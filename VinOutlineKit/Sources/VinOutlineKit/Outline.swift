@@ -182,6 +182,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				ancestorNumberingStyle = numberingStyle
 			}
 		}
+		didSet {
+			if numberingStyle != oldValue {
+				outlineTextPreferencesDidChange()
+			}
+		}
 	}
 	
 	var ancestorAutomaticallyCreateLinks: Bool?
@@ -212,6 +217,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				ancestorCheckSpellingWhileTyping = checkSpellingWhileTyping
 			}
 		}
+		didSet {
+			if checkSpellingWhileTyping != oldValue {
+				outlineTextPreferencesDidChange()
+			}
+		}
 	}
 	
 	var ancestorCorrectSpellingAutomatically: Bool?
@@ -220,6 +230,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		willSet {
 			if isCloudKit && ancestorCorrectSpellingAutomatically == nil {
 				ancestorCorrectSpellingAutomatically = correctSpellingAutomatically
+			}
+		}
+		didSet {
+			if correctSpellingAutomatically != oldValue {
+				outlineTextPreferencesDidChange()
 			}
 		}
 	}
@@ -1156,27 +1171,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 					   ownerEmail: String?,
 					   ownerURL: String?) {
 		
-		var textPrefsChanged = false
-		
-		if self.numberingStyle != numberingStyle {
-			textPrefsChanged = true
-		}
-		
-		if self.checkSpellingWhileTyping != checkSpellingWhileTyping {
-			textPrefsChanged = true
-		}
-		
-		if self.correctSpellingAutomatically != correctSpellingAutomatically {
-			textPrefsChanged = true
-		}
-
 		self.numberingStyle = numberingStyle
 		self.checkSpellingWhileTyping = checkSpellingWhileTyping
 		self.correctSpellingAutomatically = correctSpellingAutomatically
-		
-		if textPrefsChanged {
-			outlineTextPreferencesDidChange()
-		}
 		
 		self.automaticallyCreateLinks = automaticallyCreateLinks
 		self.automaticallyChangeLinkTitles = automaticallyChangeLinkTitles
