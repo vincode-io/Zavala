@@ -64,13 +64,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public enum NumberingStyle: String, CustomStringConvertible, CaseIterable, Equatable, Codable {
 		case none = "none"
 		case decimal = "decimal"
-
+		case legal = "legal"
+		
 		public var description: String {
 			switch self {
-				case .none: 
-					return "None"
-				case .decimal: 
-					return "Decimal"
+			case .none:
+				return "None"
+			case .decimal:
+				return "Decimal"
+			case .legal:
+				return "Legal"
 			}
 		}
 		
@@ -989,7 +992,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		appendPrintTitle(attrString: print)
 		
 		rows.forEach {
-			let visitor = PrintListVisitor()
+			let visitor = PrintListVisitor(numberingStyle: numberingStyle ?? .none)
 			$0.visit(visitor: visitor.visitor)
 			print.append(visitor.print)
 		}

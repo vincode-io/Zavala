@@ -165,7 +165,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return result
 	}
 	
-	public var properNumbering: String {
+	public var legalNumbering: String {
 		return ""
 	}
 	

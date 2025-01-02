@@ -11,7 +11,7 @@ class EditorRowNumberingLabel: UILabel {
 		let attrString = if numberingStyle == .decimal {
 			NSMutableAttributedString(string: row.decimalNumbering)
 		} else {
-			NSMutableAttributedString(string: row.properNumbering)
+			NSMutableAttributedString(string: row.legalNumbering)
 		}
 		
 		let fontColor = OutlineFontCache.shared.topicColor(level: row.trueLevel)
