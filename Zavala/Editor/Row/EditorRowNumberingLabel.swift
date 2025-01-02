@@ -25,7 +25,7 @@ class EditorRowNumberingLabel: UILabel {
 			}
 			accessibilityLabel = .completeAccessibilityLabel
 		} else {
-			labelAttributes[.foregroundColor] = OutlineFontCache.shared.topicColor(level: row.trueLevel)
+			labelAttributes[.foregroundColor] = fontColor
 			accessibilityLabel = nil
 		}
 		

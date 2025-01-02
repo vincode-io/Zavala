@@ -206,7 +206,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 			}
 			accessibilityLabel = .completeAccessibilityLabel
 		} else {
-			baseAttributes[.foregroundColor] = OutlineFontCache.shared.topicColor(level: row.trueLevel)
+			baseAttributes[.foregroundColor] = fontColor
 			accessibilityLabel = nil
 		}
 		
