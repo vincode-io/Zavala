@@ -2279,21 +2279,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			return impacted
 		}
 		
-		func reloadVisitor(_ visited: Row) {
-			if let index = visited.shadowTableIndex {
-				reloads.insert(index)
-			}
-			if visited.isExpanded {
-				visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
-			}
-		}
-
-		for row in impacted {
-			if row.isExpanded {
-				row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
-			}
-		}
-
+		reloads.formUnion(reloadsForAncestorAndChildren(rows: impacted))
 		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, reloads: reloads)
 		outlineElementsDidChange(changes)
 		return impacted
@@ -2356,7 +2342,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 
 		var changes = rebuildShadowTable()
-		reloads.formUnion(reloadsForParentAndChildren(rows: impacted))
+		reloads.formUnion(reloadsForAncestorAndChildren(rows: impacted))
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		outlineElementsDidChange(changes)
 		
@@ -2542,7 +2528,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		guard isBeingViewed else { return }
 
 		var changes = rebuildShadowTable()
-		var reloads = reloadsForParentAndChildren(rows: rowMoves.map { $0.row })
+		var reloads = reloadsForAncestorAndChildren(rows: rowMoves.map { $0.row })
 		reloads.formUnion(oldParentReloads)
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		outlineElementsDidChange(changes)
@@ -3239,17 +3225,10 @@ private extension Outline {
 		return transient.reloads
 	}
 	
-	func reloadsForParentAndChildren(rows: [Row]) -> Set<Int> {
+	func reloadsForAncestorAndChildren(rows: [Row]) -> Set<Int> {
 		var reloads = Set<Int>()
 		
 		for row in rows {
-			guard let shadowTableIndex = row.shadowTableIndex else { continue }
-			
-			reloads.insert(shadowTableIndex)
-			if shadowTableIndex > 0 {
-				reloads.insert(shadowTableIndex - 1)
-			}
-			
 			func reloadVisitor(_ visited: Row) {
 				if let index = visited.shadowTableIndex {
 					reloads.insert(index)
@@ -3259,8 +3238,18 @@ private extension Outline {
 				}
 			}
 
-			if row.isExpanded {
-				row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			// For indenting, outdenting and moving we alway reload the parent because its
+			// disclosure may need to be shown or hidden
+			if let parentShadowTableIndex = (row.parent as? Row)?.shadowTableIndex {
+				reloads.insert(parentShadowTableIndex)
+			}
+			
+			// Indents need to reload the grand parent to reload any numbering styles that may
+			// have changed. Outdents only need to go up as high as the parent.
+			if let grandParent = (row.parent as? Row)?.parent {
+				grandParent.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			} else {
+				row.parent?.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 		}
 
