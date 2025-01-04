@@ -152,7 +152,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return parentCount
 	}
 	
-	public var markdownNumbering: String {
+	public var simpleNumbering: String {
 		let index = parent?.firstIndexOfRow(self) ?? 0
 		return String(index + 1) + "."
 	}

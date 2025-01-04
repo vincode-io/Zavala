@@ -8,10 +8,15 @@ import VinOutlineKit
 class EditorRowNumberingLabel: UILabel {
 	
 	func update(with row: Row, for numberingStyle: Outline.NumberingStyle) {
-		let attrString = if numberingStyle == .decimal {
+		let attrString = switch numberingStyle {
+		case .simple:
+			NSMutableAttributedString(string: row.simpleNumbering)
+		case .decimal:
 			NSMutableAttributedString(string: row.decimalNumbering)
-		} else {
+		case .legal:
 			NSMutableAttributedString(string: row.legalNumbering)
+		case .none:
+			NSMutableAttributedString()
 		}
 		
 		let fontColor = OutlineFontCache.shared.numberingColor(level: row.trueLevel)

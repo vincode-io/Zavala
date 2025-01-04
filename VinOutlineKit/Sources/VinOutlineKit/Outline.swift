@@ -63,6 +63,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public enum NumberingStyle: String, CustomStringConvertible, CaseIterable, Equatable, Codable {
 		case none = "none"
+		case simple = "simple"
 		case decimal = "decimal"
 		case legal = "legal"
 		
@@ -70,6 +71,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			switch self {
 			case .none:
 				return "None"
+			case .simple:
+				return "Simple"
 			case .decimal:
 				return "Decimal"
 			case .legal:

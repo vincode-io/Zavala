@@ -55,6 +55,8 @@ final class PrintListVisitor {
 			let printTopic = switch numberingStyle {
 			case .none:
 				NSMutableAttributedString(string: "\u{2022}\t")
+			case .simple:
+				NSMutableAttributedString(string: "\(visited.simpleNumbering)  ")
 			case .decimal:
 				NSMutableAttributedString(string: "\(visited.decimalNumbering)  ")
 			case .legal:

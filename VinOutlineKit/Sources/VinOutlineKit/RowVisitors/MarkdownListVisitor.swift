@@ -32,9 +32,9 @@ final class MarkdownListVisitor {
 			}
 		} else {
 			if visited.isComplete ?? false {
-				markdown.append("\(visited.markdownNumbering) ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")~~")
+				markdown.append("\(visited.simpleNumbering) ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")~~")
 			} else {
-				markdown.append("\(visited.markdownNumbering) \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")")
+				markdown.append("\(visited.simpleNumbering) \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")")
 			}
 		}
 		
