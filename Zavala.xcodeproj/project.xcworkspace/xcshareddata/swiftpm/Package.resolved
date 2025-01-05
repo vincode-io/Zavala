@@ -1,5 +1,5 @@
 {
-  "originHash" : "fceac6fca871b9f39898fbdfc29825910b0b483c3929128f9d0ba9bf0c1c7e13",
+  "originHash" : "94c468f56499d144d11ec83184fb169895bb043ba3260a37248398dbf37d4956",
   "pins" : [
     {
       "identity" : "markdownattributedstring",
@@ -34,7 +34,7 @@
       "location" : "https://github.com/swiftlang/swift-cmark.git",
       "state" : {
         "branch" : "gfm",
-        "revision" : "fc07ab5da47975c5ef5f336acadfc02e8f706d30"
+        "revision" : "b022b08312decdc46585e0b3440d97f6f22ef703"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "d21714073e0d16ba78eebdf36724863afc36871d"
+        "revision" : "82f9258ce53b9da7980d1c1aaf80e5bdbbf98c9b"
       }
     },
     {
@@ -79,7 +79,7 @@
       "location" : "https://github.com/vincode-io/VinXML.git",
       "state" : {
         "branch" : "main",
-        "revision" : "508baa45519d24503c6f9e89eceef76cb5512232"
+        "revision" : "e5bb83a30f75a06c78b2c69647903945f0405fec"
       }
     }
   ],
