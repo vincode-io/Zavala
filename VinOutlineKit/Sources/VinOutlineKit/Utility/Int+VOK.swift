@@ -8,6 +8,8 @@ extension Int {
 		switch level {
 		case 1:
 			return legalNumberingLevel1
+		case 2:
+			return legalNumberingLevel2
 		default:
 			return ""
 		}
@@ -19,6 +21,10 @@ private extension Int {
 
 	var legalNumberingLevel1: String {
 		return roman
+	}
+	
+	var legalNumberingLevel2: String {
+		return alphabetic.uppercased()
 	}
 	
 	// https://www.geeksforgeeks.org/converting-decimal-number-lying-between-1-to-3999-to-roman-numerals/
@@ -35,7 +41,7 @@ private extension Int {
 			var div = number / num[i]
 			number = number % num[i]
 			
-			while(div != 0) {
+			while (div != 0) {
 				div = div - 1
 				result.append(sym[i])
 			}
@@ -44,5 +50,20 @@ private extension Int {
 		
 		return result
 	}
-	
+
+	var alphabetic: String {
+		guard self > 0 && self < 703 else { return "" }
+			
+		let sym = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+		
+		let div = (self - 1) / 26
+		let rem = (self - 1) % 26
+		
+		if div > 0 {
+			return sym[div - 1] + sym[rem]
+		} else {
+			return sym[rem]
+		}
+	}
+
 }
