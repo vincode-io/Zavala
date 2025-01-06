@@ -7,9 +7,11 @@ extension Int {
 	public func legalNumbering(level: Int) -> String {
 		switch level {
 		case 1:
-			return legalNumberingLevel1
+			return legalNumberingLevel1 + "."
 		case 2:
-			return legalNumberingLevel2
+			return legalNumberingLevel2 + "."
+		case 3:
+			return String(self) + "."
 		default:
 			return ""
 		}
