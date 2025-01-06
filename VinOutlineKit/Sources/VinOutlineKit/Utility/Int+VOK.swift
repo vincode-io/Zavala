@@ -7,13 +7,21 @@ extension Int {
 	public func legalNumbering(level: Int) -> String {
 		switch level {
 		case 1:
-			return legalNumberingLevel1 + "."
+			return roman + "."
 		case 2:
-			return legalNumberingLevel2 + "."
+			return alphabetic.uppercased() + "."
 		case 3:
 			return String(self) + "."
+		case 4:
+			return alphabetic + "."
+		case 5:
+			return "(\(String(self)))"
+		case 6:
+			return "(\(alphabetic))"
+		case 7:
+			return "(\(roman.lowercased()))"
 		default:
-			return ""
+			return "(??)"
 		}
 	}
 	
@@ -21,14 +29,6 @@ extension Int {
 
 private extension Int {
 
-	var legalNumberingLevel1: String {
-		return roman
-	}
-	
-	var legalNumberingLevel2: String {
-		return alphabetic.uppercased()
-	}
-	
 	// https://www.geeksforgeeks.org/converting-decimal-number-lying-between-1-to-3999-to-roman-numerals/
 	var roman: String {
 		var result = String()
@@ -54,7 +54,7 @@ private extension Int {
 	}
 
 	var alphabetic: String {
-		guard self > 0 && self < 703 else { return "" }
+		guard self > 0 && self < 703 else { return "??" }
 			
 		let sym = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 		
