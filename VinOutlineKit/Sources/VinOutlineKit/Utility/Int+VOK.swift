@@ -47,6 +47,7 @@ private extension Int {
 				div = div - 1
 				result.append(sym[i])
 			}
+			
 			i = i - 1
 		}
 		
