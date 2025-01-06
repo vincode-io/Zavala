@@ -171,7 +171,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	}
 	
 	public var legalNumbering: String {
-		return ""
+		let index = parent?.firstIndexOfRow(self) ?? 0
+		return (index + 1).legalNumbering(level: trueLevel + 1)
 	}
 	
 	public var isExpandable: Bool {
