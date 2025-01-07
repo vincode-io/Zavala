@@ -1435,8 +1435,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100), heightDimension: .estimated(50))
 				let item = NSCollectionLayoutItem(layoutSize: itemSize)
 				
-				// For some reason a full fractional width of 1 will crash us when using Stage Manager on an iPad
-				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .estimated(50))
+				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
 				let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 				
 				return NSCollectionLayoutSection(group: group)
