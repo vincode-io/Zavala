@@ -1035,7 +1035,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		navigationItem.largeTitleDisplayMode = .never
 		moreMenuButton.menu = buildEllipsisMenu()
 		
-		if UIResponder.valid(action: .focusOut) {
+		if !(outline?.isFocusOutUnavailable() ?? true) {
 			focusButton.accessibilityLabel = .focusOutControlLabel
 			focusButton.setImage(.focusActive, for: .normal)
 			focusButton.isEnabled = true
