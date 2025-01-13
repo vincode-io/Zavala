@@ -191,6 +191,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		didSet {
 			if numberingStyle != oldValue {
 				outlineTextPreferencesDidChange()
+				documentMetaDataDidChange()
 			}
 		}
 	}
@@ -203,6 +204,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				ancestorAutomaticallyCreateLinks = automaticallyCreateLinks
 			}
 		}
+		didSet {
+			if automaticallyCreateLinks != oldValue {
+				documentMetaDataDidChange()
+			}
+		}
 	}
 	
 	var ancestorAutomaticallyChangeLinkTitles: Bool?
@@ -211,6 +217,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		willSet {
 			if isCloudKit && ancestorAutomaticallyChangeLinkTitles == nil {
 				ancestorAutomaticallyChangeLinkTitles = automaticallyChangeLinkTitles
+			}
+		}
+		didSet {
+			if automaticallyChangeLinkTitles != oldValue {
+				documentMetaDataDidChange()
 			}
 		}
 	}
@@ -226,6 +237,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		didSet {
 			if checkSpellingWhileTyping != oldValue {
 				outlineTextPreferencesDidChange()
+				documentMetaDataDidChange()
 			}
 		}
 	}
@@ -241,6 +253,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		didSet {
 			if correctSpellingAutomatically != oldValue {
 				outlineTextPreferencesDidChange()
+				documentMetaDataDidChange()
 			}
 		}
 	}

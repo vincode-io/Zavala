@@ -248,7 +248,16 @@ extension Outline: VCKModel {
         serverDisambiguator = record[Outline.CloudKitRecord.Fields.disambiguator] as? Int
         serverCreated = record[Outline.CloudKitRecord.Fields.created] as? Date
         serverUpdated = record[Outline.CloudKitRecord.Fields.updated] as? Date
+		
+		if let numberingStyleRawValue = record[Outline.CloudKitRecord.Fields.numberingStyle] as? String {
+			serverNumberingStyle = NumberingStyle(rawValue: numberingStyleRawValue)
+		}
+		
+		serverAutomaticallyCreateLinks = record[Outline.CloudKitRecord.Fields.automaticallyCreateLinks] as? Bool
 		serverAutomaticallyChangeLinkTitles = record[Outline.CloudKitRecord.Fields.automaticallyChangeLinkTitles] as? Bool
+		serverCheckSpellingWhileTyping = record[Outline.CloudKitRecord.Fields.checkSpellingWhileTyping] as? Bool
+		serverCorrectSpellingAutomatically = record[Outline.CloudKitRecord.Fields.correctSpellingAutomatically] as? Bool
+
         serverOwnerName = record[Outline.CloudKitRecord.Fields.ownerName] as? String
         serverOwnerEmail = record[Outline.CloudKitRecord.Fields.ownerEmail] as? String
         serverOwnerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
