@@ -107,10 +107,6 @@ extension Outline: VCKModel {
 			keyedRows = [String: Row]()
 		}
 		
-		for deleteRecordID in update.deleteRowRecordIDs {
-			keyedRows?.removeValue(forKey: deleteRecordID.rowUUID)
-		}
-		
 		for saveRecord in update.saveRowRecords {
 			guard let entityID = EntityID(description: saveRecord.recordID.recordName) else { continue }
 
@@ -128,15 +124,6 @@ extension Outline: VCKModel {
 			keyedRows?[entityID.rowUUID] = row
 		}
 		
-		for deleteRecordID in update.deleteImageRecordIDs {
-			if let row = keyedRows?[deleteRecordID.rowUUID] {
-				if row.findImage(id: deleteRecordID) != nil {
-					row.deleteImage(id: deleteRecordID)
-					updatedRowIDs.insert(deleteRecordID.rowUUID)
-				}
-			}
-		}
-		
 		for saveRecord in update.saveImageRecords {
 			guard let entityID = EntityID(description: saveRecord.recordID.recordName),
 				  let row = keyedRows?[entityID.rowUUID] else { continue }
@@ -151,6 +138,19 @@ extension Outline: VCKModel {
 			if image.apply(saveRecord) {
 				updatedRowIDs.insert(row.id)
 				row.saveImage(image)
+			}
+		}
+		
+		for deleteRecordID in update.deleteRowRecordIDs {
+			keyedRows?.removeValue(forKey: deleteRecordID.rowUUID)
+		}
+		
+		for deleteRecordID in update.deleteImageRecordIDs {
+			if let row = keyedRows?[deleteRecordID.rowUUID] {
+				if row.findImage(id: deleteRecordID) != nil {
+					row.deleteImage(id: deleteRecordID)
+					updatedRowIDs.insert(deleteRecordID.rowUUID)
+				}
 			}
 		}
 		
