@@ -355,6 +355,12 @@ extension Outline: VCKModel {
         ancestorUpdated = nil
         serverUpdated = nil
 		
+		ancestorNumberingStyle = nil
+		serverNumberingStyle = nil
+		
+		ancestorAutomaticallyCreateLinks = nil
+		serverAutomaticallyCreateLinks = nil
+		
 		ancestorAutomaticallyChangeLinkTitles = nil
 		serverAutomaticallyChangeLinkTitles = nil
 
