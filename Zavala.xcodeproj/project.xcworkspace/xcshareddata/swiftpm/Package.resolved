@@ -1,5 +1,5 @@
 {
-  "originHash" : "94c468f56499d144d11ec83184fb169895bb043ba3260a37248398dbf37d4956",
+  "originHash" : "fceac6fca871b9f39898fbdfc29825910b0b483c3929128f9d0ba9bf0c1c7e13",
   "pins" : [
     {
       "identity" : "markdownattributedstring",
@@ -52,7 +52,7 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "82f9258ce53b9da7980d1c1aaf80e5bdbbf98c9b"
+        "revision" : "3588f0449f1592a5c746079a5c7e6c8b62ba55eb"
       }
     },
     {
@@ -79,7 +79,7 @@
       "location" : "https://github.com/vincode-io/VinXML.git",
       "state" : {
         "branch" : "main",
-        "revision" : "e5bb83a30f75a06c78b2c69647903945f0405fec"
+        "revision" : "38e83e0cf0c631e7f2aa1a0b73ac83e16f929c81"
       }
     }
   ],
