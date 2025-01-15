@@ -13,32 +13,29 @@ header:
 
 There are several ways to access the Get Info dialog. You can use the File menu on macOS and you can use the More Options menu on iOS. You can also access it in the context menu on the Documents panel.
 
-* Settings
-	* Numbering Style
+## Settings
 
-	  Automatically numbers each Row in an Outline. Available options are None, Simple, Decimal, and Legal.
+These settings define the Editor behavior on a per Outline basis.
 
+### Numbering Style
 
-	* Check Spelling While Typing
+Automatically numbers each Row in an Outline. Available options are None, Simple, Decimal, and Legal.
 
-	  Same as the standard system setting.
+### Check Spelling While Typing
 
+Same as the standard system setting.
 
-	* Correct Spelling Automatically
+### Correct Spelling Automatically
 
-	  Same as the standard system setting.
+Same as the standard system setting.
 
+### Change Links Automatically
 
-	* Change Links Automatically
+Disable this if you don’t want new Outlines to automatically link addresses, phone numbers, and URLs.
 
-	  Disable this if you don’t want new Outlines to automatically link addresses, phone numbers, and URLs.
+### Change Link Titles Automatically
 
-
-	* Change Link Titles Automatically
-
-	  Zavala can automatically change a link into something readable buy fetching the webpage and using its title. See [Linking](Linking.md) for more details.
-
-
+Zavala can automatically change a link into something readable buy fetching the webpage and using its title. See [Linking](Linking.md) for more details.
 
 ## Owner Information
 
