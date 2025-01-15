@@ -18,7 +18,6 @@
 		5116893D29BD6DED00318832 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116893C29BD6DED00318832 /* AboutView.swift */; };
 		5116894529BDA0E500318832 /* AboutSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116894429BDA0E500318832 /* AboutSceneDelegate.swift */; };
 		5116894729BDA60E00318832 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116894629BDA60E00318832 /* AboutViewController.swift */; };
-		511A99F727B9B596001BD443 /* ToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511A99F627B9B596001BD443 /* ToolbarButton.swift */; };
 		511B29E525FEE4DC00C04239 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29E425FEE4DC00C04239 /* LinkViewController.swift */; };
 		511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F126014FBA00C04239 /* EnhancedTextField.swift */; };
 		511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */; };
@@ -229,7 +228,6 @@
 		5116893C29BD6DED00318832 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		5116894429BDA0E500318832 /* AboutSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSceneDelegate.swift; sourceTree = "<group>"; };
 		5116894629BDA60E00318832 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
-		511A99F627B9B596001BD443 /* ToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButton.swift; sourceTree = "<group>"; };
 		511B29E425FEE4DC00C04239 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
 		511B29F126014FBA00C04239 /* EnhancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTextField.swift; sourceTree = "<group>"; };
 		511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkContentConfiguration.swift; sourceTree = "<group>"; };
@@ -469,7 +467,6 @@
 				5163ADF125C78CFB008F25CA /* SearchTextField.swift */,
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
-				511A99F627B9B596001BD443 /* ToolbarButton.swift */,
 				51077C5127A752DF000C71DB /* UIFont+.swift */,
 				51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */,
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
@@ -1185,7 +1182,6 @@
 				5109BC52293445EB0022E90B /* DocumentsActivityItemsConfiguration.swift in Sources */,
 				5147287A2D0CEB75009CDB0D /* DocumentSortOrder.swift in Sources */,
 				51C71C74273F264600F6C779 /* ImageSceneDelegate.swift in Sources */,
-				511A99F727B9B596001BD443 /* ToolbarButton.swift in Sources */,
 				514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */,
 				5116893D29BD6DED00318832 /* AboutView.swift in Sources */,
 				5115C02D2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift in Sources */,
