@@ -8,7 +8,7 @@ header:
 ---
 
 
-* ![](/assets/images/help/57043C37-8162-48A2-80A0-6E76C099972D.png)￼
+* ![](/assets/images/help/AB6E83C4-E86A-4066-B292-41D838968F6F.png)￼
 * General
 	* Color Palette
 
@@ -40,6 +40,10 @@ When you disable the iCloud account all the iCloud Outlines on your device will 
 ## Outline Defaults
 
 Like the Outline Owner information, Outline Defaults are used to assign default values to newly created Outlines.
+
+### Numbering Style
+
+Automatically numbers each Row in an Outline. Available options are None, Simple, Decimal, and Legal.
 
 ### Check Spelling While Typing
 

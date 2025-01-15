@@ -13,11 +13,32 @@ header:
 
 There are several ways to access the Get Info dialog. You can use the File menu on macOS and you can use the More Options menu on iOS. You can also access it in the context menu on the Documents panel.
 
-## Settings
+* Settings
+	* Numbering Style
 
-Disable the Create Links Automatically option if you don’t want Zavala to automatically detect addresses, phone numbers, and URL’s and turn them into Links.
+	  Automatically numbers each Row in an Outline. Available options are None, Simple, Decimal, and Legal.
 
-Change Link Titles Automatically will automatically change the title of a link that is pasted or typed into the outline. It does this by retrieving the web page and grabbing its title.
+
+	* Check Spelling While Typing
+
+	  Same as the standard system setting.
+
+
+	* Correct Spelling Automatically
+
+	  Same as the standard system setting.
+
+
+	* Change Links Automatically
+
+	  Disable this if you don’t want new Outlines to automatically link addresses, phone numbers, and URLs.
+
+
+	* Change Link Titles Automatically
+
+	  Zavala can automatically change a link into something readable buy fetching the webpage and using its title. See [Linking](Linking.md) for more details.
+
+
 
 ## Owner Information
 
