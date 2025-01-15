@@ -9,7 +9,7 @@ header:
 
 
 
-## ![](/assets/images/help/E8DD3B67-5C2C-4DDF-85DA-BF2BF05C3D88.png)￼
+## ![](/assets/images/help/784B120B-F37C-40EF-8C8E-5EB1B0EB1042.png)￼
 
 There are several ways to access the Get Info dialog. You can use the File menu on macOS and you can use the More Options menu on iOS. You can also access it in the context menu on the Documents panel.
 
