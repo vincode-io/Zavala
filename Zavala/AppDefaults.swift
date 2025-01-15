@@ -31,7 +31,7 @@ enum EditorMaxWidth: Int, CustomStringConvertible, CaseIterable {
 	case wide = 1
 	case fullWidth = 2
 	
-	var pixels: CGFloat? {
+	var points: CGFloat? {
 		switch self {
 		case .normal:
 			return UIFontMetrics(forTextStyle: .body).scaledValue(for: 700)

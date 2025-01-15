@@ -10,7 +10,7 @@ import VinOutlineKit
 
 class EditorCollectionViewCompositionalLayout : UICollectionViewCompositionalLayout {
 	
-	var editorMaxWidth: CGFloat? = AppDefaults.shared.editorMaxWidth.pixels
+	var editorMaxWidth: CGFloat? = AppDefaults.shared.editorMaxWidth.points
 	
 	override var collectionViewContentSize: CGSize {
 		guard let visibleSize = super.collectionView?.visibleSize else {

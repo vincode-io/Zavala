@@ -770,8 +770,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			}
 
 			guard let layout = self.collectionView.collectionViewLayout as? EditorCollectionViewCompositionalLayout else { return }
-			if layout.editorMaxWidth != AppDefaults.shared.editorMaxWidth.pixels {
-				layout.editorMaxWidth = AppDefaults.shared.editorMaxWidth.pixels
+			if layout.editorMaxWidth != AppDefaults.shared.editorMaxWidth.points {
+				layout.editorMaxWidth = AppDefaults.shared.editorMaxWidth.points
 				self.collectionView.reloadData()
 			}
 		}
