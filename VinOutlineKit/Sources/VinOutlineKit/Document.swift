@@ -202,8 +202,8 @@ public enum Document: Equatable, Hashable {
 		}
 	}
 	
-	init(coder: DocumentCoder) {
-		self = .outline(Outline(coder: coder.outline))
+	init(account: Account, coder: DocumentCoder) {
+		self = .outline(Outline(account: account, coder: coder.outline))
 	}
 	
 	public func update(disambiguator: Int) {
@@ -332,10 +332,10 @@ public enum Document: Equatable, Hashable {
 		}
 	}
 	
-	public func duplicate(accountID: Int) -> Document {
+	public func duplicate(account: Account) -> Document {
 		switch self {
 		case .outline(let outline):
-			return Document.outline(outline.duplicate(accountID: accountID))
+			return Document.outline(outline.duplicate(account: account))
 		case .dummy:
 			fatalError("The dummy document shouldn't be accessed in this way.")
 		}

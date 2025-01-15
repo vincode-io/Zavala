@@ -39,7 +39,7 @@ struct RemoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
 		let inputRows: [Row] = rows
 			.compactMap { $0.entityID }
 			.compactMap {
-				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
+				if let rowOutline = appDelegate.accountManager.findDocument($0)?.outline {
 					rowOutline.load()
 					outlines.insert(rowOutline)
 					return rowOutline.findRow(id: $0.rowUUID)

@@ -10,6 +10,12 @@ import VinOutlineKit
 
 class EditorRowContentView: UIView, UIContentView {
 
+	lazy var numberingLabel: EditorRowNumberingLabel = {
+		let label = EditorRowNumberingLabel()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		return label
+	}()
+	
 	lazy var topicTextView: EditorRowTopicTextView = {
 		let textView = EditorRowTopicTextView()
 		textView.editorDelegate = self
@@ -111,8 +117,12 @@ class EditorRowContentView: UIView, UIContentView {
 
 		guard let row = configuration.row else { return }
 
-		topicTextView.update(row: row)
-		noteTextView.update(row: row)
+		if let numberingStyle = configuration.numberingStyle, numberingStyle != Outline.NumberingStyle.none {
+			numberingLabel.update(with: row, for: numberingStyle)
+		}
+		
+		topicTextView.update(with: row)
+		noteTextView.update(with: row)
 
 		switch (configuration.row?.isExpanded ?? true, configuration.isSearching) {
 		case (true, _):
@@ -296,27 +306,68 @@ private extension EditorRowContentView {
 		
 		topicTextView.removeConstraintsOwnedBySuperview()
 		
-		if config.isNotesVisible {
-			addSubview(noteTextView)
-			NSLayoutConstraint.activate([
-				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
-				topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: spacingAdjustment / 2),
-				noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
-				barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
-			])
+		if let numberingStyle = config.numberingStyle, numberingStyle != Outline.NumberingStyle.none {
+			addSubview(numberingLabel)
+			
+			if config.isNotesVisible {
+				addSubview(noteTextView)
+
+				NSLayoutConstraint.activate([
+					numberingLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					numberingLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+
+					topicTextView.leadingAnchor.constraint(equalTo: numberingLabel.trailingAnchor, constant: 8),
+					topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+					topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: spacingAdjustment / 2),
+					
+					noteTextView.leadingAnchor.constraint(equalTo: numberingLabel.trailingAnchor, constant: 8),
+					noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
+					barView.trailingAnchor.constraint(equalTo: numberingLabel.leadingAnchor)
+				])
+			} else {
+				noteTextView.removeFromSuperview()
+				NSLayoutConstraint.activate([
+					numberingLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					numberingLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+
+					topicTextView.leadingAnchor.constraint(equalTo: numberingLabel.trailingAnchor, constant: 8),
+					topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					topicTextView.topAnchor.constraint(equalTo: numberingLabel.topAnchor),
+					topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
+					
+					barView.trailingAnchor.constraint(equalTo: numberingLabel.leadingAnchor)
+				])
+			}
+
+			numberingLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+			numberingLabel.setContentHuggingPriority(.required, for: .horizontal)
 		} else {
-			noteTextView.removeFromSuperview()
-			NSLayoutConstraint.activate([
-				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
-				topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
-				barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
-			])
+			numberingLabel.removeFromSuperview()
+			
+			if config.isNotesVisible {
+				addSubview(noteTextView)
+				NSLayoutConstraint.activate([
+					topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+					topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: spacingAdjustment / 2),
+					noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
+					barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
+				])
+			} else {
+				noteTextView.removeFromSuperview()
+				NSLayoutConstraint.activate([
+					topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+					topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
+					barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
+				])
+			}
 		}
 	}
 	

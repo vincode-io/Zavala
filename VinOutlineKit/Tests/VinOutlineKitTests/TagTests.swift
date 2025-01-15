@@ -2,24 +2,27 @@
 //  Created by Maurice Parker on 6/8/24.
 //
 
-import XCTest
+import Foundation
+import Testing
 @testable import VinOutlineKit
 
-final class TagTests: VOKTestCase {
+@MainActor
+final class TagTests {
 
-	func testParentName() throws {
+	@Test func parentName() throws {
 		let tag = Tag(name: "work/project1/presentation")
-		XCTAssertEqual(tag.parentName, "work/project1")
+		#expect(tag.parentName == "work/project1")
 	}
 
-	func testNormalizeName() {
-		XCTAssertEqual(Tag.normalize(name: "/ work / project 1 /"), "work/project 1")
+	@Test func normalizeName() {
+		let normalizedName = Tag.normalize(name: "/ work / project 1 /")
+		#expect(normalizedName == "work/project 1")
 	}
 	
-	func testRenamePath() {
+	@Test func renamePath() {
 		let tag = Tag(name: "work/project1/presentation")
 		tag.renamePath(from: "work/project1", to: "test")
-		XCTAssertEqual(tag.name, "test/presentation")
+		#expect(tag.name == "test/presentation")
 	}
 	
 }

@@ -56,12 +56,12 @@ struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, ZavalaApp
         await resume()
 
 		guard let searchText = search, !searchText.isEmpty else {
-			let outlines = await filter(documents: AccountManager.shared.documents)
+			let outlines = await filter(documents: appDelegate.accountManager.documents)
 			await suspend()
 			return .result(value: outlines)
 		}
 
-		let searchContainer = await Search(searchText: searchText)
+		let searchContainer = await Search(accountManager: appDelegate.accountManager, searchText: searchText)
 		let documents = try await searchContainer.documents
 		let outlines = await filter(documents: documents)
 
@@ -80,7 +80,7 @@ private extension GetOutlinesAppIntent {
 		@MainActor
 		func results() async throws -> [String] {
 			resume()
-			let results = Set(AccountManager.shared.activeTags.compactMap({ $0.name }))
+			let results = Set(appDelegate.accountManager.activeTags.compactMap({ $0.name }))
 			await suspend()
 			return results.sorted(by: { $0.caseInsensitiveCompare($1) == .orderedAscending })
 		}
@@ -92,7 +92,7 @@ private extension GetOutlinesAppIntent {
 		@MainActor
 		func results() async throws -> [String] {
 			resume()
-			let results = Set(AccountManager.shared.activeDocuments.compactMap({ $0.title ?? "" as String }))
+			let results = Set(appDelegate.accountManager.activeDocuments.compactMap({ $0.title ?? "" as String }))
 			await suspend()
 			return results.sorted(by: { $0.caseInsensitiveCompare($1) == .orderedAscending })
 		}

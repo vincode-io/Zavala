@@ -41,7 +41,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
         
         return selectedIndexPaths.compactMap { indexPath in
             if let entityID = dataSource.itemIdentifier(for: indexPath)?.entityID {
-                return AccountManager.shared.findDocumentContainer(entityID)
+                return appDelegate.accountManager.findDocumentContainer(entityID)
             }
             return nil
         }
@@ -217,9 +217,9 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	// MARK: Actions
 	
 	@objc func sync() {
-		if AccountManager.shared.isSyncAvailable {
+		if appDelegate.accountManager.isSyncAvailable {
 			Task {
-				await AccountManager.shared.sync()
+				await appDelegate.accountManager.sync()
 			}
 		}
 		collectionView?.refreshControl?.endRefreshing()
@@ -362,7 +362,7 @@ extension CollectionsViewController {
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			
-			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
+			if case .documentContainer(let entityID) = item.id, let container = appDelegate.accountManager.findDocumentContainer(entityID) {
 				contentConfiguration.text = container.partialName
 				contentConfiguration.image = container.image
 				contentConfiguration.textProperties.lineBreakMode = .byTruncatingMiddle
@@ -432,7 +432,7 @@ extension CollectionsViewController {
 			
 			// The collection view should deselect collapsed items on its own in my opinion, but it doesn't 🤷🏼‍♂️
 			guard let entityID = item.entityID,
-				  let collapsingDocumentContainer = AccountManager.shared.findDocumentContainer(entityID),
+				  let collapsingDocumentContainer = appDelegate.accountManager.findDocumentContainer(entityID),
 				  let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems else {
 				return
 			}
@@ -456,7 +456,7 @@ extension CollectionsViewController {
 	}
 	
 	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
-		guard let localAccount = AccountManager.shared.localAccount, localAccount.isActive else { return nil }
+		guard let localAccount = appDelegate.accountManager.localAccount, localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 
@@ -483,7 +483,7 @@ extension CollectionsViewController {
 	}
 	
 	private func cloudKitAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
-		guard let cloudKitAccount = AccountManager.shared.cloudKitAccount else { return nil }
+		guard let cloudKitAccount = appDelegate.accountManager.cloudKitAccount else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 
@@ -594,7 +594,7 @@ extension CollectionsViewController: CollectionsSearchCellDelegate {
 
 	nonisolated func collectionsSearchDidBecomeActive() {
 		Task {
-			await selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
+			await selectDocumentContainers([Search(accountManager: appDelegate.accountManager, searchText: "")], isNavigationBranch: false, animated: false)
 		}
 	}
 
@@ -602,9 +602,9 @@ extension CollectionsViewController: CollectionsSearchCellDelegate {
 		Task {
 			await collectionView.deselectAll()
 			if let searchText {
-				await updateSelections([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
+				await updateSelections([Search(accountManager: appDelegate.accountManager, searchText: searchText)], isNavigationBranch: false, animated: true)
 			} else {
-				await updateSelections([Search(searchText: "")], isNavigationBranch: false, animated: true)
+				await updateSelections([Search(accountManager: appDelegate.accountManager, searchText: "")], isNavigationBranch: false, animated: true)
 			}
 
 		}
@@ -642,7 +642,7 @@ private extension CollectionsViewController {
 
 			let containers: [DocumentContainer] = items.compactMap { item in
 				if case .documentContainer(let entityID) = item.id {
-					return AccountManager.shared.findDocumentContainer(entityID)
+					return appDelegate.accountManager.findDocumentContainer(entityID)
 				}
 				return nil
 			}

@@ -9,13 +9,15 @@ header:
 
 
 
-## ![](/assets/images/help/83F697F6-9D41-4D3D-9796-E3711AC46DB1.png)￼
+## ![](/assets/images/help/E8DD3B67-5C2C-4DDF-85DA-BF2BF05C3D88.png)￼
 
 There are several ways to access the Get Info dialog. You can use the File menu on macOS and you can use the More Options menu on iOS. You can also access it in the context menu on the Documents panel.
 
 ## Settings
 
-Automatically Change Link Titles will automatically change the title of a link that is pasted or typed into the outline. It does this by retrieving the web page and grabbing its title.
+Disable the Create Links Automatically option if you don’t want Zavala to automatically detect addresses, phone numbers, and URL’s and turn them into Links.
+
+Change Link Titles Automatically will automatically change the title of a link that is pasted or typed into the outline. It does this by retrieving the web page and grabbing its title.
 
 ## Owner Information
 

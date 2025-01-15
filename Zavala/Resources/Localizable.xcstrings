@@ -5,7 +5,7 @@
 
     },
     "(No Title)" : {
-      "comment" : "Control Label: (No Title)"
+      "comment" : "Title Label: (No Title)"
     },
     "%@ at %@" : {
       "comment" : "Timestame Label: Created\nTimestame Label: Updated",
@@ -73,6 +73,9 @@
     },
     "Add Note Level" : {
       "comment" : "Control Label: Add Note Level"
+    },
+    "Add Numbering Level" : {
+      "comment" : "Control Label: The menu option to add a new Numbering Level."
     },
     "Add Outline" : {
 
@@ -754,6 +757,12 @@
     },
     "Note Level %lld" : {
       "comment" : "Font Label: The font for the given Note Level"
+    },
+    "Numbering Level %lld" : {
+      "comment" : "Font Label: The font for the given Numbering Level"
+    },
+    "Numbering Style" : {
+      "comment" : "Control Label: Numbering Style"
     },
     "On My Device" : {
 

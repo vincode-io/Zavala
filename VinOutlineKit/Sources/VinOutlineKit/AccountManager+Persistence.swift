@@ -11,7 +11,7 @@ public extension AccountManager {
 		let account: Account
 		do {
 			let accountCoder = try decoder.decode(AccountCoder.self, from: data)
-			account = Account(coder: accountCoder)
+			account = Account(accountManager: self, coder: accountCoder)
 		} catch {
 			logger.error("Account read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return

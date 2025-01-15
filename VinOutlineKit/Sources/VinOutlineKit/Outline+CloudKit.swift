@@ -16,6 +16,7 @@ extension Outline: VCKModel {
 		static let recordType = "Outline"
 		struct Fields {
 			static let title = "title"
+			static let numberingStyle = "numberingStyle"
 			static let automaticallyCreateLinks = "automaticallyCreateLinks"
 			static let automaticallyChangeLinkTitles = "autoLinkingEnabled"
 			static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
@@ -106,10 +107,6 @@ extension Outline: VCKModel {
 			keyedRows = [String: Row]()
 		}
 		
-		for deleteRecordID in update.deleteRowRecordIDs {
-			keyedRows?.removeValue(forKey: deleteRecordID.rowUUID)
-		}
-		
 		for saveRecord in update.saveRowRecords {
 			guard let entityID = EntityID(description: saveRecord.recordID.recordName) else { continue }
 
@@ -127,15 +124,6 @@ extension Outline: VCKModel {
 			keyedRows?[entityID.rowUUID] = row
 		}
 		
-		for deleteRecordID in update.deleteImageRecordIDs {
-			if let row = keyedRows?[deleteRecordID.rowUUID] {
-				if row.findImage(id: deleteRecordID) != nil {
-					row.deleteImage(id: deleteRecordID)
-					updatedRowIDs.insert(deleteRecordID.rowUUID)
-				}
-			}
-		}
-		
 		for saveRecord in update.saveImageRecords {
 			guard let entityID = EntityID(description: saveRecord.recordID.recordName),
 				  let row = keyedRows?[entityID.rowUUID] else { continue }
@@ -150,6 +138,19 @@ extension Outline: VCKModel {
 			if image.apply(saveRecord) {
 				updatedRowIDs.insert(row.id)
 				row.saveImage(image)
+			}
+		}
+		
+		for deleteRecordID in update.deleteRowRecordIDs {
+			keyedRows?.removeValue(forKey: deleteRecordID.rowUUID)
+		}
+		
+		for deleteRecordID in update.deleteImageRecordIDs {
+			if let row = keyedRows?[deleteRecordID.rowUUID] {
+				if row.findImage(id: deleteRecordID) != nil {
+					row.deleteImage(id: deleteRecordID)
+					updatedRowIDs.insert(deleteRecordID.rowUUID)
+				}
 			}
 		}
 		
@@ -212,6 +213,11 @@ extension Outline: VCKModel {
 
 		created = record[Outline.CloudKitRecord.Fields.created] as? Date
         updated = record[Outline.CloudKitRecord.Fields.updated] as? Date
+		
+		if let numberingStyleRawValue = record[Outline.CloudKitRecord.Fields.numberingStyle] as? String {
+			numberingStyle = NumberingStyle(rawValue: numberingStyleRawValue)
+		}
+		
 		automaticallyCreateLinks = record[Outline.CloudKitRecord.Fields.automaticallyCreateLinks] as? Bool
 		automaticallyChangeLinkTitles = record[Outline.CloudKitRecord.Fields.automaticallyChangeLinkTitles] as? Bool
 		checkSpellingWhileTyping = record[Outline.CloudKitRecord.Fields.checkSpellingWhileTyping] as? Bool
@@ -242,7 +248,16 @@ extension Outline: VCKModel {
         serverDisambiguator = record[Outline.CloudKitRecord.Fields.disambiguator] as? Int
         serverCreated = record[Outline.CloudKitRecord.Fields.created] as? Date
         serverUpdated = record[Outline.CloudKitRecord.Fields.updated] as? Date
+		
+		if let numberingStyleRawValue = record[Outline.CloudKitRecord.Fields.numberingStyle] as? String {
+			serverNumberingStyle = NumberingStyle(rawValue: numberingStyleRawValue)
+		}
+		
+		serverAutomaticallyCreateLinks = record[Outline.CloudKitRecord.Fields.automaticallyCreateLinks] as? Bool
 		serverAutomaticallyChangeLinkTitles = record[Outline.CloudKitRecord.Fields.automaticallyChangeLinkTitles] as? Bool
+		serverCheckSpellingWhileTyping = record[Outline.CloudKitRecord.Fields.checkSpellingWhileTyping] as? Bool
+		serverCorrectSpellingAutomatically = record[Outline.CloudKitRecord.Fields.correctSpellingAutomatically] as? Bool
+
         serverOwnerName = record[Outline.CloudKitRecord.Fields.ownerName] as? String
         serverOwnerEmail = record[Outline.CloudKitRecord.Fields.ownerEmail] as? String
         serverOwnerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
@@ -287,6 +302,9 @@ extension Outline: VCKModel {
 
         let recordUpdated = merge(client: updated, ancestor: ancestorUpdated, server: serverUpdated)
         record[Outline.CloudKitRecord.Fields.updated] = recordUpdated
+
+		let recordNumberingStyle = merge(client: numberingStyle, ancestor: ancestorNumberingStyle, server: serverNumberingStyle)
+		record[Outline.CloudKitRecord.Fields.numberingStyle] = recordNumberingStyle?.rawValue
 
 		let recordAutomaticallyCreateLinks = merge(client: automaticallyCreateLinks, ancestor: ancestorAutomaticallyCreateLinks, server: serverAutomaticallyCreateLinks)
 		record[Outline.CloudKitRecord.Fields.automaticallyCreateLinks] = recordAutomaticallyCreateLinks
@@ -345,6 +363,12 @@ extension Outline: VCKModel {
 
         ancestorUpdated = nil
         serverUpdated = nil
+		
+		ancestorNumberingStyle = nil
+		serverNumberingStyle = nil
+		
+		ancestorAutomaticallyCreateLinks = nil
+		serverAutomaticallyCreateLinks = nil
 		
 		ancestorAutomaticallyChangeLinkTitles = nil
 		serverAutomaticallyChangeLinkTitles = nil

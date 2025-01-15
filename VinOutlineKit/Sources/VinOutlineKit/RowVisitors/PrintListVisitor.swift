@@ -14,9 +14,15 @@ import Foundation
 @MainActor
 final class PrintListVisitor {
 	
+	let numberingStyle: Outline.NumberingStyle
+	
 	var indentLevel = 0
 	var print = NSMutableAttributedString()
 
+	init(numberingStyle: Outline.NumberingStyle) {
+		self.numberingStyle = numberingStyle
+	}
+	
 	func visitor(_ visited: Row) {
 		#if canImport(UIKit)
 		if let topic = visited.topic {
@@ -46,7 +52,17 @@ final class PrintListVisitor {
 			topicParagraphStyle.tabStops = [NSTextTab(textAlignment: .left, location: textIndent, options: [:])]
 			attrs[.paragraphStyle] = topicParagraphStyle
 			
-			let printTopic = NSMutableAttributedString(string: "\u{2022}\t")
+			let printTopic = switch numberingStyle {
+			case .none:
+				NSMutableAttributedString(string: "\u{2022}\t")
+			case .simple:
+				NSMutableAttributedString(string: "\(visited.simpleNumbering)  ")
+			case .decimal:
+				NSMutableAttributedString(string: "\(visited.decimalNumbering)  ")
+			case .legal:
+				NSMutableAttributedString(string: "\(visited.legalNumbering)  ")
+			}
+			
 			printTopic.append(topic)
 			printTopic.addAttributes(attrs)
 			printTopic.replaceFont(with: topicFont)

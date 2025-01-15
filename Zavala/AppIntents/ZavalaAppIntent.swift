@@ -14,14 +14,14 @@ extension ZavalaAppIntent {
 	@MainActor
 	func resume() {
 		if UIApplication.shared.applicationState == .background {
-			AccountManager.shared.resume()
+			appDelegate.accountManager.resume()
 		}
 	}
 	
 	@MainActor
 	func suspend() async {
 		if UIApplication.shared.applicationState == .background {
-			await AccountManager.shared.suspend()
+			await appDelegate.accountManager.suspend()
 		}
 	}
 
@@ -32,7 +32,7 @@ extension ZavalaAppIntent {
 	
 	@MainActor
 	func findOutline(_ entityID: EntityID?) -> Outline? {
-		guard let entityID, let outline = AccountManager.shared.findDocument(entityID)?.outline else {
+		guard let entityID, let outline = appDelegate.accountManager.findDocument(entityID)?.outline else {
 			return nil
 		}
 		return outline

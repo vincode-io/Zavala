@@ -14,6 +14,9 @@ let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala"
 
 final class IndexRequestHandler: CSIndexExtensionRequestHandler {
 	
+	@MainActor
+	static var accountManager: AccountManager?
+	
     override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping @Sendable () -> Void) {
 		logger.info("IndexRequestHandler starting...")
 
@@ -21,7 +24,7 @@ final class IndexRequestHandler: CSIndexExtensionRequestHandler {
 			
 			Self.resume()
 
-			for document in AccountManager.shared.documents {
+			for document in Self.accountManager?.documents ?? [] {
 				logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
 				
 				let documentIndexAttributes = DocumentIndexAttributes(document: document)
@@ -42,7 +45,7 @@ final class IndexRequestHandler: CSIndexExtensionRequestHandler {
 			Self.resume()
 			
 			for description in identifiers {
-				if let entityID = EntityID(description: description), let document = AccountManager.shared.findDocument(entityID) {
+				if let entityID = EntityID(description: description), let document = Self.accountManager?.findDocument(entityID) {
 					
 					logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
 					
@@ -77,19 +80,19 @@ private extension IndexRequestHandler {
 	
 	@MainActor
 	static func resume() {
-		if AccountManager.shared == nil {
+		if Self.accountManager == nil {
 			let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
 			let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
 			let documentAccountsFolderPath = containerURL!.appendingPathComponent("Accounts").path
-			AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: Self.errorHandler)
+			Self.accountManager = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: Self.errorHandler)
 		} else {
-			AccountManager.shared.resume()
+			Self.accountManager?.resume()
 		}
 	}
 	
 	@MainActor
 	static func suspend() async {
-		await AccountManager.shared.suspend()
+		await Self.accountManager?.suspend()
 	}
 	
 }

@@ -10,6 +10,7 @@ import Foundation
 enum OutlineFontField: Hashable, Equatable, CustomStringConvertible {
 	case title
 	case tags
+	case rowNumbering(Int) // Level
 	case rowTopic(Int) // Level
 	case rowNote(Int) // Level
 	case backlinks
@@ -29,6 +30,8 @@ enum OutlineFontField: Hashable, Equatable, CustomStringConvertible {
 			return "title"
 		case .tags:
 			return "tags"
+		case .rowNumbering(let level):
+			return  "rowNumbering_\(level)"
 		case .rowTopic(let level):
 			return  "rowTopic_\(level)"
 		case .rowNote(let level):
@@ -44,6 +47,8 @@ enum OutlineFontField: Hashable, Equatable, CustomStringConvertible {
 			return .titleLabel
 		case .tags:
 			return .tagsLabel
+		case .rowNumbering(let level):
+			return .numberingLevelLabel(level: level)
 		case .rowTopic(let level):
 			return .topicLevelLabel(level: level)
 		case .rowNote(let level):
@@ -59,6 +64,8 @@ enum OutlineFontField: Hashable, Equatable, CustomStringConvertible {
 			return 0
 		case .tags:
 			return 1
+		case .rowNumbering(let level):
+			return (level * 10) - 5
 		case .rowTopic(let level):
 			return level * 10
 		case .rowNote(let level):
@@ -78,7 +85,9 @@ enum OutlineFontField: Hashable, Equatable, CustomStringConvertible {
 			self = .backlinks
 		default:
 			let components = description.split(separator: "_")
-			if components[0] == "rowTopic", let level = Int(components[1]) {
+			if components[0] == "rowNumbering", let level = Int(components[1]) {
+				self = .rowNumbering(level)
+			} else if components[0] == "rowTopic", let level = Int(components[1]) {
 				self = .rowTopic(level)
 			} else if components[0] == "rowNote", let level = Int(components[1]) {
 				self = .rowNote(level)

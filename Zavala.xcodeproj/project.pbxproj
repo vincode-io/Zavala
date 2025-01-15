@@ -173,6 +173,7 @@
 		51FA27422B3B748C008B665E /* SettingsEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA27412B3B748C008B665E /* SettingsEditorView.swift */; };
 		51FA27442B3B8F2B008B665E /* SettingsFontsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA27432B3B8F2B008B665E /* SettingsFontsView.swift */; };
 		51FA27462B3B9337008B665E /* SettingsHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA27452B3B9337008B665E /* SettingsHelpView.swift */; };
+		51FF99E52D25D1E1003B6EF4 /* EditorRowNumberingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FF99E42D25D1DA003B6EF4 /* EditorRowNumberingLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -302,6 +303,7 @@
 		5191D43E2BA353C0004D06D9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5192220F271E27FD000CDC1F /* EditorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionView.swift; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
+		519457862D18B390002D96B8 /* Zavala.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Zavala.xctestplan; path = Zavala/Zavala.xctestplan; sourceTree = "<group>"; };
 		519672692B61B1CD006A564A /* AppKitDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppKitDefaults.swift; sourceTree = "<group>"; };
 		519897C32ADE13F3008A6FA4 /* ButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonGroup.swift; sourceTree = "<group>"; };
 		519897C52ADE1C4A008A6FA4 /* About.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = About.storyboard; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 		51FA27412B3B748C008B665E /* SettingsEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsEditorView.swift; sourceTree = "<group>"; };
 		51FA27432B3B8F2B008B665E /* SettingsFontsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontsView.swift; sourceTree = "<group>"; };
 		51FA27452B3B9337008B665E /* SettingsHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHelpView.swift; sourceTree = "<group>"; };
+		51FF99E42D25D1DA003B6EF4 /* EditorRowNumberingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowNumberingLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -571,6 +574,7 @@
 		5181A92B2554D92000C153E8 = {
 			isa = PBXGroup;
 			children = (
+				519457862D18B390002D96B8 /* Zavala.xctestplan */,
 				513F32A12594062C0003048F /* README.md */,
 				5181A9362554D92000C153E8 /* Zavala */,
 				51E060B025A4547400194066 /* AppKitPlugin */,
@@ -696,6 +700,7 @@
 				51C71C77273FFA6700F6C779 /* EditorRowContentView.swift */,
 				5167702C261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift */,
 				51F2DC7A2586E101003BD5CE /* EditorRowNoteTextView.swift */,
+				51FF99E42D25D1DA003B6EF4 /* EditorRowNumberingLabel.swift */,
 				51D977F9257A2E4F00D98490 /* EditorRowPreviewParameters.swift */,
 				51E2156C2C8766AD00358782 /* EditorRowSearchLayoutFragment.swift */,
 				51CC2DF02C3057F100DA55D8 /* EditorRowTextStorageDelegate.swift */,
@@ -1168,6 +1173,7 @@
 				519184F327107FDA00B7E177 /* UITextView+.swift in Sources */,
 				51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,
+				51FF99E52D25D1E1003B6EF4 /* EditorRowNumberingLabel.swift in Sources */,
 				51FA273E2B3B6A12008B665E /* SettingsView.swift in Sources */,
 				516D223C2B4F0BE200440901 /* RequestReview.swift in Sources */,
 				519185072713453700B7E177 /* MacRenameTagViewController.swift in Sources */,

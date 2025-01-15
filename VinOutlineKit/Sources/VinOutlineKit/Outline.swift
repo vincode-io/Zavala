@@ -61,6 +61,27 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		case notSearching
 	}
 	
+	public enum NumberingStyle: String, CustomStringConvertible, CaseIterable, Equatable, Codable {
+		case none = "none"
+		case simple = "simple"
+		case decimal = "decimal"
+		case legal = "legal"
+		
+		public var description: String {
+			switch self {
+			case .none:
+				return "None"
+			case .simple:
+				return "Simple"
+			case .decimal:
+				return "Decimal"
+			case .legal:
+				return "Legal"
+			}
+		}
+		
+	}
+	
 	public struct UserInfoKeys {
 		public static let replacableLinkTitle = "replacableLinkTitle"
 		public static let searchText = "searchText"
@@ -159,12 +180,33 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	var ancestorNumberingStyle: NumberingStyle?
+	var serverNumberingStyle: NumberingStyle?
+	public internal(set) var numberingStyle: NumberingStyle? {
+		willSet {
+			if isCloudKit && ancestorNumberingStyle == nil {
+				ancestorNumberingStyle = numberingStyle
+			}
+		}
+		didSet {
+			if numberingStyle != oldValue {
+				outlineTextPreferencesDidChange()
+				documentMetaDataDidChange()
+			}
+		}
+	}
+	
 	var ancestorAutomaticallyCreateLinks: Bool?
 	var serverAutomaticallyCreateLinks: Bool?
 	public internal(set) var automaticallyCreateLinks: Bool? {
 		willSet {
 			if isCloudKit && ancestorAutomaticallyCreateLinks == nil {
 				ancestorAutomaticallyCreateLinks = automaticallyCreateLinks
+			}
+		}
+		didSet {
+			if automaticallyCreateLinks != oldValue {
+				documentMetaDataDidChange()
 			}
 		}
 	}
@@ -177,6 +219,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				ancestorAutomaticallyChangeLinkTitles = automaticallyChangeLinkTitles
 			}
 		}
+		didSet {
+			if automaticallyChangeLinkTitles != oldValue {
+				documentMetaDataDidChange()
+			}
+		}
 	}
 	
 	var ancestorCheckSpellingWhileTyping: Bool?
@@ -187,6 +234,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				ancestorCheckSpellingWhileTyping = checkSpellingWhileTyping
 			}
 		}
+		didSet {
+			if checkSpellingWhileTyping != oldValue {
+				outlineTextPreferencesDidChange()
+				documentMetaDataDidChange()
+			}
+		}
 	}
 	
 	var ancestorCorrectSpellingAutomatically: Bool?
@@ -195,6 +248,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		willSet {
 			if isCloudKit && ancestorCorrectSpellingAutomatically == nil {
 				ancestorCorrectSpellingAutomatically = correctSpellingAutomatically
+			}
+		}
+		didSet {
+			if correctSpellingAutomatically != oldValue {
+				outlineTextPreferencesDidChange()
+				documentMetaDataDidChange()
 			}
 		}
 	}
@@ -425,9 +484,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return expandAllInOutlineUnavailable
 	}
 	
-	public var account: Account? {
-		return AccountManager.shared.findAccount(accountID: id.accountID)
-	}
+	public private(set) weak var account: Account?
 	
 	public var tags: [Tag] {
 		guard let account else { return [Tag]() }
@@ -610,7 +667,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	private var selectionLocation: Int?
 	private var selectionLength: Int?
 
-	init(id: EntityID) {
+	init(account: Account?, id: EntityID) {
+		self.account = account
 		self.id = id
 		self.created = Date()
 		self.updated = Date()
@@ -618,7 +676,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		imagesFile = ImagesFile(outline: self)
 	}
 
-	init(parentID: EntityID, title: String?) {
+	init(account: Account?, parentID: EntityID, title: String?) {
+		self.account = account
 		self.id = .document(parentID.accountID, UUID().uuidString)
 		self.title = title
 		self.created = Date()
@@ -627,7 +686,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		imagesFile = ImagesFile(outline: self)
 	}
 	
-	init(coder: OutlineCoder) {
+	init(account: Account?, coder: OutlineCoder) {
+		self.account = account
 		self.cloudKitMetaData = coder.cloudKitMetaData
 		self.id = coder.id
 		self.ancestorTitle = coder.ancestorTitle
@@ -639,6 +699,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.ancestorUpdated = coder.ancestorUpdated
 		self.updated = coder.updated
 		self.ancestorAutomaticallyCreateLinks = coder.ancestorAutomaticallyCreateLinks
+		self.numberingStyle = coder.numberingStyle
+		self.ancestorNumberingStyle = coder.ancestorNumberingStyle
 		self.automaticallyCreateLinks = coder.automaticallyCreateLinks
 		self.ancestorAutomaticallyChangeLinkTitles = coder.ancestorAutomaticallyChangeLinkTitles
 		self.automaticallyChangeLinkTitles = coder.automaticallyChangeLinkTitles
@@ -946,7 +1008,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		appendPrintTitle(attrString: print)
 		
 		rows.forEach {
-			let visitor = PrintListVisitor()
+			let visitor = PrintListVisitor(numberingStyle: numberingStyle ?? .none)
 			$0.visit(visitor: visitor.visitor)
 			print.append(visitor.print)
 		}
@@ -998,7 +1060,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		var md = "# \(title ?? "")\n\n"
 		rows.forEach {
-			let visitor = MarkdownListVisitor(useAltLinks: useAltLinks)
+			let visitor = MarkdownListVisitor(useAltLinks: useAltLinks, numberingStyle: numberingStyle ?? .none)
 			$0.visit(visitor: visitor.visitor)
 			md.append(visitor.markdown)
 			md.append("\n")
@@ -1044,6 +1106,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			opml.append("  <vertScrollState>\(verticleScrollState)</vertScrollState>\n")
 		}
 		
+		if let numberingStyle {
+			opml.append("  <numberingStyle>\(numberingStyle.rawValue)</numberingStyle>\n")
+		}
+
 		if let automaticallyCreateLinks {
 			opml.append("  <automaticallyCreateLinks>\(automaticallyCreateLinks ? "true" : "false")</automaticallyCreateLinks>\n")
 		}
@@ -1115,7 +1181,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		requestCloudKitUpdate(for: id)
 	}
 	
-	public func update(checkSpellingWhileTyping: Bool,
+	public func update(numberingStyle: NumberingStyle,
+					   checkSpellingWhileTyping: Bool,
 					   correctSpellingAutomatically: Bool,
 					   automaticallyCreateLinks: Bool,
 					   automaticallyChangeLinkTitles: Bool,
@@ -1123,22 +1190,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 					   ownerEmail: String?,
 					   ownerURL: String?) {
 		
-		var textPrefsChanged = false
-		
-		if self.checkSpellingWhileTyping != checkSpellingWhileTyping {
-			textPrefsChanged = true
-		}
-		
-		if self.correctSpellingAutomatically != correctSpellingAutomatically {
-			textPrefsChanged = true
-		}
-		
+		self.numberingStyle = numberingStyle
 		self.checkSpellingWhileTyping = checkSpellingWhileTyping
 		self.correctSpellingAutomatically = correctSpellingAutomatically
-		
-		if textPrefsChanged {
-			outlineTextPreferencesDidChange()
-		}
 		
 		self.automaticallyCreateLinks = automaticallyCreateLinks
 		self.automaticallyChangeLinkTitles = automaticallyChangeLinkTitles
@@ -2241,21 +2295,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			return impacted
 		}
 		
-		func reloadVisitor(_ visited: Row) {
-			if let index = visited.shadowTableIndex {
-				reloads.insert(index)
-			}
-			if visited.isExpanded {
-				visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
-			}
-		}
-
-		for row in impacted {
-			if row.isExpanded {
-				row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
-			}
-		}
-
+		reloads.formUnion(reloadsForAncestorAndChildren(rows: impacted))
 		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, reloads: reloads)
 		outlineElementsDidChange(changes)
 		return impacted
@@ -2318,7 +2358,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 
 		var changes = rebuildShadowTable()
-		reloads.formUnion(reloadsForParentAndChildren(rows: impacted))
+		reloads.formUnion(reloadsForAncestorAndChildren(rows: impacted))
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		outlineElementsDidChange(changes)
 		
@@ -2504,7 +2544,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		guard isBeingViewed else { return }
 
 		var changes = rebuildShadowTable()
-		var reloads = reloadsForParentAndChildren(rows: rowMoves.map { $0.row })
+		var reloads = reloadsForAncestorAndChildren(rows: rowMoves.map { $0.row })
 		reloads.formUnion(oldParentReloads)
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		outlineElementsDidChange(changes)
@@ -2575,7 +2615,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public func delete() {
 		for link in documentLinks ?? [EntityID]() {
-			if let outline = AccountManager.shared.findDocument(link)?.outline {
+			if let outline = account?.accountManager?.findDocument(link)?.outline {
 				outline.deleteBacklink(id)
 			}
 		}
@@ -2597,8 +2637,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outlineDidDelete()
 	}
 	
-	public func duplicate(accountID: Int) -> Outline {
-		let outline = Outline(id: .document(accountID, UUID().uuidString))
+	public func duplicate(account: Account) -> Outline {
+		let outline = Outline(account: account, id: .document(account.id.accountID, UUID().uuidString))
 
 		outline.title = title
 		outline.ownerName = ownerName
@@ -2611,7 +2651,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outline.documentLinks = documentLinks
 		
 		for linkedDocumentID in outline.documentLinks ?? [EntityID]() {
-			if let linkedOutline = AccountManager.shared.findDocument(linkedDocumentID)?.outline {
+			if let linkedOutline = account.accountManager?.findDocument(linkedDocumentID)?.outline {
 				linkedOutline.createBacklink(outline.id)
 			}
 		}
@@ -2760,7 +2800,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	func rebuildShadowTable() -> OutlineElementChanges {
 		guard let oldShadowTable = shadowTable else { return OutlineElementChanges(section: adjustedRowsSection) }
-		rebuildTransientData()
+		let reloads = rebuildTransientData()
 		
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()
@@ -2784,7 +2824,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			}
 		}
 		
-		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
+		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves, reloads: reloads)
 	}
 	
 	func toCoder() -> OutlineCoder {
@@ -2798,6 +2838,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 							created: created,
 							ancestorUpdated: ancestorUpdated,
 							updated: updated,
+							ancestorNumberingStyle: ancestorNumberingStyle,
+							numberingStyle: numberingStyle,
 							ancestorAutomaticallyCreateLinks: ancestorAutomaticallyCreateLinks,
 							automaticallyCreateLinks: automaticallyCreateLinks,
 							ancestorAutomaticallyChangeLinkTitles: ancestorAutomaticallyChangeLinkTitles,
@@ -3180,8 +3222,10 @@ private extension Outline {
 		}
 	}
 	
-	func rebuildTransientData() {
-		let transient = TransientDataVisitor(isCompletedFilterOn: isCompletedFilterOn, isSearching: isSearching)
+	@discardableResult
+	func rebuildTransientData() -> Set<Int> {
+		let reloadMovedRows = (numberingStyle ?? .none) != .none
+		let transient = TransientDataVisitor(isCompletedFilterOn: isCompletedFilterOn, isSearching: isSearching, reloadMovedRows: reloadMovedRows)
 		
 		if let focusRow {
 			focusRow.visit(visitor: transient.visitor(_:))
@@ -3193,19 +3237,14 @@ private extension Outline {
 		}
 		
 		self.shadowTable = transient.shadowTable
+		
+		return transient.reloads
 	}
 	
-	func reloadsForParentAndChildren(rows: [Row]) -> Set<Int> {
+	func reloadsForAncestorAndChildren(rows: [Row]) -> Set<Int> {
 		var reloads = Set<Int>()
 		
 		for row in rows {
-			guard let shadowTableIndex = row.shadowTableIndex else { continue }
-			
-			reloads.insert(shadowTableIndex)
-			if shadowTableIndex > 0 {
-				reloads.insert(shadowTableIndex - 1)
-			}
-			
 			func reloadVisitor(_ visited: Row) {
 				if let index = visited.shadowTableIndex {
 					reloads.insert(index)
@@ -3215,8 +3254,18 @@ private extension Outline {
 				}
 			}
 
-			if row.isExpanded {
-				row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			// For indenting, outdenting and moving we alway reload the parent because its
+			// disclosure may need to be shown or hidden
+			if let parentShadowTableIndex = (row.parent as? Row)?.shadowTableIndex {
+				reloads.insert(parentShadowTableIndex)
+			}
+			
+			// Indents need to reload the grand parent to reload any numbering styles that may
+			// have changed. Outdents only need to go up as high as the parent.
+			if let grandParent = (row.parent as? Row)?.parent {
+				grandParent.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			} else {
+				row.parent?.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 		}
 
@@ -3300,7 +3349,7 @@ private extension Outline {
 	}
 	
 	func createLinkRelationship(_ entityID: EntityID) {
-		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
+		guard let outline = account?.accountManager?.findDocument(entityID)?.outline else { return }
 		
 		if isCloudKit && ancestorDocumentLinks == nil {
 			ancestorDocumentLinks = documentLinks
@@ -3317,7 +3366,7 @@ private extension Outline {
 	}
 
 	func deleteLinkRelationship(_ entityID: EntityID) {
-		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
+		guard let outline = account?.accountManager?.findDocument(entityID)?.outline else { return }
 
 		if isCloudKit && ancestorDocumentLinks == nil {
 			ancestorDocumentLinks = documentLinks

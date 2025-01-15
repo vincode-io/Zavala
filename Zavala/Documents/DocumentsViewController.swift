@@ -335,7 +335,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
         let document = account.createOutline(title: title, tags: documentContainers.tags)
 		
 		let defaults = AppDefaults.shared
-		document.outline?.update(checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
+		document.outline?.update(numberingStyle: defaults.numberingStyle,
+								 checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
 								 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
 								 automaticallyCreateLinks: defaults.automaticallyCreateLinks,
 								 automaticallyChangeLinkTitles: defaults.automaticallyChangeLinkTitles,
@@ -357,7 +358,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	func manageSharing() {
 		guard let document = selectedDocuments.first,
 			  let shareRecord = document.shareRecord,
-			  let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer,
+			  let container = appDelegate.accountManager.cloudKitAccount?.cloudKitContainer,
 			  let indexPath = collectionView.indexPathsForSelectedItems?.first,
 			  let cell = collectionView.cellForItem(at: indexPath) else {
 			return
@@ -404,9 +405,9 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	// MARK: Actions
 	
 	@objc func sync() {
-		if AccountManager.shared.isSyncAvailable {
+		if appDelegate.accountManager.isSyncAvailable {
 			Task {
-				await AccountManager.shared.sync()
+				await appDelegate.accountManager.sync()
 			}
 		}
 		collectionView?.refreshControl?.endRefreshing()
@@ -490,7 +491,7 @@ extension DocumentsViewController: UICloudSharingControllerDelegate {
 	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
 		Task {
 			try await Task.sleep(for: .seconds(2))
-			await AccountManager.shared.sync()
+			await appDelegate.accountManager.sync()
 		}
 	}
 	
@@ -622,7 +623,7 @@ extension DocumentsViewController {
 		let document = documents[indexPath.row]
 		
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(document: document).userInfo]
+		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, document: document).userInfo]
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
@@ -754,7 +755,7 @@ extension DocumentsViewController: UISearchControllerDelegate {
 	func willPresentSearchController(_ searchController: UISearchController) {
 		heldDocumentContainers = documentContainers
 		Task {
-			await setDocumentContainers([Search(searchText: "")], isNavigationBranch: false)
+			await setDocumentContainers([Search(accountManager: appDelegate.accountManager, searchText: "")], isNavigationBranch: false)
 		}
 	}
 
@@ -777,7 +778,7 @@ extension DocumentsViewController: UISearchResultsUpdating {
 		guard heldDocumentContainers != nil else { return }
 		
 		Task {
-			await setDocumentContainers([Search(searchText: searchController.searchBar.text!)], isNavigationBranch: false)
+			await setDocumentContainers([Search(accountManager: appDelegate.accountManager, searchText: searchController.searchBar.text!)], isNavigationBranch: false)
 		}
 	}
 
@@ -971,8 +972,12 @@ private extension DocumentsViewController {
             for document in documents {
 				Task {
 					document.load()
-					let newDocument = document.duplicate(accountID: document.id.accountID)
-					document.account?.createDocument(newDocument)
+					
+					guard let documentAccount = document.account else { return }
+					
+					let newDocument = document.duplicate(account: documentAccount)
+					documentAccount.createDocument(newDocument)
+					
 					await newDocument.forceSave()
 					await newDocument.unload()
 					await document.unload()
@@ -992,7 +997,7 @@ private extension DocumentsViewController {
 	}
 	
 	func manageSharingAction(document: Document, sourceView: UIView) -> UIAction? {
-		guard let shareRecord = document.shareRecord, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer else {
+		guard let shareRecord = document.shareRecord, let container = appDelegate.accountManager.cloudKitAccount?.cloudKitContainer else {
 			return nil
 		}
 

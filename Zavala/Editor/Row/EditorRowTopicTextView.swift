@@ -123,7 +123,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	override func deleteBackward() {
 		guard let row else { return }
 		if attributedText.length == 0 && row.rowCount == 0 {
-			isSavingTextUnnecessary = true
+			isTextChanged = false
 			editorDelegate?.deleteRow(self, row: row, rowStrings: rowStrings)
 			return
 		}
@@ -164,15 +164,15 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	
 	@objc func insertRow(_ sender: Any) {
 		guard let row else { return }
-		isSavingTextUnnecessary = true
+		isTextChanged = false
 		editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: true)
 	}
 
 	@objc func split(_ sender: Any) {
 		guard let row else { return }
 		
-		isSavingTextUnnecessary = true
-		
+		isTextChanged = false
+
 		if cursorPosition == 0 {
 			editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: false)
 		} else {
@@ -185,7 +185,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
-	override func update(row: Row) {
+	override func update(with row: Row) {
 		// Don't update the row if we are in the middle of entering multistage characters, e.g. Japanese
 		guard markedTextRange == nil else { return }
 		
@@ -206,7 +206,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 			}
 			accessibilityLabel = .completeAccessibilityLabel
 		} else {
-			baseAttributes[.foregroundColor] = OutlineFontCache.shared.topicColor(level: row.trueLevel)
+			baseAttributes[.foregroundColor] = fontColor
 			accessibilityLabel = nil
 		}
 		
@@ -277,18 +277,18 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 		
 		switch text {
 		case "\n":
-			if cursorIsAtBeginning {
+			if cursorIsAtEnd {
+				isTextChanged = false
+				editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
+			} else if cursorIsAtBeginning {
 				if row.outline?.shouldMoveLeftOnReturn(row: row) ?? false {
 					editorDelegate?.moveRowLeft(self, row: row)
 				} else {
-					isSavingTextUnnecessary = true
+					isTextChanged = false
 					editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: false)
 				}
-			} else if cursorIsAtEnd {
-				isSavingTextUnnecessary = true
-				editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
 			} else {
-				isSavingTextUnnecessary = true
+				isTextChanged = false
 				editorDelegate?.splitRow(self, row: row, topic: cleansedAttributedText, cursorPosition: cursorPosition)
 			}
 			return false

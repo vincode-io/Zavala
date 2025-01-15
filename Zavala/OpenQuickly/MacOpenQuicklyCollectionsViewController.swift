@@ -80,7 +80,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 
-			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
+			if case .documentContainer(let entityID) = item.id, let container = appDelegate.accountManager.findDocumentContainer(entityID) {
 				contentConfiguration.text = container.partialName
 				contentConfiguration.image = container.image
 
@@ -142,7 +142,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 	}
 	
 	func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
-		guard let localAccount = AccountManager.shared.localAccount, localAccount.isActive else { return nil }
+		guard let localAccount = appDelegate.accountManager.localAccount, localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 		let header = CollectionsItem.item(id: .header(.localAccount))
@@ -166,7 +166,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 	}
 	
 	func cloudKitAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
-		guard let cloudKitAccount = AccountManager.shared.cloudKitAccount else { return nil }
+		guard let cloudKitAccount = appDelegate.accountManager.cloudKitAccount else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 		let header = CollectionsItem.item(id: .header(.cloudKitAccount))

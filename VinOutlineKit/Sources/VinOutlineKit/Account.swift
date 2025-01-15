@@ -87,14 +87,14 @@ public final class Account: Identifiable, Equatable {
 	var folder: URL {
 		switch type {
 		case .local:
-			return AccountManager.shared.localAccountFolder
+			return accountManager!.localAccountFolder
 		case .cloudKit:
-			return AccountManager.shared.cloudKitAccountFolder
+			return accountManager!.cloudKitAccountFolder
 		}
 	}
 	var cloudKitManager: CloudKitManager?
 	
-	private let operationQueue = OperationQueue()
+	private(set) weak var accountManager: AccountManager?
 
 	private var documentsDictionaryNeedUpdate = true
 	private var _idToDocumentsDictionary = [String: Document]()
@@ -114,13 +114,16 @@ public final class Account: Identifiable, Equatable {
 		return _idToTagsDictionary
 	}
 
-	init(accountType: AccountType) {
+	init(accountManager: AccountManager, accountType: AccountType) {
+		self.accountManager = accountManager
 		self.type = accountType
 		self.isActive = true
 		self.documents = [Document]()
 	}
 	
-	init(coder: AccountCoder) {
+	init(accountManager: AccountManager, coder: AccountCoder) {
+		self.accountManager = accountManager
+		
 		self.type = coder.type
 		self.isActive = coder.isActive
 		
@@ -129,7 +132,7 @@ public final class Account: Identifiable, Equatable {
 		}
 		
 		if let documentCoders = coder.documents {
-			self.documents = documentCoders.map { Document(coder: $0)}
+			self.documents = documentCoders.map { Document(account: self, coder: $0)}
 		}
 		
 		self.sharedDatabaseChangeToken = coder.sharedDatabaseChangeToken
@@ -137,7 +140,7 @@ public final class Account: Identifiable, Equatable {
 	}
 	
 	func initializeCloudKit(errorHandler: ErrorHandler) {
-		cloudKitManager = CloudKitManager(account: self, errorHandler: errorHandler)
+		cloudKitManager = CloudKitManager(account: self, errorHandler: errorHandler, cloudKitAccountFolder: accountManager!.cloudKitAccountFolder)
 		
 		for document in documents ?? [] {
 			cloudKitManager?.addSyncRecordIfNeeded(document: document)
@@ -218,7 +221,7 @@ public final class Account: Identifiable, Equatable {
 			title = VinOutlineKitStringAssets.noTitle
 		}
 		
-		let outline = Outline(parentID: id, title: title)
+		let outline = Outline(account: self, parentID: id, title: title)
 		let document = Document.outline(outline)
 		documents?.append(document)
 		accountDocumentsDidChange()
@@ -238,6 +241,10 @@ public final class Account: Identifiable, Equatable {
 			outline.verticleScrollState = Int(verticleScrollState)
 		}
 		
+		if let numberingStyle = headNode?["numberingStyle"]?.first?.content {
+			outline.numberingStyle = Outline.NumberingStyle(rawValue: numberingStyle)
+		}
+
 		if let automaticallyCreateLinks = headNode?["automaticallyCreateLinks"]?.first?.content {
 			outline.automaticallyCreateLinks = automaticallyCreateLinks == "true" ? true : false
 		}
@@ -299,7 +306,7 @@ public final class Account: Identifiable, Equatable {
 	}
 	
 	public func createOutline(title: String? = nil, tags: [Tag]? = nil) -> Document {
-		let outline = Outline(parentID: id, title: title)
+		let outline = Outline(account: self, parentID: id, title: title)
 		if documents == nil {
 			documents = [Document]()
 		}
@@ -336,7 +343,7 @@ public final class Account: Identifiable, Equatable {
 			await outline.forceSave()
 			await outline.unload()
 		} else {
-			let outline = Outline(id: update.documentID)
+			let outline = Outline(account: self, id: update.documentID)
 			outline.zoneID = update.zoneID
 
 			outline.apply(update)

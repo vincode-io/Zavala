@@ -60,19 +60,38 @@ struct GetInfoView: View {
 	var form: some View {
 		Form {
 			Section(String.settingsControlLabel) {
+				HStack {
+					Text(String.numberingStyleControlLabel)
+						.font(.body)
+					Spacer()
+					Picker(selection: $getInfoViewModel.numberingStyle) {
+						ForEach(Outline.NumberingStyle.allCases, id: \.self) {
+							Text($0.description)
+						}
+					} label: {
+					}
+					#if targetEnvironment(macCatalyst)
+					.frame(width: SettingsView.pickerWidth)
+					#endif
+					.pickerStyle(.menu)
+				}
+
 				Toggle(isOn: $getInfoViewModel.checkSpellingWhileTyping) {
 					Text(String.checkSpellingWhileTypingControlLabel)
 				}
 				.toggleStyle(.switch)
+
 				Toggle(isOn: $getInfoViewModel.correctSpellingAutomatically) {
 					Text(String.correctSpellingAutomaticallyControlLabel)
 				}
 				.toggleStyle(.switch)
 				.disabled(getInfoViewModel.checkSpellingWhileTyping == false)
+
 				Toggle(isOn: $getInfoViewModel.automaticallyCreateLinks) {
 					Text(String.automaticallyCreateLinksControlLabel)
 				}
 				.toggleStyle(.switch)
+
 				Toggle(isOn: $getInfoViewModel.automaticallyChangeLinkTitles) {
 					Text(String.automaticallyChangeLinkTitlesControlLabel)
 				}
@@ -150,6 +169,7 @@ class GetInfoViewModel: ObservableObject {
 	private var outline: Outline
 	
 	var title: String
+	@Published var numberingStyle: Outline.NumberingStyle
 	@Published var checkSpellingWhileTyping: Bool
 	@Published var correctSpellingAutomatically: Bool
 	@Published var automaticallyCreateLinks: Bool
@@ -165,6 +185,7 @@ class GetInfoViewModel: ObservableObject {
 		self.outline = outline
 		
 		self.title = outline.title ?? ""
+		self.numberingStyle = outline.numberingStyle ?? .none
 		self.checkSpellingWhileTyping = outline.checkSpellingWhileTyping ?? true
 		self.correctSpellingAutomatically = outline.correctSpellingAutomatically ?? true
 		self.automaticallyCreateLinks = outline.automaticallyCreateLinks ?? true
@@ -189,7 +210,8 @@ class GetInfoViewModel: ObservableObject {
 	}
 	
 	func update() {
-		outline.update(checkSpellingWhileTyping: checkSpellingWhileTyping,
+		outline.update(numberingStyle: numberingStyle,
+					   checkSpellingWhileTyping: checkSpellingWhileTyping,
 					   correctSpellingAutomatically: correctSpellingAutomatically,
 					   automaticallyCreateLinks: automaticallyCreateLinks,
 					   automaticallyChangeLinkTitles: automaticallyChangeLinkTitles,

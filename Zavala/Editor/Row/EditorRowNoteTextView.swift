@@ -96,7 +96,7 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 	override func deleteBackward() {
 		guard let row else { return }
 		if attributedText.length == 0 {
-			isSavingTextUnnecessary = true
+			isTextChanged = false
 			editorDelegate?.deleteRowNote(self, row: row, rowStrings: rowStrings)
 		} else {
 			super.deleteBackward()
@@ -118,7 +118,7 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
-	override func update(row: Row) {
+	override func update(with row: Row) {
 		// Don't update the row if we are in the middle of entering multistage characters, e.g. Japanese
 		guard markedTextRange == nil else { return }
 		

@@ -81,16 +81,22 @@ struct SettingsFontAddMenu: View {
 	var body: some View {
 		Menu {
 			Button {
+				guard let fieldConfig = AppDefaults.shared.outlineFonts?.nextNumberingDefault else { return }
+				presentingFieldConfig = FieldConfig(field: fieldConfig.0, config: fieldConfig.1)
+			} label: {
+				Text(String.addNumberingLevelControlLabel)
+			}
+			Button {
 				guard let fieldConfig = AppDefaults.shared.outlineFonts?.nextTopicDefault else { return }
 				presentingFieldConfig = FieldConfig(field: fieldConfig.0, config: fieldConfig.1)
 			} label: {
-				Label(String.addTopicLevelControlLabel, systemImage: "textformat.size.larger")
+				Text(String.addTopicLevelControlLabel)
 			}
 			Button {
 				guard let fieldConfig = AppDefaults.shared.outlineFonts?.nextNoteDefault else { return }
 				presentingFieldConfig = FieldConfig(field: fieldConfig.0, config: fieldConfig.1)
 			} label: {
-				Label(String.addNoteLevelControlLabel, systemImage: "textformat.size.smaller")
+				Text(String.addNoteLevelControlLabel)
 			}
 		} label: {
 			Label(String.addControlLabel, systemImage: "plus")
@@ -120,6 +126,9 @@ class SettingsFontsViewModel: ObservableObject {
 
 	func deleteUnavailable(_ fontField: OutlineFontField) -> Bool {
 		switch fontField {
+		case .rowNumbering(let level):
+			guard level > 1 else { return true }
+			return lastOutlineFonts?.deepestNumberingLevel ?? -1 != level
 		case .rowTopic(let level):
 			guard level > 1 else { return true }
 			return lastOutlineFonts?.deepestTopicLevel ?? -1 != level

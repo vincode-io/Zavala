@@ -63,6 +63,12 @@ class EditorRowViewCell: UICollectionViewListCell {
 		}
 	}
 	
+	var numberingStyle: Outline.NumberingStyle? {
+		didSet {
+			setNeedsUpdateConfiguration()
+		}
+	}
+	
 	weak var delegate: EditorRowViewCellDelegate? {
 		didSet {
 			setNeedsUpdateConfiguration()
@@ -101,6 +107,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 		
 		var content = EditorRowContentConfiguration(row: row,
 													isSearching: isSearching,
+													numberingStyle: numberingStyle,
 													indentationWidth: indentationWidth,
 													isDisclosureVisible: isDisclosureVisible,
 													isNotesVisible: isNotesVisible,

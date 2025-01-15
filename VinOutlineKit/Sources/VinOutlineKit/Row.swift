@@ -34,7 +34,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	
 	public static let typeIdentifier = "io.vincode.Zavala.Row"
 	
-	public var parent: RowContainer?
+	public weak var parent: RowContainer?
 	public var shadowTableIndex: Int?
 	
 	public var isCloudKit: Bool {
@@ -150,6 +150,29 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		}
 		
 		return parentCount
+	}
+	
+	public var simpleNumbering: String {
+		let index = parent?.firstIndexOfRow(self) ?? 0
+		return String(index + 1) + "."
+	}
+	
+	public var decimalNumbering: String {
+		var result = String()
+		var currentRow: Row? = self
+		
+		while currentRow != nil {
+			let index = currentRow!.parent?.firstIndexOfRow(currentRow!) ?? 0
+			result = String(index + 1) + "." + result
+			currentRow = currentRow?.parent as? Row
+		}
+		
+		return result
+	}
+	
+	public var legalNumbering: String {
+		let index = parent?.firstIndexOfRow(self) ?? 0
+		return (index + 1).legalNumbering(level: trueLevel + 1)
 	}
 	
 	public var isExpandable: Bool {
@@ -578,8 +601,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return false
 	}
 	
-	public func markdownList() -> String {
-		let visitor = MarkdownListVisitor(useAltLinks: false)
+	public func markdownList(numberingStyle: Outline.NumberingStyle) -> String {
+		let visitor = MarkdownListVisitor(useAltLinks: false, numberingStyle: numberingStyle)
 		visit(visitor: visitor.visitor)
 		return visitor.markdown
 	}
@@ -722,7 +745,8 @@ private extension Row {
 			result.enumerateAttribute(.link, in: .init(location: 0, length: result.length), options: []) { (value, range, _) in
 				guard let url = value as? URL,
 					  let entityID = EntityID(url: url),
-					  let document = AccountManager.shared.findDocument(entityID),
+					  let accountManager = outline?.account?.accountManager,
+					  let document = accountManager.findDocument(entityID),
 					  let newURL = URL(string: document.filename(type: type)) else { return }
 				
 				result.removeAttribute(.link, range: range)

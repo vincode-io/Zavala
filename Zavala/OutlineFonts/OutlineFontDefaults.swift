@@ -14,12 +14,14 @@ struct OutlineFontDefaults: Equatable {
 		#if targetEnvironment(macCatalyst) || canImport(AppKit)
 		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "Helvetica Neue", size: 26, color: .primaryText)
 		defaults.rowFontConfigs[.tags] = tagConfigV2
+		defaults.rowFontConfigs[.rowNumbering(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 14, color: .secondaryText)
 		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 14, color: .primaryText)
 		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 13, color: .secondaryText)
 		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "Helvetica Neue", size: 12, color: .secondaryText)
 		#else
 		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "Helvetica Neue", size: 34, color: .primaryText)
 		defaults.rowFontConfigs[.tags] = tagConfigV2
+		defaults.rowFontConfigs[.rowNumbering(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 17, color: .secondaryText)
 		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 17, color: .primaryText)
 		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 16, color: .secondaryText)
 		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "Helvetica Neue", size: 14, color: .secondaryText)
@@ -46,6 +48,24 @@ struct OutlineFontDefaults: Equatable {
 	var rowFontConfigs = [OutlineFontField: OutlineFontConfig]()
 	var sortedFields: [OutlineFontField] {
 		return rowFontConfigs.keys.sorted(by: { $0.displayOrder < $1.displayOrder })
+	}
+	
+	var deepestNumberingLevel: Int {
+		var deepestLevel = 0
+		for key in rowFontConfigs.keys {
+			if case .rowNumbering(let level) = key {
+				if level > deepestLevel {
+					deepestLevel = level
+				}
+			}
+		}
+		return deepestLevel
+	}
+
+	var nextNumberingDefault: (OutlineFontField, OutlineFontConfig)? {
+		let level = deepestNumberingLevel
+		let nextField = OutlineFontField.rowNumbering(level + 1)
+		return (nextField, rowFontConfigs[.rowNumbering(level)]!)
 	}
 	
 	var deepestTopicLevel: Int {
@@ -122,6 +142,22 @@ struct OutlineFontDefaults: Equatable {
 			
 			updatedUserInfo[key] = config
 		}
+		return updatedUserInfo
+	}
+	
+	static func addMissingFontConfigs(userInfo: [String: [AnyHashable: AnyHashable]]) -> [String: [AnyHashable: AnyHashable]] {
+		let defaults = OutlineFontDefaults.defaults
+
+		var updatedUserInfo = [String: [AnyHashable: AnyHashable]]()
+
+		defaults.rowFontConfigs.keys.forEach { field in
+			if userInfo[field.description] == nil {
+				updatedUserInfo[field.description] = defaults.rowFontConfigs[field]!.userInfo
+			} else {
+				updatedUserInfo[field.description] = userInfo[field.description]
+			}
+		}
+		
 		return updatedUserInfo
 	}
 	

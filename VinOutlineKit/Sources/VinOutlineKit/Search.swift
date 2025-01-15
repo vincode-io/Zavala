@@ -49,7 +49,7 @@ public final class Search: Identifiable, DocumentContainer {
 			
 			for try await result in searchQuery!.results {
 				if let entityID = EntityID(description: result.item.uniqueIdentifier) {
-					if let document = AccountManager.shared.findDocument(entityID) {
+					if let document = accountManager!.findDocument(entityID) {
 						documents.append(document)
 					}
 				}
@@ -59,8 +59,10 @@ public final class Search: Identifiable, DocumentContainer {
 		}
 	}
 
+	private weak var accountManager: AccountManager?
 
-	public init(searchText: String) {
+	public init(accountManager: AccountManager, searchText: String) {
+		self.accountManager = accountManager
 		self.id = .search(searchText)
 		self.searchText = searchText
 	}
@@ -78,7 +80,7 @@ private extension Search {
 	func toDocuments(_ searchItems: [CSSearchableItem]) -> [Document] {
 		return searchItems.compactMap {
 			if let entityID = EntityID(description: $0.uniqueIdentifier) {
-				if let document = AccountManager.shared.findDocument(entityID) {
+				if let document = accountManager!.findDocument(entityID) {
 					return document
 				}
 			}

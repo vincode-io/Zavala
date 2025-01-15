@@ -156,11 +156,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		}
 		
 		if let goBackwardStackUserInfos = userInfo[UserInfoKeys.goBackwardStack] as? [Any] {
-			goBackwardStack = goBackwardStackUserInfos.compactMap { Pin(userInfo: $0) }
+			goBackwardStack = goBackwardStackUserInfos.compactMap { Pin(accountManager: appDelegate.accountManager, userInfo: $0) }
 		}
 
 		if let goForwardStackUserInfos = userInfo[UserInfoKeys.goForwardStack] as? [Any] {
-			goForwardStack = goForwardStackUserInfos.compactMap { Pin(userInfo: $0) }
+			goForwardStack = goForwardStackUserInfos.compactMap { Pin(accountManager: appDelegate.accountManager, userInfo: $0) }
 		}
 
 		cleanUpNavigationStacks()
@@ -181,7 +181,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			documentsViewController?.documentSortOrderState = documentSortOrderState
 		}
 
-		let pin = Pin(userInfo: userInfo[Pin.UserInfoKeys.pin])
+		let pin = Pin(accountManager: appDelegate.accountManager, userInfo: userInfo[Pin.UserInfoKeys.pin])
 		
 		guard let documentContainers = pin.containers, !documentContainers.isEmpty else {
 			return
@@ -198,7 +198,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 	}
 	
 	func handleDocument(_ entityID: EntityID, isNavigationBranch: Bool) async {
-		guard let account = AccountManager.shared.findAccount(accountID: entityID.accountID),
+		guard let account = appDelegate.accountManager.findAccount(accountID: entityID.accountID),
 			  let document = account.findDocument(entityID) else {
 			presentError(title: .documentNotFoundTitle, message: .documentNotFoundMessage)
 			return
@@ -238,7 +238,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .sync:
-			return AccountManager.shared.isSyncAvailable
+			return appDelegate.accountManager.isSyncAvailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
 		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
@@ -256,7 +256,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 	
 	@objc func sync(_ sender: Any?) {
 		Task {
-			await AccountManager.shared.sync()
+			await appDelegate.accountManager.sync()
 		}
 	}
 	
@@ -453,18 +453,18 @@ extension MainSplitViewController: DocumentsDelegate {
 			}
 		}
 
-		lastPin = Pin(containers: documentContainers, document: document)
+		lastPin = Pin(accountManager: appDelegate.accountManager, containers: documentContainers, document: document)
 		
         if let search = documentContainers.first as? Search {
 			if search.searchText.isEmpty {
 				editorViewController?.edit(nil, isNew: isNew)
 			} else {
 				editorViewController?.edit(document.outline, isNew: isNew, searchText: search.searchText)
-				pinWasVisited(Pin(containers: documentContainers, document: document))
+				pinWasVisited(Pin(accountManager: appDelegate.accountManager, containers: documentContainers, document: document))
 			}
 		} else {
 			editorViewController?.edit(document.outline, selectRow: selectRow, isNew: isNew)
-			pinWasVisited(Pin(containers: documentContainers, document: document))
+			pinWasVisited(Pin(accountManager: appDelegate.accountManager, containers: documentContainers, document: document))
 		}
 	}
 
@@ -676,7 +676,7 @@ private extension MainSplitViewController {
 	func selectDefaultDocumentContainer() async {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		
-		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else {
+		guard let account = appDelegate.accountManager.findAccount(accountID: accountID) ?? appDelegate.accountManager.activeAccounts.first else {
 			return
 		}
 		
@@ -686,7 +686,7 @@ private extension MainSplitViewController {
 	}
 	
 	func cleanUpNavigationStacks() {
-		let allDocumentIDs = AccountManager.shared.activeDocuments.map { $0.id }
+		let allDocumentIDs = appDelegate.accountManager.activeDocuments.map { $0.id }
 		
 		var replacementGoBackwardStack = [Pin]()
 		for pin in goBackwardStack {
@@ -827,7 +827,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .sync:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
-				return !AccountManager.shared.isSyncAvailable
+				return !appDelegate.accountManager.isSyncAvailable
 			}
 			item.image = .sync.symbolSizedForCatalyst()
 			item.label = .syncControlLabel

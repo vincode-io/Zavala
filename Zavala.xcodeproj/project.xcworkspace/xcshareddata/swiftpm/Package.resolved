@@ -34,7 +34,7 @@
       "location" : "https://github.com/swiftlang/swift-cmark.git",
       "state" : {
         "branch" : "gfm",
-        "revision" : "fc07ab5da47975c5ef5f336acadfc02e8f706d30"
+        "revision" : "b022b08312decdc46585e0b3440d97f6f22ef703"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "d21714073e0d16ba78eebdf36724863afc36871d"
+        "revision" : "3588f0449f1592a5c746079a5c7e6c8b62ba55eb"
       }
     },
     {
@@ -79,7 +79,7 @@
       "location" : "https://github.com/vincode-io/VinXML.git",
       "state" : {
         "branch" : "main",
-        "revision" : "508baa45519d24503c6f9e89eceef76cb5512232"
+        "revision" : "38e83e0cf0c631e7f2aa1a0b73ac83e16f929c81"
       }
     }
   ],

@@ -375,6 +375,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			cell.rowSpacingSize = self?.rowSpacingSize
 			cell.isNotesHidden = self?.outline?.isNotesFilterOn ?? false
 			cell.isSearching = self?.isSearching ?? false
+			cell.numberingStyle = self?.outline?.numberingStyle
 			cell.delegate = self
 		}
 		
@@ -1034,7 +1035,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		navigationItem.largeTitleDisplayMode = .never
 		moreMenuButton.menu = buildEllipsisMenu()
 		
-		if UIResponder.valid(action: .focusOut) {
+		if !(outline?.isFocusOutUnavailable() ?? true) {
 			focusButton.accessibilityLabel = .focusOutControlLabel
 			focusButton.setImage(.focusActive, for: .normal)
 			focusButton.isEnabled = true
@@ -1134,9 +1135,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func sync() {
-		if AccountManager.shared.isSyncAvailable {
+		if appDelegate.accountManager.isSyncAvailable {
 			Task {
-				await AccountManager.shared.sync()
+				await appDelegate.accountManager.sync()
 			}
 		}
 		collectionView?.refreshControl?.endRefreshing()
@@ -1977,13 +1978,13 @@ extension EditorViewController: UICloudSharingControllerDelegate {
 	
 	func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
 		Task {
-			await AccountManager.shared.sync()
+			await appDelegate.accountManager.sync()
 		}
 	}
 	
 	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
 		Task {
-			await AccountManager.shared.sync()
+			await appDelegate.accountManager.sync()
 		}
 	}
 
@@ -2258,7 +2259,7 @@ private extension EditorViewController {
 					let attrString = NSMutableAttributedString(attributedString: topic.cleansedAttributedText)
 					attrString.append(bottomRow.topic ?? NSAttributedString())
 
-					topic.isSavingTextUnnecessary = true
+					topic.isTextChanged = false
 					joinRow(bottomRow, topic: attrString)
 				} else {
 					super.pressesBegan(presses, with: event)
@@ -3233,7 +3234,7 @@ private extension EditorViewController {
 
 		var markdowns = [String]()
 		for row in rows.sortedWithDecendentsFiltered() {
-			markdowns.append(row.markdownList())
+			markdowns.append(row.markdownList(numberingStyle: .none))
 		}
 		let markdownData = markdowns.joined(separator: "\n").data(using: .utf8)
 
@@ -3548,7 +3549,7 @@ private extension EditorViewController {
 		// If the user is currently editing a note and wants to delete it, the text view will try to save
 		// its current contents to the row after the note data was already cleared.
 		if let noteTextView = currentTextView as? EditorRowNoteTextView {
-			noteTextView.isSavingTextUnnecessary = true
+			noteTextView.isTextChanged = false
 		}
 		
 		guard let undoManager, let outline else { return }
@@ -3657,7 +3658,7 @@ private extension EditorViewController {
 	}
 	
 	func generateBacklink(id: EntityID) -> NSAttributedString {
-		if let title = AccountManager.shared.findDocument(id)?.title, !title.isEmpty, let url = id.url {
+		if let title = appDelegate.accountManager.findDocument(id)?.title, !title.isEmpty, let url = id.url {
 			let result = NSMutableAttributedString(string: title)
 			result.addAttribute(.link, value: url, range: NSRange(0..<result.length))
 			return result

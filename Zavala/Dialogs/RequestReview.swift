@@ -17,7 +17,7 @@ struct RequestReview {
 	static func request() {
 		if BuildInfo.shared.versionNumber != AppDefaults.shared.lastReviewPromptAppVersion &&
 			Date().addingTimeInterval(-2592000) > AppDefaults.shared.lastReviewPromptDate ?? .distantPast &&
-			AccountManager.shared.activeDocuments.count >= 10 {
+			appDelegate.accountManager.activeDocuments.count >= 10 {
 			
 			AppDefaults.shared.lastReviewPromptAppVersion = BuildInfo.shared.versionNumber
 			AppDefaults.shared.lastReviewPromptDate = Date()

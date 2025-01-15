@@ -12,9 +12,7 @@ import OrderedCollections
 @MainActor
 public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 
-	static var actionRequestFile: URL {
-		return AccountManager.shared.cloudKitAccountFolder.appendingPathComponent("cloudKitRequests.plist")
-	}
+	private static var actionRequestFileName = "cloudKitRequests.plist"
 	
 	let zoneName: String
 	let zoneOwner: String
@@ -40,14 +38,16 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 		self.id = id
 	}
 	
-	static func append(requests: OrderedSet<CloudKitActionRequest>) {
+	static func append(cloudKitAccountFolder: URL, requests: OrderedSet<CloudKitActionRequest>) {
 		guard requests.count != 0 else {
 			return
 		}
+		
+		let actionRequestFile = cloudKitAccountFolder.appendingPathComponent(Self.actionRequestFileName)
 
 		var queuedRequests: OrderedSet<CloudKitActionRequest>
 		
-		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
+		if let fileData = try? Data(contentsOf: actionRequestFile) {
 			let decoder = PropertyListDecoder()
 			
 			if let decodedRequests = try? decoder.decode(OrderedSet<CloudKitActionRequest>.self, from: fileData) {
@@ -62,17 +62,19 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 		}
 		
 		queuedRequests.append(contentsOf: requests)
-		Self.save(requests: queuedRequests)
+		Self.save(cloudKitAccountFolder: cloudKitAccountFolder, requests: queuedRequests)
 	}
 	
-	static func clear() {
-		save(requests: OrderedSet<CloudKitActionRequest>())
+	static func clear(cloudKitAccountFolder: URL) {
+		save(cloudKitAccountFolder: cloudKitAccountFolder, requests: OrderedSet<CloudKitActionRequest>())
 	}
 	
-	static func load() -> OrderedSet<CloudKitActionRequest>? {
+	static func load(cloudKitAccountFolder: URL) -> OrderedSet<CloudKitActionRequest>? {
+		let actionRequestFile = cloudKitAccountFolder.appendingPathComponent(Self.actionRequestFileName)
+
 		var queuedRequests: OrderedSet<CloudKitActionRequest>? = nil
 		
-		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
+		if let fileData = try? Data(contentsOf: actionRequestFile) {
 			let decoder = PropertyListDecoder()
 			if let decodedRequests = try? decoder.decode(OrderedSet<CloudKitActionRequest>.self, from: fileData) {
 				queuedRequests = decodedRequests
@@ -90,12 +92,14 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 
 private extension CloudKitActionRequest {
 	
-	static func save(requests: OrderedSet<CloudKitActionRequest>) {
+	static func save(cloudKitAccountFolder: URL, requests: OrderedSet<CloudKitActionRequest>) {
+		let actionRequestFile = cloudKitAccountFolder.appendingPathComponent(Self.actionRequestFileName)
+
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary
 
 		if let encodedIDs = try? encoder.encode(requests) {
-			try? encodedIDs.write(to: CloudKitActionRequest.actionRequestFile)
+			try? encodedIDs.write(to: actionRequestFile)
 		}
 	}
 	

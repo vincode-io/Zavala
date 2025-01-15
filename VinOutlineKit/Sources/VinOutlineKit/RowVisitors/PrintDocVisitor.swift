@@ -41,7 +41,7 @@ final class PrintDocVisitor {
 					print.append(NSAttributedString(string: "\n"))
 				}
 				
-				let listVisitor = PrintListVisitor()
+				let listVisitor = PrintListVisitor(numberingStyle: .none)
 				listVisitor.indentLevel = 1
 				visited.visit(visitor: listVisitor.visitor)
 				print.append(listVisitor.print)

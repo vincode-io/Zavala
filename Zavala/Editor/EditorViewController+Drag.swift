@@ -28,7 +28,7 @@ extension EditorViewController: UICollectionViewDragDelegate {
 			if row == rows[0] {
 				var markdowns = [String]()
 				for row in rows {
-					markdowns.append(row.markdownList())
+					markdowns.append(row.markdownList(numberingStyle: .none))
 				}
 				let markdownData = markdowns.joined(separator: "\n").data(using: .utf8)
 

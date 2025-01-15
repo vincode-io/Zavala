@@ -9,7 +9,7 @@ import UIKit
 
 class SettingsSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
-	private static let windowSize = CGSize(width: 400, height: 450)
+	private static let windowSize = CGSize(width: 400, height: 500)
 	
 	var userInterfaceColorPalette = AppDefaults.shared.userInterfaceColorPalette
 	var window: UIWindow?

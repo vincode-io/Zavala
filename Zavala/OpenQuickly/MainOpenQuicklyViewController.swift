@@ -34,7 +34,7 @@ class MainOpenQuicklyViewController: UIViewController {
 			self.dismiss(animated: true)
 		}
 		
-		let searchItems = AccountManager.shared.activeDocuments.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
+		let searchItems = appDelegate.accountManager.activeDocuments.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
 		searchTextField.filterItems(searchItems)
 	}
 

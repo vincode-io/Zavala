@@ -49,6 +49,8 @@ public class CloudKitManager {
 	private weak var errorHandler: ErrorHandler?
 	private weak var account: Account?
 
+	private var cloudKitAccountFolder: URL
+	
 	private var workTask: Task<(), Never>?
 	private var workChannel = AsyncChannel<Void>()
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
@@ -79,7 +81,7 @@ public class CloudKitManager {
 		 return (isReachable && !needsConnection)
 	}
 		
-	init(account: Account, errorHandler: ErrorHandler) {
+	init(account: Account, errorHandler: ErrorHandler, cloudKitAccountFolder: URL) {
 		self.account = account
 
 		let delegate = CloudKitOutlineZoneDelegate(account: account, zoneID: CloudKitOutlineZone.defaultZoneID)
@@ -87,6 +89,8 @@ public class CloudKitManager {
 
 		self.zones[outlineZone.zoneID] = outlineZone
 		self.errorHandler = errorHandler
+		self.cloudKitAccountFolder = cloudKitAccountFolder
+		
 		migrateSharedDatabaseChangeToken()
 		outlineZone.migrateChangeToken()
 		
@@ -113,7 +117,7 @@ public class CloudKitManager {
 	func addRequests(_ requests: OrderedSet<CloudKitActionRequest>) {
 		Task {
 			await requestsSemaphore.wait()
-			CloudKitActionRequest.append(requests: requests)
+			CloudKitActionRequest.append(cloudKitAccountFolder: cloudKitAccountFolder, requests: requests)
 			requestsSemaphore.signal()
 
 			await workChannel.send(())
@@ -122,7 +126,7 @@ public class CloudKitManager {
 	
 	func loadRequests() async -> OrderedSet<CloudKitActionRequest> {
 		await requestsSemaphore.wait()
-		let requests = CloudKitActionRequest.load()
+		let requests = CloudKitActionRequest.load(cloudKitAccountFolder: cloudKitAccountFolder)
 		requestsSemaphore.signal()
 		return requests ?? []
 	}
@@ -327,13 +331,13 @@ private extension CloudKitManager {
 		}
 		
 		await requestsSemaphore.wait()
-		guard let requests = CloudKitActionRequest.load(), !requests.isEmpty else {
+		guard let requests = CloudKitActionRequest.load(cloudKitAccountFolder: cloudKitAccountFolder), !requests.isEmpty else {
 			logger.info("No pending requests to send.")
 			requestsSemaphore.signal()
 			return
 		}
 
-		CloudKitActionRequest.clear()
+		CloudKitActionRequest.clear(cloudKitAccountFolder: cloudKitAccountFolder)
 		requestsSemaphore.signal()
 
 		logger.info("Sending \(requests.count) requests.")
@@ -401,7 +405,7 @@ private extension CloudKitManager {
 		self.logger.info("Saving \(leftOverRequests.count) requests.")
 		
 		await requestsSemaphore.wait()
-		CloudKitActionRequest.append(requests: leftOverRequests)
+		CloudKitActionRequest.append(cloudKitAccountFolder: cloudKitAccountFolder, requests: leftOverRequests)
 		requestsSemaphore.signal()
 	}
 	

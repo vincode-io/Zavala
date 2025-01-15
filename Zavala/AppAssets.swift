@@ -145,6 +145,7 @@ extension String {
 	static let addControlLabel = String(localized: "Add", comment: "Control Label: Add")
 	static let addNoteControlLabel = String(localized: "Add Note", comment: "Control Label: Add Note")
 	static let addNoteLevelControlLabel = String(localized: "Add Note Level", comment: "Control Label: Add Note Level")
+	static let addNumberingLevelControlLabel = String(localized: "Add Numbering Level", comment: "Control Label: The menu option to add a new Numbering Level.")
 	static let addRowAboveControlLabel = String(localized: "Add Row Above", comment: "Control Label: Add Row Above")
 	static let addRowAfterControlLabel = String(localized: "Add Row After", comment: "Control Label: Add Row After")
 	static let addRowBelowControlLabel = String(localized: "Add Row Below", comment: "Control Label: Add Row Below")
@@ -298,8 +299,9 @@ extension String {
 	static let noneControlLabel = String(localized: "None", comment: "Control Label: None")
 	static let normalControlLabel = String(localized: "Normal", comment: "Control Label: Normal")
 	static let noSelectionLabel = String(localized: "No Selection", comment: "Large Label: No Selection")
-	static let noTitleLabel = String(localized: "(No Title)", comment: "Control Label: (No Title)")
-	
+	static let noTitleLabel = String(localized: "(No Title)", comment: "Title Label: (No Title)")
+	static let numberingStyleControlLabel = String(localized: "Numbering Style", comment: "Control Label: Numbering Style")
+
 	static let openQuicklyEllipsisControlLabel = String(localized: "Open Quickly…", comment: "Control Label: Open Quickly…")
 	static let openQuicklySearchPlaceholder = String(localized: "Open Quickly", comment: "Search Field Placeholder: Open Quickly")
 	static let outlineControlLabel = String(localized: "Outline", comment: "Control Label: Outline")
@@ -434,6 +436,10 @@ extension String {
 	
 	static func editDocumentPrompt(documentTitle: String) -> String {
 		return String(localized: "Edit document “\(documentTitle)”", comment: "Prompt: edit document")
+	}
+	
+	static func numberingLevelLabel(level: Int) -> String {
+		return String(localized: "Numbering Level \(level)", comment: "Font Label: The font for the given Numbering Level")
 	}
 	
 	static func topicLevelLabel(level: Int) -> String {

@@ -46,7 +46,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 			let document = newOutlineDocument()
 			editorViewController?.edit(document?.outline, isNew: true)
 			if let document {
-				pinWasVisited(Pin(document: document))
+				pinWasVisited(Pin(accountManager: appDelegate.accountManager, document: document))
 			}
 			return
 		}
@@ -58,7 +58,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 			return
 		}
 		
-		let pin = Pin(userInfo: userInfo[Pin.UserInfoKeys.pin])
+		let pin = Pin(accountManager: appDelegate.accountManager, userInfo: userInfo[Pin.UserInfoKeys.pin])
 		if let documentID = pin.documentID {
 			openDocument(documentID)
 			return
@@ -68,11 +68,11 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 	}
 	
 	func openDocument(_ documentID: EntityID) {
-		if let document = AccountManager.shared.findDocument(documentID), let outline = document.outline {
+		if let document = appDelegate.accountManager.findDocument(documentID), let outline = document.outline {
 			sceneDelegate?.window?.windowScene?.title = outline.title
 			activityManager.selectingDocument(nil, document)
 			editorViewController?.edit(outline, isNew: false)
-			pinWasVisited(Pin(document: document))
+			pinWasVisited(Pin(accountManager: appDelegate.accountManager, document: document))
 		} else {
 			Task {
 				self.presentError(title: .documentNotFoundTitle, message: .documentNotFoundMessage) {
@@ -85,11 +85,12 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 	func newOutlineDocument(title: String? = nil) -> Document? {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		
-		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return nil }
+		guard let account = appDelegate.accountManager.findAccount(accountID: accountID) ?? appDelegate.accountManager.activeAccounts.first else { return nil }
 		let document = account.createOutline(title: title)
 		
 		let defaults = AppDefaults.shared
-		document.outline?.update(checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
+		document.outline?.update(numberingStyle: defaults.numberingStyle,
+								 checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
 								 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
 								 automaticallyCreateLinks: defaults.automaticallyCreateLinks,
 								 automaticallyChangeLinkTitles: defaults.automaticallyChangeLinkTitles,
@@ -139,7 +140,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 
 	@objc func sync(_ sender: Any?) {
 		Task {
-			await AccountManager.shared.sync()
+			await appDelegate.accountManager.sync()
 		}
 	}
 
@@ -188,7 +189,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 	}
 	
 	@objc func manageSharing(_ sender: Any?) {
-		guard let shareRecord = selectedDocuments.first!.shareRecord, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer else {
+		guard let shareRecord = selectedDocuments.first!.shareRecord, let container = appDelegate.accountManager.cloudKitAccount?.cloudKitContainer else {
 			return
 		}
 		
@@ -203,7 +204,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .sync:
-			return AccountManager.shared.isSyncAvailable
+			return appDelegate.accountManager.isSyncAvailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
 		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
@@ -269,7 +270,7 @@ extension EditorContainerViewController: UICloudSharingControllerDelegate {
 	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
 		Task { 
 			try await Task.sleep(for: .seconds(2))
-			await AccountManager.shared.sync()
+			await appDelegate.accountManager.sync()
 		}
 	}
 	
@@ -344,7 +345,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		case .sync:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
-				return !AccountManager.shared.isSyncAvailable
+				return !appDelegate.accountManager.isSyncAvailable
 			}
 			item.image = .sync.symbolSizedForCatalyst()
 			item.label = .syncControlLabel

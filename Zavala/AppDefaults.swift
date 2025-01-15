@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import VinOutlineKit
 
 enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
 	case automatic = 0
@@ -106,6 +107,7 @@ final class AppDefaults {
 		static let ownerURL = "ownerURL"
 		static let automaticallyCreateLinks = "automaticallyCreateLinks"
 		static let automaticallyChangeLinkTitles = "autoLinking"
+		static let numberingStyle = "numberingStyle"
 		static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
 		static let correctSpellingAutomatically = "correctSpellingAutomatically"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
@@ -123,6 +125,7 @@ final class AppDefaults {
 		static let upgradedDefaultsToV2 = "upgradedDefaultsToV2"
 		static let upgradedDefaultsToV2dot3 = "upgradedDefaultsToV2dot3"
 		static let upgradedDefaultsToV3dot1 = "upgradedDefaultsToV3dot1"
+		static let upgradedDefaultsToV3dot2 = "upgradedDefaultsToV3dot2"
 		static let lastReviewPromptDate = "lastReviewPromptDate"
 		static let lastReviewPromptAppVersion = "lastReviewPromptAppVersion"
 	}
@@ -233,6 +236,18 @@ final class AppDefaults {
 		}
 	}
 	
+	var numberingStyle: Outline.NumberingStyle {
+		get {
+			guard let numberingStyleRawValue = NSUbiquitousKeyValueStore.default.string(forKey: Key.numberingStyle) else {
+				return Outline.NumberingStyle.none
+			}
+			return Outline.NumberingStyle(rawValue: numberingStyleRawValue) ?? .none
+		}
+		set {
+			NSUbiquitousKeyValueStore.default.set(newValue.rawValue, forKey: Key.numberingStyle)
+		}
+	}
+		
 	var checkSpellingWhileTyping: Bool {
 		get {
 			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.checkSpellingWhileTyping)
@@ -389,6 +404,15 @@ final class AppDefaults {
 		}
 	}
 
+	var upgradedDefaultsToV3dot2: Bool {
+		get {
+			return Self.bool(for: Key.upgradedDefaultsToV3dot2)
+		}
+		set {
+			Self.setBool(for: Key.upgradedDefaultsToV3dot2, newValue)
+		}
+	}
+
 	var lastReviewPromptDate: Date? {
 		get {
 			Self.date(for: Key.lastReviewPromptDate)
@@ -421,6 +445,7 @@ final class AppDefaults {
 		upgradeDefaultsToV2()
 		upgradeDefaultsToV2dot3()
 		upgradeDefaultsToV3dot1()
+		upgradeDefaultsToV3dot2()
 	}
 
 }
@@ -510,4 +535,16 @@ private extension AppDefaults {
 		
 		Self.shared.upgradedDefaultsToV3dot1 = true
 	}
+	
+	static func upgradeDefaultsToV3dot2() {
+		guard !Self.shared.upgradedDefaultsToV3dot2 else { return }
+		
+		if let userInfo = AppDefaults.store.object(forKey: Key.outlineFonts) as? [String: [AnyHashable: AnyHashable]] {
+			let updatedUserInfo = OutlineFontDefaults.addMissingFontConfigs(userInfo: userInfo)
+			AppDefaults.store.set(updatedUserInfo, forKey: Key.outlineFonts)
+		}
+
+		Self.shared.upgradedDefaultsToV3dot2 = true
+	}
+	
 }

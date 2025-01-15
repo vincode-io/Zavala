@@ -73,7 +73,7 @@ struct OutlineEntityQuery: EntityQuery, ZavalaAppIntent {
 		
 		var results = [OutlineAppEntity]()
 		for entityID in entityIDs {
-			if let outline = await AccountManager.shared.findDocument(entityID)?.outline {
+			if let outline = await appDelegate.accountManager.findDocument(entityID)?.outline {
 				await results.append(OutlineAppEntity(outline: outline))
 			}
 		}
