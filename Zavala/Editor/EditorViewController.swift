@@ -1602,7 +1602,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			responder.resignFirstResponder()
 		}
 		
-		let rows: [Row] = indexPaths.map(\.row).compactMap { outline?.shadowTable?[$0] }
+		let rows: [Row] = indexPaths.filter( {$0.section == adjustedRowsSection })
+			.map(\.row)
+			.compactMap({ outline?.shadowTable?[$0] })
 		return buildRowsContextMenu(rows: rows)
 
 	}
