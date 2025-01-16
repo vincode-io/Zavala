@@ -640,26 +640,28 @@ private extension CollectionsViewController {
 		return UIContextMenuConfiguration(identifier: mainItem as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self else { return nil }
 
-			let containers: [DocumentContainer] = items.compactMap { item in
+			let tagDocuments: [TagDocuments] = items.compactMap { item in
 				if case .documentContainer(let entityID) = item.id {
-					return appDelegate.accountManager.findDocumentContainer(entityID)
+					return appDelegate.accountManager.findDocumentContainer(entityID) as? TagDocuments
 				}
 				return nil
 			}
 			
+			guard !tagDocuments.isEmpty else { return nil }
+			
 			var menuItems = [UIMenu]()
-			if let renameTagAction = self.renameTagAction(containers: containers) {
+			if let renameTagAction = self.renameTagAction(tagDocuments: tagDocuments) {
 				menuItems.append(UIMenu(title: "", options: .displayInline, children: [renameTagAction]))
 			}
-			if let deleteTagAction = self.deleteTagAction(containers: containers) {
+			if let deleteTagAction = self.deleteTagAction(tagDocuments: tagDocuments) {
 				menuItems.append(UIMenu(title: "", options: .displayInline, children: [deleteTagAction]))
 			}
 			return UIMenu(title: "", children: menuItems)
 		})
 	}
 
-	func renameTagAction(containers: [DocumentContainer]) -> UIAction? {
-		guard containers.count == 1, let container = containers.first, let tagDocuments = container as? TagDocuments else { return nil }
+	func renameTagAction(tagDocuments: [TagDocuments]) -> UIAction? {
+		guard tagDocuments.count == 1, let firstTagDocuments = tagDocuments.first else { return nil }
 		
 		let action = UIAction(title: .renameControlLabel, image: .rename) { [weak self] action in
 			guard let self else { return }
@@ -667,14 +669,14 @@ private extension CollectionsViewController {
 			if self.traitCollection.userInterfaceIdiom == .mac {
 				let renameTagViewController = UIStoryboard.dialog.instantiateController(ofType: MacRenameTagViewController.self)
 				renameTagViewController.preferredContentSize = CGSize(width: 400, height: 80)
-				renameTagViewController.tagDocuments = tagDocuments
+				renameTagViewController.tagDocuments = firstTagDocuments
 				self.present(renameTagViewController, animated: true)
 			} else {
 				let renameTagNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "RenameTagViewControllerNav") as! UINavigationController
 				renameTagNavViewController.preferredContentSize = CGSize(width: 400, height: 100)
 				renameTagNavViewController.modalPresentationStyle = .formSheet
 				let renameTagViewController = renameTagNavViewController.topViewController as! RenameTagViewController
-				renameTagViewController.tagDocuments = tagDocuments
+				renameTagViewController.tagDocuments = firstTagDocuments
 				self.present(renameTagNavViewController, animated: true)
 			}
 		}
@@ -682,15 +684,12 @@ private extension CollectionsViewController {
 		return action
 	}
 
-	func deleteTagAction(containers: [DocumentContainer]) -> UIAction? {
-		let tagDocuments = containers.compactMap { $0 as? TagDocuments }
-		guard tagDocuments.count == containers.count else { return nil}
-		
+	func deleteTagAction(tagDocuments: [TagDocuments]) -> UIAction? {
 		let action = UIAction(title: .deleteControlLabel, image: .delete, attributes: .destructive) { [weak self] action in
 			let deleteAction = UIAlertAction(title: .deleteControlLabel, style: .destructive) { _ in
-				for tagDocument in tagDocuments {
-					if let tag = tagDocument.tag {
-						tagDocument.account?.forceDeleteTag(tag)
+				for element in tagDocuments {
+					if let tag = element.tag {
+						element.account?.forceDeleteTag(tag)
 					}
 				}
 			}
