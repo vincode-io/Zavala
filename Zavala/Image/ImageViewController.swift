@@ -22,8 +22,8 @@ class ImageViewController: UIViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
-		closeButton.accessibilityLabel = NSLocalizedString("Close", comment: "Close")
-		shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Share")
+		closeButton.accessibilityLabel = NSLocalizedString("label.text.close", comment: "Close")
+		shareButton.accessibilityLabel = NSLocalizedString("label.text.share", comment: "Share")
 
 		closeButton.tintColor = .accentColor
 		shareButton.tintColor = .accentColor

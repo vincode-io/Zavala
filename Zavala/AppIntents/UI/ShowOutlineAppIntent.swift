@@ -11,22 +11,22 @@ import VinOutlineKit
 
 struct ShowOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
     static let intentClassName = "ShowOutlineIntent"
-    static let title: LocalizedStringResource = "Show Outline"
-    static let description = IntentDescription("Shows the given outline in the foremost window of Zavala.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.show-outline", comment: "Show Outline")
+    static let description = IntentDescription(LocalizedStringResource("intent.description.show-outline", comment: "Shows the given outline in the foremost window of Zavala."))
 	static let openAppWhenRun = true
 	
-    @Parameter(title: "Outline")
+    @Parameter(title: LocalizedStringResource("intent.parameter.outline", comment: "Intent parameter: Outline"))
 	var outline: OutlineAppEntity
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Show \(\.$outline)")
+        Summary("intent.summary-show-\(\.$outline)")
     }
 
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$outline)) { outline in
             DisplayRepresentation(
-                title: "Show \(outline)",
-                subtitle: ""
+                title: LocalizedStringResource("intent.prediction.show-\(outline)", comment: "Show <outline>"),
+                subtitle: nil
             )
         }
     }

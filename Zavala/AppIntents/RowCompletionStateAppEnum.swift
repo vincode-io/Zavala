@@ -13,10 +13,10 @@ enum RowCompletionStateAppEnum: String, AppEnum {
     case complete
     case uncomplete
 
-    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Row Completion State")
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.row-completion-state", comment: "Row Completion State"))
     static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
-        .complete: "Complete",
-        .uncomplete: "Uncomplete"
+        .complete: DisplayRepresentation(title: LocalizedStringResource("label.text.complete", comment: "Complete")),
+        .uncomplete: DisplayRepresentation(title: LocalizedStringResource("label.text.uncomplete", comment: "Uncomplete"))
     ]
 }
 

@@ -1,44 +1,141 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "(No Title)" : {
-      "comment" : "OPML Export Title: (No Title)"
-    },
-    "All" : {
-      "comment" : "Collection: All Documents"
-    },
-    "An unexpected CloudKit error occurred." : {
-      "comment" : "An unexpected CloudKit error occurred."
-    },
     "iCloud" : {
-      "comment" : "iCloud Account Name: iCloud"
+      "comment" : "iCloud Account Name: iCloud",
+      "shouldTranslate" : false
     },
-    "On My iPad" : {
-      "comment" : "Local Account Name: On My iPad"
+    "label.text.all" : {
+      "comment" : "Label: All",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
+          }
+        }
+      }
     },
-    "On My iPhone" : {
-      "comment" : "Local Account Name: On My iPhone"
+    "label.text.cloudkit-generic-error" : {
+      "comment" : "An unexpected CloudKit error occurred.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unexpected CloudKit error occurred."
+          }
+        }
+      }
     },
-    "On My Mac" : {
-      "comment" : "Local Account Name: On My Mac"
+    "label.text.no-title" : {
+      "comment" : "Label: (No Title)",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(No Title)"
+          }
+        }
+      }
     },
-    "Search" : {
-      "comment" : "Collection: Search Documents"
+    "label.text.on-my-ipad" : {
+      "comment" : "Local Account Name: On My iPad",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On My iPad"
+          }
+        }
+      }
     },
-    "This Tag name already exists. Please choose a different name." : {
-      "comment" : "Error Message: This Tag name already exists. Please choose a different name."
+    "label.text.on-my-iphone" : {
+      "comment" : "Local Account Name: On My iPhone",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On My iPhone"
+          }
+        }
+      }
     },
-    "Unable to access security scoped resource." : {
-      "comment" : "Error Message: Unable to access security scoped resource."
+    "label.text.on-my-mac" : {
+      "comment" : "Local Account Name: On My Mac",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On My Mac"
+          }
+        }
+      }
     },
-    "Unable to deserialize the row data." : {
-      "comment" : "Error Message: Unable to deserialize the row data."
+    "label.text.search" : {
+      "comment" : "Label: Search",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        }
+      }
     },
-    "Unable to process the OPML data." : {
-      "comment" : "Error Message: Unable to read the import file."
+    "label.text.tag-already-exists" : {
+      "comment" : "Label: This Tag name already exists. Please choose a different name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Tag name already exists. Please choose a different name."
+          }
+        }
+      }
     },
-    "Unable to read the import file." : {
-      "comment" : "Error Message: Unable to read the import file."
+    "label.text.unable-to-access-security-scoped-resoruces" : {
+      "comment" : "Label: Unable to access security scoped resource.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to access security scoped resource."
+          }
+        }
+      }
+    },
+    "label.text.unable-to-deserialize-row-data" : {
+      "comment" : "Label: Unable to deserialize the row data.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to deserialize the row data."
+          }
+        }
+      }
+    },
+    "label.text.unable-to-process-opml" : {
+      "comment" : "Label: Unable to process the OPML data.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to process the OPML data."
+          }
+        }
+      }
+    },
+    "label.text.unable-to-read-import-file" : {
+      "comment" : "Label: Unable to read the import file.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to read the import file."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

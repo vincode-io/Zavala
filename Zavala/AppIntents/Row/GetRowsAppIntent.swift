@@ -11,35 +11,35 @@ import VinOutlineKit
 
 struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "GetRowsIntent"
-    static let title: LocalizedStringResource = "Get Rows"
-    static let description = IntentDescription("Get Rows from an Outline.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.get-rows", comment: "Get Rows")
+    static let description = IntentDescription(LocalizedStringResource("intent.descrption.get-rows-outlines", comment: "Get Rows from an Outline."))
 
-    @Parameter(title: "Entity ID")
+    @Parameter(title: LocalizedStringResource("intent.parameter.entity-id", comment: "Entity ID"))
 	var entityID: EntityID
 
-    @Parameter(title: "Search")
+    @Parameter(title: LocalizedStringResource("intent.parameter.search", comment: "Search"))
     var search: String?
 
-    @Parameter(title: "Regular Expression", default: true)
+    @Parameter(title: LocalizedStringResource("intent.parameter.regular-expression", comment: "Regular Expression"), default: true)
     var regularExpression: Bool?
 
-    @Parameter(title: "Start Depth", default: 1)
+    @Parameter(title: LocalizedStringResource("intent.parameter.start-depth", comment: "Start Depth"), default: 1)
     var startDepth: Int?
 
-    @Parameter(title: "End Depth", default: 200)
+    @Parameter(title: LocalizedStringResource("intent.parameter.end-depth", comment: "End Depth"), default: 200)
     var endDepth: Int?
 
-    @Parameter(title: "Completion State")
+    @Parameter(title: LocalizedStringResource("intent.parameter.completion-state", comment: "Completion State"))
     var completionState: RowCompletionStateAppEnum?
 
-    @Parameter(title: "Expanded State")
+    @Parameter(title: LocalizedStringResource("intent.parameter.expanded-state", comment: "Expanded State"))
     var expandedState: RowExpandedStateAppEnum?
 
-    @Parameter(title: "Excluded Rows")
+    @Parameter(title: LocalizedStringResource("intent.parameter.excluded-rows", comment: "Excluded Rows"))
 	var excludedRows: [EntityID]?
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Get Rows matching \(\.$search) starting at \(\.$entityID)") {
+        Summary("intent.summary.get-rows-matching-\(\.$search)-starting-at-\(\.$entityID)") {
             \.$regularExpression
             \.$completionState
             \.$expandedState
@@ -52,8 +52,8 @@ struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$entityID, \.$search, \.$regularExpression, \.$completionState, \.$expandedState, \.$excludedRows, \.$startDepth, \.$endDepth)) { entityID, search, regularExpression, completionState, expandedState, excludedRows, startDepth, endDepth in
             DisplayRepresentation(
-                title: "Get Rows matching \(search!) starting at \(entityID)",
-                subtitle: ""
+                title: LocalizedStringResource("intent.prediction.get-rows-matching-\(search!)-starting-at-\(entityID)", comment: "Get Rows matching <search> starting at <entityID>"),
+                subtitle: nil
             )
         }
     }

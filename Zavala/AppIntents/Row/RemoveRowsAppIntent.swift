@@ -11,21 +11,21 @@ import VinOutlineKit
 
 struct RemoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "RemoveRowsIntent"
-    static let title: LocalizedStringResource = "Remove Rows"
-    static let description = IntentDescription("Delete the specified Rows.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.remove-rows", comment: "Remove Rows")
+    static let description = IntentDescription(LocalizedStringResource("intent.descrption.delete-rows", comment: "Delete the specified Rows."))
 
-    @Parameter(title: "Rows")
+    @Parameter(title: LocalizedStringResource("intent.parameter.rows", comment: "Rows"))
 	var rows: [RowAppEntity]
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Remove \(\.$rows)")
+        Summary("intent.summary.remove-\(\.$rows)")
     }
 
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$rows)) { rows in
             DisplayRepresentation(
-                title: "Remove \(rows, format: .list(type: .and))",
-                subtitle: ""
+                title: LocalizedStringResource("intent.prediction.remove-\(rows, format: .list(type: .and))", comment: "Remove <rows>"),
+                subtitle: nil
             )
         }
     }

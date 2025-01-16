@@ -12,35 +12,36 @@ import VinUtility
 
 struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, ZavalaAppIntent {
     static let intentClassName = "GetOutlinesIntent"
-    static let title: LocalizedStringResource = "Get Outlines"
-    static let description = IntentDescription("Get Outlines based on search criteria.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.get-outlines", comment: "Intent title: Get Outlines")
+    static let description = IntentDescription(LocalizedStringResource("intent.description.get-outlines", comment: "Intent title: Get Outlines based on search criteria."))
 
-    @Parameter(title: "Search")
+    @Parameter(title: LocalizedStringResource("intent.parameter.search", comment: "Intent Parameter: Search"))
     var search: String?
 
-    @Parameter(title: "Account Type")
+    @Parameter(title: LocalizedStringResource("intent.parameter.account-type", comment: "Intent Parameter: Account Type"))
 	var accountType: AccountTypeAppEnum?
 
-    @Parameter(title: "Tag", optionsProvider: TagStringOptionsProvider())
+    @Parameter(title: LocalizedStringResource("intent.parameter.tag", comment: "Intent parameter: Tag"), optionsProvider: TagStringOptionsProvider())
     var tagNames: [String]?
 
-    @Parameter(title: "Outline", optionsProvider: OutlineStringOptionsProvider())
+    @Parameter(title: LocalizedStringResource("intent.parameter.outline", comment: "Intent parameter: Outline"),
+			   optionsProvider: OutlineStringOptionsProvider())
     var outlineNames: [String]?
 
-    @Parameter(title: "Created Start Date")
+    @Parameter(title: LocalizedStringResource("intent.parameter.created-start-date", comment: "Intent Parameter: Created Start Date"))
     var createdStartDate: DateComponents?
 
-    @Parameter(title: "Created End Date")
+    @Parameter(title: LocalizedStringResource("intent.parameter.created-end-date", comment: "Intent Parameter: Created End Date"))
     var createdEndDate: DateComponents?
 
-    @Parameter(title: "Updated Start Date")
+    @Parameter(title: LocalizedStringResource("intent.parameter.updated-start-date", comment: "Intent Parameter: Updated Start Date"))
     var updatedStartDate: DateComponents?
 
-    @Parameter(title: "Updated End Date")
+    @Parameter(title: LocalizedStringResource("intent.parameter.updated-end-date", comment: "Intent Parameter: Updated End Date"))
     var updatedEndDate: DateComponents?
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Get Outlines") {
+        Summary("intent.summary.get-outlines") {
             \.$accountType
             \.$outlineNames
             \.$tagNames

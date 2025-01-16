@@ -10,37 +10,37 @@ import AppIntents
 import VinOutlineKit
 
 struct OutlineAppEntity: AppEntity {
-	static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Outline")
+	static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.outline", comment: "Outline"))
 	static let defaultQuery = OutlineEntityQuery()
 	
-    @Property(title: "ID")
+	@Property(title: LocalizedStringResource("label.text.id", comment: "ID"))
     var id: EntityID
 
-	@Property(title: "Entity ID")
+	@Property(title: LocalizedStringResource("label.text.entity-id", comment: "Entity ID"))
 	var entityID: EntityID
 
-    @Property(title: "Title")
+    @Property(title: LocalizedStringResource("label.text.title", comment: "Title"))
     var title: String?
 
-	@Property(title: "Tags")
+	@Property(title: LocalizedStringResource("label.text.tags", comment: "Tags"))
 	var tags: [String]?
 
-    @Property(title: "Owner Name")
+    @Property(title: LocalizedStringResource("label.text.owner-name", comment: "Owner Name"))
     var ownerName: String?
 
-    @Property(title: "Owner Email")
+    @Property(title: LocalizedStringResource("label.text.owner-email", comment: "Owner Email"))
     var ownerEmail: String?
 
-    @Property(title: "Owner URL")
+    @Property(title: LocalizedStringResource("label.text.owner-url", comment: "Owner URL"))
     var ownerURL: String?
 
-	@Property(title: "Created")
+	@Property(title: LocalizedStringResource("label.text.created", comment: "Created"))
 	var created: Date?
 
-	@Property(title: "Updated")
+	@Property(title: LocalizedStringResource("label.text.updated", comment: "Updated"))
 	var updated: Date?
 
-    @Property(title: "URL")
+    @Property(title: LocalizedStringResource("label.text.url", comment: "URL"))
     var url: URL?
 
     var displayRepresentation: DisplayRepresentation {

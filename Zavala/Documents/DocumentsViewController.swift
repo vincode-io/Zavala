@@ -825,7 +825,7 @@ private extension DocumentsViewController {
 
 		let currentSortOrder = currentSortOrder
 		
-		let sortByTitle = UIAction(title: .titleControlLabel) { [weak self] _ in
+		let sortByTitle = UIAction(title: .titleLabel) { [weak self] _ in
 			self?.sortByTitle(nil)
 		}
 		if currentSortOrder.field == .title {
@@ -1120,7 +1120,7 @@ private extension DocumentsViewController {
 			title = .deleteOutlinesPrompt(outlineCount: documents.count)
             message = .deleteOutlinesMessage
         } else {
-			title = .deleteOutlinePrompt(outlineName: documents.first?.title ?? "")
+			title = .deleteOutlinePrompt(outlineTitle: documents.first?.title ?? "")
             message = .deleteOutlineMessage
         }
         

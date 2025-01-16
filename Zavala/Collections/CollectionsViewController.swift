@@ -104,6 +104,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 			}
+			
+			navigationItem.title = .collectionsControlLabel
 
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true

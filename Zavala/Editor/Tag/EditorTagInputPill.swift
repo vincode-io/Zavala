@@ -179,7 +179,7 @@ private extension EditorTagInputPill {
 		self.button.backgroundColor = .accentColor
 		self.buttonWidthConstraint?.isActive = false
 		self.textFieldTrailingConstraint?.constant = -4
-		self.button.setTitle("Add", for: .normal)
+		self.button.setTitle(.addControlLabel, for: .normal)
 		buttonIsShowing = true
 	}
 	

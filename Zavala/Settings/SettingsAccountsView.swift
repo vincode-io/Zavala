@@ -17,14 +17,7 @@ struct SettingsAccountsView: View {
 	var body: some View {
 		Section(String.accountsControlLabel) {
 			Toggle(isOn: $enableLocalAccount) {
-				switch UIDevice.current.userInterfaceIdiom {
-				case .phone:
-					Text(String.enableOnMyIPhoneControlLabel)
-				case .mac:
-					Text(String.enableOnMyMacControlLabel)
-				default:
-					Text(String.enableOnMyIPadControlLabel)
-				}
+				Text(String.enableOnMyDevice)
 			}
 			.toggleStyle(.switch)
 			.onChange(of: enableLocalAccount) { old, new in

@@ -10,28 +10,28 @@ import AppIntents
 import VinOutlineKit
 
 struct RowAppEntity: AppEntity {
-    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Row")
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.row", comment: "Row"))
 	static let defaultQuery = RowAppEntityQuery()
 
-	@Property(title: "ID")
+	@Property(title: LocalizedStringResource("label.text.id", comment: "ID"))
 	var id: EntityID
 
-	@Property(title: "Entity ID")
+	@Property(title: LocalizedStringResource("label.text.entity-id", comment: "Entity ID"))
 	var entityID: EntityID
 
-    @Property(title: "Topic")
+    @Property(title: LocalizedStringResource("label.text.topic", comment: "topic"))
     var topic: String?
 
-    @Property(title: "Note")
+    @Property(title: LocalizedStringResource("label.text.note", comment: "Note"))
     var note: String?
 
-    @Property(title: "Complete")
+    @Property(title: LocalizedStringResource("label.text.complete", comment: "Complete"))
     var complete: Bool?
 
-    @Property(title: "Expanded")
+    @Property(title: LocalizedStringResource("label.text.expanded", comment: "Expanded"))
     var expanded: Bool?
 
-    @Property(title: "Level")
+    @Property(title: LocalizedStringResource("label.text.level", comment: "Level"))
     var level: Int?
 
 	var displayRepresentation: DisplayRepresentation {

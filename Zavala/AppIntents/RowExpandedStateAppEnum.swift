@@ -12,10 +12,10 @@ enum RowExpandedStateAppEnum: String, AppEnum {
     case expanded
     case collapsed
 
-    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Row Expanded State")
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.row-expanded-state", comment: "Row Expanded State"))
     static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
-        .expanded: "Expanded",
-        .collapsed: "Collapsed"
+        .expanded: DisplayRepresentation(title: LocalizedStringResource("label.text.expanded", comment: "Expanded")),
+        .collapsed: DisplayRepresentation(title: LocalizedStringResource("label.text.collapsed", comment: "Collapsed"))
     ]
 }
 

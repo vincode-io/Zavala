@@ -11,11 +11,11 @@ import VinOutlineKit
 
 struct GetCurrentTagsAppIntent: AppIntent, CustomIntentMigratedAppIntent {
     static let intentClassName = "GetCurrentTagsIntent"
-    static let title: LocalizedStringResource = "Get Current Tags"
-    static let description = IntentDescription("Gets the name of the currently selected Tags if there are any.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.get-current-tags", comment: "Get Current Tags")
+    static let description = IntentDescription(LocalizedStringResource("intent.description.get-current-tags", comment: "Gets the name of the currently selected Tags if there are any."))
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Get Current Tags")
+        Summary("intent.summary.get-current-tags")
     }
 
 	@MainActor

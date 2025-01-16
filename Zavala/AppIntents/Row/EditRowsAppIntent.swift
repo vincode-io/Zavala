@@ -11,43 +11,43 @@ import VinOutlineKit
 
 struct EditRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "EditRowsIntent"
-    static let title: LocalizedStringResource = "Edit Rows"
-    static let description = IntentDescription("Update the details of a Row.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.edit-rows", comment: "Edit Rows")
+    static let description = IntentDescription(LocalizedStringResource("intent.descrption.update-row-details", comment: "Update the details of a Row"))
 
-    @Parameter(title: "Rows")
+    @Parameter(title: LocalizedStringResource("intent.parameter.rows", comment: "Rows"))
 	var rows: [RowAppEntity]
 
-    @Parameter(title: "Detail")
+    @Parameter(title: LocalizedStringResource("intent.parameter.detail", comment: "Detail"))
     var detail: RowDetailAppEnum
 
-    @Parameter(title: "Topic")
+    @Parameter(title: LocalizedStringResource("intent.parameter.topic", comment: "Topic"))
     var topic: String?
 
-    @Parameter(title: "Note")
+    @Parameter(title: LocalizedStringResource("intent.parameter.note", comment: "Note"))
     var note: String?
 
-    @Parameter(title: "Complete")
+    @Parameter(title: LocalizedStringResource("intent.parameter.complete", comment: "Complete"))
     var complete: Bool?
 
-    @Parameter(title: "Expanded")
+    @Parameter(title: LocalizedStringResource("intent.parameter.expanded", comment: "Expanded"))
     var expanded: Bool?
 
     static var parameterSummary: some ParameterSummary {
         Switch(\.$detail) {
             Case(.topic) {
-                Summary("Set \(\.$detail) of \(\.$rows) to \(\.$topic)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$rows)-to-\(\.$topic)")
             }
             Case(.note) {
-                Summary("Set \(\.$detail) of \(\.$rows) to \(\.$note)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$rows)-to-\(\.$note)")
             }
             Case(.complete) {
-                Summary("Set \(\.$detail) of \(\.$rows) to \(\.$complete)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$rows)-to-\(\.$complete)")
             }
             Case(.expanded) {
-                Summary("Set \(\.$detail) of \(\.$rows) to \(\.$expanded)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$rows)-to-\(\.$expanded)")
             }
             DefaultCase {
-                Summary("Set \(\.$detail) of \(\.$rows)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$rows)")
             }
         }
     }
@@ -55,32 +55,32 @@ struct EditRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$rows, \.$detail, \.$topic)) { rows, detail, topic in
             DisplayRepresentation(
-                title: "Set \(detail) of \(rows, format: .list(type: .and)) to \(topic!)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.set-\(detail)-of-\(rows, format: .list(type: .and))-to-\(topic!)", comment: "Set <detail> of <rows> to <topic>"),
+                subtitle: nil
             )
         }
         IntentPrediction(parameters: (\.$rows, \.$detail, \.$note)) { rows, detail, note in
             DisplayRepresentation(
-                title: "Set \(detail) of \(rows, format: .list(type: .and)) to \(note!)",
-                subtitle: ""
+                title: LocalizedStringResource("intent.prediction.set-\(detail)-of-\(rows, format: .list(type: .and))-to-\(note!)", comment: "Set <detail> of <rows> to <note>"),
+                subtitle: nil
             )
         }
         IntentPrediction(parameters: (\.$rows, \.$detail, \.$complete)) { rows, detail, complete in
             DisplayRepresentation(
-                title: "Set \(detail) of \(rows, format: .list(type: .and)) to \(String(describing: complete!))",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.set-\(detail)-of-\(rows, format: .list(type: .and))-to-\(String(describing: complete!))", comment: "Set <detail> of <rows> to <complete>"),
+                subtitle: nil
             )
         }
         IntentPrediction(parameters: (\.$rows, \.$detail, \.$expanded)) { rows, detail, expanded in
-            DisplayRepresentation(
-                title: "Set \(detail) of \(rows, format: .list(type: .and)) to \(String(describing: expanded!))",
-                subtitle: ""
+			DisplayRepresentation(
+                title: LocalizedStringResource("intent.prediction.set-\(detail)-of-\(rows, format: .list(type: .and))-to-\(String(describing:expanded!))", comment: "Set <detail> of <rows> to <expanded>"),
+                subtitle: nil
             )
         }
         IntentPrediction(parameters: (\.$rows, \.$detail)) { rows, detail in
-            DisplayRepresentation(
-                title: "Set \(detail) of \(rows, format: .list(type: .and))",
-                subtitle: ""
+			DisplayRepresentation(
+                title: LocalizedStringResource("intent.prediction.set-\(detail)-of-\(rows, format: .list(type: .and))", comment: "Set <detail> of <rows>"),
+                subtitle: nil
             )
         }
     }

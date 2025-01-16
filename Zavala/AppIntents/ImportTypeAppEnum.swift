@@ -11,9 +11,9 @@ import AppIntents
 enum ImportTypeAppEnum: String, AppEnum {
     case opml
 
-    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Import Type")
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("intent.parameter.import-type", comment: "Intent Parameter: Import Type"))
     static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
-        .opml: "OPML"
+        .opml: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.type-opml", comment: "Import type: OPML"))
     ]
 }
 

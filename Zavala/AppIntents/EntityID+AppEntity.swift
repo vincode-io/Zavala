@@ -18,7 +18,7 @@ extension EntityID: @retroactive AppValue {}
 extension EntityID: @retroactive _IntentValue {}
 extension EntityID: @retroactive PersistentlyIdentifiable {}
 extension EntityID: @retroactive AppEntity, @retroactive EntityIdentifierConvertible {
-	public static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Entity ID")
+	public static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.entity-id", comment: "Entity ID"))
 	public static let defaultQuery = EntityIDEntityQuery()
 	
 	public var id: EntityID {

@@ -12,10 +12,10 @@ enum ExportLinkTypeAppEnum: String, AppEnum {
     case zavalaLinks
     case altLinks
 
-    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Export Link Type")
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("intent.parameter.export-link-type", comment: "Intent parameter: Export Link Type"))
     static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
-        .zavalaLinks: "Zavala Deep Links",
-        .altLinks: "Relative File Links"
+		.zavalaLinks: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.zavala-deep-links", comment: "Export Link Type: Zavala Deep Links")) ,
+        .altLinks: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.relative-file-links", comment: "Export Link Type: Relative File Links"))
     ]
 }
 

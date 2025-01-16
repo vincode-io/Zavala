@@ -11,27 +11,27 @@ import VinOutlineKit
 
 struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "CopyRowsIntent"
-    static let title: LocalizedStringResource = "Copy Rows"
-    static let description = IntentDescription("Copy Rows in or between Outlines.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.copy-rows", comment: "Copy Rows")
+    static let description = IntentDescription(LocalizedStringResource("intent.descrption.copy-rows-outlines", comment: "Copy Rows in or between Outlines"))
 
-    @Parameter(title: "Rows")
+    @Parameter(title: LocalizedStringResource("intent.parameter.rows", comment: "Rows"))
 	var rows: [RowAppEntity]
 
-    @Parameter(title: "Entity ID")
+    @Parameter(title: LocalizedStringResource("intent.parameter.entity-id", comment: "Entity ID"))
 	var entityID: EntityID
 
-    @Parameter(title: "Destination")
+    @Parameter(title: LocalizedStringResource("intent.parameter.destination", comment: "Destination"))
     var destination: RowDestinationAppEnum
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Copy \(\.$rows) to \(\.$entityID) at \(\.$destination)")
+        Summary("intent.summary.copy-\(\.$rows)-to-\(\.$entityID)-at-\(\.$destination)")
     }
 
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$rows, \.$entityID, \.$destination)) { rows, entityID, destination in
             DisplayRepresentation(
-                title: "Copy \(rows, format: .list(type: .and)) to \(entityID) at \(destination)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.copy-\(rows, format: .list(type: .and))-to-\(entityID)-at-\(destination)", comment: "Copy <rows> to <entityID> at <destination>)"),
+                subtitle: nil
             )
         }
     }

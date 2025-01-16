@@ -11,20 +11,22 @@ import VinOutlineKit
 
 struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "AddOutlineIntent"
-    static let title: LocalizedStringResource = "Add Outline"
-    static let description = IntentDescription("Adds an Outline.")
+	static let title: LocalizedStringResource = LocalizedStringResource("intent.title.add-outline", comment: "Intent Title: Add Outline")
+	static let description = IntentDescription(LocalizedStringResource("intent.description.add-outline", comment: "Intent Description: Adds an Outline"))
 
-	@Parameter(title: "Account Type", requestValueDialog: "Which Account did you want to add this Outline to?")
+	@Parameter(title: LocalizedStringResource("intent.parameter.account-type", comment: "Intent Parameter: Account Type"),
+			   requestValueDialog: IntentDialog(LocalizedStringResource("intent.parameter.account-type-request", comment: "Intent request dialog: Which Account do you want to add this Outline to?")))
 	var accountType: AccountTypeAppEnum
 
-	@Parameter(title: "Title", requestValueDialog: "What is the title for the new Outline?")
+	@Parameter(title: LocalizedStringResource("intent.parameter.title", comment: "Intent Parameter: Title"),
+			   requestValueDialog: IntentDialog(LocalizedStringResource("intent.parameter.outline-title-request", comment: "Intent request dialog: What is the title of the new Outline?")))
     var title: String
 
-    @Parameter(title: "Tag Names")
+    @Parameter(title: LocalizedStringResource("intent.parameter.tag-names", comment: "Intent Parameter: Tag Names"))
     var tagNames: [String]?
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Add Outline titled \(\.$title) to \(\.$accountType)") {
+		Summary("intent.summary.add-outline-\(\.$title)-to-\(\.$accountType)") {
             \.$tagNames
         }
     }
@@ -32,8 +34,8 @@ struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$title, \.$tagNames, \.$accountType)) { title, tagNames, accountType in
             DisplayRepresentation(
-                title: "Add Outline titled \(title) to \(accountType)",
-                subtitle: ""
+                title: LocalizedStringResource("intent.prediction.add-outline-\(title)-to-\(accountType)", comment: "Intent Prediction: Add Outline titled <title> to <accountType>"),
+                subtitle: nil
             )
         }
     }
