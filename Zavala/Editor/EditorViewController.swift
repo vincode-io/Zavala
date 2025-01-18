@@ -1579,8 +1579,8 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Outline.Section.title.rawValue:
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		case Outline.Section.tags.rawValue:
-			if let outline, indexPath.row < outline.tagCount {
-				let tag = outline.tags[indexPath.row]
+			if let outlineTags = outline?.tags, indexPath.row < outlineTags.count {
+				let tag = outlineTags[indexPath.row]
 				return collectionView.dequeueConfiguredReusableCell(using: tagRegistration!, for: indexPath, item: tag.name)
 			} else {
 				return collectionView.dequeueConfiguredReusableCell(using: tagInputRegistration!, for: indexPath, item: outline!.id)
