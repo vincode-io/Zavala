@@ -14,7 +14,7 @@ import VinUtility
 
 @MainActor
 protocol CollectionsDelegate: AnyObject {
-	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool) async
+	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, reloadDocuments: Bool, animated: Bool) async
 }
 
 enum CollectionsSection: Int {
@@ -178,8 +178,17 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	}
 
 	@objc func accountDidReload(_ note: Notification) {
-		debounceApplyChangeSnapshot()
-		debounceReloadVisible()
+		let selectedIndexes = collectionView.indexPathsForSelectedItems
+
+		applyChangeSnapshot(animated: false)
+		reloadVisible()
+
+		guard let items = selectedIndexes?.compactMap({ dataSource.itemIdentifier(for: $0) }) else { return }
+		let containers = items.toContainers()
+		
+		Task {
+			await delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: false, reloadDocuments: true, animated: true)
+		}
 	}
 	
 	@objc func accountMetadataDidChange(_ note: Notification) {
@@ -301,7 +310,7 @@ extension CollectionsViewController {
 		let containers = items.toContainers()
         
 		Task {
-			await delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: true, animated: true)
+			await delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: true, reloadDocuments: false, animated: true)
 		}
     }
     
@@ -540,7 +549,7 @@ extension CollectionsViewController {
 			
 			if let selectedItems, !selectedItems.isEmpty, selectedIndexPaths.isEmpty {
 				Task {
-					await self.delegate?.documentContainerSelectionsDidChange(self, documentContainers: [], isNavigationBranch: false, animated: true)
+					await self.delegate?.documentContainerSelectionsDidChange(self, documentContainers: [], isNavigationBranch: false, reloadDocuments: false, animated: true)
 				}
 			} else {
 				for selectedIndexPath in selectedIndexPaths {
@@ -575,7 +584,7 @@ extension CollectionsViewController {
 		}
 		
 		let containers = items.toContainers()
-		await delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, animated: animated)
+		await delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, reloadDocuments: false, animated: animated)
 	}
 	
 	func reloadVisible() {

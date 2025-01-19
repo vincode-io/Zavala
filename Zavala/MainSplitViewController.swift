@@ -359,6 +359,7 @@ extension MainSplitViewController: CollectionsDelegate {
 	func documentContainerSelectionsDidChange(_: CollectionsViewController,
 											  documentContainers: [DocumentContainer],
 											  isNavigationBranch: Bool,
+											  reloadDocuments: Bool,
 											  animated: Bool) async {
 		
 		// The window might not be quite available at launch, so put a slight delay in to help it get there
@@ -396,7 +397,7 @@ extension MainSplitViewController: CollectionsDelegate {
 			activityManager.invalidateSelectDocumentContainers()
 		}
 		
-		await documentsViewController?.setDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch)
+		await documentsViewController?.setDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, reselectDocument: reloadDocuments)
 	}
 
 }

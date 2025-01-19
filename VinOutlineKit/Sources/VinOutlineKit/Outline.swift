@@ -750,7 +750,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	public func rowsFileDidLoad() {
-		guard isBeingViewed else { return }
+		// We need to make sure that there is still an account. This can be set to nil when
+		// reloading the Account File and something is holding on to an Outline still. Most
+		// likely this is the Editor while the Outline is being viewed.
+		guard isBeingViewed, account != nil else { return }
 		
 		var changes = rebuildShadowTable()
 		let reloads = Set(shadowTable!.compactMap { $0.shadowTableIndex })

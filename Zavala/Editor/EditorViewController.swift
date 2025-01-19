@@ -912,7 +912,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	func edit(_ newOutline: Outline?, selectRow: EntityID? = nil, isNew: Bool, searchText: String? = nil) {
-		guard outline != newOutline else { return }
+		guard outline != newOutline else {
+			if let newOutline {
+				reload(newOutline)
+			}
+			return
+		}
+		
 		isOutlineNewFlag = isNew
 		
 		messageLabel?.removeFromSuperview()
@@ -991,6 +997,23 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			restoreScrollPosition()
 			restoreOutlineCursorPosition()
 			moveCursorToTitleOnNew()
+		}
+	}
+	
+	func reload(_ newOutline: Outline) {
+		outline?.decrementBeingViewedCount()
+		
+		let oldOutline = outline
+		Task {
+			await oldOutline?.unload()
+
+			outline = newOutline
+			
+			outline?.load()
+			outline?.incrementBeingViewedCount()
+			outline?.prepareForViewing()
+
+			collectionView.reloadData()
 		}
 	}
 	

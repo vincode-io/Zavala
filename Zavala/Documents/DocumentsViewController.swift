@@ -256,12 +256,30 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	
 	// MARK: API
 	
-	func setDocumentContainers(_ documentContainers: [DocumentContainer], isNavigationBranch: Bool) async {
+	func setDocumentContainers(_ documentContainers: [DocumentContainer], isNavigationBranch: Bool, reselectDocument: Bool = false) async {
 		func updateContainer() async {
 			self.documentContainers = documentContainers
 			updateUI()
-			collectionView.deselectAll()
-			await loadDocuments(animated: false, isNavigationBranch: isNavigationBranch)
+
+			let prevSelectedDocID = self.collectionView.indexPathsForSelectedItems?.map({ self.documents[$0.row] }).first?.id
+
+			if !reselectDocument {
+				collectionView.deselectAll()
+			}
+			
+			await loadDocuments(animated: reselectDocument, isNavigationBranch: isNavigationBranch)
+			
+			let prevSelectedDoc = self.documents.first(where: { $0.id == prevSelectedDocID })
+			
+			if reselectDocument, let prevSelectedDoc {
+				delegate?.documentSelectionDidChange(self,
+													 documentContainers: documentContainers,
+													 documents: [prevSelectedDoc],
+													 selectRow: nil,
+													 isNew: false,
+													 isNavigationBranch: false,
+													 animated: false)
+			}
 		}
 		
 		if documentContainers.count == 1, documentContainers.first is Search {
