@@ -11,27 +11,27 @@ import VinOutlineKit
 
 struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "MoveRowsIntent"
-    static let title: LocalizedStringResource = "Move Rows"
-    static let description = IntentDescription("Move Rows in or between Outlines.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.move-rows", comment: "Move Rows")
+    static let description = IntentDescription(LocalizedStringResource("intent.descrption.move-rows-outlines", comment: "Move Rows in or between Outlines"))
 
-    @Parameter(title: "Rows")
+    @Parameter(title: LocalizedStringResource("intent.parameter.rows", comment: "Rows"))
 	var rows: [RowAppEntity]
 
-    @Parameter(title: "Entity ID")
+    @Parameter(title: LocalizedStringResource("intent.parameter.entity-id", comment: "Entity ID"))
 	var entityID: EntityID
 
-    @Parameter(title: "Destination")
+    @Parameter(title: LocalizedStringResource("intent.parameter.destination", comment: "Destination"))
     var destination: RowDestinationAppEnum
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Move \(\.$rows) to \(\.$entityID) at \(\.$destination)")
+        Summary("intent.summary.move-\(\.$rows)-to-\(\.$entityID)-at-\(\.$destination)")
     }
 
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$rows, \.$entityID, \.$destination)) { rows, entityID, destination in
             DisplayRepresentation(
-                title: "Move \(rows, format: .list(type: .and)) to \(entityID) at \(destination)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.move-\(rows, format: .list(type: .and))-to-\(entityID)-at-\(destination)", comment: "Move <rows> to <entityID> at <destination>"),
+                subtitle: nil
             )
         }
     }

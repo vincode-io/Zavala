@@ -10,43 +10,43 @@ import AppIntents
 
 struct EditOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "EditOutlineIntent"
-    static let title: LocalizedStringResource = "Edit Outline"
-    static let description = IntentDescription("Update the details of an Outline.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.edit-outline", comment: "Intent title: Edit Outline")
+    static let description = IntentDescription(LocalizedStringResource("intent.description.edit-outline", comment: "Intent description: Update the details of an Outline."))
 
-    @Parameter(title: "Outline")
+    @Parameter(title: LocalizedStringResource("intent.parameter.outline", comment: "Intent parameter: Outline"))
 	var outline: OutlineAppEntity
 
-    @Parameter(title: "Detail")
+    @Parameter(title: LocalizedStringResource("intent.parameter.detail", comment: "Intent parameter: Detail"))
     var detail: OutlineDetailAppEnum
 
-    @Parameter(title: "Title")
+    @Parameter(title: LocalizedStringResource("intent.parameter.title", comment: "Intent Parameter: Title"))
     var title: String?
 
-    @Parameter(title: "Owner Name")
+    @Parameter(title: LocalizedStringResource("intent.parameter.owner-name", comment: "Intent parameter: Owner Name"))
     var ownerName: String?
 
-    @Parameter(title: "Owner Email")
+    @Parameter(title: LocalizedStringResource("intent.parameter.owner-email", comment: "Intent parameter: Owner Email"))
     var ownerEmail: String?
 
-    @Parameter(title: "Owner URL")
+    @Parameter(title: LocalizedStringResource("intent.parameter.owner-url", comment: "Intent parameter: Owner URL"))
     var ownerURL: String?
 
     static var parameterSummary: some ParameterSummary {
         Switch(\.$detail) {
             Case(.title) {
-                Summary("Set \(\.$detail) of \(\.$outline) to \(\.$title)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$outline)-to-\(\.$title)")
             }
             Case(.ownerName) {
-                Summary("Set \(\.$detail) of \(\.$outline) to \(\.$ownerName)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$outline)-to-\(\.$ownerName)")
             }
             Case(.ownerEmail) {
-                Summary("Set \(\.$detail) of \(\.$outline) to \(\.$ownerEmail)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$outline)-to-\(\.$ownerEmail)")
             }
             Case(.ownerURL) {
-                Summary("Set \(\.$detail) of \(\.$outline) to \(\.$ownerURL)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$outline)-to-\(\.$ownerURL)")
             }
             DefaultCase {
-                Summary("Set \(\.$detail) of \(\.$outline)")
+                Summary("intent.summary.set-\(\.$detail)-of-\(\.$outline)")
             }
         }
     }
@@ -54,32 +54,32 @@ struct EditOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$outline, \.$detail, \.$ownerName)) { outline, detail, ownerName in
             DisplayRepresentation(
-                title: "Set \(detail) of \(outline) to \(ownerName!)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.set-detail-\(detail)-outline-\(outline)-ownerName-\(ownerName!)", comment: "Intent prediction: Set <detail> of <outline> to <owner name>"),
+                subtitle: nil
             )
         }
         IntentPrediction(parameters: (\.$outline, \.$detail, \.$ownerURL)) { outline, detail, ownerURL in
             DisplayRepresentation(
-                title: "Set \(detail) of \(outline) to \(ownerURL!)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.set-detail-\(detail)-outline-\(outline)-ownerURL-\(ownerURL!)", comment: "Intent prediction: Set <detail> of <outline> to <owner URL>"),
+                subtitle: nil
             )
         }
         IntentPrediction(parameters: (\.$outline, \.$detail, \.$title)) { outline, detail, title in
             DisplayRepresentation(
-                title: "Set\(detail) of\(outline) to \(title!)",
-                subtitle: ""
+                title: LocalizedStringResource("intent.prediction.set-detail-\(detail)-outline-\(outline)-title-\(title!)", comment: "Intent prediction: Set <detail> of <outline> to <title>"),
+                subtitle: nil
             )
         }
         IntentPrediction(parameters: (\.$outline, \.$detail, \.$ownerEmail)) { outline, detail, ownerEmail in
             DisplayRepresentation(
-                title: "Set\(detail) of\(outline) to \(ownerEmail!)",
-                subtitle: ""
+                title: LocalizedStringResource("intent.prediction.set-detail-\(detail)-outline-\(outline)-ownerEmail-\(ownerEmail!)", comment: "Intent prediction: Set <detail> of <outline> to <owner Email>"),
+                subtitle: nil
             )
         }
         IntentPrediction(parameters: (\.$outline, \.$detail)) { outline, detail in
             DisplayRepresentation(
-                title: "Set \(detail) of \(outline)",
-                subtitle: ""
+                title: LocalizedStringResource("intent.prediction.set-detail-\(detail)-outline-\(outline)", comment: "Intent prediction: Set <detail> of <outline>"),
+                subtitle: nil
             )
         }
     }

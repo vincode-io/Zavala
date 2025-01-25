@@ -11,23 +11,23 @@ import VinOutlineKit
 
 struct ImportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "ImportIntent"
-    static let title: LocalizedStringResource = "Import"
-    static let description = IntentDescription("Import an outline.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.import", comment: "Intent title: Import")
+    static let description = IntentDescription(LocalizedStringResource("intent.descrption.import-outline", comment: "Intent description: Import an Outline."))
 
-    @Parameter(title: "Input File")
+    @Parameter(title: LocalizedStringResource("intent.parameter.input-file", comment: "Intent Parameter: Input File"))
     var inputFile: IntentFile
 
-    @Parameter(title: "Input Images")
+    @Parameter(title: LocalizedStringResource("intent.parameter.input-images", comment: "Intent Parameter: Input Images"))
     var inputImages: [IntentFile]?
 
-    @Parameter(title: "Import Type")
+    @Parameter(title: LocalizedStringResource("intent.parameter.import-type", comment: "Intent Parameter: Import Type"))
 	var importType: ImportTypeAppEnum
 
-    @Parameter(title: "Account Type")
+    @Parameter(title: LocalizedStringResource("intent.parameter.account-type", comment: "Intent Parameter: Account Type"))
 	var accountType: AccountTypeAppEnum
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Import the \(\.$importType) \(\.$inputFile) into \(\.$accountType)") {
+        Summary("intent.summary.import-the-\(\.$importType)-\(\.$inputFile)-into-\(\.$accountType)") {
             \.$inputImages
         }
     }
@@ -35,8 +35,8 @@ struct ImportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$inputFile, \.$importType, \.$accountType, \.$inputImages)) { inputFile, importType, accountType, inputImages in
             DisplayRepresentation(
-                title: "Import the \(importType) \(inputFile) into \(accountType)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.predicition.import-the-\(importType)-\(inputFile)-into-\(accountType)", comment: "Import the <ImportType> <InputFile> into <AccountType>"),
+				subtitle: nil
             )
         }
     }

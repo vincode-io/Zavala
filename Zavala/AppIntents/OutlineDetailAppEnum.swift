@@ -15,12 +15,14 @@ enum OutlineDetailAppEnum: String, AppEnum {
     case ownerEmail
     case ownerURL
 
-    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Outline Detail")
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.outline-detail", comment: "Outline Detail"))
     static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
-        .title: "Title",
-        .ownerName: "Owner Name",
-        .ownerEmail: "Owner Email",
-        .ownerURL: "Owner URL"
+        .title: DisplayRepresentation(title: LocalizedStringResource("label.text.title", comment: "Title")),
+        .ownerName: DisplayRepresentation(title: LocalizedStringResource("label.text.owner-name", comment: "Owner Name")),
+        .ownerEmail: DisplayRepresentation(title: LocalizedStringResource("label.text.owner-email", comment: "Owner Email")),
+        .ownerURL: DisplayRepresentation(title: LocalizedStringResource("label.text.owner-url", comment: "Owner URL"))
     ]
 }
+
+
 

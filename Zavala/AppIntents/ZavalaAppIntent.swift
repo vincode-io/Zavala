@@ -51,19 +51,19 @@ enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {
 	var localizedStringResource: LocalizedStringResource {
 		switch self {
 		case .invalidDestinationForOutline:
-			return "The specified Destination is not a valid for the Outline specified by the Entity ID."
+			return .invalidDestinationForOutline
 		case .outlineNotBeingViewed:
-			return "There isn't an Outline currently being viewed."
+			return .outlineNotBeingViewed
 		case .outlineNotFound:
-			return "The requested Outline was not found."
+			return .outlineNotFound
 		case .noTagsSelected:
-			return "No Tags are currently selected."
+			return .noTagsSelected
 		case .rowContainerNotFound:
-			return "Unable to find the Outline or Row specified by the Entity ID."
+			return .rowContainerNotFound
 		case .unavailableAccount:
-			return "The specified Account isn't available to be used."
+			return .unavailableAccount
 		case .unexpectedError:
-			return "An unexpected error occurred. Please try again."
+			return .unexpectedError
 		}
 		
 	}

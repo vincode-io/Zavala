@@ -12,27 +12,27 @@ import VinUtility
 
 struct ExportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "ExportIntent"
-    static let title: LocalizedStringResource = "Export"
-    static let description = IntentDescription("Export the outline in various formats.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.export", comment: "Intent title: Export")
+    static let description = IntentDescription(LocalizedStringResource("intent.title.export-description", comment: "Intent description: Export the outline in various formats."))
 
-    @Parameter(title: "Outline")
+    @Parameter(title: LocalizedStringResource("intent.parameter.outline", comment: "Intent parameter: Outline"))
 	var outline: OutlineAppEntity
 
-    @Parameter(title: "Export Type")
+    @Parameter(title: LocalizedStringResource("intent.parameter.export-type", comment: "Intent parameter: Export Type"))
     var exportType: ExportTypeAppEnum
 
-    @Parameter(title: "Export Link Type", default: .zavalaLinks)
+    @Parameter(title: LocalizedStringResource("intent.parameter.export-link-type", comment: "Intent parameter: Export Link Type"), default: .zavalaLinks)
     var exportLinkType: ExportLinkTypeAppEnum
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Export the \(\.$outline) as \(\.$exportType) using \(\.$exportLinkType)")
+        Summary("intent.summary.export-the-\(\.$outline)-as-\(\.$exportType)-using-\(\.$exportLinkType)")
     }
 
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$outline, \.$exportType, \.$exportLinkType)) { outline, exportType, exportLinkType in
             DisplayRepresentation(
-                title: "Export the \(outline) as \(exportType) using \(exportLinkType)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.export-the-\(outline)-as-\(exportType)-using-\(exportLinkType)", comment: "Import prediction: Export the <Outline> as <ExportType> using <ExportLinkType>"),
+                subtitle: nil
             )
         }
     }

@@ -10,21 +10,21 @@ import AppIntents
 
 struct GetImagesForOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "GetImagesForOutlineIntent"
-    static let title: LocalizedStringResource = "Get Images For Outline"
-    static let description = IntentDescription("Gets all the Images associated with the given Outline. Useful for integrating with Outlines exported as Markdown.")
+    static let title: LocalizedStringResource = LocalizedStringResource("intent.title.get-images-for-outline", comment: "Intent title: Get Images for Outline")
+    static let description = IntentDescription(LocalizedStringResource("intent.descrption.get-images-for-outline", comment: "Gets all the Images associated with the given Outline. Useful for integrating with Outlines exported as Markdown."))
 
-    @Parameter(title: "Outline")
+    @Parameter(title: LocalizedStringResource("intent.parameter.outline", comment: "Intent parameter: Outline"))
 	var outline: OutlineAppEntity
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Get Images for \(\.$outline)")
+        Summary("intent.summary.get-images-for-\(\.$outline)")
     }
 
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$outline)) { outline in
             DisplayRepresentation(
-                title: "Get Images for \(outline)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.get-images-for-\(outline)", comment: "Intent Prediction: Get Images for <Outline>"),
+				subtitle: nil
             )
         }
     }

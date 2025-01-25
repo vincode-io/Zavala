@@ -15,13 +15,18 @@ enum ExportTypeAppEnum: String, AppEnum {
     case pdfDoc
     case pdfList
 
-    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Export Type")
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("intent.parameter.export-type", comment: "Intent parameter: Export Type"))
     static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
-        .opml: "OPML",
-        .markdownDoc: "Markdown Doc",
-        .markdownList: "Markdown List",
-        .pdfDoc: "PDF Doc",
-        .pdfList: "PDF List"
+        .opml: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.type-opml", comment: "Export type: OPML")),
+        .markdownDoc: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.export-type-markdown-doc", comment: "Export type: Markdown Doc")),
+        .markdownList: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.export-type-markdown-list", comment: "Export type: Markdown List")),
+        .pdfDoc: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.export-type-pdf-doc", comment: "Export type: PDF Doc")),
+        .pdfList: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.export-type-pdf-list", comment: "Export type: PDF List"))
     ]
 }
+
+
+
+
+
 

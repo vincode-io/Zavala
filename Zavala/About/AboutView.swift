@@ -50,9 +50,9 @@ struct AboutView: View {
 						}
 				}
 				VStack(spacing: 5) {
-					Text("Developed by [Maurice C. Parker](https://vincode.io)")
+					Text(try! AttributedString(markdown: String.appDevelopedByCreditLabel))
 						.tint(.accentColor)
-					Text("App icon by [Brad Ellis](https://hachyderm.io/@bradellis)")
+					Text(try! AttributedString(markdown: String.appIconCreditLabel))
 						.tint(.accentColor)
 				}
 				VStack(spacing: 5) {

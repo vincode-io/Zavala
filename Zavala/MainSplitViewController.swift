@@ -841,7 +841,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				guard let currentSortOrder = self?.documentsViewController?.currentSortOrder else { return false }
 				
-				let sortByTitleAction = UIAction(title: .titleControlLabel) { _ in
+				let sortByTitleAction = UIAction(title: .titleLabel) { _ in
 					Task { @MainActor in
 						UIApplication.shared.sendAction(.sortByTitle, to: nil, from: nil, for: nil)
 					}

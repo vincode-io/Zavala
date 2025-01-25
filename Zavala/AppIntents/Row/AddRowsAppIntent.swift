@@ -11,27 +11,27 @@ import VinOutlineKit
 
 struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "AddRowsIntent"
-    static let title: LocalizedStringResource = "Add Rows"
-    static let description = IntentDescription("Add Rows to an Outline.")
+	static let title: LocalizedStringResource = LocalizedStringResource("intent.title.add-rows", comment: "Add Rows")
+	static let description = IntentDescription(LocalizedStringResource("intent.descrption.add-rows-to-outline", comment: "Add Rows to Outline"))
 
-    @Parameter(title: "Entity ID")
+    @Parameter(title: LocalizedStringResource("intent.parameter.entity-id", comment: "Entity ID"))
 	var entityID: EntityID
 
-    @Parameter(title: "Destination")
+    @Parameter(title: LocalizedStringResource("intent.parameter.destination", comment: "Destination"))
     var destination: RowDestinationAppEnum
 
-    @Parameter(title: "Topics")
+    @Parameter(title: LocalizedStringResource("intent.parameter.topics", comment: "Topics"))
     var topics: [String]
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Add \(\.$topics) to \(\.$entityID) at \(\.$destination)")
+        Summary("intent.summary.add-\(\.$topics)-to-\(\.$entityID)-at-\(\.$destination)")
     }
 
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$entityID, \.$destination, \.$topics)) { entityID, destination, topics in
             DisplayRepresentation(
-                title: "Add \(topics, format: .list(type: .and)) to \(entityID) at \(destination)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.add-\(topics, format: .list(type: .and))-to-\(entityID)-at-\(destination)", comment: "Add <topics> to <entityID> at <destination>"),
+                subtitle: nil
             )
         }
     }

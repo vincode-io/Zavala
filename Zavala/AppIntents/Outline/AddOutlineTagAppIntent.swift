@@ -10,24 +10,24 @@ import AppIntents
 
 struct AddOutlineTagAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "AddOutlineTagIntent"
-    static let title: LocalizedStringResource = "Add Outline Tag"
-    static let description = IntentDescription("Add a Tag to the given Outline.")
+	static let title: LocalizedStringResource = LocalizedStringResource("intent.title.add-outline-tag", comment: "Intent title: Add Outline Tag")
+	static let description = IntentDescription(LocalizedStringResource("intent.description.add-outline-tag", comment: "Intent description: Add a Tag to the given Outline."))
 
-    @Parameter(title: "Outline")
+	@Parameter(title: LocalizedStringResource("intent.parameter.outline", comment: "Intent parameter: Outline"))
 	var outline: OutlineAppEntity
 
-    @Parameter(title: "Tag Name")
+	@Parameter(title: LocalizedStringResource("intent.parameter.tag-name", comment: "Intent paramter: Tag Name"))
     var tagName: String
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Add \(\.$tagName) to \(\.$outline)")
+        Summary("intent.summary-add-tag-\(\.$tagName)-to-outline-\(\.$outline)")
     }
 
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$outline, \.$tagName)) { outline, tagName in
             DisplayRepresentation(
-                title: "Add \(tagName) to \(outline)",
-                subtitle: ""
+				title: LocalizedStringResource("intent.prediction.add-tag-\(tagName)-to-\(outline)", comment: "Intent prediction: Add <tagname> to <outline>"),
+                subtitle: nil
             )
         }
     }
@@ -54,7 +54,7 @@ struct AddOutlineTagAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predict
 
 private extension IntentDialog {
     static func tagNameParameterPrompt(tagName: String) -> Self {
-        "What is the \(tagName) to add?"
+		return IntentDialog(LocalizedStringResource("intent.prompt.tag-name-to-add-\(tagName)", comment: "What is the <tagname> to add?"))
     }
 }
 
