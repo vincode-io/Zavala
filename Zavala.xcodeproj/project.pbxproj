@@ -954,6 +954,7 @@
 				en,
 				Base,
 				"en-GB",
+				"en-AU",
 			);
 			mainGroup = 5181A92B2554D92000C153E8;
 			packageReferences = (

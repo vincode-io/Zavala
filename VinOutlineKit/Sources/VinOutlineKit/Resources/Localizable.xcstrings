@@ -14,6 +14,12 @@
             "value" : "All"
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26,6 +32,12 @@
       "comment" : "An unexpected CloudKit error occurred.",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unexpected CloudKit error occurred."
+          }
+        },
+        "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "An unexpected CloudKit error occurred."
@@ -48,6 +60,12 @@
             "value" : "(No Title)"
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(No Title)"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -60,6 +78,12 @@
       "comment" : "Local Account Name: On My iPad",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On My iPad"
+          }
+        },
+        "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "On My iPad"
@@ -82,6 +106,12 @@
             "value" : "On My iPhone"
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On My iPhone"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -94,6 +124,12 @@
       "comment" : "Local Account Name: On My Mac",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On My Mac"
+          }
+        },
+        "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "On My Mac"
@@ -116,6 +152,12 @@
             "value" : "Search"
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -128,6 +170,12 @@
       "comment" : "Label: This Tag name already exists. Please choose a different name.",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Tag name already exists. Please choose a different name."
+          }
+        },
+        "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "This Tag name already exists. Please choose a different name."
@@ -150,6 +198,12 @@
             "value" : "Unable to access security scoped resource."
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to access security scoped resource."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -165,6 +219,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to deserialize the row data."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to deserialise the row data."
           }
         },
         "en-GB" : {
@@ -184,6 +244,12 @@
             "value" : "Unable to process the OPML data."
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to process the OPML data."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -196,6 +262,12 @@
       "comment" : "Label: Unable to read the import file.",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to read the import file."
+          }
+        },
+        "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to read the import file."
