@@ -13,6 +13,12 @@
             "state" : "translated",
             "value" : "All"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
+          }
         }
       }
     },
@@ -20,6 +26,12 @@
       "comment" : "An unexpected CloudKit error occurred.",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unexpected CloudKit error occurred."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "An unexpected CloudKit error occurred."
@@ -35,6 +47,12 @@
             "state" : "translated",
             "value" : "(No Title)"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(No Title)"
+          }
         }
       }
     },
@@ -42,6 +60,12 @@
       "comment" : "Local Account Name: On My iPad",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On My iPad"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "On My iPad"
@@ -57,6 +81,12 @@
             "state" : "translated",
             "value" : "On My iPhone"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On My iPhone"
+          }
         }
       }
     },
@@ -64,6 +94,12 @@
       "comment" : "Local Account Name: On My Mac",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On My Mac"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "On My Mac"
@@ -79,6 +115,12 @@
             "state" : "translated",
             "value" : "Search"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
         }
       }
     },
@@ -86,6 +128,12 @@
       "comment" : "Label: This Tag name already exists. Please choose a different name.",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Tag name already exists. Please choose a different name."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "This Tag name already exists. Please choose a different name."
@@ -101,6 +149,12 @@
             "state" : "translated",
             "value" : "Unable to access security scoped resource."
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to access security scoped resource."
+          }
         }
       }
     },
@@ -111,6 +165,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to deserialize the row data."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to deserialise the row data."
           }
         }
       }
@@ -123,6 +183,12 @@
             "state" : "translated",
             "value" : "Unable to process the OPML data."
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to process the OPML data."
+          }
         }
       }
     },
@@ -130,6 +196,12 @@
       "comment" : "Label: Unable to read the import file.",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to read the import file."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to read the import file."
