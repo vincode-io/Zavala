@@ -1000,23 +1000,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 	
-	func reload(_ newOutline: Outline) {
-		outline?.decrementBeingViewedCount()
-		
-		let oldOutline = outline
-		Task {
-			await oldOutline?.unload()
-
-			outline = newOutline
-			
-			outline?.load()
-			outline?.incrementBeingViewedCount()
-			outline?.prepareForViewing()
-
-			collectionView.reloadData()
-		}
-	}
-	
 	func selectAllRows() {
 		for i in 0..<collectionView.numberOfItems(inSection: adjustedRowsSection) {
 			collectionView.selectItem(at: IndexPath(row: i, section: adjustedRowsSection), animated: false, scrollPosition: [])
@@ -2218,6 +2201,29 @@ private extension EditorViewController {
 		let filterOptionsMenu = UIMenu(title: "", options: .displayInline, children: [filterCompletedAction, filterNotesAction])
 
 		return UIMenu(title: "", children: [turnFilterOnMenu, filterOptionsMenu])
+	}
+	
+	func reload(_ newOutline: Outline) {
+		outline?.decrementBeingViewedCount()
+		
+		let oldOutline = outline
+		Task {
+			await oldOutline?.unload()
+
+			outline = newOutline
+			
+			outline?.load()
+			outline?.incrementBeingViewedCount()
+			outline?.prepareForViewing()
+
+			let cursorCoordinates = CursorCoordinates.bestCoordinates
+			
+			collectionView.reloadData()
+			
+			if let cursorCoordinates {
+				restoreCursorPosition(cursorCoordinates, scroll: false)
+			}
+		}
 	}
 	
 	func showFindInteraction(text: String? = nil, replace: Bool = false) {
