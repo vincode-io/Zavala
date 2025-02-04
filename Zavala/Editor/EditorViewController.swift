@@ -1749,7 +1749,7 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		scrollToVisible(textInput: textView, rect: rect, animated: true)
 	}
 
-	func editorRowTextFieldDidBecomeActive(row: Row) {
+	func editorRowTextFieldDidBecomeActive() {
 		// This makes doing row insertions much faster because this work will
 		// be performed a cycle after the actual insertion was completed.
 		Task { @MainActor in
@@ -1758,6 +1758,14 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		}
 	}
 
+	func editorRowTextFieldDidBecomeInactive() {
+		// This makes doing row insertions much faster because this work will
+		// be performed a cycle after the actual insertion was completed.
+		Task { @MainActor in
+			self.updateUI()
+		}
+	}
+	
 	func editorRowToggleDisclosure(row: Row, applyToAll: Bool) {
 		toggleDisclosure(row: row, applyToAll: applyToAll)
 	}

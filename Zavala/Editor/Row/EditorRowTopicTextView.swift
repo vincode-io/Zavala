@@ -12,7 +12,8 @@ import VinOutlineKit
 protocol EditorRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
-	func didBecomeActive(_: EditorRowTopicTextView, row: Row)
+	func didBecomeActive(_: EditorRowTopicTextView)
+	func didBecomeInactive(_: EditorRowTopicTextView)
 	func resize(_: EditorRowTopicTextView)
 	func scrollIfNecessary(_: EditorRowTopicTextView)
 	func scrollEditorToVisible(_: EditorRowTopicTextView, rect: CGRect)
@@ -96,17 +97,20 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		inputAccessoryView = editorDelegate?.editorRowTopicTextViewInputAccessoryView
 		let result = super.becomeFirstResponder()
 		if result {
-			didBecomeActive()
+			editorDelegate?.didBecomeActive(self)
 		}
 		return result
 	}
 	
-	func didBecomeActive() {
-		if let row {
-			editorDelegate?.didBecomeActive(self, row: row)
+	override func resignFirstResponder() -> Bool {
+		CursorCoordinates.updateLastKnownCoordinates()
+		let result = super.resignFirstResponder()
+		if result {
+			editorDelegate?.didBecomeInactive(self)
 		}
+		return result
 	}
-    
+	
     override func textWasChanged() {
         guard let row else { return }
         editorDelegate?.textChanged(self, row: row, isInNotes: false, selection: selectedRange, rowStrings: rowStrings)
