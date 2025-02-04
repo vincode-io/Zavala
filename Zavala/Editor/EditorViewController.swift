@@ -912,7 +912,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	func edit(_ newOutline: Outline?, selectRow: EntityID? = nil, isNew: Bool, searchText: String? = nil) {
-		guard outline != newOutline else { return }
+		guard outline != newOutline else {
+			if let newOutline {
+				reload(newOutline)
+			}
+			return
+		}
+		
 		isOutlineNewFlag = isNew
 		
 		messageLabel?.removeFromSuperview()
@@ -991,6 +997,23 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			restoreScrollPosition()
 			restoreOutlineCursorPosition()
 			moveCursorToTitleOnNew()
+		}
+	}
+	
+	func reload(_ newOutline: Outline) {
+		outline?.decrementBeingViewedCount()
+		
+		let oldOutline = outline
+		Task {
+			await oldOutline?.unload()
+
+			outline = newOutline
+			
+			outline?.load()
+			outline?.incrementBeingViewedCount()
+			outline?.prepareForViewing()
+
+			collectionView.reloadData()
 		}
 	}
 	
@@ -1579,8 +1602,8 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Outline.Section.title.rawValue:
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		case Outline.Section.tags.rawValue:
-			if let outline, indexPath.row < outline.tagCount {
-				let tag = outline.tags[indexPath.row]
+			if let outlineTags = outline?.tags, indexPath.row < outlineTags.count {
+				let tag = outlineTags[indexPath.row]
 				return collectionView.dequeueConfiguredReusableCell(using: tagRegistration!, for: indexPath, item: tag.name)
 			} else {
 				return collectionView.dequeueConfiguredReusableCell(using: tagInputRegistration!, for: indexPath, item: outline!.id)
@@ -1602,7 +1625,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			responder.resignFirstResponder()
 		}
 		
-		let rows: [Row] = indexPaths.map(\.row).compactMap { outline?.shadowTable?[$0] }
+		let rows: [Row] = indexPaths.filter( {$0.section == adjustedRowsSection })
+			.map(\.row)
+			.compactMap({ outline?.shadowTable?[$0] })
 		return buildRowsContextMenu(rows: rows)
 
 	}
