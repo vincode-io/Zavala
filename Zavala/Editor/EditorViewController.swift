@@ -1000,23 +1000,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 	
-	func reload(_ newOutline: Outline) {
-		outline?.decrementBeingViewedCount()
-		
-		let oldOutline = outline
-		Task {
-			await oldOutline?.unload()
-
-			outline = newOutline
-			
-			outline?.load()
-			outline?.incrementBeingViewedCount()
-			outline?.prepareForViewing()
-
-			collectionView.reloadData()
-		}
-	}
-	
 	func selectAllRows() {
 		for i in 0..<collectionView.numberOfItems(inSection: adjustedRowsSection) {
 			collectionView.selectItem(at: IndexPath(row: i, section: adjustedRowsSection), animated: false, scrollPosition: [])
@@ -1766,7 +1749,7 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		scrollToVisible(textInput: textView, rect: rect, animated: true)
 	}
 
-	func editorRowTextFieldDidBecomeActive(row: Row) {
+	func editorRowTextFieldDidBecomeActive() {
 		// This makes doing row insertions much faster because this work will
 		// be performed a cycle after the actual insertion was completed.
 		Task { @MainActor in
@@ -1775,6 +1758,14 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		}
 	}
 
+	func editorRowTextFieldDidBecomeInactive() {
+		// This makes doing row insertions much faster because this work will
+		// be performed a cycle after the actual insertion was completed.
+		Task { @MainActor in
+			self.updateUI()
+		}
+	}
+	
 	func editorRowToggleDisclosure(row: Row, applyToAll: Bool) {
 		toggleDisclosure(row: row, applyToAll: applyToAll)
 	}
@@ -2218,6 +2209,29 @@ private extension EditorViewController {
 		let filterOptionsMenu = UIMenu(title: "", options: .displayInline, children: [filterCompletedAction, filterNotesAction])
 
 		return UIMenu(title: "", children: [turnFilterOnMenu, filterOptionsMenu])
+	}
+	
+	func reload(_ newOutline: Outline) {
+		outline?.decrementBeingViewedCount()
+		
+		let oldOutline = outline
+		Task {
+			await oldOutline?.unload()
+
+			outline = newOutline
+			
+			outline?.load()
+			outline?.incrementBeingViewedCount()
+			outline?.prepareForViewing()
+
+			let cursorCoordinates = CursorCoordinates.bestCoordinates
+			
+			collectionView.reloadData()
+			
+			if let cursorCoordinates {
+				restoreCursorPosition(cursorCoordinates, scroll: false)
+			}
+		}
 	}
 	
 	func showFindInteraction(text: String? = nil, replace: Bool = false) {
