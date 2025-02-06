@@ -39,7 +39,6 @@ If you’d like to contribute:
 * [Planned Features](https://github.com/vincode-io/Zavala/wiki/Planned-Features)
 * [Definitions](https://github.com/vincode-io/Zavala/wiki/Definitions)
 * [Architecture Notebook](https://github.com/vincode-io/Zavala/wiki/Architecture-Notebook)
-* [Dependencies](https://github.com/vincode-io/Zavala/wiki/Dependencies)
 * [Accessibility](https://github.com/vincode-io/Zavala/wiki/Accessibility)
 
 ## Credits
