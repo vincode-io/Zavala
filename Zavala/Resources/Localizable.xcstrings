@@ -6691,19 +6691,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Created on %1$@ at%2$@"
+            "value" : "Created on %1$@ at %2$@"
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Created on %1$@ at%2$@"
+            "value" : "Created on %1$@ at %2$@"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Created on %1$@ at%2$@"
+            "value" : "Created on %1$@ at %2$@"
           }
         }
       }

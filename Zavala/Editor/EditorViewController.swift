@@ -3681,7 +3681,7 @@ private extension EditorViewController {
 		}
 		
 		let refString = references.count == 1 ? String.referenceLabel : String.referencesLabel
-		let result = NSMutableAttributedString(string: "\(refString)")
+		let result = NSMutableAttributedString(string: "\(refString): ")
 		result.append(references[0])
 		
 		for i in 1..<references.count {
