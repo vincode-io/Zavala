@@ -129,6 +129,7 @@ extension String {
 	
 	// MARK: URL's
 	
+	static let contributersURL = "https://github.com/vincode-io/Zavala/graphs/contributors"
 	static let acknowledgementsURL = "https://github.com/vincode-io/Zavala/wiki/Acknowledgements"
 	static let communityURL = "https://github.com/vincode-io/Zavala/discussions"
 	static let feedbackURL = "mailto:mo@vincode.io"
@@ -182,6 +183,7 @@ extension String {
 	static let communityControlLabel = String(localized: "label.text.community-discussion", comment: "Label: Community Discussion")
 	static let completeAccessibilityLabel = String(localized: "accessibility.text.complete", comment: "Accessibility Label: Complete")
 	static let completeControlLabel = String(localized: "label.text.complete", comment: "Label: Complete")
+	static let contributersControlLabel = String(localized: "label.text.contributers", comment: "Label: Complete")
 	static let copyControlLabel = String(localized: "button.text.copy", comment: "Action: Copy")
 	static let copyDocumentLinkControlLabel = String(localized: "button.text.copy-document-link", comment: "Document Action: Copy Document Link")
 	static let copyDocumentLinksControlLabel = String(localized: "button.text.copy-document-links", comment: "Document Action: Copy Document Links")

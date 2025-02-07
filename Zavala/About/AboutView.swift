@@ -56,6 +56,8 @@ struct AboutView: View {
 						.tint(.accentColor)
 				}
 				VStack(spacing: 5) {
+					Link(String.contributersControlLabel, destination: URL(string: .contributersURL)!)
+						.buttonStyle(.borderless)
 					Link(String.acknowledgementsControlLabel, destination: URL(string: .acknowledgementsURL)!)
 						.buttonStyle(.borderless)
 					Link(String.privacyPolicyControlLabel, destination: URL(string: .privacyPolicyURL)!)

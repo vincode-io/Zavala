@@ -6594,6 +6594,29 @@
         }
       }
     },
+    "label.text.contributers" : {
+      "comment" : "Label: Complete",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contributors"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contributors"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contributors"
+          }
+        }
+      }
+    },
     "label.text.copyright-%@" : {
       "comment" : "Label: Copyright © Vincode, Inc. 2020-<Current Year>",
       "localizations" : {
