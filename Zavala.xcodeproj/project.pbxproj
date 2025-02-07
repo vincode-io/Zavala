@@ -218,6 +218,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		17D85C902D564926008E710A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		17D85C912D564928008E710A /* en-AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/Main.strings"; sourceTree = "<group>"; };
+		17D85C922D56492A008E710A /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Main.strings"; sourceTree = "<group>"; };
 		17DC11DC2D38C05B00D5AA93 /* Localization-Principles.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Localization-Principles.md"; sourceTree = "<group>"; };
 		51077C5127A752DF000C71DB /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		5109BC4F292579A30022E90B /* CopyDocumentLinkActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyDocumentLinkActivity.swift; sourceTree = "<group>"; };
@@ -1240,6 +1243,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				5181A93E2554D92000C153E8 /* Base */,
+				17D85C902D564926008E710A /* en */,
+				17D85C912D564928008E710A /* en-AU */,
+				17D85C922D56492A008E710A /* en-GB */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

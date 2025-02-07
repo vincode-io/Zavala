@@ -3,6 +3,14 @@
   "strings" : {
     "iCloud" : {
       "comment" : "iCloud Account Name: iCloud",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud"
+          }
+        }
+      },
       "shouldTranslate" : false
     },
     "label.text.all" : {

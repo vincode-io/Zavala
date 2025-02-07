@@ -1,29 +1,189 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@ was moved or renamed while open." : {
-      "comment" : "Message text for app moved while running alert"
+    "button.text.automatic-color-palette" : {
+      "comment" : "Label: Automatic",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic"
+          }
+        }
+      }
     },
-    "Automatic" : {
-      "comment" : "Control Label: Automatic"
+    "button.text.dark-color-palette" : {
+      "comment" : "Label: Dark",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        }
+      }
     },
-    "Dark" : {
-      "comment" : "Control Label: Dark"
+    "button.text.light-color-palette" : {
+      "comment" : "Label: Light",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        }
+      }
     },
-    "Light" : {
-      "comment" : "Control Label: Light"
+    "label.text.%@-moved-or-renamed" : {
+      "comment" : "%@ was moved or renamed while open.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ was moved or renamed while open."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ was moved or renamed while open."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ was moved or renamed while open."
+          }
+        }
+      }
     },
-    "Moving an open application can cause unexpected behavior. Manually relaunch the application to continue." : {
-      "comment" : "Informative text for app moved while running alert"
+    "label.text.app-placeholder" : {
+      "comment" : "'This app': Backup name if the app name cannot be deduced from the bundle",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This app"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This app"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This app "
+          }
+        }
+      }
     },
-    "Open Quickly" : {
-      "comment" : "Window Title: Open Quickly"
+    "label.text.moving-application-informative" : {
+      "comment" : "Infomative text: Moving an open application can cause unexpected behavior. Manually relaunch the application to continue.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moving an open application can cause unexpected behavior. Manually relaunch the application to continue."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moving an open application can cause unexpected behaviour. Manually relaunch the application to continue."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moving an open application can cause unexpected behaviour. Manually relaunch the application to continue."
+          }
+        }
+      }
     },
-    "Terminate" : {
-      "comment" : "Relaunch Button"
+    "label.text.open-quickly" : {
+      "comment" : "Window Title: Open Quickly",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Quickly"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Quickly"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Quickly"
+          }
+        }
+      }
     },
-    "This app" : {
-      "comment" : "Backup name if the app name cannot be deduced from the bundle"
+    "label.text.terminate" : {
+      "comment" : "Terminate",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminate"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminate"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminate"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
