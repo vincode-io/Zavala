@@ -66,10 +66,14 @@ struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 				return nil
 			}
 		
+		var copiedRows = [Row]()
+		
 		for row in rows {
 			let rowGroup = RowGroup(row)
 			let attachedRow = rowGroup.attach(to: outline)
 
+			copiedRows.append(attachedRow)
+			
 			switch destination {
 			case .insideAtStart:
 				outline.createRowsInsideAtStart([attachedRow], afterRowContainer: rowContainer)
@@ -91,6 +95,6 @@ struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 		}
 		
 		await suspend()
-		return .result(value: rows.map({RowAppEntity(row: $0)}))
+		return .result(value: copiedRows.map({RowAppEntity(row: $0)}))
     }
 }
