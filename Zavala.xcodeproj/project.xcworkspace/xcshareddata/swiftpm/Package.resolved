@@ -52,7 +52,7 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "3588f0449f1592a5c746079a5c7e6c8b62ba55eb"
+        "revision" : "e62a44fd1f2764ba8807db3b6f257627449bbb8c"
       }
     },
     {
@@ -61,7 +61,7 @@
       "location" : "https://github.com/vincode-io/VinCloudKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "2d0fb7ae1ba7d0d2fbc7693033da6297e78b9be0"
+        "revision" : "5f94c933ad0c529080591079ceb8d07bf8b1200b"
       }
     },
     {
