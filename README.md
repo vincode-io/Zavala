@@ -32,7 +32,7 @@ If you’d like to contribute:
 2. In [Discussions](https://github.com/vincode-io/Zavala/discussions) under the [Work](https://github.com/vincode-io/Zavala/discussions/categories/work) category mention that you would like to work on the item. We will probably discuss implementation details.  **This is very important, because there might be things you need to know before you start work.**
 4. Once approved, then go for it. Write the code, then do a pull request. We’ll either have comments or we’ll merge it. (We might revise it afterward, of course.)
 
-## Project Documents
+## Technical Documents
 
 * [Building from Source](https://github.com/vincode-io/Zavala/wiki/Building-from-Source)
 * [Design Goals](https://github.com/vincode-io/Zavala/wiki/Design-Goals)
@@ -40,6 +40,7 @@ If you’d like to contribute:
 * [Definitions](https://github.com/vincode-io/Zavala/wiki/Definitions)
 * [Architecture Notebook](https://github.com/vincode-io/Zavala/wiki/Architecture-Notebook)
 * [Accessibility](https://github.com/vincode-io/Zavala/wiki/Accessibility)
+* [Localization Principles](https://github.com/vincode-io/Zavala/wiki/Localization-Principles)
 
 ## Credits
 
