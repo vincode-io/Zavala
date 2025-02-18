@@ -197,7 +197,7 @@ extension String {
 
 	static let darkControlLabel = String(localized: "button.text.set-appearance-dark", comment: "Set App Color Palette Action: Dark")
 	static let deleteAlwaysControlLabel = String(localized: "button.text.always-delete-without-asking", comment: "Delete Action: Always Delete Without Asking")
-	static let deleteCompletedRowsControlLabel = String(localized: "label.text.delete-completed", comment: "Label: Delete Completed Rows")
+	static let deleteCompletedRowsControlLabel = String(localized: "label.text.delete-completed", comment: "Label: Delete Completed")
 	static let deleteCompletedRowsTitle = String(localized: "label.text.delete-completed-rows", comment: "Label: Delete Completed Rows")
 	static let deleteCompletedRowsMessage = String(localized: "label.text.delete-completed-rows-message", comment: "Alert Message: Are you sure you want to delete the completed rows?")
 	static let deleteControlLabel = String(localized: "button.text.delete", comment: "Action: Delete")

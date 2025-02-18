@@ -6733,24 +6733,24 @@
       }
     },
     "label.text.delete-completed" : {
-      "comment" : "Label: Delete Completed Rows",
+      "comment" : "Label: Delete Completed",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Completed Rows"
+            "value" : "Delete Completed"
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Completed Rows"
+            "value" : "Delete Completed"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Completed Rows"
+            "value" : "Delete Completed"
           }
         }
       }
