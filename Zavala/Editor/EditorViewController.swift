@@ -2602,10 +2602,8 @@ private extension EditorViewController {
 		if !collectionView.isVisible(indexPath: indexPath) {
 			CATransaction.begin()
 			CATransaction.setCompletionBlock {
-				// Got to wait or the row cell won't be found
 				Task { @MainActor in
-					try? await Task.sleep(for: .seconds(0.5))
-					restoreCursor()
+					self.restoreCursorPosition(cursorCoordinates, scroll: scroll, centered: centered)
 				}
 			}
 			if indexPath.row < collectionView.numberOfItems(inSection: indexPath.section) {
