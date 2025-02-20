@@ -491,6 +491,12 @@ open class SearchTextField: EnhancedTextField {
 		tableView?.clearSelection()
 	}
 	
+	// Clean filtered results
+	open func clearResults() {
+		filteredResults.removeAll()
+		tableView?.removeFromSuperview()
+	}
+	
     open func hideResultsList() {
         if let tableFrame:CGRect = tableView?.frame {
             let newFrame = CGRect(x: tableFrame.origin.x, y: tableFrame.origin.y, width: tableFrame.size.width, height: 0.0)
@@ -590,12 +596,6 @@ open class SearchTextField: EnhancedTextField {
         if inlineMode {
             handleInlineFiltering()
         }
-    }
-    
-    // Clean filtered results
-    fileprivate func clearResults() {
-        filteredResults.removeAll()
-        tableView?.removeFromSuperview()
     }
     
     // Look for Font attribute, and if it exists, adapt to the subtitle font size

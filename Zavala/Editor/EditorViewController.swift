@@ -1172,14 +1172,19 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func toggleMode() {
-		guard let topicView = currentTextView as? EditorRowTopicTextView,
-			  let shadowTableIndex = topicView.row?.shadowTableIndex else {
-			moveCursorToCurrentRowTopic()
+		let currentFirstResponder = UIResponder.currentFirstResponder
+		
+		if currentFirstResponder is EditorTitleTextView || currentFirstResponder is EditorTagInputTextField {
+			currentFirstResponder?.resignFirstResponder()
 			return
 		}
 		
-		_ = topicView.resignFirstResponder()
-		collectionView.selectItem(at: IndexPath(row: shadowTableIndex, section: adjustedRowsSection), animated: true, scrollPosition: [])
+		if let topicView = currentFirstResponder as? EditorRowTopicTextView, let shadowTableIndex = topicView.row?.shadowTableIndex {
+			_ = topicView.resignFirstResponder()
+			collectionView.selectItem(at: IndexPath(row: shadowTableIndex, section: adjustedRowsSection), animated: true, scrollPosition: [])
+		} else {
+			moveCursorToCurrentRowTopic()
+		}
 	}
 
 	@objc func copyRowLink(_ sender: Any?) {

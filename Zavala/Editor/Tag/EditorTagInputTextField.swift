@@ -38,13 +38,24 @@ class EditorTagInputTextField: SearchTextField, EditorTextInput {
 	}
 	
 	override var keyCommands: [UIKeyCommand]? {
-		let tab = UIKeyCommand(action: #selector(createTag), input: "\t")
-		tab.wantsPriorityOverSystemBehavior = true
+		var keyCommands = [UIKeyCommand]()
+		
+		// Yes, this can get called even if this object isn't a first responder. Overriding the tab key here messes with UIKit's Focus
+		// system. What happes is that when you are in a tag input field and hit ESC here, we resign the first responder in
+		// EditorViewConroller.toggleMode, but we will still get hung up when pressing the Tab key and nothing ends up happening.
+		if isFirstResponder {
+			let tab = UIKeyCommand(action: #selector(createTag), input: "\t")
+			tab.wantsPriorityOverSystemBehavior = true
+			keyCommands.append(tab)
+		}
+		
+		if isShowingResults {
+			let esc = UIKeyCommand(action: #selector(closeSuggestionList), input: UIKeyCommand.inputEscape)
+			esc.wantsPriorityOverSystemBehavior = true
+			keyCommands.append(esc)
+		}
 
-		let esc = UIKeyCommand(action: #selector(closeSuggestionList), input: UIKeyCommand.inputEscape)
-		esc.wantsPriorityOverSystemBehavior = true
-
-		return [tab, esc]
+		return keyCommands
 	}
 	
 	private var stackedUndoManager: UndoManager?
@@ -114,6 +125,7 @@ class EditorTagInputTextField: SearchTextField, EditorTextInput {
 	
 	@objc func closeSuggestionList() {
 		super.clearSelection()
+		super.clearResults()
 		super.hideResultsList()
 	}
 	
