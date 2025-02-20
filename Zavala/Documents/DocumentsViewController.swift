@@ -339,6 +339,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		Task {
 			await loadDocuments(animated: animated)
 			openDocument(document, isNew: true, animated: true)
+			editCurrentDocument()
 		}
 	}
 

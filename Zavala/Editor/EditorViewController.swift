@@ -1006,10 +1006,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	func edit(selectRow: EntityID? = nil) {
-		guard let outline else {
-			fatalError("You should not call edit() without an outline already set.")
-		}
-		
+		guard isViewLoaded, let outline else { return }
+
 		if let selectRow {
 			guard let index = outline.shadowTable?.first(where: { $0.entityID == selectRow })?.shadowTableIndex else { return }
 			collectionView.selectItem(at: IndexPath(row: index, section: adjustedRowsSection), animated: false, scrollPosition: [.centeredVertically])
