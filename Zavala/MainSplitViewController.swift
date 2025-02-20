@@ -226,6 +226,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		guard let documentContainers = pin.containers else { return }
 		await collectionsViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: true, animated: false)
 		documentsViewController?.openDocument(pin.document, isNavigationBranch: true, animated: false)
+		documentsViewController?.editCurrentDocument()
 	}
 	
 	func importOPMLs(urls: [URL]) {
@@ -765,6 +766,7 @@ private extension MainSplitViewController {
 			
 			await collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false)
 			documentsViewController?.openDocument(pin.document, isNavigationBranch: false, animated: false)
+			documentsViewController?.editCurrentDocument()
 		}
 	}
 	
@@ -785,6 +787,7 @@ private extension MainSplitViewController {
 		
 			await collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false)
 			documentsViewController?.openDocument(pin.document, isNavigationBranch: false, animated: false)
+			documentsViewController?.editCurrentDocument()
 		}
 	}
 	
