@@ -194,7 +194,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			return
 		}
 		
-		handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
+		editDocument(document, isNavigationBranch: isNavigationBranch)
 	}
 	
 	func handleDocument(_ entityID: EntityID, isNavigationBranch: Bool) async {
@@ -207,13 +207,13 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		let selectRow = entityID.isRow ? entityID : nil
 		
 		if let collectionsTags = selectedTags, document.hasAnyTag(collectionsTags) {
-			self.handleSelectDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch)
+			editDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch)
 		} else if document.tagCount == 1, let tag = document.tags?.first {
 			await collectionsViewController?.selectDocumentContainers([TagDocuments(account: account, tag: tag)], isNavigationBranch: true, animated: false)
-			handleSelectDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch)
+			editDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch)
 		} else {
 			await collectionsViewController?.selectDocumentContainers([AllDocuments(account: account)], isNavigationBranch: true, animated: false)
-			handleSelectDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch)
+			editDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch)
 		}
 	}
 	
@@ -663,7 +663,7 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 
 private extension MainSplitViewController {
 	
-	func handleSelectDocument(_ document: Document, selectRow: EntityID? = nil, isNavigationBranch: Bool) {
+	func editDocument(_ document: Document, selectRow: EntityID? = nil, isNavigationBranch: Bool) {
 		self.documentsViewController?.openDocument(document, isNavigationBranch: isNavigationBranch, animated: false)
 		self.documentsViewController?.editCurrentDocument(selectRow: selectRow)
 		self.lastMainControllerToAppear = .editor
