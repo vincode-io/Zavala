@@ -15,6 +15,11 @@ import VinUtility
 extension Selector {
 	static let goBackwardOne = #selector(MainSplitViewController.goBackwardOne(_:))
 	static let goForwardOne = #selector(MainSplitViewController.goForwardOne(_:))
+	static let sortByTitle = #selector(MainSplitViewController.sortByTitle(_:))
+	static let sortByCreated = #selector(MainSplitViewController.sortByCreated(_:))
+	static let sortByUpdated = #selector(MainSplitViewController.sortByUpdated(_:))
+	static let sortAscending = #selector(MainSplitViewController.sortAscending(_:))
+	static let sortDescending = #selector(MainSplitViewController.sortDescending(_:))
 }
 
 protocol MainControllerIdentifiable {
@@ -258,6 +263,26 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		Task {
 			await appDelegate.accountManager.sync()
 		}
+	}
+	
+	@objc func sortByTitle(_ sender: Any?) {
+		documentsViewController?.sortByTitle()
+	}
+	
+	@objc func sortByCreated(_ sender: Any?) {
+		documentsViewController?.sortByCreated()
+	}
+	
+	@objc func sortByUpdated(_ sender: Any?) {
+		documentsViewController?.sortByUpdated()
+	}
+	
+	@objc func sortAscending(_ sender: Any?) {
+		documentsViewController?.sortAscending()
+	}
+	
+	@objc func sortDescending(_ sender: Any?) {
+		documentsViewController?.sortDescending()
 	}
 	
 	@objc func createOutline(_ sender: Any?) {

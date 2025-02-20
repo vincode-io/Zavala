@@ -13,14 +13,6 @@ import Semaphore
 import VinOutlineKit
 import VinUtility
 
-extension Selector {
-	static let sortByTitle = #selector(DocumentsViewController.sortByTitle(_:))
-	static let sortByCreated = #selector(DocumentsViewController.sortByCreated(_:))
-	static let sortByUpdated = #selector(DocumentsViewController.sortByUpdated(_:))
-	static let sortAscending = #selector(DocumentsViewController.sortAscending(_:))
-	static let sortDescending = #selector(DocumentsViewController.sortDescending(_:))
-}
-
 @MainActor
 protocol DocumentsDelegate: AnyObject  {
 	func openDocuments(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool)
@@ -322,25 +314,24 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		delegate?.editCurrentDocument(self, selectRow: selectRow)
 	}
 	
-	func importOPMLs(urls: [URL]) {
-		guard let documentContainers,
-			  let account = documentContainers.uniqueAccount else { return }
-
-		for url in urls {
-			Task {
-				do {
-					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
-					let document = try await account.importOPML(url, tags: tags)
-					
-					await loadDocuments(animated: true)
-					openDocument(document, animated: true)
-					
-					DocumentIndexer.updateIndex(forDocument: document)
-				} catch {
-					self.presentError(title: .importFailedTitle, message: error.localizedDescription)
-				}
-			}
-		}
+	func sortByTitle() {
+		changeSortField(.title)
+	}
+	
+	func sortByCreated() {
+		changeSortField(.created)
+	}
+	
+	func sortByUpdated() {
+		changeSortField(.updated)
+	}
+	
+	func sortAscending() {
+		changeSortOrder(.ascending)
+	}
+	
+	func sortDescending() {
+		changeSortOrder(.descending)
 	}
 	
 	func createOutline(animated: Bool) {
@@ -367,6 +358,27 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 								 ownerEmail: defaults.ownerEmail,
 								 ownerURL: defaults.ownerURL)
 		return document
+	}
+	
+	func importOPMLs(urls: [URL]) {
+		guard let documentContainers,
+			  let account = documentContainers.uniqueAccount else { return }
+
+		for url in urls {
+			Task {
+				do {
+					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
+					let document = try await account.importOPML(url, tags: tags)
+					
+					await loadDocuments(animated: true)
+					openDocument(document, animated: true)
+					
+					DocumentIndexer.updateIndex(forDocument: document)
+				} catch {
+					self.presentError(title: .importFailedTitle, message: error.localizedDescription)
+				}
+			}
+		}
 	}
 	
 	func share() {
@@ -448,26 +460,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		self.present(docPicker, animated: true)
 	}
 
-	@objc func sortByTitle(_ sender: Any?) {
-		changeSortField(.title)
-	}
-	
-	@objc func sortByCreated(_ sender: Any?) {
-		changeSortField(.created)
-	}
-	
-	@objc func sortByUpdated(_ sender: Any?) {
-		changeSortField(.updated)
-	}
-	
-	@objc func sortAscending(_ sender: Any?) {
-		changeSortOrder(.ascending)
-	}
-	
-	@objc func sortDescending(_ sender: Any?) {
-		changeSortOrder(.descending)
-	}
-	
 	override func delete(_ sender: Any?) {
 		deleteDocuments(selectedDocuments)
 	}
@@ -842,35 +834,35 @@ private extension DocumentsViewController {
 		let currentSortOrder = currentSortOrder
 		
 		let sortByTitle = UIAction(title: .titleLabel) { [weak self] _ in
-			self?.sortByTitle(nil)
+			self?.sortByTitle()
 		}
 		if currentSortOrder.field == .title {
 			sortByTitle.state = .on
 		}
 		
 		let sortByCreated = UIAction(title: .createdControlLabel) { [weak self] _ in
-			self?.sortByCreated(nil)
+			self?.sortByCreated()
 		}
 		if currentSortOrder.field == .created {
 			sortByCreated.state = .on
 		}
 
 		let sortByUpdated = UIAction(title: .updatedControlLabel) { [weak self] _ in
-			self?.sortByUpdated(nil)
+			self?.sortByUpdated()
 		}
 		if currentSortOrder.field == .updated {
 			sortByUpdated.state = .on
 		}
 
 		let sortAscending = UIAction(title: .ascendingControlLabel) { [weak self] _ in
-			self?.sortAscending(nil)
+			self?.sortAscending()
 		}
 		if currentSortOrder.ordered == .ascending {
 			sortAscending.state = .on
 		}
 
 		let sortDescending = UIAction(title: .descendingControlLabel) { [weak self] _ in
-			self?.sortDescending(nil)
+			self?.sortDescending()
 		}
 		if currentSortOrder.ordered == .descending {
 			sortDescending.state = .on
