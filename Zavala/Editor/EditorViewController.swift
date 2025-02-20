@@ -348,7 +348,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.dropDelegate = self
 		collectionView.dragInteractionEnabled = true
 		collectionView.allowsMultipleSelection = true
-		collectionView.remembersLastFocusedIndexPath = false
 		collectionView.allowsFocus = true
 		collectionView.selectionFollowsFocus = true
 		collectionView.focusGroupIdentifier = EditorViewController.focusGroupIdentifier
