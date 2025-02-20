@@ -664,7 +664,8 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 private extension MainSplitViewController {
 	
 	func handleSelectDocument(_ document: Document, selectRow: EntityID? = nil, isNavigationBranch: Bool) {
-		self.documentsViewController?.openDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch, animated: false)
+		self.documentsViewController?.openDocument(document, isNavigationBranch: isNavigationBranch, animated: false)
+		self.documentsViewController?.editCurrentDocument(selectRow: selectRow)
 		self.lastMainControllerToAppear = .editor
 		self.validateToolbar()
 	}

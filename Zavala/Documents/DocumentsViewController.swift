@@ -295,7 +295,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 
-	func openDocument(_ document: Document?, selectRow: EntityID? = nil, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
+	func openDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
 		guard let documentContainers else { return }
 
 		collectionView.deselectAll()
