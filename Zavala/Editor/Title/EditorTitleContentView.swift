@@ -30,6 +30,7 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.adjustsFontForContentSizeCategory = true
 		textView.translatesAutoresizingMaskIntoConstraints = false
 		textView.focusGroupIdentifier = EditorViewController.focusGroupIdentifier
+		textView.focusGroupPriority = .prioritized
 		
 		addSubview(textView)
 
