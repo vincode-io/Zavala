@@ -69,7 +69,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		}
 		
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
-			editorContainerViewController.openDocument(documentID)
+			editorContainerViewController.editDocument(documentID)
 			if let windowFrame = window?.frame {
 				window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 700, height: 600)
 			}
@@ -148,7 +148,7 @@ private extension OutlineEditorSceneDelegate {
 		Task {
 			await appDelegate.accountManager.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
 			if let documentID = appDelegate.accountManager.cloudKitAccount?.findDocument(shareRecordID: shareMetadata.share.recordID)?.id {
-				editorContainerViewController.openDocument(documentID)
+				editorContainerViewController.editDocument(documentID)
 			}
 		}
 	}

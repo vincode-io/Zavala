@@ -20,6 +20,7 @@ class CollectionsSearchContentView: UIView, UIContentView {
 		searchTextField.placeholder = .searchPlaceholder
 		searchTextField.translatesAutoresizingMaskIntoConstraints = false
 		searchTextField.autocorrectionType = .no
+		searchTextField.focusGroupIdentifier = CollectionsViewController.focusGroupIdentifier
 		addSubview(searchTextField)
 
 		let heightConstraint = searchTextField.heightAnchor.constraint(equalToConstant: 28)

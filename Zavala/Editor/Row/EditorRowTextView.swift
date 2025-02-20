@@ -131,7 +131,8 @@ class EditorRowTextView: UITextView {
 		self.isScrollEnabled = false
 		self.textContainer.lineFragmentPadding = 0
 		self.textContainerInset = .zero
-		self.backgroundColor = .clear
+		self.backgroundColor = .clear		
+		self.focusGroupIdentifier = EditorViewController.focusGroupIdentifier
 
 		if #available(iOS 18.0, *) {
 			self.allowedWritingToolsResultOptions = [.plainText, .richText]

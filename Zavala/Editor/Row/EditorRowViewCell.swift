@@ -101,7 +101,6 @@ class EditorRowViewCell: UICollectionViewListCell {
 		default:
 			indentationWidth = 16
 		}
-
 		
 		let isDisclosureVisible = row.rowCount != 0
 		let isNotesVisible = !isNotesHidden && !row.isNoteEmpty

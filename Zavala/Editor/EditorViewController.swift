@@ -82,6 +82,8 @@ protocol EditorDelegate: AnyObject {
 
 class EditorViewController: UIViewController, DocumentsActivityItemsConfigurationDelegate, MainControllerIdentifiable {
 
+	static var focusGroupIdentifier: String? = "io.vincode.Zavala.EditorViewController"
+
 	private static let searchBarHeight: CGFloat = 44
 	
 	@IBOutlet weak var collectionView: EditorCollectionView!
@@ -89,7 +91,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override var keyCommands: [UIKeyCommand]? {
 		var keyCommands = [UIKeyCommand]()
 		
-		if !isEditingNote {
+		if isEditingTopic {
 			let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: .moveCurrentRowsLeft)
 			shiftTab.wantsPriorityOverSystemBehavior = true
 			keyCommands.append(shiftTab)
@@ -346,7 +348,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.dropDelegate = self
 		collectionView.dragInteractionEnabled = true
 		collectionView.allowsMultipleSelection = true
-		collectionView.selectionFollowsFocus = false
+		collectionView.remembersLastFocusedIndexPath = false
+		collectionView.allowsFocus = true
+		collectionView.selectionFollowsFocus = true
+		collectionView.focusGroupIdentifier = EditorViewController.focusGroupIdentifier
 		collectionView.contentInset = EditorViewController.defaultContentInsets
 		collectionView.addInteraction(findInteraction)
 
@@ -377,6 +382,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			cell.isSearching = self?.isSearching ?? false
 			cell.numberingStyle = self?.outline?.numberingStyle
 			cell.delegate = self
+			
+			cell.configurationUpdateHandler = { cell, state in
+				guard let editorRowViewCell = cell as? EditorRowViewCell else { return }
+				if state.isSelected || state.isHighlighted {
+					// Put some logic here to change the text color to white when in light mode
+				} else {
+					// Put some logic here to change the text color back to the selected font color
+				}
+			}
 		}
 		
 		backlinkRegistration = UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline> { [weak self] (cell, indexPath, outline) in
@@ -911,7 +925,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		])
 	}
 	
-	func edit(_ newOutline: Outline?, selectRow: EntityID? = nil, isNew: Bool, searchText: String? = nil) {
+	func open(_ newOutline: Outline?, isNew: Bool, searchText: String? = nil) {
 		guard outline != newOutline else {
 			if let newOutline {
 				reload(newOutline)
@@ -989,6 +1003,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 
 		updateUI()
+	}
+	
+	func edit(selectRow: EntityID? = nil) {
+		guard let outline else {
+			fatalError("You should not call edit() without an outline already set.")
+		}
 		
 		if let selectRow {
 			guard let index = outline.shadowTable?.first(where: { $0.entityID == selectRow })?.shadowTableIndex else { return }
@@ -1161,7 +1181,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return
 		}
 		
-		topicView.resignFirstResponder()
+		_ = topicView.resignFirstResponder()
 		collectionView.selectItem(at: IndexPath(row: shadowTableIndex, section: adjustedRowsSection), animated: true, scrollPosition: [])
 	}
 
@@ -1626,7 +1646,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
-		return false
+		return indexPath.section == adjustedRowsSection
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -2368,22 +2388,11 @@ private extension EditorViewController {
 	func pressesBeganForOutlineMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		if presses.count == 1, let key = presses.first?.key {
 			guard cancelledKeys.remove(key) == nil else {
+				super.pressesBegan(presses, with: event)
 				return
 			}
 			
 			switch (key.keyCode, true) {
-			case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				isGoingUp = true
-				repeatMoveSelectionUp(keepSelection: false)
-			case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				isGoingDown = true
-				repeatMoveSelectionDown(keepSelection: false)
-			case (.keyboardUpArrow, key.modifierFlags.contains(.shift)):
-				isGoingUp = true
-				repeatMoveSelectionUp(keepSelection: true)
-			case (.keyboardDownArrow, key.modifierFlags.contains(.shift)):
-				isGoingDown = true
-				repeatMoveSelectionDown(keepSelection: true)
 			case (.keyboardLeftArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
 					if let cell = collectionView.cellForItem(at: first) as? EditorRowViewCell {
@@ -2405,116 +2414,6 @@ private extension EditorViewController {
 		}
 	}
 
-	func repeatMoveSelectionUp(keepSelection: Bool) {
-		if let sortedIndexPaths = collectionView.indexPathsForSelectedItems?.sorted(),
-		   let first = sortedIndexPaths.first,
-		   let last = sortedIndexPaths.last {
-			
-			if keepSelection {
-				if shiftStartIndex == nil {
-					shiftStartIndex = first.row
-				}
-				
-				let shiftNextIndex: Int
-				if last.row > shiftStartIndex! {
-					shiftNextIndex = last.row
-				} else {
-					if first.row > 0 {
-						shiftNextIndex = first.row - 1
-					} else {
-						shiftNextIndex = first.row
-					}
-				}
-				
-				let indexPath = IndexPath(row: shiftNextIndex, section: first.section)
-				if shiftNextIndex > shiftStartIndex! {
-					collectionView.deselectItem(at: indexPath, animated: false)
-				} else if shiftNextIndex < shiftStartIndex! {
-					collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-				}
-				collectionView.scrollToItem(at: indexPath, at: [], animated: true)
-			} else {
-				// This shouldn't be necessary, but when hitting keys fast sometimes the shiftStartIndex doesn't get cleared
-				shiftStartIndex = nil
-				
-				if first.row > 0 {
-					collectionView.deselectAll(animated: false)
-					let indexPath = IndexPath(row: first.row - 1, section: first.section)
-					collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-					collectionView.scrollToItem(at: indexPath, at: [], animated: true)
-				}
-			}
-		}
-		
-		goingUpOrDownTask?.cancel()
-		goingUpOrDownTask = Task {
-			try? await Task.sleep(for: .seconds(goingUpRepeatInterval))
-			guard !Task.isCancelled else { return }
-			
-			if self.isGoingUp {
-				self.goingUpRepeatInterval = Self.fastRepeatInterval
-				self.repeatMoveSelectionUp(keepSelection: keepSelection)
-			} else {
-				self.goingUpRepeatInterval = Self.slowRepeatInterval
-			}
-		}
-	}
-	
-	func repeatMoveSelectionDown(keepSelection: Bool) {
-		if let sortedIndexPaths = collectionView.indexPathsForSelectedItems?.sorted(),
-		   let first = sortedIndexPaths.first,
-		   let last = sortedIndexPaths.last {
-			
-			if keepSelection {
-				if shiftStartIndex == nil {
-					shiftStartIndex = last.row
-				}
-				
-				let shiftNextIndex: Int
-				if first.row < shiftStartIndex! {
-					shiftNextIndex = first.row
-				} else {
-					if last.row + 1 < outline?.shadowTable?.count ?? 0 {
-						shiftNextIndex = last.row + 1
-					} else {
-						shiftNextIndex = last.row
-					}
-				}
-				
-				let indexPath = IndexPath(row: shiftNextIndex, section: first.section)
-				if shiftNextIndex < shiftStartIndex! {
-					collectionView.deselectItem(at: indexPath, animated: false)
-				} else if shiftNextIndex > shiftStartIndex! {
-					collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-				}
-				collectionView.scrollToItem(at: indexPath, at: [], animated: true)
-			} else {
-				// This shouldn't be necessary, but when hitting keys fast sometimes the shiftStartIndex doesn't get cleared
-				shiftStartIndex = nil
-				
-				if last.row + 1 < outline?.shadowTable?.count ?? 0 {
-					collectionView.deselectAll(animated: false)
-					let indexPath = IndexPath(row: last.row + 1, section: last.section)
-					collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-					collectionView.scrollToItem(at: indexPath, at: [], animated: true)
-				}
-			}
-		}
-
-		goingUpOrDownTask?.cancel()
-		goingUpOrDownTask = Task {
-			try? await Task.sleep(for: .seconds(goingDownRepeatInterval))
-			guard !Task.isCancelled else { return }
-			
-			if self.isGoingDown {
-				self.goingDownRepeatInterval = Self.fastRepeatInterval
-				self.repeatMoveSelectionDown(keepSelection: keepSelection)
-			} else {
-				self.goingDownRepeatInterval = Self.slowRepeatInterval
-			}
-		}
-	}
-	
 	func repeatMoveCursorUp() {
 		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
 			moveCursorUp(topicTextView: textView)

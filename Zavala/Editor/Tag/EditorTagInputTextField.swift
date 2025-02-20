@@ -62,7 +62,8 @@ class EditorTagInputTextField: SearchTextField, EditorTextInput {
 		self.tableXOffset = -8
 		self.tableYOffset = 3
 		self.textColor = .secondaryLabel
-
+		self.focusGroupIdentifier = EditorViewController.focusGroupIdentifier
+		
 		self.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
 			guard let self else { return }
 			self.text = nil

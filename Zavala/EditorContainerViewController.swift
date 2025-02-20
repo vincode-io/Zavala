@@ -44,7 +44,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 	func handle(_ activity: NSUserActivity) {
 		guard activity.activityType != NSUserActivity.ActivityType.newOutline else {
 			let document = newOutlineDocument()
-			editorViewController?.edit(document?.outline, isNew: true)
+			editorViewController?.open(document?.outline, isNew: true)
+			editorViewController?.edit()
 			if let document {
 				pinWasVisited(Pin(accountManager: appDelegate.accountManager, document: document))
 			}
@@ -54,24 +55,25 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		guard let userInfo = activity.userInfo else { return }
 		
 		if let searchIdentifier = userInfo[CSSearchableItemActivityIdentifier] as? String, let documentID = EntityID(description: searchIdentifier) {
-			openDocument(documentID)
+			editDocument(documentID)
 			return
 		}
 		
 		let pin = Pin(accountManager: appDelegate.accountManager, userInfo: userInfo[Pin.UserInfoKeys.pin])
 		if let documentID = pin.documentID {
-			openDocument(documentID)
+			editDocument(documentID)
 			return
 		}
 		
 		sceneDelegate?.closeWindow()
 	}
 	
-	func openDocument(_ documentID: EntityID) {
+	func editDocument(_ documentID: EntityID) {
 		if let document = appDelegate.accountManager.findDocument(documentID), let outline = document.outline {
 			sceneDelegate?.window?.windowScene?.title = outline.title
 			activityManager.selectingDocument(nil, document)
-			editorViewController?.edit(outline, isNew: false)
+			editorViewController?.open(outline, isNew: false)
+			editorViewController?.edit()
 			pinWasVisited(Pin(accountManager: appDelegate.accountManager, document: document))
 		} else {
 			Task {
@@ -103,7 +105,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 
 	func shutdown() {
 		activityManager.invalidateSelectDocument()
-		editorViewController?.edit(nil, isNew: false)
+		editorViewController?.open(nil, isNew: false)
 	}
 	
 	// MARK: Actions

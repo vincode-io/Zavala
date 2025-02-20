@@ -220,7 +220,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 	func handlePin(_ pin: Pin) async {
 		guard let documentContainers = pin.containers else { return }
 		await collectionsViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: true, animated: false)
-		documentsViewController?.selectDocument(pin.document, isNavigationBranch: true, animated: false)
+		documentsViewController?.openDocument(pin.document, isNavigationBranch: true, animated: false)
 	}
 	
 	func importOPMLs(urls: [URL]) {
@@ -406,13 +406,12 @@ extension MainSplitViewController: CollectionsDelegate {
 
 extension MainSplitViewController: DocumentsDelegate {
 	
-	func documentSelectionDidChange(_: DocumentsViewController,
-									documentContainers: [DocumentContainer],
-									documents: [Document],
-									selectRow: EntityID?,
-									isNew: Bool,
-									isNavigationBranch: Bool,
-									animated: Bool) {
+	func openDocuments(_: DocumentsViewController,
+					   documentContainers: [DocumentContainer],
+					   documents: [Document],
+					   isNew: Bool,
+					   isNavigationBranch: Bool,
+					   animated: Bool) {
 		
 		// Don't overlay the Document Container title if we are just switching Document Containers
 		if !documents.isEmpty {
@@ -421,7 +420,7 @@ extension MainSplitViewController: DocumentsDelegate {
 		
 		guard documents.count == 1, let document = documents.first else {
 			activityManager.invalidateSelectDocument()
-			editorViewController?.edit(nil, isNew: isNew)
+			editorViewController?.open(nil, isNew: isNew)
 			if documents.isEmpty {
 				editorViewController?.showMessage(.noSelectionLabel)
 			} else {
@@ -458,15 +457,19 @@ extension MainSplitViewController: DocumentsDelegate {
 		
         if let search = documentContainers.first as? Search {
 			if search.searchText.isEmpty {
-				editorViewController?.edit(nil, isNew: isNew)
+				editorViewController?.open(nil, isNew: isNew)
 			} else {
-				editorViewController?.edit(document.outline, isNew: isNew, searchText: search.searchText)
+				editorViewController?.open(document.outline, isNew: isNew, searchText: search.searchText)
 				pinWasVisited(Pin(accountManager: appDelegate.accountManager, containers: documentContainers, document: document))
 			}
 		} else {
-			editorViewController?.edit(document.outline, selectRow: selectRow, isNew: isNew)
+			editorViewController?.open(document.outline, isNew: isNew)
 			pinWasVisited(Pin(accountManager: appDelegate.accountManager, containers: documentContainers, document: document))
 		}
+	}
+
+	func editCurrentDocument(_: DocumentsViewController, selectRow: EntityID?) {
+		editorViewController?.edit(selectRow: selectRow)
 	}
 
 	func showGetInfo(_: DocumentsViewController, outline: Outline) {
@@ -637,7 +640,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 		if isCollapsed && viewController === documentsViewController && lastMainControllerToAppear == .editor {
 			activityManager.invalidateSelectDocument()
-			documentsViewController?.selectDocument(nil, isNavigationBranch: false, animated: false)
+			documentsViewController?.openDocument(nil, isNavigationBranch: false, animated: false)
 			return
 		}
 	}
@@ -661,7 +664,7 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 private extension MainSplitViewController {
 	
 	func handleSelectDocument(_ document: Document, selectRow: EntityID? = nil, isNavigationBranch: Bool) {
-		self.documentsViewController?.selectDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch, animated: false)
+		self.documentsViewController?.openDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch, animated: false)
 		self.lastMainControllerToAppear = .editor
 		self.validateToolbar()
 	}
@@ -735,7 +738,7 @@ private extension MainSplitViewController {
 			lastPin = pin
 			
 			await collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false)
-			documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
+			documentsViewController?.openDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
 	}
 	
@@ -755,7 +758,7 @@ private extension MainSplitViewController {
 			let pin = goForwardStack.removeFirst()
 		
 			await collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false)
-			documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
+			documentsViewController?.openDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
 	}
 	

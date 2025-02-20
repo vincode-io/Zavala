@@ -24,6 +24,8 @@ enum CollectionsSection: Int {
 class CollectionsViewController: UICollectionViewController, MainControllerIdentifiable {
 	nonisolated var mainControllerIdentifer: MainControllerIdentifier { return .collections }
 	
+	static var focusGroupIdentifier: String? = "io.vincode.Zavala.CollectionsViewController"
+	
 	weak var delegate: CollectionsDelegate?
 	
 	var selectedAccount: Account? {
@@ -144,6 +146,9 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	
 	func startUp() {
 		collectionView.remembersLastFocusedIndexPath = true
+		collectionView.allowsFocus = true
+		collectionView.selectionFollowsFocus = true
+		collectionView.focusGroupIdentifier = CollectionsViewController.focusGroupIdentifier
 		collectionView.dragDelegate = self
 		collectionView.dropDelegate = self
 		collectionView.collectionViewLayout = createLayout()
@@ -282,10 +287,6 @@ extension CollectionsViewController {
 		guard let mainItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
 		return makeDocumentContainerContextMenu(mainItem: mainItem, items: items)
 	}
-    
-	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
-		return false
-	}
 	
 	override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
 		if traitCollection.userInterfaceIdiom == .pad {
@@ -391,28 +392,21 @@ extension CollectionsViewController {
 					}
 				} else {
 					cell.configurationUpdateHandler = { cell, state in
-						guard let cell = cell as? ConsistentCollectionViewListCell,
-							  var config = cell.contentConfiguration?.updated(for: state) as? UIListContentConfiguration else { return }
+						guard let cell = cell as? ConsistentCollectionViewListCell else { return }
 						
 						if state.isSelected || state.isHighlighted {
-							config.imageProperties.tintColor = .white
-
 							if container.children.isEmpty {
 								cell.accessories = [.outlineDisclosure(options: .init(isHidden: true))]
 							} else {
 								cell.accessories = [.outlineDisclosure(options: .init(isHidden: false, tintColor: .lightGray))]
 							}
 						} else {
-							config.imageProperties.tintColor = nil
-
 							if container.children.isEmpty {
 								cell.accessories = [.outlineDisclosure(options: .init(isHidden: true))]
 							} else {
 								cell.accessories = [.outlineDisclosure(options: .init(isHidden: false))]
 							}
 						}
-						
-						cell.contentConfiguration = config
 					}
 				}
 			}

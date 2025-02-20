@@ -29,6 +29,8 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.autocapitalizationType = .words
 		textView.adjustsFontForContentSizeCategory = true
 		textView.translatesAutoresizingMaskIntoConstraints = false
+		textView.focusGroupIdentifier = EditorViewController.focusGroupIdentifier
+		
 		addSubview(textView)
 
 		NSLayoutConstraint.activate([

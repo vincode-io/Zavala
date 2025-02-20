@@ -45,7 +45,6 @@ class EditorTagInputPill: UIView {
 		addSubview(border)
 
 		textField.editorDelegate = self
-		textField.placeholder = "Tag"
 		textField.font = OutlineFontCache.shared.tagFont
 		textField.textColor = OutlineFontCache.shared.tagColor
 		textField.translatesAutoresizingMaskIntoConstraints = false
