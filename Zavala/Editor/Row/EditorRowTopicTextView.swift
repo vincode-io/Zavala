@@ -189,7 +189,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
-	override func update(with row: Row) {
+	func update(with row: Row, configuration: EditorRowContentConfiguration) {
 		// Don't update the row if we are in the middle of entering multistage characters, e.g. Japanese
 		guard markedTextRange == nil else { return }
 		
@@ -200,7 +200,13 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		let cursorRange = selectedTextRange
 		
 		text = ""
-		let fontColor = OutlineFontCache.shared.topicColor(level: row.trueLevel)
+		
+		let fontColor = if configuration.isSelected {
+			UIColor.white
+		} else {
+			OutlineFontCache.shared.topicColor(level: row.trueLevel)
+		}
+		
 		baseAttributes = [NSAttributedString.Key : Any]()
 		if row.isComplete ?? false || row.isAnyParentComplete {
 			if fontColor.cgColor.alpha > 0.3 {

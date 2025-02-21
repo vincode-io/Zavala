@@ -19,6 +19,7 @@ struct EditorRowContentConfiguration: UIContentConfiguration {
 	var indentationWidth: CGFloat
 	var isDisclosureVisible: Bool
 	var isNotesVisible: Bool
+	var isSelected: Bool
 	var rowIndentSize: DefaultsSize?
 	var rowSpacingSize: DefaultsSize?
 	
@@ -28,6 +29,7 @@ struct EditorRowContentConfiguration: UIContentConfiguration {
 		 indentationWidth: CGFloat,
 		 isDisclosureVisible: Bool,
 		 isNotesVisible: Bool,
+		 isSelected: Bool,
 		 rowIndentSize: DefaultsSize?,
 		 rowSpacingSize: DefaultsSize?) {
 		self.row = row
@@ -35,6 +37,7 @@ struct EditorRowContentConfiguration: UIContentConfiguration {
 		self.numberingStyle = numberingStyle
 		self.indentationWidth = indentationWidth
 		self.isNotesVisible = isNotesVisible
+		self.isSelected = isSelected
 		self.isDisclosureVisible = isDisclosureVisible
 		self.rowIndentSize = rowIndentSize
 		self.rowSpacingSize = rowSpacingSize
@@ -53,6 +56,7 @@ struct EditorRowContentConfiguration: UIContentConfiguration {
 			&& indentationWidth == other.indentationWidth
 			&& isDisclosureVisible == other.isDisclosureVisible
 			&& isNotesVisible == other.isNotesVisible
+			&& isSelected == other.isSelected
 			&& rowIndentSize == other.rowIndentSize
 			&& rowSpacingSize == other.rowSpacingSize
 	}

@@ -104,6 +104,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 		
 		let isDisclosureVisible = row.rowCount != 0
 		let isNotesVisible = !isNotesHidden && !row.isNoteEmpty
+		let isSelected = state.isSelected
 		
 		var content = EditorRowContentConfiguration(row: row,
 													isSearching: isSearching,
@@ -111,6 +112,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 													indentationWidth: indentationWidth,
 													isDisclosureVisible: isDisclosureVisible,
 													isNotesVisible: isNotesVisible,
+													isSelected: isSelected,
 													rowIndentSize: rowIndentSize,
 													rowSpacingSize: rowSpacingSize)
 		

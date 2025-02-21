@@ -122,7 +122,7 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
-	override func update(with row: Row) {
+	func update(with row: Row, configuration: EditorRowContentConfiguration) {
 		// Don't update the row if we are in the middle of entering multistage characters, e.g. Japanese
 		guard markedTextRange == nil else { return }
 		
@@ -134,14 +134,24 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		
 		text = ""
 		
+		let fontColor = if configuration.isSelected {
+			UIColor.white.withAlphaComponent(0.66)
+		} else {
+			OutlineFontCache.shared.noteColor(level: row.trueLevel)
+		}
+		
 		baseAttributes = [NSAttributedString.Key : Any]()
 		baseAttributes[.font] = OutlineFontCache.shared.noteFont(level: row.trueLevel)
-		baseAttributes[.foregroundColor] = OutlineFontCache.shared.noteColor(level: row.trueLevel)
+		baseAttributes[.foregroundColor] = fontColor
 
 		typingAttributes = baseAttributes
 		
 		textStorageDelegate = EditorRowTextStorageDelegate(baseAttributes: baseAttributes)
 		self.textStorage.delegate = textStorageDelegate
+		
+		var linkAttrs = baseAttributes
+		linkAttrs[.underlineStyle] = 1
+		linkTextAttributes = linkAttrs
 		
         if let note = row.note {
             attributedText = note

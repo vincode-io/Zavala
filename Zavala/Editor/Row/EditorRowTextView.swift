@@ -234,10 +234,6 @@ class EditorRowTextView: UITextView {
         fatalError("textChanged has not been implemented")
     }
 
-	func update(with row: Row) {
-		fatalError("update has not been implemented")
-	}
-	
 	func scrollEditorToVisible(rect: CGRect) {
 		fatalError("scrollEditorToVisible has not been implemented")
 	}

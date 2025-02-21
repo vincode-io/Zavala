@@ -7,7 +7,9 @@ import VinOutlineKit
 
 class EditorRowNumberingLabel: UILabel {
 	
-	func update(with row: Row, for numberingStyle: Outline.NumberingStyle) {
+	func update(with row: Row, configuration: EditorRowContentConfiguration) {
+		guard let numberingStyle = configuration.numberingStyle else { return }
+		
 		let attrString = switch numberingStyle {
 		case .simple:
 			NSMutableAttributedString(string: row.simpleNumbering)
@@ -19,7 +21,11 @@ class EditorRowNumberingLabel: UILabel {
 			NSMutableAttributedString()
 		}
 		
-		let fontColor = OutlineFontCache.shared.numberingColor(level: row.trueLevel)
+		let fontColor = if configuration.isSelected {
+			UIColor.white.withAlphaComponent(0.66)
+		} else {
+			OutlineFontCache.shared.numberingColor(level: row.trueLevel)
+		}
 		
 		var labelAttributes = [NSAttributedString.Key : Any]()
 		if row.isComplete ?? false || row.isAnyParentComplete {

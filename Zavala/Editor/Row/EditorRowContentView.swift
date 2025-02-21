@@ -118,11 +118,11 @@ class EditorRowContentView: UIView, UIContentView {
 		guard let row = configuration.row else { return }
 
 		if let numberingStyle = configuration.numberingStyle, numberingStyle != Outline.NumberingStyle.none {
-			numberingLabel.update(with: row, for: numberingStyle)
+			numberingLabel.update(with: row, configuration: configuration)
 		}
 		
-		topicTextView.update(with: row)
-		noteTextView.update(with: row)
+		topicTextView.update(with: row, configuration: configuration)
+		noteTextView.update(with: row, configuration: configuration)
 
 		switch (configuration.row?.isExpanded ?? true, configuration.isSearching) {
 		case (true, _):

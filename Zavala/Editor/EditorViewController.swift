@@ -381,15 +381,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			cell.isSearching = self?.isSearching ?? false
 			cell.numberingStyle = self?.outline?.numberingStyle
 			cell.delegate = self
-			
-			cell.configurationUpdateHandler = { cell, state in
-				guard let editorRowViewCell = cell as? EditorRowViewCell else { return }
-				if state.isSelected || state.isHighlighted {
-					// Put some logic here to change the text color to white when in light mode
-				} else {
-					// Put some logic here to change the text color back to the selected font color
-				}
-			}
 		}
 		
 		backlinkRegistration = UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline> { [weak self] (cell, indexPath, outline) in
