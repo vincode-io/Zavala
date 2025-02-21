@@ -46,24 +46,28 @@ final class DocumentsItem: NSObject, NSCopying, Identifiable, Sendable {
 }
 
 class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
-
+	
 	weak var delegate: MacOpenQuicklyDocumentsDelegate?
 	private var documentContainers: [DocumentContainer]?
-
+	
 	private var dataSource: UICollectionViewDiffableDataSource<Int, DocumentsItem>!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		
 		collectionView.layer.borderWidth = 1
 		collectionView.layer.borderColor = UIColor.systemGray2.cgColor
 		collectionView.layer.cornerRadius = 3
+		collectionView.allowsFocus = true
+		collectionView.selectionFollowsFocus = true
 		
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applySnapshot()
 	}
-
+	
+	// MARK: API
+	
 	func setDocumentContainers(_ documentContainers: [DocumentContainer]) {
 		self.documentContainers = documentContainers
 		collectionView.deselectAll()
@@ -71,6 +75,15 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 	}
 	
 	// MARK: UICollectionView
+	
+	override func collectionView(_ collectionView: UICollectionView, performPrimaryActionForItemAt indexPath: IndexPath) {
+		guard let itemID = dataSource.itemIdentifier(for: indexPath) else { return }
+		delegate?.openDocument(self, documentID: itemID.id)
+	}
+	
+}
+
+private extension MacOpenQuicklyDocumentsViewController {
 	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -100,15 +113,6 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 			}
 			
 			cell.contentConfiguration = contentConfiguration
-			
-			let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.selectDocument(gesture:)))
-			cell.addGestureRecognizer(singleTap)
-			
-			if self.traitCollection.userInterfaceIdiom == .mac {
-				let doubleTap = UITapGestureRecognizer(target: self, action: #selector(self.openDocumentInNewWindow(gesture:)))
-				doubleTap.numberOfTapsRequired = 2
-				cell.addGestureRecognizer(doubleTap)
-			}
 		}
 		
 		dataSource = UICollectionViewDiffableDataSource<Int, DocumentsItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
@@ -116,24 +120,6 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 		}
 	}
 
-	@objc private func selectDocument(gesture: UITapGestureRecognizer) {
-		guard let cell = gesture.view as? UICollectionViewCell,
-			  let indexPath = collectionView.indexPath(for: cell),
-			  let item = dataSource.itemIdentifier(for: indexPath) else { return }
-
-		collectionView.deselectAll()
-		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-		delegate?.documentSelectionDidChange(self, documentID: item.id)
-	}
-	
-	@objc func openDocumentInNewWindow(gesture: UITapGestureRecognizer) {
-		guard let cell = gesture.view as? UICollectionViewCell,
-			  let indexPath = collectionView.indexPath(for: cell),
-			  let item = dataSource.itemIdentifier(for: indexPath) else { return }
-
-		delegate?.openDocument(self, documentID: item.id)
-	}
-	
 	func applySnapshot() {
 		guard let documentContainers else {
 			let snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()

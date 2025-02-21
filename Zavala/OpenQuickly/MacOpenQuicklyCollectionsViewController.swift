@@ -26,7 +26,8 @@ class MacOpenQuicklyCollectionsViewController: UICollectionViewController {
 		collectionView.layer.borderWidth = 1
 		collectionView.layer.borderColor = UIColor.systemGray2.cgColor
 		collectionView.layer.cornerRadius = 3
-		collectionView.allowsMultipleSelection = true
+		collectionView.allowsFocus = true
+		collectionView.selectionFollowsFocus = true
 		
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
