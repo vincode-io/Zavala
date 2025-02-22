@@ -36,6 +36,13 @@ class EditorTitleTextView: UITextView, EditorTextInput {
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		textDropDelegate = Self.dropDelegate
+
+		#if targetEnvironment(macCatalyst)
+		let appleColorPreferencesChangedNotification = Notification.Name(rawValue: "AppleColorPreferencesChangedNotification")
+		DistributedNotificationCenter.default.addObserver(self, selector: #selector(appleColorPreferencesChanged(_:)), name: appleColorPreferencesChangedNotification, object: nil)
+		#endif
+
+		updateTintColor()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -50,4 +57,20 @@ class EditorTitleTextView: UITextView, EditorTextInput {
 		return result
 	}
 	
+}
+
+private extension EditorTitleTextView {
+	
+	func updateTintColor() {
+		if UIColor.accentColor.isDefaultAccentColor {
+			tintColor = .brightenedDefaultAccentColor
+		} else {
+			tintColor = .accentColor
+		}
+	}
+
+	@objc func appleColorPreferencesChanged(_ note: Notification? = nil) {
+		updateTintColor()
+	}
+
 }
