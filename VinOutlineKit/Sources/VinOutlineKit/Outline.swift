@@ -1731,6 +1731,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		} else if afterRow == nil {
 			insertRow(row, at: 0)
 			row.parent = self
+		} else if afterRow == focusRow {
+			afterRow?.insertRow(row, at: 0)
+			row.parent = afterRow
 		} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
 			afterRow?.insertRow(row, at: 0)
 			row.parent = afterRow
