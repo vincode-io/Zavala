@@ -161,6 +161,8 @@ extension Outline: VCKModel {
 		
 		guard isBeingViewed else { return }
 
+		var changes = rebuildShadowTable()
+
 		var reloadRows = [Row]()
 		
 		func reloadVisitor(_ visited: Row) {
@@ -175,7 +177,6 @@ extension Outline: VCKModel {
 			}
 		}
 		
-		var changes = rebuildShadowTable()
 		let reloadIndexes = reloadRows.compactMap { $0.shadowTableIndex }
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloadIndexes)))
 		
