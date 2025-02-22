@@ -15,8 +15,8 @@ import VinUtility
 
 @MainActor
 protocol DocumentsDelegate: AnyObject  {
-	func openDocuments(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool)
-	func editCurrentDocument(_: DocumentsViewController, selectRow: EntityID?)
+	func openDocuments(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNavigationBranch: Bool, animated: Bool)
+	func editCurrentDocument(_: DocumentsViewController, isNew: Bool, selectRow: EntityID?)
 	func showGetInfo(_: DocumentsViewController, outline: Outline)
 	func exportPDFDocs(_: DocumentsViewController, outlines: [Outline])
 	func exportPDFLists(_: DocumentsViewController, outlines: [Outline])
@@ -270,10 +270,9 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 				delegate?.openDocuments(self,
 										documentContainers: documentContainers,
 										documents: [prevSelectedDoc],
-										isNew: false,
 										isNavigationBranch: false,
 										animated: false)
-				delegate?.editCurrentDocument(self, selectRow: nil)
+				delegate?.editCurrentDocument(self, isNew: false, selectRow: nil)
 			}
 		}
 		
@@ -287,7 +286,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 
-	func openDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
+	func openDocument(_ document: Document?, isNavigationBranch: Bool = true, animated: Bool) {
 		guard let documentContainers else { return }
 
 		collectionView.deselectAll()
@@ -297,21 +296,19 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			delegate?.openDocuments(self,
 									documentContainers: documentContainers,
 									documents: [document],
-									isNew: isNew,
 									isNavigationBranch: isNavigationBranch,
 									animated: animated)
 		} else {
 			delegate?.openDocuments(self,
 									documentContainers: documentContainers,
 									documents: [],
-									isNew: isNew,
 									isNavigationBranch: isNavigationBranch,
 									animated: animated)
 		}
 	}
 	
-	func editCurrentDocument(selectRow: EntityID? = nil) {
-		delegate?.editCurrentDocument(self, selectRow: selectRow)
+	func editCurrentDocument(isNew: Bool = false, selectRow: EntityID? = nil) {
+		delegate?.editCurrentDocument(self, isNew: isNew, selectRow: selectRow)
 	}
 	
 	func sortByTitle() {
@@ -338,8 +335,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		guard let document = createOutlineDocument(title: "") else { return }
 		Task {
 			await loadDocuments(animated: animated)
-			openDocument(document, isNew: true, animated: true)
-			editCurrentDocument()
+			openDocument(document, animated: true)
+			editCurrentDocument(isNew: true)
 		}
 	}
 
@@ -475,7 +472,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		delegate?.openDocuments(self,
 								documentContainers: documentContainers,
 								documents: documents,
-								isNew: false,
 								isNavigationBranch: false,
 								animated: true)
 	}
@@ -562,7 +558,6 @@ extension DocumentsViewController {
 			delegate?.openDocuments(self,
 									documentContainers: documentContainers,
 									documents: [],
-									isNew: false,
 									isNavigationBranch: false,
 									animated: true)
 			return
@@ -572,7 +567,6 @@ extension DocumentsViewController {
 		delegate?.openDocuments(self,
 								documentContainers: documentContainers,
 								documents: selectedDocuments,
-								isNew: false,
 								isNavigationBranch: true,
 								animated: true)
 	}
@@ -594,7 +588,6 @@ extension DocumentsViewController {
 			delegate?.openDocuments(self,
 									documentContainers: documentContainers,
 									documents: [],
-									isNew: false,
 									isNavigationBranch: false,
 									animated: true)
 			return
@@ -604,13 +597,12 @@ extension DocumentsViewController {
 		delegate?.openDocuments(self,
 								documentContainers: documentContainers,
 								documents: selectedDocuments,
-								isNew: false,
 								isNavigationBranch: true,
 								animated: true)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, performPrimaryActionForItemAt indexPath: IndexPath) {
-		delegate?.editCurrentDocument(self, selectRow: nil)
+		delegate?.editCurrentDocument(self, isNew: false, selectRow: nil)
 	}
 	
 	private func createLayout() -> UICollectionViewLayout {
@@ -698,7 +690,6 @@ extension DocumentsViewController {
 			self.delegate?.openDocuments(self,
 										 documentContainers: documentContainers,
 										 documents: [],
-										 isNew: false,
 										 isNavigationBranch: isNavigationBranch,
 										 animated: true)
 			return
@@ -736,7 +727,6 @@ extension DocumentsViewController {
 			self.delegate?.openDocuments(self,
 										 documentContainers: documentContainers,
 										 documents: [],
-										 isNew: false,
 										 isNavigationBranch: isNavigationBranch,
 										 animated: true)
 		}
@@ -1099,7 +1089,6 @@ private extension DocumentsViewController {
 				self.delegate?.openDocuments(self,
 											 documentContainers: documentContainers,
 											 documents: [],
-											 isNew: false,
 											 isNavigationBranch: true,
 											 animated: true)
 			}

@@ -44,8 +44,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 	func handle(_ activity: NSUserActivity) {
 		guard activity.activityType != NSUserActivity.ActivityType.newOutline else {
 			let document = newOutlineDocument()
-			editorViewController?.open(document?.outline, isNew: true)
-			editorViewController?.edit()
+			editorViewController?.open(document?.outline)
+			editorViewController?.edit(isNew: true)
 			if let document {
 				pinWasVisited(Pin(accountManager: appDelegate.accountManager, document: document))
 			}
@@ -72,7 +72,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		if let document = appDelegate.accountManager.findDocument(documentID), let outline = document.outline {
 			sceneDelegate?.window?.windowScene?.title = outline.title
 			activityManager.selectingDocument(nil, document)
-			editorViewController?.open(outline, isNew: false)
+			editorViewController?.open(outline)
 			editorViewController?.edit()
 			pinWasVisited(Pin(accountManager: appDelegate.accountManager, document: document))
 		} else {
@@ -105,7 +105,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 
 	func shutdown() {
 		activityManager.invalidateSelectDocument()
-		editorViewController?.open(nil, isNew: false)
+		editorViewController?.open(nil)
 	}
 	
 	// MARK: Actions

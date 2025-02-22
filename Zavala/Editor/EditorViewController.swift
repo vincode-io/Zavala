@@ -305,7 +305,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	// This is used to keep the collection view from scrolling to the top as its layout gets invalidated.
 	private var transitionContentOffset: CGPoint?
 	
-	private var isOutlineNewFlag = false
 	private var updateTitleChannel = AsyncChannel<String>()
 
 	private var currentKeyboardHeight: CGFloat = 0
@@ -425,7 +424,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		moveCursorToTitleOnNew()
 		undoManager?.removeAllActions()
 	}
 	
@@ -915,15 +913,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		])
 	}
 	
-	func open(_ newOutline: Outline?, isNew: Bool, searchText: String? = nil) {
+	func open(_ newOutline: Outline?, searchText: String? = nil) {
 		guard outline != newOutline else {
 			if let newOutline {
 				reload(newOutline)
 			}
 			return
 		}
-		
-		isOutlineNewFlag = isNew
 		
 		messageLabel?.removeFromSuperview()
 		messageLabel = nil
@@ -995,16 +991,20 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		updateUI()
 	}
 	
-	func edit(selectRow: EntityID? = nil) {
+	func edit(isNew: Bool = false, selectRow: EntityID? = nil) {
+		guard !isNew else {
+			moveCursorToTitleOnNew()
+			return
+		}
+		
 		guard isViewLoaded, let outline else { return }
-
+		
 		if let selectRow {
 			guard let index = outline.shadowTable?.first(where: { $0.entityID == selectRow })?.shadowTableIndex else { return }
 			collectionView.selectItem(at: IndexPath(row: index, section: adjustedRowsSection), animated: false, scrollPosition: [.centeredVertically])
 		} else {
 			restoreScrollPosition()
 			restoreOutlineCursorPosition()
-			moveCursorToTitleOnNew()
 		}
 	}
 	
@@ -2630,13 +2630,18 @@ private extension EditorViewController {
 	}
 	
 	func moveCursorToTitleOnNew() {
-		if isOutlineNewFlag {
-			Task { @MainActor in
-				try? await Task.sleep(for: .seconds(0.6))
-				self.moveCursorToTitle()
+		// On the iPhone the view might not be there when this gets called, so try until it is ready.
+		guard isViewLoaded && collectionView.numberOfSections > 0 else {
+			Task {
+				self.moveCursorToTitleOnNew()
 			}
+			return
 		}
-		isOutlineNewFlag = false
+		
+		// On the iPad you have to wait for another run loop or it won't work. Dunno why.
+		Task {
+			self.moveCursorToTitle()
+		}
 	}
 	
 	func moveCursorToTitle() {

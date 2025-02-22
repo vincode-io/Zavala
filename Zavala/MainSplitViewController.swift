@@ -435,7 +435,6 @@ extension MainSplitViewController: DocumentsDelegate {
 	func openDocuments(_: DocumentsViewController,
 					   documentContainers: [DocumentContainer],
 					   documents: [Document],
-					   isNew: Bool,
 					   isNavigationBranch: Bool,
 					   animated: Bool) {
 		
@@ -446,7 +445,7 @@ extension MainSplitViewController: DocumentsDelegate {
 		
 		guard documents.count == 1, let document = documents.first else {
 			activityManager.invalidateSelectDocument()
-			editorViewController?.open(nil, isNew: isNew)
+			editorViewController?.open(nil)
 			if documents.isEmpty {
 				editorViewController?.showMessage(.noSelectionLabel)
 			} else {
@@ -483,19 +482,19 @@ extension MainSplitViewController: DocumentsDelegate {
 		
         if let search = documentContainers.first as? Search {
 			if search.searchText.isEmpty {
-				editorViewController?.open(nil, isNew: isNew)
+				editorViewController?.open(nil)
 			} else {
-				editorViewController?.open(document.outline, isNew: isNew, searchText: search.searchText)
+				editorViewController?.open(document.outline, searchText: search.searchText)
 				pinWasVisited(Pin(accountManager: appDelegate.accountManager, containers: documentContainers, document: document))
 			}
 		} else {
-			editorViewController?.open(document.outline, isNew: isNew)
+			editorViewController?.open(document.outline)
 			pinWasVisited(Pin(accountManager: appDelegate.accountManager, containers: documentContainers, document: document))
 		}
 	}
 
-	func editCurrentDocument(_: DocumentsViewController, selectRow: EntityID?) {
-		editorViewController?.edit(selectRow: selectRow)
+	func editCurrentDocument(_: DocumentsViewController, isNew: Bool, selectRow: EntityID?) {
+		editorViewController?.edit(isNew: isNew, selectRow: selectRow)
 	}
 
 	func showGetInfo(_: DocumentsViewController, outline: Outline) {
