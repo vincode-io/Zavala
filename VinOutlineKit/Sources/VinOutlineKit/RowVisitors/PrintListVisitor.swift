@@ -81,9 +81,9 @@ final class PrintListVisitor {
 
 			let noteFont: UIFont
 			if let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withDesign(.serif) {
-				noteFont = UIFont(descriptor: descriptor, size: 11)
+				noteFont = UIFont(descriptor: descriptor, size: 10)
 			} else {
-				noteFont = UIFont.systemFont(ofSize: 11)
+				noteFont = UIFont.systemFont(ofSize: 10)
 			}
 
 			let noteParagraphStyle = NSMutableParagraphStyle()
