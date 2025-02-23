@@ -1807,6 +1807,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			} else if let parent = row.parent, let afterRow {
 				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rowCount - 1
 				parent.insertRow(row, at: insertIndex + 1)
+			} else if afterRow == focusRow {
+				afterRow?.insertRow(row, at: 0)
+				row.parent = afterRow
 			} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
