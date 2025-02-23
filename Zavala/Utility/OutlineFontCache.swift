@@ -7,7 +7,6 @@
 
 import UIKit
 import VinOutlineKit
-import Combine
 
 public extension Notification.Name {
 	static let OutlineFontCacheDidRebuild = Notification.Name(rawValue: "OutlineFontCacheDidRebuild")
