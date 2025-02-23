@@ -52,3 +52,7 @@ You can use this Shortcut to restore a Zavala archive to an Account. You will pr
 ## [Export to Reminders](https://www.icloud.com/shortcuts/f2865613b0ee47da8a2cf0cb27cdb945)
 
 This shortcut will take the currently selected Outline and export it to Reminders as a Reminder List with Tasks taken from the Outline’s rows.
+
+## [Migraine Log](https://www.icloud.com/shortcuts/60a2681372eb43919810721878a14753)
+
+This example is useful for logging information using a template Row as a starting point. In this case, we are logging migraine headaches and associated symptoms. See the comments in the Shortcut for more information.
