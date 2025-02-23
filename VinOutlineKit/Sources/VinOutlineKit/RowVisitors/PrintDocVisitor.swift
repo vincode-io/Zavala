@@ -83,9 +83,14 @@ private extension PrintDocVisitor {
 			attrs[.strikethroughStyle] = 0
 		}
 		
-		let fontSize = indentLevel < 3 ? 18 - ((indentLevel + 1) * 2) : 12
+		let fontSize = CGFloat(indentLevel < 3 ? 18 - ((indentLevel + 1) * 2) : 12)
 
-		let topicFont = UIFont.systemFont(ofSize: CGFloat(fontSize))
+		let topicFont = if let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withDesign(.serif) {
+			UIFont(descriptor: descriptor, size: fontSize)
+		} else {
+			UIFont.systemFont(ofSize: fontSize)
+		}
+
 		let topicParagraphStyle = NSMutableParagraphStyle()
 		topicParagraphStyle.paragraphSpacing = 0.33 * topicFont.lineHeight
 		attrs[.paragraphStyle] = topicParagraphStyle
@@ -103,11 +108,10 @@ private extension PrintDocVisitor {
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.darkGray
 
-		let noteFont: UIFont
-		if let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withDesign(.serif) {
-			noteFont = UIFont(descriptor: descriptor, size: 11)
+		let noteFont = if let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withDesign(.serif) {
+			UIFont(descriptor: descriptor, size: 11)
 		} else {
-			noteFont = UIFont.systemFont(ofSize: 11)
+			UIFont.systemFont(ofSize: 11)
 		}
 
 		let noteParagraphStyle = NSMutableParagraphStyle()
