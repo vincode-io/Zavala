@@ -14,6 +14,16 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
 		
+		guard var contentConfig = contentConfiguration as? UIListContentConfiguration else { return }
+
+		if state.isSelected || state.isHighlighted {
+			contentConfig.secondaryTextProperties.color = .lightGray
+		} else {
+			contentConfig.secondaryTextProperties.color = .tertiaryLabel
+		}
+
+		contentConfiguration = contentConfig
+		
 		var backgroundConfig = UIBackgroundConfiguration.listSidebarCell().updated(for: state)
 
 		if state.traitCollection.userInterfaceIdiom == .mac {
