@@ -153,14 +153,6 @@ private extension EditorViewController {
 		// The target index path points to the following row, but we want the preceding row to be the sibling
 		var newSiblingTargetIndexPath = destinationIndexPath.row > 0 ? destinationIndexPath.row - 1 : 0
 
-		// Adjust the index path when dragging downward
-		for row in rows {
-			if row.shadowTableIndex ?? 0 < destinationIndexPath.row {
-				newSiblingTargetIndexPath = newSiblingTargetIndexPath + 1
-				break
-			}
-		}
-
 		let newSiblingCandidate = shadowTable[newSiblingTargetIndexPath]
 
 		// We have to handle dropping into the first entry in a parent in a special way
