@@ -95,8 +95,8 @@ private extension MacOpenQuicklyDocumentsViewController {
 	}
 	
 	private func configureDataSource() {
-		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, DocumentsItem> { [weak self] (cell, indexPath, item) in
-			guard let self, let document = appDelegate.accountManager.findDocument(item.id) else { return }
+		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, DocumentsItem> { (cell, indexPath, item) in
+			guard let document = appDelegate.accountManager.findDocument(item.id) else { return }
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			cell.insetBackground = true
