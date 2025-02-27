@@ -1,0 +1,196 @@
+/* 
+  Localizable.strings
+  Zavala
+
+  Created by Holton_Jiang on 02/27/25.
+  
+*/
+
+/* Menu Items, Toolbars, & Buttons */
+"Done" = "完成";
+"Outline" = "大纲";
+"Import_OPML" = "导入 OPML";
+"Import_OPML_Ellipsis" = "导入 OPML中…";
+"Export" = "导出";
+"Export_Markdown_Doc_Ellipsis" = "导出 Markdown 文档中…";
+"Export_Markdown_List_Ellipsis" = "导出 Markdown 列表中…";
+"Export_PDF_Doc_Ellipsis" = "导出 PDF 文档中…";
+"Export_PDF_List_Ellipsis" = "导出 PDF 列表中…";
+"Export_OPML_Ellipsis" = "导出 OPML中…";
+"New_Main_Window" = "新建主窗口";
+"New_Outline" = "新建大纲";
+"New_Folder" = "新建文件夹";
+"Toggle_Sidebar" = "切换侧边栏";
+"Mark_As_Favorite" = "标记为收藏夹";
+"Unmark_As_Favorite" = "取消标记为收藏夹";
+"Rename" = "重命名";
+"Delete" = "删除";
+"Cancel" = "取消";
+"Get_Info" = "获取信息";
+"Typing" = "输入";
+"Move_Up" = "上升";
+"Move_Down" = "下降";
+"Move_Left" = "向左移动";
+"Move_Right" = "向右移动";
+"Move" = "移动";
+"Complete" = "完成";
+"Uncomplete" = "未完成";
+"Filter" = "筛选";
+"Turn_Filter_On" = "选择筛选";
+"Turn_Filter_Off" = "关闭筛选";
+"Completed" = "完成";
+"Filter_Completed" = "筛选条件已完成";
+"Notes" = "笔记";
+"Filter_Notes" = "筛选笔记";
+"Expand" = "展开";
+"Expand_All" = "全部展开";
+"Expand_All_In_Row" = "展开行中的所有内容";
+"Expand_All_In_Outline" = "展开大纲中的全部";
+"Collapse" = "折叠";
+"Collapse_All" = "全部折叠";
+"Collapse_All_In_Row" = "折叠行中的所有内容";
+"Collapse_All_In_Outline" = "折叠大纲中的所有内容";
+"Collapse_Parent_Row" = "折叠标题";
+"Add_Row_Above" = "在上方添加行";
+"Add_Row_Below" = "在下方添加行";
+"Add_Row" = "添加行";
+"Add_Row_Inside" = "在内部添加行";
+"Add_Row_Outside" = "在外部添加行";
+"Delete_Row" = "删除行";
+"Delete_Rows" = "删除行";
+"Add_Note" = "添加注释";
+"Delete_Note" = "删除注释";
+"Split_Row" = "拆分行";
+"Restore" = "恢复";
+"Restore_Archive" = "恢复存档";
+"Archive_Account" = "存档 %@";
+"Format" = "格式";
+"Bold" = "粗体";
+"Italic" = "斜体";
+"Image" = "图像";
+"Insert_Image" = "插入图片";
+"Insert_Image_Ellipsis" = "插入图片…";
+"Link" = "链接";
+"Link_Ellipsis" = "链接…";
+"Cut" = "剪切";
+"Copy" = "复制";
+"Paste" = "粘贴";
+"Release_Notes" = "发行笔记";
+"GitHub_Repository" = "GitHub 存储库";
+"Bug_Tracker" = "Bug追踪";
+"Search" = "搜索";
+"Tag" = "标签";
+"Delete_Tag" = "删除标签";
+"Add" = "添加";
+"Preferences_Ellipsis" = "偏好…";
+"Settings_Ellipsis" = "设置…";
+"Remove" = "移除";
+"Sync" = "与 iCloud 同步";
+"Delete_Completed" = "已完成删除";
+"Delete_Completed_Rows" = "删除已完成的行";
+"Collaborate" = "协作";
+"Collaborate_Ellipsis" = "协作…";
+"Share" = "分享";
+"Share_Ellipsis" = "分享中…";
+"More" = "了解更多…";
+"Find" = "寻找";
+"Document_Find_Ellipsis" = "文档查找中…";
+"Find_Ellipsis" = "查找…";
+"Find_Next" = "查找下一个";
+"Find_Previous" = "查找上一个";
+"Use_Selection_For_Find" = "使用筛选进行查找";
+"Previous_Result" = "上一个结果";
+"Next_Result" = "下一个结果";
+"Print" = "打印";
+"Print_Doc" = "打印文档";
+"Print_Doc_Ellipsis" = "打印文档…";
+"Print_List" = "打印列表";
+"Print_List_Ellipsis" = "打印列表…";
+"Acknowledgements" = "确认";
+"Open_Quickly_Ellipsis" = "快速打开…";
+"Copy_Document_Link" = "复制文档链接";
+"Delete_Outline" = "删除大纲";
+"Website" = "网址";
+"Duplicate" = "生成副本";
+"Navigation" = "导航";
+"Back" = "返回";
+"Forward" = "向前";
+"Go_Backward" = "后退";
+"Go_Forward" = "前进";
+"History" = "历史";
+"Select" = "选择";
+"Zavala_Help" = "Zavala 帮助";
+"Report an Issue" = "报告问题";
+"Remove_Tag" = "删除标签";
+"Delete_Once" = "再次删除";
+"Delete_Always" = "始终不询问就删除";
+"Copy_Document_Link" = "复制文档链接";
+"Copy_Document_Links" = "复制文档链接";
+
+/* State restoration */
+"Unknown_Outline" = "找不到请求的大纲。";
+
+/* Activity Manager */
+"See_Documents_In" = "查看 “%@” 中的文档";
+"Edit_Document" = "编辑 “%@” 文档";
+
+/* Collections */
+"Delete_Tag_Prompt" = "是否确定要删除 “%@” 标签？";
+"Delete_Tags_Prompt" = "您确定要删 %d 标签吗？";
+"Delete_Tag_Message" = "不会删除与此标签关联的大纲。";
+"Delete_Tags_Message" = "不会删除与这些标签关联的大纲。";
+
+/* Documents */
+"Not_Available" = "不可用";
+"Import Failed" = "导入失败";
+"Delete_Outline_Prompt" = "是否确定要删除 “%@” 大纲？";
+"Delete_Outlines_Prompt" = "您确定要删除 %d 大纲吗？";
+"Delete_Outline_Message" = "大纲已删除且无法恢复。";
+"Delete_Outlines_Message" = "大纲将被删除且无法恢复。";
+"No_Title" = "(Title)";
+
+/* Editor */
+"No_Selection" = "无选择";
+"Multiple_Selections" = "多项选择";
+
+/* Generic Eror Handling */
+"Error" = "错误";
+
+/* Crash Reporter */
+"Email_It" = "通过电子邮件发送";
+"Crash_Reporter_Title" = "找到崩溃日志";
+"Crash_Reporter_Message" = "为了帮助我们修复崩溃的错误，请单击下面的 “通过电子邮件发送” 。在发送电子邮件之前，您可以查看电子邮件。";
+
+/* Settings */
+"Remove_CloudKit_Title" = "删除 iCloud 帐户";
+"Remove_CloudKit_Message" = "您确定要删除 iCloud 帐户吗？iCloud 帐户中的所有文档都将从此设备中删除。";
+"Enable_On_My_iPhone" = "在我的 iPhone 上启用";
+"Enable_On_My_iPad" = "在我的 iPad 上启用";
+
+"Title" = "标题";
+"Tags" = "标签";
+"Topic_Level" = "主题级别 %d";
+"Note_Level" = "注释级别 %d";
+"Backlinks" = "双向链接";
+"Restore_Defaults_Message" = "恢复默认";
+"Restore_Defaults_Informative" = "是否确定要恢复默认？您的所有自定义字体都将丢失。";
+"Add_Topic_Level" = "添加主题级别";
+"Add_Note_Level" = "添加注释级别";
+
+"Automatic" = "跟随系统";
+"Light" = "浅色";
+"Dark" = "深色";
+
+/* Outline Get Info */
+"Created_On" = "创建 %@ 在 %@ 中";
+"Updated_On" = "更新 %@ 在 %@ 中";
+
+/* Open Quickly */
+"Open_Quickly_Placeholder" = "快速打开";
+
+/* Outline Editor */
+"Reference" = "引用: ";
+"References" = "引用于: ";
+
+"Delete_Completed_Title" = "删除已完成的行";
+"Delete_Completed_Message" = "是否确定要删除已完成的行？";
