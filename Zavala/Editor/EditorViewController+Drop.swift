@@ -151,7 +151,7 @@ private extension EditorViewController {
 		var newIndex: Int
 		
 		// The target index path points to the following row, but we want the preceding row to be the sibling
-		var newSiblingTargetIndexPath = destinationIndexPath.row > 0 ? destinationIndexPath.row - 1 : 0
+		let newSiblingTargetIndexPath = destinationIndexPath.row > 0 ? destinationIndexPath.row - 1 : 0
 
 		let newSiblingCandidate = shadowTable[newSiblingTargetIndexPath]
 
