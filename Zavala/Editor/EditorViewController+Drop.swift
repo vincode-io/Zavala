@@ -178,7 +178,7 @@ private extension EditorViewController {
 	func localRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager, let outline else { return }
 
-		let command = LocalDropRowCommand(actionName:.moveControlLabel,
+		let command = LocalDropRowCommand(actionName: .moveControlLabel,
 										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
