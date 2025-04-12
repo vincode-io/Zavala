@@ -344,6 +344,14 @@ private extension CloudKitManager {
 		
 		let (loadedDocuments, modifications) = loadDocumentsAndStageModifications(requests: requests)
 
+		defer {
+			Task {
+				for document in loadedDocuments {
+					await document.unload()
+				}
+			}
+		}
+		
 		// Send the grouped changes
 		
 		let leftOverRequests = try await withThrowingTaskGroup(of: ([EntityID], [EntityID]).self, returning: OrderedSet<CloudKitActionRequest>.self) { taskGroup in
@@ -398,10 +406,6 @@ private extension CloudKitManager {
 			}
 		}
 
-		for document in loadedDocuments {
-			await document.unload()
-		}
-			
 		self.logger.info("Saving \(leftOverRequests.count) requests.")
 		
 		await requestsSemaphore.wait()
