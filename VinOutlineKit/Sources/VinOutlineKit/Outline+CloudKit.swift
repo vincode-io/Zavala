@@ -278,7 +278,7 @@ extension Outline: VCKModel {
         let errorDocumentBacklinks = record[Outline.CloudKitRecord.Fields.documentBacklinks] as? [String] ?? [String]()
         serverDocumentBacklinks = errorDocumentBacklinks.compactMap { EntityID(description: $0) }
         
-        serverHasAltLinks = record[Outline.CloudKitRecord.Fields.hasAltLinks] as? Bool
+        hasAltLinks = record[Outline.CloudKitRecord.Fields.hasAltLinks] as? Bool
 
 		isCloudKitMerging = true
 	}
