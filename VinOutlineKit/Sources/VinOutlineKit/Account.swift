@@ -377,8 +377,19 @@ public final class Account: Identifiable, Equatable {
 		saveToCloudKit(mutableDocument)
 	}
 
-	public func deleteDocument(_ document: Document) {
-		deleteDocument(document, updateCloudKit: true)
+	public func deleteDocument(_ document: Document, updateCloudKit: Bool = true) {
+		documents?.removeAll(where: { $0.id == document.id})
+		accountDocumentsDidChange()
+		
+		if updateCloudKit {
+			deleteFromCloudKit(document)
+		}
+
+		for tag in document.tags ?? [Tag]() {
+			deleteTag(tag)
+		}
+
+		document.delete()
 	}
 	
 	public func findDocumentContainer(_ entityID: EntityID) -> DocumentContainer? {
@@ -661,21 +672,6 @@ private extension Account {
 		
 		_idToTagsDictionary = idDictionary
 		tagsDictionaryNeedUpdate = false
-	}
-	
-	func deleteDocument(_ document: Document, updateCloudKit: Bool) {
-		documents?.removeAll(where: { $0.id == document.id})
-		accountDocumentsDidChange()
-		
-		if updateCloudKit {
-			deleteFromCloudKit(document)
-		}
-
-		for tag in document.tags ?? [Tag]() {
-			deleteTag(tag)
-		}
-
-		document.delete()
 	}
 	
 	func saveToCloudKit(_ document: Document) {

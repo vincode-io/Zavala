@@ -28,6 +28,27 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 		return account?.zoneChangeTokens?[key]
 	}
 	
+	func delete(_ recordID: CKRecord.ID) async {
+		guard let entityID = EntityID(description: recordID.recordName) else { return }
+		
+		switch entityID {
+		case .document:
+			if let document = account?.findDocument(entityID) {
+				account?.deleteDocument(document, updateCloudKit: false)
+			}
+		case .row(_, _, let rowID):
+			if let outline = account?.findDocument(entityID)?.outline, let row = outline.findRow(id: rowID) {
+				outline.deleteRows([row])
+			}
+		case .image(_, _, let rowID, _):
+			if let outline = account?.findDocument(entityID)?.outline, let row = outline.findRow(id: rowID) {
+				row.deleteImage(id: entityID)
+			}
+		default:
+			assertionFailure("Unknown entity ID kind.)")
+		}
+	}
+
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey]) async throws {
 		let requests = await account?.cloudKitManager?.loadRequests() ?? []
 		let requestRecordIDs = Set(requests.map({ $0.recordID }))
