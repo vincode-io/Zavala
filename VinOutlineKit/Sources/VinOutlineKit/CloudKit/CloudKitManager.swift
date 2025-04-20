@@ -55,7 +55,8 @@ public class CloudKitManager {
 	private var workChannel = AsyncChannel<Void>()
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let requestsSemaphore = AsyncSemaphore(value: 1)
-	
+	private let syncSemaphore = AsyncSemaphore(value: 1)
+
 	private var isSyncing = false
 	private var isNetworkAvailable: Bool {
 		var zeroAddress = sockaddr_in()
@@ -326,7 +327,9 @@ private extension CloudKitManager {
 	
 	func sendChanges() async throws {
 		isSyncing = true
+		await syncSemaphore.wait()
 		defer {
+			syncSemaphore.signal()
 			isSyncing = false
 		}
 		
@@ -477,6 +480,11 @@ private extension CloudKitManager {
 	}
 	
 	func fetchChanges(zoneID: CKRecordZone.ID) async throws {
+		await syncSemaphore.wait()
+		defer {
+			syncSemaphore.signal()
+		}
+		
 		let zone = findZone(zoneID: zoneID)
 		
 		do {
