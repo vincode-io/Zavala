@@ -762,7 +762,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outlineElementsDidChange(changes)
 	}
 	
-	public func correctCorruption() {
+	public func correctExtraRowsCorruption() {
 		guard let rowOrder, let keyedRows else { return }
 		
 		beginCloudKitBatchRequest()
@@ -773,14 +773,28 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder }))
 		allRowOrderIDs.formUnion(rowOrder)
 		
+		var foundCorruption = false
+		
 		// Fix any keyRows that don't have rowOrder entries
 		for row in keyedRows.values {
 			if !allRowOrderIDs.contains(row.id) {
 				self.rowOrder?.append(row.id)
 				requestCloudKitUpdates(for: [self.id, row.entityID])
+				foundCorruption = true
 			}
 		}
 	
+		if foundCorruption {
+			outlineContentDidChange()
+			outlineElementsDidChange(rebuildShadowTable())
+		}
+	}
+	
+	public func correctRowOrderCorruption() {
+		guard let rowOrder, let keyedRows else { return }
+
+		var foundCorruption = false
+		
 		// Fix any rowOrder values that don't have keyedRows. Sync the RowContainer with the bad
 		// rowOrder as well as any missing rows that it had referenced. Another device might still
 		// have that row causing a back and forth between devices about which rowOrder is correct or not.
@@ -790,6 +804,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		for rowID in rowOrder {
 			if !keyedRows.keys.contains(rowID) {
 				self.rowOrder?.remove(rowID)
+				foundCorruption = true
 			}
 		}
 		
@@ -797,12 +812,18 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			for rowID in row.rowOrder {
 				if !keyedRows.keys.contains(rowID) {
 					row.rowOrder.remove(rowID)
+					foundCorruption = true
 				}
 			}
 		}
 
-		outlineContentDidChange()
-		outlineElementsDidChange(rebuildShadowTable())
+		// Row order corruption happens when merging the row orders during an iCloud sync. When an indent may have
+		// happened on a connected device to a row that was deleted on an unconnected device, an insert will happen
+		// into a row order array for the unconnected device once it is connected again and syncs.
+		if foundCorruption {
+			outlineContentDidChange()
+			outlineElementsDidChange(rebuildShadowTable())
+		}
 	}
 	
 	public func findRowContainer(entityID: EntityID) -> RowContainer? {
