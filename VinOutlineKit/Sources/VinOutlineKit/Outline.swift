@@ -793,6 +793,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public func correctRowOrderCorruption() {
 		guard let rowOrder, let keyedRows else { return }
 
+		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
+		
 		var foundCorruption = false
 		
 		// Fix any rowOrder values that don't have keyedRows. Sync the RowContainer with the bad
@@ -815,6 +820,28 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 					foundCorruption = true
 				}
 			}
+		}
+
+		// Remove duplicate row order entries. It is possible that a user may have moved a row to a new parent
+		// on a disconnected device and to a different parent on a connected device. Our merge won't detect this
+		// since it is working on a per record basis and a row could end up owned by multiple rows.
+		var seenRowIDs: Set<String> = []
+
+		func duplicateRowIDsVisitor(_ visited: Row) {
+			for rowID in visited.rowOrder {
+				if seenRowIDs.contains(rowID) {
+					visited.rowOrder.remove(rowID)
+					requestCloudKitUpdate(for: self.id)
+					foundCorruption = true
+				} else {
+					seenRowIDs.insert(rowID)
+				}
+			}
+			visited.rows.forEach { $0.visit(visitor: duplicateRowIDsVisitor) }
+		}
+		
+		for row in rows {
+			row.visit(visitor: duplicateRowIDsVisitor)
 		}
 
 		// Row order corruption happens when merging the row orders during an iCloud sync. When an indent may have

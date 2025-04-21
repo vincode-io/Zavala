@@ -154,6 +154,8 @@ extension Outline: VCKModel {
 			}
 		}
 		
+		correctRowOrderCorruption()
+		
 		if !updatedRowIDs.isEmpty || !update.deleteRowRecordIDs.isEmpty  {
 			rowsFile?.markAsDirty()
 			documentDidChangeBySync()

@@ -340,7 +340,6 @@ public final class Account: Identifiable, Equatable {
 			let outline = document.outline!
 			outline.load()
 			outline.apply(update)
-			outline.correctRowOrderCorruption()
 			await outline.forceSave()
 			await outline.unload()
 		} else {
