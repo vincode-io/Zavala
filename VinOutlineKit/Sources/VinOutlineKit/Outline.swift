@@ -146,8 +146,28 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				}
 			}
 		}
+
+		// Duplicate row IDs are a sign of curruption
+		var seenRowIDs: Set<String> = []
+		var foundCorruption = false
 		
-		return false
+		func duplicateRowIDsVisitor(_ visited: Row) {
+			for rowID in visited.rowOrder {
+				if seenRowIDs.contains(rowID) {
+					foundCorruption = true
+					break
+				} else {
+					seenRowIDs.insert(rowID)
+				}
+			}
+			visited.rows.forEach { $0.visit(visitor: duplicateRowIDsVisitor) }
+		}
+
+		for row in rows {
+			row.visit(visitor: duplicateRowIDsVisitor)
+		}
+
+		return foundCorruption
 	}
 	
 	public var cloudKitMetaData: Data? {
