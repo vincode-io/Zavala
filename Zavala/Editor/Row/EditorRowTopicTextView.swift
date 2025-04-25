@@ -287,16 +287,16 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 		
 		switch text {
 		case "\n":
-			if cursorIsAtEnd {
-				isTextChanged = false
-				editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
-			} else if cursorIsAtBeginning {
+			if cursorIsAtBeginning {
 				if row.outline?.shouldMoveLeftOnReturn(row: row) ?? false {
 					editorDelegate?.moveRowLeft(self, row: row)
 				} else {
 					isTextChanged = false
 					editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: false)
 				}
+			} else if cursorIsAtEnd {
+				isTextChanged = false
+				editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
 			} else {
 				isTextChanged = false
 				editorDelegate?.splitRow(self, row: row, topic: cleansedAttributedText, cursorPosition: cursorPosition)
