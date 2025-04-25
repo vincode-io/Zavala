@@ -262,8 +262,8 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowTextChanged(rowID: rowID, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
-	func deleteRowNote(_: EditorRowNoteTextView, rowID: String, rowStrings: RowStrings) {
-		appliedConfiguration?.delegate?.editorRowDeleteRowNote(rowID: rowID, rowStrings: rowStrings)
+	func deleteRowNote(_: EditorRowNoteTextView, rowID: String) {
+		appliedConfiguration?.delegate?.editorRowDeleteRowNote(rowID: rowID)
 	}
 	
 	func moveCursorTo(_: EditorRowNoteTextView, rowID: String) {

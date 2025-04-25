@@ -1842,9 +1842,9 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		return outline?.shouldMoveLeftOnReturn(row: row) ?? false
 	}
 
-	func editorRowDeleteRowNote(rowID: String, rowStrings: RowStrings) {
+	func editorRowDeleteRowNote(rowID: String) {
 		guard let row = outline?.findRow(id: rowID) else { return }
-		deleteRowNotes([row], rowStrings: rowStrings)
+		deleteRowNotes([row], rowStrings: nil)
 	}
 	
 	func editorRowMoveCursorTo(rowID: String) {
@@ -3542,12 +3542,6 @@ private extension EditorViewController {
 	}
 
 	func deleteRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		// If the user is currently editing a note and wants to delete it, the text view will try to save
-		// its current contents to the row after the note data was already cleared.
-		if let noteTextView = currentTextView as? EditorRowNoteTextView {
-			noteTextView.isTextChanged = false
-		}
-		
 		guard let undoManager, let outline else { return }
 		
 		let command = DeleteNoteCommand(actionName: .deleteNoteControlLabel,

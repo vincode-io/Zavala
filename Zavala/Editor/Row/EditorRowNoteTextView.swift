@@ -19,7 +19,7 @@ protocol EditorRowNoteTextViewDelegate: AnyObject {
 	func didBecomeActive(_ : EditorRowNoteTextView)
 	func didBecomeInactive(_ : EditorRowNoteTextView)
 	func textChanged(_ : EditorRowNoteTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
-	func deleteRowNote(_ : EditorRowNoteTextView, rowID: String, rowStrings: RowStrings)
+	func deleteRowNote(_ : EditorRowNoteTextView, rowID: String)
 	func moveCursorTo(_ : EditorRowNoteTextView, rowID: String)
 	func moveCursorDown(_ : EditorRowNoteTextView, rowID: String)
 	func editLink(_: EditorRowNoteTextView, _ link: String?, text: String?, range: NSRange)
@@ -101,7 +101,7 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		guard let rowID else { return }
 		if attributedText.length == 0 {
 			isTextChanged = false
-			editorDelegate?.deleteRowNote(self, rowID: rowID, rowStrings: rowStrings)
+			editorDelegate?.deleteRowNote(self, rowID: rowID)
 		} else {
 			super.deleteBackward()
 		}

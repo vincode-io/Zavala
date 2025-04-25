@@ -28,7 +28,7 @@ protocol EditorRowViewCellDelegate: AnyObject {
 	func editorRowSplitRow(rowID: String, topic: NSAttributedString, cursorPosition: Int)
 	func editorRowJoinRowWithPreviousSibling(rowID: String, attrText: NSAttributedString)
 	func editorRowShouldMoveLeftOnReturn(rowID: String) -> Bool
-	func editorRowDeleteRowNote(rowID: String, rowStrings: RowStrings)
+	func editorRowDeleteRowNote(rowID: String)
 	func editorRowEditLink(_ link: String?, text: String?, range: NSRange)
 	func editorRowZoomImage(_ image: UIImage, rect: CGRect)
 }
