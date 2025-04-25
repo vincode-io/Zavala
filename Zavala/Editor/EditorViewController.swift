@@ -2566,7 +2566,9 @@ private extension EditorViewController {
 			}
 		}
 
-		updateUI()
+		Task {
+			updateUI()
+		}
 	}
 
 	func restoreOutlineCursorPosition() {
