@@ -8,7 +8,7 @@
 import UIKit
 import VinOutlineKit
 
-struct EditorRowContentConfiguration: UIContentConfiguration {
+struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 
 	weak var delegate: EditorRowViewCellDelegate? = nil
 
@@ -60,5 +60,11 @@ struct EditorRowContentConfiguration: UIContentConfiguration {
 			&& rowIndentSize == other.rowIndentSize
 			&& rowSpacingSize == other.rowSpacingSize
 	}
-	
+
+	static func == (lhs: EditorRowContentConfiguration, rhs: EditorRowContentConfiguration) -> Bool {
+		lhs.row == rhs.row
+		&& lhs.isSearching == rhs.isSearching
+		&& lhs.isLayoutEqual(rhs)
+	}
+
 }

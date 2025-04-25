@@ -103,6 +103,8 @@ class EditorRowContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorRowContentConfiguration) {
+		guard appliedConfiguration != configuration else { return }
+		
 		defer {
 			appliedConfiguration = configuration
 		}
