@@ -552,17 +552,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public var cursorCoordinates: CursorCoordinates? {
 		get {
 			guard let rowID = selectionRowID,
-				  let row = findRow(id: rowID.rowUUID),
 				  let isInNotes = selectionIsInNotes,
 				  let location = selectionLocation,
 				  let length = selectionLength else {
 				return nil
 			}
-			return CursorCoordinates(row: row, isInNotes: isInNotes, selection: NSRange(location: location, length: length))
+			return CursorCoordinates(rowID: rowID.rowUUID, isInNotes: isInNotes, selection: NSRange(location: location, length: length))
 		}
 		set {
 			if let coordinates = newValue {
-				selectionRowID = .row(id.accountID, id.documentUUID, coordinates.row.id)
+				selectionRowID = .row(id.accountID, id.documentUUID, coordinates.rowID)
 			} else {
 				selectionRowID = nil
 			}

@@ -16,18 +16,19 @@ protocol EditorRowViewCellDelegate: AnyObject {
 	func editorRowScrollEditorToVisible(textView: UITextView, rect: CGRect)
 	func editorRowTextFieldDidBecomeActive()
 	func editorRowTextFieldDidBecomeInactive()
-	func editorRowToggleDisclosure(row: Row, applyToAll: Bool)
-	func editorRowMoveCursorTo(row: Row)
-	func editorRowMoveCursorUp(row: Row)
-	func editorRowMoveCursorDown(row: Row)
-	func editorRowMoveRowLeft(row: Row)
-	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange)
-	func editorRowDeleteRow(_ row: Row, rowStrings: RowStrings)
-	func editorRowCreateRow(beforeRow: Row, rowStrings: RowStrings?, moveCursor: Bool)
-	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?)
-	func editorRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
-	func editorRowJoinRow(_: Row, topic: NSAttributedString)
-	func editorRowDeleteRowNote(_ row: Row, rowStrings: RowStrings)
+	func editorRowToggleDisclosure(rowID: String, applyToAll: Bool)
+	func editorRowMoveCursorTo(rowID: String)
+	func editorRowMoveCursorUp(rowID: String)
+	func editorRowMoveCursorDown(rowID: String)
+	func editorRowMoveRowLeft(rowID: String)
+	func editorRowTextChanged(rowID: String, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange)
+	func editorRowDeleteRow(rowID: String, rowStrings: RowStrings)
+	func editorRowCreateRow(beforeRowID: String, rowStrings: RowStrings?, moveCursor: Bool)
+	func editorRowCreateRow(afterRowID: String, rowStrings: RowStrings?)
+	func editorRowSplitRow(rowID: String, topic: NSAttributedString, cursorPosition: Int)
+	func editorRowJoinRowWithPreviousSibling(rowID: String, attrText: NSAttributedString)
+	func editorRowShouldMoveLeftOnReturn(rowID: String) -> Bool
+	func editorRowDeleteRowNote(rowID: String, rowStrings: RowStrings)
 	func editorRowEditLink(_ link: String?, text: String?, range: NSRange)
 	func editorRowZoomImage(_ image: UIImage, rect: CGRect)
 }
@@ -52,19 +53,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 		}
 	}
 	
-	var isNotesHidden: Bool = false {
-		didSet {
-			setNeedsUpdateConfiguration()
-		}
-	}
-	
 	var isSearching: Bool = false {
-		didSet {
-			setNeedsUpdateConfiguration()
-		}
-	}
-	
-	var numberingStyle: Outline.NumberingStyle? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
@@ -103,12 +92,25 @@ class EditorRowViewCell: UICollectionViewListCell {
 		}
 		
 		let isDisclosureVisible = row.rowCount != 0
-		let isNotesVisible = !isNotesHidden && !row.isNoteEmpty
+		let isNotesVisible = !(row.outline?.isNotesFiltered ?? false) && !row.isNoteEmpty
 		let isSelected = state.isSelected
-		
-		var content = EditorRowContentConfiguration(row: row,
+		let hasChildren = row.rowCount > 0
+				
+		var content = EditorRowContentConfiguration(rowID: row.id,
+													rowTopic: row.topic,
+													rowNote: row.note,
+													rowHasChildren: hasChildren,
+													rowIsExpanded: row.isExpanded,
+													rowOutlineNumbering: row.outlineNumbering,
+													rowCurrentLevel: row.currentLevel,
+													rowTrueLevel: row.trueLevel,
+													rowIsComplete: row.isComplete ?? false,
+													rowIsAnyParentComplete: row.isAnyParentComplete,
+													rowSearchResultCoordinates: row.searchResultCoordinates,
 													isSearching: isSearching,
-													numberingStyle: numberingStyle,
+													outlineNumberingStyle: row.outline?.numberingStyle,
+													outlineCheckSpellingWhileTyping: row.outline?.checkSpellingWhileTyping ?? true,
+													outlineCorrectSpellingAutomatically: row.outline?.correctSpellingAutomatically ?? true,
 													indentationWidth: indentationWidth,
 													isDisclosureVisible: isDisclosureVisible,
 													isNotesVisible: isNotesVisible,

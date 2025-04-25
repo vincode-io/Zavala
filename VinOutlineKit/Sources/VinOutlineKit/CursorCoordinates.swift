@@ -19,12 +19,12 @@ public protocol CursorCoordinatesProvider {
 @MainActor
 public struct CursorCoordinates {
 
-	public var row: Row
+	public var rowID: String
 	public var isInNotes: Bool
 	public var selection: NSRange
 	
-	public init(row: Row, isInNotes: Bool, selection: NSRange) {
-		self.row = row
+	public init(rowID: String, isInNotes: Bool, selection: NSRange) {
+		self.rowID = rowID
 		self.isInNotes = isInNotes
 		self.selection = selection
 	}

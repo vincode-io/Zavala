@@ -7,28 +7,23 @@ import VinOutlineKit
 
 class EditorRowNumberingLabel: UILabel {
 	
-	func update(with row: Row, configuration: EditorRowContentConfiguration) {
-		guard let numberingStyle = configuration.numberingStyle else { return }
+	func update(configuration: EditorRowContentConfiguration) {
+		guard let numberingStyle = configuration.outlineNumberingStyle else { return }
 		
-		let attrString = switch numberingStyle {
-		case .simple:
-			NSMutableAttributedString(string: row.simpleNumbering)
-		case .decimal:
-			NSMutableAttributedString(string: row.decimalNumbering)
-		case .legal:
-			NSMutableAttributedString(string: row.legalNumbering)
-		case .none:
+		let attrString = if let numbering = configuration.rowOutlineNumbering {
+			NSMutableAttributedString(string: numbering)
+		} else {
 			NSMutableAttributedString()
 		}
 		
 		let fontColor = if configuration.isSelected {
 			UIColor.white.withAlphaComponent(0.66)
 		} else {
-			OutlineFontCache.shared.numberingColor(level: row.trueLevel)
+			OutlineFontCache.shared.numberingColor(level: configuration.rowTrueLevel)
 		}
 		
 		var labelAttributes = [NSAttributedString.Key : Any]()
-		if row.isComplete ?? false || row.isAnyParentComplete {
+		if configuration.rowIsComplete || configuration.rowIsAnyParentComplete {
 			if fontColor.cgColor.alpha > 0.3 {
 				labelAttributes[.foregroundColor] = fontColor.withAlphaComponent(0.3)
 			} else {
@@ -40,7 +35,7 @@ class EditorRowNumberingLabel: UILabel {
 			accessibilityLabel = nil
 		}
 		
-		if row.isComplete ?? false {
+		if configuration.rowIsComplete {
 			labelAttributes[.strikethroughStyle] = 1
 			if fontColor.cgColor.alpha > 0.3 {
 				labelAttributes[.strikethroughColor] = fontColor.withAlphaComponent(0.3)
@@ -51,7 +46,7 @@ class EditorRowNumberingLabel: UILabel {
 			labelAttributes[.strikethroughStyle] = 0
 		}
 		
-		labelAttributes[.font] = OutlineFontCache.shared.numberingFont(level: row.trueLevel)
+		labelAttributes[.font] = OutlineFontCache.shared.numberingFont(level: configuration.rowTrueLevel)
 
 		attrString.setAttributes(labelAttributes, range: NSRange(location: 0, length: attrString.length))
 		

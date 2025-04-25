@@ -168,7 +168,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 					return nil
 				}
 			}
-		} else if let currentRow = currentTextView?.row {
+		} else if let currentRowID = currentTextView?.rowID, let currentRow = outline?.findRow(id: currentRowID) {
 			return [currentRow]
 		}
 		return nil
@@ -376,9 +376,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			cell.row = row
 			cell.rowIndentSize = self?.rowIndentSize
 			cell.rowSpacingSize = self?.rowSpacingSize
-			cell.isNotesHidden = self?.outline?.isNotesFilterOn ?? false
 			cell.isSearching = self?.isSearching ?? false
-			cell.numberingStyle = self?.outline?.numberingStyle
 			cell.delegate = self
 		}
 		
@@ -1170,7 +1168,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return
 		}
 		
-		if let topicView = currentFirstResponder as? EditorRowTopicTextView, let shadowTableIndex = topicView.row?.shadowTableIndex {
+		if let topicView = currentFirstResponder as? EditorRowTopicTextView,
+		   let rowID = topicView.rowID,
+		   let row = outline?.findRow(id: rowID),
+		   let shadowTableIndex = row.shadowTableIndex {
 			_ = topicView.resignFirstResponder()
 			collectionView.selectItem(at: IndexPath(row: shadowTableIndex, section: adjustedRowsSection), animated: true, scrollPosition: [])
 		} else {
@@ -1784,57 +1785,84 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		}
 	}
 	
-	func editorRowToggleDisclosure(row: Row, applyToAll: Bool) {
+	func editorRowToggleDisclosure(rowID: String, applyToAll: Bool) {
+		guard let row = outline?.findRow(id: rowID) else { return }
 		toggleDisclosure(row: row, applyToAll: applyToAll)
 	}
 	
-	func editorRowMoveRowLeft(row: Row) {
+	func editorRowMoveRowLeft(rowID: String) {
+		guard let row = outline?.findRow(id: rowID) else { return }
 		moveRowsLeft([row])
 	}
 
-	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
+	func editorRowTextChanged(rowID: String, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
+		guard let row = outline?.findRow(id: rowID) else { return }
 		textChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 		savedCursorRectForUpAndDownArrowing = nil
 	}
 	
-	func editorRowDeleteRow(_ row: Row, rowStrings: RowStrings) {
+	func editorRowDeleteRow(rowID: String, rowStrings: RowStrings) {
+		guard let row = outline?.findRow(id: rowID) else { return }
 		deleteRows([row], rowStrings: rowStrings)
 	}
 	
-	func editorRowCreateRow(beforeRow: Row, rowStrings: RowStrings?, moveCursor: Bool) {
+	func editorRowCreateRow(beforeRowID: String, rowStrings: RowStrings?, moveCursor: Bool) {
+		guard let beforeRow = outline?.findRow(id: beforeRowID) else { return }
 		createRow(beforeRows: [beforeRow], rowStrings: rowStrings, moveCursor: moveCursor)
 	}
 	
-	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?) {
-		let afterRows = afterRow == nil ? nil : [afterRow!]
-		createRow(afterRows: afterRows, rowStrings: rowStrings)
+	func editorRowCreateRow(afterRowID: String, rowStrings: RowStrings?) {
+		guard let afterRow = outline?.findRow(id: afterRowID) else { return }
+		createRow(afterRows: [afterRow], rowStrings: rowStrings)
 	}
 	
-	func editorRowSplitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
+	func editorRowSplitRow(rowID: String, topic: NSAttributedString, cursorPosition: Int) {
+		guard let row = outline?.findRow(id: rowID) else { return }
 		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func editorRowJoinRow(_ row: Row, topic: NSAttributedString) {
+	func editorRowJoinRowWithPreviousSibling(rowID: String, attrText: NSAttributedString) {
+		guard let row = outline?.findRow(id: rowID),
+			  let shadowTableIndex = row.shadowTableIndex,
+			  shadowTableIndex > 0,
+			  let candidateSibling = outline?.shadowTable?[shadowTableIndex - 1],
+			  row.hasSameParent(candidateSibling),
+			  let siblingTopic = candidateSibling.topic else {
+				return
+			}
+		
+		let topic = NSMutableAttributedString(attributedString: siblingTopic)
+		topic.append(attrText)
+		
 		joinRow(row, topic: topic)
 	}
 
-	func editorRowDeleteRowNote(_ row: Row, rowStrings: RowStrings) {
+	func editorRowShouldMoveLeftOnReturn(rowID: String) -> Bool {
+		guard let row = outline?.findRow(id: rowID) else { return false }
+		return outline?.shouldMoveLeftOnReturn(row: row) ?? false
+	}
+
+	func editorRowDeleteRowNote(rowID: String, rowStrings: RowStrings) {
+		guard let row = outline?.findRow(id: rowID) else { return }
 		deleteRowNotes([row], rowStrings: rowStrings)
 	}
 	
-	func editorRowMoveCursorTo(row: Row) {
+	func editorRowMoveCursorTo(rowID: String) {
+		guard let row = outline?.findRow(id: rowID) else { return }
 		moveCursorTo(row: row)
 	}
 
-	func editorRowMoveCursorUp(row: Row) {
-		guard let shadowTableIndex = row.shadowTableIndex else { return }
+	func editorRowMoveCursorUp(rowID: String) {
+		guard let row = outline?.findRow(id: rowID), let shadowTableIndex = row.shadowTableIndex else { return }
+		
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 		guard let topicTextView = (collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView else { return }
 		moveCursorUp(topicTextView: topicTextView)
 	}
 
-	func editorRowMoveCursorDown(row: Row) {
-		guard let shadowTableIndex = row.shadowTableIndex else { return }
+	func editorRowMoveCursorDown(rowID: String) {
+		guard let row = outline?.findRow(id: rowID), let shadowTableIndex = row.shadowTableIndex else { return }
+		
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 		guard let topicTextView = (collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView else { return }
 		moveCursorDown(topicTextView: topicTextView)
@@ -1887,7 +1915,11 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 				Task { @MainActor in
 					self.restoreCursorPosition(cursorCoordinates)
 					
-					guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
+					guard let row = outline?.findRow(id: cursorCoordinates.rowID),
+						  let shadowTableIndex = row.shadowTableIndex else {
+						return
+					}
+					
 					let indexPath = IndexPath(row: shadowTableIndex, section: self.adjustedRowsSection)
 					guard let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return	}
 					
@@ -1921,7 +1953,11 @@ extension EditorViewController: LinkViewControllerDelegate {
 			}
 		}
 		
-		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
+		guard let row = outline?.findRow(id: cursorCoordinates.rowID),
+			  let shadowTableIndex = row.shadowTableIndex else {
+			return
+		}
+
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 		guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return	}
 		
@@ -2309,7 +2345,9 @@ private extension EditorViewController {
 			case (.keyboardDeleteForward, true):
 				if let topic = currentTextView as? EditorRowTopicTextView,
 				   topic.cursorIsAtEnd,
-				   let shadowTableIndex = topic.row?.shadowTableIndex,
+				   let rowID = topic.rowID,
+				   let row = outline?.findRow(id: rowID),
+				   let shadowTableIndex = row.shadowTableIndex,
 				   shadowTableIndex + 1 < outline?.shadowTable?.count ?? 0,
 				   let bottomRow = outline?.shadowTable?[shadowTableIndex + 1] {
 					let attrString = NSMutableAttributedString(attributedString: topic.cleansedAttributedText)
@@ -2348,7 +2386,9 @@ private extension EditorViewController {
 				}
 			case (.keyboardLeftArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let topic = currentTextView as? EditorRowTopicTextView, topic.cursorIsAtBeginning,
-				   let currentRowIndex = topic.row?.shadowTableIndex,
+				   let rowID = topic.rowID,
+				   let row = outline?.findRow(id: rowID),
+				   let currentRowIndex = row.shadowTableIndex,
 				   currentRowIndex > 0,
 				   let cell = collectionView.cellForItem(at: IndexPath(row: currentRowIndex - 1, section: adjustedRowsSection)) as? EditorRowViewCell {
 					cell.moveToTopicEnd()
@@ -2358,7 +2398,9 @@ private extension EditorViewController {
 				}
 			case (.keyboardRightArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let topic = currentTextView as? EditorRowTopicTextView, topic.cursorIsAtEnd,
-				   let currentRowIndex = topic.row?.shadowTableIndex,
+				   let rowID = topic.rowID,
+				   let row = outline?.findRow(id: rowID),
+				   let currentRowIndex = row.shadowTableIndex,
 				   currentRowIndex + 1 < outline?.shadowTable?.count ?? 0,
 				   let cell = collectionView.cellForItem(at: IndexPath(row: currentRowIndex + 1, section: adjustedRowsSection)) as? EditorRowViewCell {
 					cell.moveToTopicStart()
@@ -2588,7 +2630,11 @@ private extension EditorViewController {
 	}
 
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, scroll: Bool, centered: Bool = false) {
-		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
+		guard let row = outline?.findRow(id: cursorCoordinates.rowID),
+			  let shadowTableIndex = row.shadowTableIndex else {
+			return
+		}
+
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 
 		func restoreCursor() {
@@ -2928,7 +2974,9 @@ private extension EditorViewController {
 	}
 	
 	func moveCursorUp(topicTextView: EditorRowTopicTextView) {
-		guard let row = topicTextView.row, let shadowTableIndex = row.shadowTableIndex, shadowTableIndex > 0 else {
+		guard let rowID = topicTextView.rowID,
+			  let row = outline?.findRow(id: rowID),
+			  let shadowTableIndex = row.shadowTableIndex, shadowTableIndex > 0 else {
 			moveCursorToTagInput()
 			return
 		}
@@ -2981,7 +3029,12 @@ private extension EditorViewController {
 	}
 	
 	func moveCursorDown(topicTextView: EditorRowTopicTextView) {
-		guard let row = topicTextView.row, let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable else { return }
+		guard let rowID = topicTextView.rowID,
+			  let row = outline?.findRow(id: rowID),
+			  let shadowTableIndex = row.shadowTableIndex,
+			  let shadowTable = outline?.shadowTable else {
+			return
+		}
 		
 		// Move the cursor to the end of the last row
 		guard shadowTableIndex < (shadowTable.count - 1) else {
@@ -3094,7 +3147,10 @@ private extension EditorViewController {
 	func collapse(rows: [Row]) {
 		guard let undoManager, let outline else { return }
 
-		let currentRow = currentTextView?.row
+		var currentRow: Row? = nil
+		if let rowID = currentTextView?.rowID {
+			currentRow = outline.findRow(id: rowID)
+		}
 		
 		let command = CollapseCommand(actionName: .collapseControlLabel,
 									  undoManager: undoManager,

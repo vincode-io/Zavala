@@ -28,7 +28,7 @@ public final class TextChangedCommand: OutlineCommand {
 		
 		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 
-		cursorCoordinates = CursorCoordinates(row: row, isInNotes: isInNotes, selection: selection)
+		cursorCoordinates = CursorCoordinates(rowID: row.id, isInNotes: isInNotes, selection: selection)
 	}
 	
 	public override func perform() {

@@ -17,15 +17,16 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func resize(_: EditorRowTopicTextView)
 	func scrollIfNecessary(_: EditorRowTopicTextView)
 	func scrollEditorToVisible(_: EditorRowTopicTextView, rect: CGRect)
-	func moveCursorUp(_: EditorRowTopicTextView, row: Row)
-	func moveCursorDown(_: EditorRowTopicTextView, row: Row)
-	func moveRowLeft(_: EditorRowTopicTextView, row: Row)
-	func textChanged(_: EditorRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
-	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
-	func createRow(_: EditorRowTopicTextView, beforeRow: Row, rowStrings: RowStrings, moveCursor: Bool)
-	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings)
-	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
-	func joinRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString)
+	func moveCursorUp(_: EditorRowTopicTextView, rowID: String)
+	func moveCursorDown(_: EditorRowTopicTextView, rowID: String)
+	func moveRowLeft(_: EditorRowTopicTextView, rowID: String)
+	func textChanged(_: EditorRowTopicTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
+	func deleteRow(_: EditorRowTopicTextView, rowID: String, rowStrings: RowStrings)
+	func createRow(_: EditorRowTopicTextView, beforeRowID: String, rowStrings: RowStrings, moveCursor: Bool)
+	func createRow(_: EditorRowTopicTextView, afterRowID: String, rowStrings: RowStrings)
+	func splitRow(_: EditorRowTopicTextView, rowID: String, topic: NSAttributedString, cursorPosition: Int)
+	func joinRowWithPreviousSibling(_: EditorRowTopicTextView, rowID: String, attrText: NSAttributedString)
+	func shouldMoveLeftOnReturn(_: EditorRowTopicTextView, rowID: String) -> Bool
 	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange)
 	func zoomImage(_: EditorRowTopicTextView, _ image: UIImage, rect: CGRect)
 }
@@ -112,8 +113,8 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	}
 	
     override func textWasChanged() {
-        guard let row else { return }
-        editorDelegate?.textChanged(self, row: row, isInNotes: false, selection: selectedRange, rowStrings: rowStrings)
+        guard let rowID else { return }
+        editorDelegate?.textChanged(self, rowID: rowID, isInNotes: false, selection: selectedRange, rowStrings: rowStrings)
     }
 
 	override func resize() {
@@ -125,41 +126,35 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
     }
     
 	override func deleteBackward() {
-		guard let row else { return }
-		if attributedText.length == 0 && row.rowCount == 0 {
+		guard let rowID else { return }
+		
+		if attributedText.length == 0 && !rowHasChildren {
 			isTextChanged = false
-			editorDelegate?.deleteRow(self, row: row, rowStrings: rowStrings)
+			editorDelegate?.deleteRow(self, rowID: rowID, rowStrings: rowStrings)
 			return
 		}
 		
 		let originalTextLength = attributedText.length
 		super.deleteBackward()
 		
-		if originalTextLength == attributedText.length,
-		   cursorIsAtBeginning,
-		   let shadowTableIndex = row.shadowTableIndex,
-		   shadowTableIndex > 0,
-		   let topRow = row.outline?.shadowTable?[shadowTableIndex - 1] {
-			let attrString = NSMutableAttributedString(attributedString: topRow.topic ?? NSAttributedString())
-			attrString.append(cleansedAttributedText)
-			
-			editorDelegate?.joinRow(self, row: row, topic: attrString)
+		if originalTextLength == attributedText.length && cursorIsAtBeginning {
+			editorDelegate?.joinRowWithPreviousSibling(self, rowID: rowID, attrText: cleansedAttributedText)
 		}
 	}
 
 	@objc func createRow(_ sender: Any) {
-		guard let row else { return }
-		editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
+		guard let rowID else { return }
+		editorDelegate?.createRow(self, afterRowID: rowID, rowStrings: rowStrings)
 	}
 	
 	@objc func moveCursorUp(_ sender: Any) {
-		guard let row else { return }
-		editorDelegate?.moveCursorUp(self, row: row)
+		guard let rowID else { return }
+		editorDelegate?.moveCursorUp(self, rowID: rowID)
 	}
 	
 	@objc func moveCursorDown(_ sender: Any) {
-		guard let row else { return }
-		editorDelegate?.moveCursorDown(self, row: row)
+		guard let rowID else { return }
+		editorDelegate?.moveCursorDown(self, rowID: rowID)
 	}
 	
 	@objc func insertTab(_ sender: Any) {
@@ -167,20 +162,20 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	@objc func insertRow(_ sender: Any) {
-		guard let row else { return }
+		guard let rowID else { return }
 		isTextChanged = false
-		editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: true)
+		editorDelegate?.createRow(self, beforeRowID: rowID, rowStrings: rowStrings, moveCursor: true)
 	}
 
 	@objc func split(_ sender: Any) {
-		guard let row else { return }
+		guard let rowID else { return }
 		
 		isTextChanged = false
 
 		if cursorPosition == 0 {
-			editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: false)
+			editorDelegate?.createRow(self, beforeRowID: rowID, rowStrings: rowStrings, moveCursor: false)
 		} else {
-			editorDelegate?.splitRow(self, row: row, topic: cleansedAttributedText, cursorPosition: cursorPosition)
+			editorDelegate?.splitRow(self, rowID: rowID, topic: cleansedAttributedText, cursorPosition: cursorPosition)
 		}
 	}
 	
@@ -189,11 +184,15 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
-	func update(with row: Row, configuration: EditorRowContentConfiguration) {
+	func update(configuration: EditorRowContentConfiguration) {
 		// Don't update the row if we are in the middle of entering multistage characters, e.g. Japanese
 		guard markedTextRange == nil else { return }
 		
-		self.row = row
+		self.rowID = configuration.rowID
+		self.rowHasChildren = configuration.rowHasChildren
+		self.outlineCheckSpellingWhileTyping = configuration.outlineCheckSpellingWhileTyping
+		self.outlineCorrectSpellingAutomatically = configuration.outlineCorrectSpellingAutomatically
+		self.rowSearchResultCoordinates = configuration.rowSearchResultCoordinates
 		
 		updateTextPreferences()
 		
@@ -204,11 +203,11 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		let fontColor = if configuration.isSelected {
 			UIColor.white
 		} else {
-			OutlineFontCache.shared.topicColor(level: row.trueLevel)
+			OutlineFontCache.shared.topicColor(level: configuration.rowTrueLevel)
 		}
 		
 		baseAttributes = [NSAttributedString.Key : Any]()
-		if row.isComplete ?? false || row.isAnyParentComplete {
+		if configuration.rowIsComplete || configuration.rowIsAnyParentComplete {
 			if fontColor.cgColor.alpha > 0.3 {
 				baseAttributes[.foregroundColor] = fontColor.withAlphaComponent(0.3)
 			} else {
@@ -220,7 +219,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 			accessibilityLabel = nil
 		}
 		
-		if row.isComplete ?? false {
+		if configuration.rowIsComplete {
 			baseAttributes[.strikethroughStyle] = 1
 			if fontColor.cgColor.alpha > 0.3 {
 				baseAttributes[.strikethroughColor] = fontColor.withAlphaComponent(0.3)
@@ -231,7 +230,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 			baseAttributes[.strikethroughStyle] = 0
 		}
 		
-		baseAttributes[.font] = OutlineFontCache.shared.topicFont(level: row.trueLevel)
+		baseAttributes[.font] = OutlineFontCache.shared.topicFont(level: configuration.rowTrueLevel)
 		
 		typingAttributes = baseAttributes
 		
@@ -242,7 +241,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		linkAttrs[.underlineStyle] = 1
 		linkTextAttributes = linkAttrs
 		
-        if let topic = row.topic {
+		if let topic = configuration.rowTopic {
             attributedText = topic
         }
         
@@ -262,8 +261,8 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 extension EditorRowTopicTextView: CursorCoordinatesProvider {
 
 	var coordinates: CursorCoordinates? {
-		if let row {
-			return CursorCoordinates(row: row, isInNotes: false, selection: selectedRange)
+		if let rowID {
+			return CursorCoordinates(rowID: rowID, isInNotes: false, selection: selectedRange)
 		}
 		return nil
 	}
@@ -283,23 +282,23 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		guard let row else { return true }
+		guard let rowID else { return true }
 		
 		switch text {
 		case "\n":
 			if cursorIsAtBeginning {
-				if row.outline?.shouldMoveLeftOnReturn(row: row) ?? false {
-					editorDelegate?.moveRowLeft(self, row: row)
+				if editorDelegate?.shouldMoveLeftOnReturn(self, rowID: rowID) ?? false {
+					editorDelegate?.moveRowLeft(self, rowID: rowID)
 				} else {
 					isTextChanged = false
-					editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: false)
+					editorDelegate?.createRow(self, beforeRowID: rowID, rowStrings: rowStrings, moveCursor: false)
 				}
 			} else if cursorIsAtEnd {
 				isTextChanged = false
-				editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
+				editorDelegate?.createRow(self, afterRowID: rowID, rowStrings: rowStrings)
 			} else {
 				isTextChanged = false
-				editorDelegate?.splitRow(self, row: row, topic: cleansedAttributedText, cursorPosition: cursorPosition)
+				editorDelegate?.splitRow(self, rowID: rowID, topic: cleansedAttributedText, cursorPosition: cursorPosition)
 			}
 			return false
 		default:

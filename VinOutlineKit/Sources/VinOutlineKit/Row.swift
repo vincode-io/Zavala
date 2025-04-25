@@ -152,6 +152,15 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return parentCount
 	}
 	
+	public var outlineNumbering: String? {
+		switch outline?.numberingStyle {
+		case .simple: return simpleNumbering
+		case .decimal: return decimalNumbering
+		case .legal: return legalNumbering
+		default: return nil
+		}
+	}
+	
 	public var simpleNumbering: String {
 		let index = parent?.firstIndexOfRow(self) ?? 0
 		return String(index + 1) + "."

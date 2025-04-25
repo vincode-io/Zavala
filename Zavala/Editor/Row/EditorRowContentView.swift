@@ -117,16 +117,14 @@ class EditorRowContentView: UIView, UIContentView {
 			noteTextView.saveText()
 		}
 
-		guard let row = configuration.row else { return }
-
-		if let numberingStyle = configuration.numberingStyle, numberingStyle != Outline.NumberingStyle.none {
-			numberingLabel.update(with: row, configuration: configuration)
+		if let numberingStyle = configuration.outlineNumberingStyle, numberingStyle != Outline.NumberingStyle.none {
+			numberingLabel.update(configuration: configuration)
 		}
 		
-		topicTextView.update(with: row, configuration: configuration)
-		noteTextView.update(with: row, configuration: configuration)
+		topicTextView.update(configuration: configuration)
+		noteTextView.update(configuration: configuration)
 
-		switch (configuration.row?.isExpanded ?? true, configuration.isSearching) {
+		switch (configuration.rowIsExpanded, configuration.isSearching) {
 		case (true, _):
 			disclosureIndicator.setDisclosure(state: .expanded, animated: false)
 		case (false, false):
@@ -135,7 +133,7 @@ class EditorRowContentView: UIView, UIContentView {
 			disclosureIndicator.setDisclosure(state: .partial, animated: false)
 		}
 
-		barView.level = row.currentLevel
+		barView.level = configuration.rowCurrentLevel
 		barView.indentationWidth = configuration.indentationWidth
 		
 		guard appliedConfiguration == nil || !appliedConfiguration!.isLayoutEqual(configuration) else {
@@ -172,16 +170,16 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowScrollEditorToVisible(textView: textView, rect: rect)
 	}
 	
-	func moveCursorUp(_: EditorRowTopicTextView, row: Row) {
-		appliedConfiguration?.delegate?.editorRowMoveCursorUp(row: row)
+	func moveCursorUp(_: EditorRowTopicTextView, rowID: String) {
+		appliedConfiguration?.delegate?.editorRowMoveCursorUp(rowID: rowID)
 	}
 	
-	func moveCursorDown(_: EditorRowTopicTextView, row: Row) {
-		appliedConfiguration?.delegate?.editorRowMoveCursorDown(row: row)
+	func moveCursorDown(_: EditorRowTopicTextView, rowID: String) {
+		appliedConfiguration?.delegate?.editorRowMoveCursorDown(rowID: rowID)
 	}
 
-	func moveRowLeft(_: EditorRowTopicTextView, row: Row) {
-		appliedConfiguration?.delegate?.editorRowMoveRowLeft(row: row)
+	func moveRowLeft(_: EditorRowTopicTextView, rowID: String) {
+		appliedConfiguration?.delegate?.editorRowMoveRowLeft(rowID: rowID)
 	}
 
 	func didBecomeActive(_: EditorRowTopicTextView) {
@@ -192,30 +190,34 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeInactive()
 	}
 
-	func textChanged(_: EditorRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
-		appliedConfiguration?.delegate?.editorRowTextChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
+	func textChanged(_: EditorRowTopicTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
+		appliedConfiguration?.delegate?.editorRowTextChanged(rowID: rowID, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
-	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings) {
-		appliedConfiguration?.delegate?.editorRowDeleteRow(row, rowStrings: rowStrings)
+	func deleteRow(_: EditorRowTopicTextView, rowID: String, rowStrings: RowStrings) {
+		appliedConfiguration?.delegate?.editorRowDeleteRow(rowID: rowID, rowStrings: rowStrings)
 	}
 	
-	func createRow(_: EditorRowTopicTextView, beforeRow: Row, rowStrings: RowStrings, moveCursor: Bool) {
-		appliedConfiguration?.delegate?.editorRowCreateRow(beforeRow: beforeRow, rowStrings: rowStrings, moveCursor: moveCursor)
+	func createRow(_: EditorRowTopicTextView, beforeRowID: String, rowStrings: RowStrings, moveCursor: Bool) {
+		appliedConfiguration?.delegate?.editorRowCreateRow(beforeRowID: beforeRowID, rowStrings: rowStrings, moveCursor: moveCursor)
 	}
 	
-	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings) {
-		appliedConfiguration?.delegate?.editorRowCreateRow(afterRow: afterRow, rowStrings: rowStrings)
+	func createRow(_: EditorRowTopicTextView, afterRowID: String, rowStrings: RowStrings) {
+		appliedConfiguration?.delegate?.editorRowCreateRow(afterRowID: afterRowID, rowStrings: rowStrings)
 	}
 	
-	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int) {
-		appliedConfiguration?.delegate?.editorRowSplitRow(row, topic: topic, cursorPosition: cursorPosition)
+	func splitRow(_: EditorRowTopicTextView, rowID: String, topic: NSAttributedString, cursorPosition: Int) {
+		appliedConfiguration?.delegate?.editorRowSplitRow(rowID: rowID, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func joinRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString) {
-		appliedConfiguration?.delegate?.editorRowJoinRow(row, topic: topic)
+	func joinRowWithPreviousSibling(_: EditorRowTopicTextView, rowID: String, attrText: NSAttributedString) {
+		appliedConfiguration?.delegate?.editorRowJoinRowWithPreviousSibling(rowID: rowID, attrText: attrText)
 	}
 	
+	func shouldMoveLeftOnReturn(_: EditorRowTopicTextView, rowID: String) -> Bool {
+		return appliedConfiguration?.delegate?.editorRowShouldMoveLeftOnReturn(rowID: rowID) ?? false
+	}
+
 	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange) {
 		appliedConfiguration?.delegate?.editorRowEditLink(link, text: text, range: range)
 	}
@@ -256,20 +258,20 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeInactive()
 	}
 	
-	func textChanged(_: EditorRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
-		appliedConfiguration?.delegate?.editorRowTextChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
+	func textChanged(_: EditorRowNoteTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
+		appliedConfiguration?.delegate?.editorRowTextChanged(rowID: rowID, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
-	func deleteRowNote(_: EditorRowNoteTextView, row: Row, rowStrings: RowStrings) {
-		appliedConfiguration?.delegate?.editorRowDeleteRowNote(row, rowStrings: rowStrings)
+	func deleteRowNote(_: EditorRowNoteTextView, rowID: String, rowStrings: RowStrings) {
+		appliedConfiguration?.delegate?.editorRowDeleteRowNote(rowID: rowID, rowStrings: rowStrings)
 	}
 	
-	func moveCursorTo(_: EditorRowNoteTextView, row: Row) {
-		appliedConfiguration?.delegate?.editorRowMoveCursorTo(row: row)
+	func moveCursorTo(_: EditorRowNoteTextView, rowID: String) {
+		appliedConfiguration?.delegate?.editorRowMoveCursorTo(rowID: rowID)
 	}
 	
-	func moveCursorDown(_: EditorRowNoteTextView, row: Row) {
-		appliedConfiguration?.delegate?.editorRowMoveCursorDown(row: row)
+	func moveCursorDown(_: EditorRowNoteTextView, rowID: String) {
+		appliedConfiguration?.delegate?.editorRowMoveCursorDown(rowID: rowID)
 	}
 	
 	func editLink(_: EditorRowNoteTextView, _ link: String?, text: String?, range: NSRange) {
@@ -287,10 +289,10 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 private extension EditorRowContentView {
 
 	@objc func toggleDisclosure(_ sender: Any?, forEvent event: UIEvent) {
-		guard let row = appliedConfiguration?.row else { return }
+		guard let rowID = appliedConfiguration?.rowID else { return }
 		disclosureIndicator.toggleDisclosure()
 		let applyToAll = event.modifierFlags.contains(.alternate)
-		appliedConfiguration?.delegate?.editorRowToggleDisclosure(row: row, applyToAll: applyToAll)
+		appliedConfiguration?.delegate?.editorRowToggleDisclosure(rowID: rowID, applyToAll: applyToAll)
 	}
 	
 	func configureTextViews(config: EditorRowContentConfiguration) {
@@ -316,7 +318,7 @@ private extension EditorRowContentView {
 		
 		topicTextView.removeConstraintsOwnedBySuperview()
 		
-		if let numberingStyle = config.numberingStyle, numberingStyle != Outline.NumberingStyle.none {
+		if let numberingStyle = config.outlineNumberingStyle, numberingStyle != Outline.NumberingStyle.none {
 			addSubview(numberingLabel)
 			
 			if config.isNotesVisible {

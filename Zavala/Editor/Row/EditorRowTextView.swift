@@ -21,7 +21,12 @@ extension NSAttributedString.Key {
 
 class EditorRowTextView: UITextView {
 	
-	var row: Row?
+	var rowID: String?
+	var rowHasChildren = false
+	var outlineCheckSpellingWhileTyping = true
+	var outlineCorrectSpellingAutomatically = true
+	var rowSearchResultCoordinates: NSHashTable<SearchResultCoordinates>?
+	
 	var baseAttributes = [NSAttributedString.Key : Any]()
 	var previousSelectedTextRange: UITextRange?
 
@@ -198,13 +203,13 @@ class EditorRowTextView: UITextView {
 	// MARK: API
 	
 	func updateTextPreferences() {
-		if row?.outline?.checkSpellingWhileTyping ?? true {
+		if outlineCheckSpellingWhileTyping {
 			self.spellCheckingType = .yes
 		} else {
 			self.spellCheckingType = .no
 		}
 		
-		if row?.outline?.correctSpellingAutomatically ?? true {
+		if outlineCorrectSpellingAutomatically {
 			self.autocorrectionType = .yes
 		} else {
 			self.autocorrectionType = .no
@@ -418,7 +423,7 @@ extension EditorRowTextView {
     }
     
     func addSearchHighlighting(isInNotes: Bool) {
-        guard let coordinates = row?.searchResultCoordinates else { return }
+        guard let coordinates = rowSearchResultCoordinates else { return }
         for element in coordinates.objectEnumerator() {
             guard let coordinate = element as? SearchResultCoordinates, coordinate.isInNotes == isInNotes else { continue }
             if coordinate.isCurrentResult {

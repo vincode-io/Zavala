@@ -18,10 +18,10 @@ protocol EditorRowNoteTextViewDelegate: AnyObject {
 	func scrollEditorToVisible(_ : EditorRowNoteTextView, rect: CGRect)
 	func didBecomeActive(_ : EditorRowNoteTextView)
 	func didBecomeInactive(_ : EditorRowNoteTextView)
-	func textChanged(_ : EditorRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
-	func deleteRowNote(_ : EditorRowNoteTextView, row: Row, rowStrings: RowStrings)
-	func moveCursorTo(_ : EditorRowNoteTextView, row: Row)
-	func moveCursorDown(_ : EditorRowNoteTextView, row: Row)
+	func textChanged(_ : EditorRowNoteTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
+	func deleteRowNote(_ : EditorRowNoteTextView, rowID: String, rowStrings: RowStrings)
+	func moveCursorTo(_ : EditorRowNoteTextView, rowID: String)
+	func moveCursorDown(_ : EditorRowNoteTextView, rowID: String)
 	func editLink(_: EditorRowNoteTextView, _ link: String?, text: String?, range: NSRange)
 	func zoomImage(_: EditorRowNoteTextView, _ image: UIImage, rect: CGRect)
 }
@@ -85,8 +85,8 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 	}
 	
     override func textWasChanged() {
-        guard let row else { return }
-        editorDelegate?.textChanged(self, row: row, isInNotes: true, selection: selectedRange, rowStrings: rowStrings)
+        guard let rowID else { return }
+        editorDelegate?.textChanged(self, rowID: rowID, isInNotes: true, selection: selectedRange, rowStrings: rowStrings)
     }
     
 	override func resize() {
@@ -98,23 +98,23 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
     }
     
 	override func deleteBackward() {
-		guard let row else { return }
+		guard let rowID else { return }
 		if attributedText.length == 0 {
 			isTextChanged = false
-			editorDelegate?.deleteRowNote(self, row: row, rowStrings: rowStrings)
+			editorDelegate?.deleteRowNote(self, rowID: rowID, rowStrings: rowStrings)
 		} else {
 			super.deleteBackward()
 		}
 	}
 
 	@objc func moveCursorToText(_ sender: Any) {
-		guard let row else { return }
-		editorDelegate?.moveCursorTo(self, row: row)
+		guard let rowID else { return }
+		editorDelegate?.moveCursorTo(self, rowID: rowID)
 	}
 	
 	@objc func moveCursorDown(_ sender: Any) {
-		guard let row else { return }
-		editorDelegate?.moveCursorDown(self, row: row)
+		guard let rowID else { return }
+		editorDelegate?.moveCursorDown(self, rowID: rowID)
 	}
 
 	@objc override func editLink(_ sender: Any?) {
@@ -122,12 +122,16 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
-	func update(with row: Row, configuration: EditorRowContentConfiguration) {
+	func update(configuration: EditorRowContentConfiguration) {
 		// Don't update the row if we are in the middle of entering multistage characters, e.g. Japanese
 		guard markedTextRange == nil else { return }
 		
-		self.row = row
-		
+		self.rowID = configuration.rowID
+		self.rowHasChildren = configuration.rowHasChildren
+		self.outlineCheckSpellingWhileTyping = configuration.outlineCheckSpellingWhileTyping
+		self.outlineCorrectSpellingAutomatically = configuration.outlineCorrectSpellingAutomatically
+		self.rowSearchResultCoordinates = configuration.rowSearchResultCoordinates
+
 		updateTextPreferences()
 		
 		let cursorRange = selectedTextRange
@@ -137,11 +141,11 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		let fontColor = if configuration.isSelected {
 			UIColor.white.withAlphaComponent(0.66)
 		} else {
-			OutlineFontCache.shared.noteColor(level: row.trueLevel)
+			OutlineFontCache.shared.noteColor(level: configuration.rowTrueLevel)
 		}
 		
 		baseAttributes = [NSAttributedString.Key : Any]()
-		baseAttributes[.font] = OutlineFontCache.shared.noteFont(level: row.trueLevel)
+		baseAttributes[.font] = OutlineFontCache.shared.noteFont(level: configuration.rowTrueLevel)
 		baseAttributes[.foregroundColor] = fontColor
 
 		typingAttributes = baseAttributes
@@ -153,7 +157,7 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		linkAttrs[.underlineStyle] = 1
 		linkTextAttributes = linkAttrs
 		
-        if let note = row.note {
+		if let note = configuration.rowNote {
             attributedText = note
         }
         
@@ -173,8 +177,8 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 extension EditorRowNoteTextView: CursorCoordinatesProvider {
 
 	var coordinates: CursorCoordinates? {
-		if let row {
-			return CursorCoordinates(row: row, isInNotes: true, selection: selectedRange)
+		if let rowID {
+			return CursorCoordinates(rowID: rowID, isInNotes: true, selection: selectedRange)
 		}
 		return nil
 	}
