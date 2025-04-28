@@ -22,7 +22,7 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 	var rowTrueLevel: Int
 	var rowIsComplete: Bool
 	var rowIsAnyParentComplete: Bool
-	var rowSearchResultCoordinates: NSHashTable<SearchResultCoordinates>?
+	var rowSearchResultCoordinates: [SearchResultCoordinates]
 	
 	var isSearching: Bool
 	
@@ -48,7 +48,7 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 		 rowTrueLevel: Int,
 		 rowIsComplete: Bool,
 		 rowIsAnyParentComplete: Bool,
-		 rowSearchResultCoordinates: NSHashTable<SearchResultCoordinates>?,
+		 rowSearchResultCoordinates: [SearchResultCoordinates],
 		 isSearching: Bool,
 		 outlineNumberingStyle: Outline.NumberingStyle?,
 		 outlineCheckSpellingWhileTyping: Bool,

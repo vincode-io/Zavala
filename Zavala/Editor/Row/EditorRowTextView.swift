@@ -25,7 +25,7 @@ class EditorRowTextView: UITextView {
 	var rowHasChildren = false
 	var outlineCheckSpellingWhileTyping = true
 	var outlineCorrectSpellingAutomatically = true
-	var rowSearchResultCoordinates: NSHashTable<SearchResultCoordinates>?
+	var rowSearchResultCoordinates: [SearchResultCoordinates] = []
 	
 	var baseAttributes = [NSAttributedString.Key : Any]()
 	var previousSelectedTextRange: UITextRange?
@@ -423,9 +423,8 @@ extension EditorRowTextView {
     }
     
     func addSearchHighlighting(isInNotes: Bool) {
-        guard let coordinates = rowSearchResultCoordinates else { return }
-        for element in coordinates.objectEnumerator() {
-            guard let coordinate = element as? SearchResultCoordinates, coordinate.isInNotes == isInNotes else { continue }
+        for coordinate in rowSearchResultCoordinates {
+            guard coordinate.isInNotes == isInNotes else { continue }
             if coordinate.isCurrentResult {
                 textStorage.addAttribute(.selectedSearchResult, value: true, range: coordinate.range)
             } else {

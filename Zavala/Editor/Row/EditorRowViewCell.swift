@@ -106,7 +106,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 													rowTrueLevel: row.trueLevel,
 													rowIsComplete: row.isComplete ?? false,
 													rowIsAnyParentComplete: row.isAnyParentComplete,
-													rowSearchResultCoordinates: row.searchResultCoordinates,
+													rowSearchResultCoordinates: row.searchResultCoordinates.allObjects,
 													isSearching: isSearching,
 													outlineNumberingStyle: row.outline?.numberingStyle,
 													outlineCheckSpellingWhileTyping: row.outline?.checkSpellingWhileTyping ?? true,
