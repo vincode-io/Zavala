@@ -37,7 +37,6 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 	var rowIndentSize: DefaultsSize?
 	var rowSpacingSize: DefaultsSize?
 	
-	
 	init(rowID: String,
 		 rowTopic: NSAttributedString?,
 		 rowNote: NSAttributedString?,
