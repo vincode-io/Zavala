@@ -216,11 +216,10 @@ public class CloudKitManager {
 	}
 	
 	func generateCKShare(for document: Document) async throws -> CKShare {
-		guard let zoneID = document.zoneID else {
+		guard let zoneID = document.zoneID, let zone = findZone(zoneID: zoneID) else {
 			throw CloudKitOutlineZoneError.unknown
 		}
 		
-		let zone = findZone(zoneID: zoneID)
 		return try await zone.generateCKShare(for: document)
 	}
 	
@@ -249,7 +248,7 @@ public class CloudKitManager {
 			  let zoneID = outline.zoneID,
 			  isNetworkAvailable else { return }
 		
-		let zone = findZone(zoneID: zoneID)
+		guard let zone = findZone(zoneID: zoneID) else { return }
 
 		Task { @MainActor in
 			if let shareRecord = try await zone.fetch(externalID: outline.cloudKitShareRecordName!) as? CKShare {
@@ -314,12 +313,16 @@ private extension CloudKitManager {
 		NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
 	}
 
-	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone {
+	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone? {
 		if let zone = zones[zoneID] {
 			return zone
 		}
 
-		let delegate = CloudKitOutlineZoneDelegate(account: account!, zoneID: zoneID)
+		guard let account else {
+			return nil
+		}
+		
+		let delegate = CloudKitOutlineZoneDelegate(account: account, zoneID: zoneID)
 		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID, delegate: delegate)
 		zones[zoneID] = zone
 		return zone
@@ -361,7 +364,8 @@ private extension CloudKitManager {
 			var leftOverRequests = requests
 			
 			for zoneID in modifications.keys {
-				let cloudKitZone = findZone(zoneID: zoneID)
+				guard let cloudKitZone = findZone(zoneID: zoneID) else { continue }
+				
 				let (modelsToSave, recordIDsToDelete) = modifications[zoneID]!
 				
 				let strategy = VCKModifyStrategy.onlyIfServerUnchanged
@@ -485,7 +489,7 @@ private extension CloudKitManager {
 			syncSemaphore.signal()
 		}
 		
-		let zone = findZone(zoneID: zoneID)
+		guard let zone = findZone(zoneID: zoneID) else { return }
 		
 		do {
 			try await zone.fetchChangesInZone(incremental: false)
