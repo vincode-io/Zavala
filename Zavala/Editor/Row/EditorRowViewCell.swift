@@ -92,7 +92,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 		}
 		
 		let isDisclosureVisible = row.rowCount != 0
-		let isNotesVisible = !(row.outline?.isNotesFiltered ?? false) && !row.isNoteEmpty
+		let isNotesVisible = !(row.outline?.isNotesFilterOn ?? false) && !row.isNoteEmpty
 		let isSelected = state.isSelected
 		let hasChildren = row.rowCount > 0
 				
