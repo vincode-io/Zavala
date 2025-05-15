@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-async-algorithms",
       "state" : {
-        "revision" : "4c3ea81f81f0a25d0470188459c6d4bf20cf2f97",
-        "version" : "1.0.3"
+        "revision" : "042e1c4d9d19748c9c228f8d4ebc97bb1e339b0b",
+        "version" : "1.0.4"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/swiftlang/swift-cmark.git",
       "state" : {
         "branch" : "gfm",
-        "revision" : "b022b08312decdc46585e0b3440d97f6f22ef703"
+        "revision" : "b97d09472e847a416629f026eceae0e2afcfad65"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "e62a44fd1f2764ba8807db3b6f257627449bbb8c"
+        "revision" : "b57dd89b17c02c60869875ee68c38078848329fb"
       }
     },
     {
@@ -61,7 +61,7 @@
       "location" : "https://github.com/vincode-io/VinCloudKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "735c4a446bf924c460388d5987a7772b5fb27979"
+        "revision" : "66eb86f7f8786e2a97973d6b686eddd5ddecfd1c"
       }
     },
     {
