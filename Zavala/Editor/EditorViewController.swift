@@ -1826,12 +1826,16 @@ extension EditorViewController: EditorRowViewCellDelegate {
 			  let shadowTableIndex = row.shadowTableIndex,
 			  shadowTableIndex > 0,
 			  let candidateSibling = outline?.shadowTable?[shadowTableIndex - 1],
-			  row.hasSameParent(candidateSibling),
-			  let siblingTopic = candidateSibling.topic else {
+			  row.hasSameParent(candidateSibling) else {
 				return
 			}
 		
-		let topic = NSMutableAttributedString(attributedString: siblingTopic)
+		let topic = if let siblingTopic = candidateSibling.topic {
+			NSMutableAttributedString(attributedString: siblingTopic)
+		} else {
+			NSMutableAttributedString()
+		}
+		
 		topic.append(attrText)
 		
 		joinRow(row, topic: topic)
