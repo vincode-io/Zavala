@@ -693,6 +693,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.updated = Date()
 		rowsFile = RowsFile(outline: self)
 		imagesFile = ImagesFile(outline: self)
+		beingUsedCount = 1
 	}
 
 	init(account: Account?, parentID: EntityID, title: String?) {
@@ -703,6 +704,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.updated = Date()
 		rowsFile = RowsFile(outline: self)
 		imagesFile = ImagesFile(outline: self)
+		beingUsedCount = 1
 	}
 	
 	init(account: Account?, coder: OutlineCoder) {
@@ -2643,9 +2645,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	public func unload() async {
-		if beingUsedCount > 0 {
-			beingUsedCount = beingUsedCount - 1
-		}
+		beingUsedCount = beingUsedCount - 1
+
+		guard beingUsedCount > -1 else { fatalError("This Outline was unloaded more times than it was loaded.") }
 		
 		guard beingUsedCount == 0 else { return }
 
