@@ -2313,8 +2313,8 @@ private extension EditorViewController {
 												preferredStyle: .alert)
 		
 		let recoverAction = UIAlertAction(title: .fixItControlLabel, style: .default) { [weak self] action in
-			self?.outline?.correctExtraRowsCorruption()
-			self?.outline?.correctRowOrderCorruption()
+			self?.outline?.correctRowToRowOrderCorruption()
+			self?.outline?.correctDuplicateRowCorruption()
 		}
 		alertController.addAction(recoverAction)
 		alertController.preferredAction = recoverAction

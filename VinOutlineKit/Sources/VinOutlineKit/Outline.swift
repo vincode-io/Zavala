@@ -783,7 +783,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outlineElementsDidChange(changes)
 	}
 	
-	public func correctExtraRowsCorruption() {
+	public func correctRowToRowOrderCorruption() {
 		guard let rowOrder, let keyedRows else { return }
 		
 		beginCloudKitBatchRequest()
@@ -795,32 +795,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		allRowOrderIDs.formUnion(rowOrder)
 		
 		var foundCorruption = false
-		
-		// Fix any keyRows that don't have rowOrder entries
-		for row in keyedRows.values {
-			if !allRowOrderIDs.contains(row.id) {
-				self.rowOrder?.append(row.id)
-				requestCloudKitUpdates(for: [self.id, row.entityID])
-				foundCorruption = true
-			}
-		}
-	
-		if foundCorruption {
-			outlineContentDidChange()
-			outlineElementsDidChange(rebuildShadowTable())
-		}
-	}
-	
-	public func correctRowOrderCorruption() {
-		guard let rowOrder, let keyedRows else { return }
 
-		beginCloudKitBatchRequest()
-		defer {
-			endCloudKitBatchRequest()
-		}
-		
-		var foundCorruption = false
-		
 		// Fix any rowOrder values that don't have keyedRows. Sync the RowContainer with the bad
 		// rowOrder as well as any missing rows that it had referenced. Another device might still
 		// have that row causing a back and forth between devices about which rowOrder is correct or not.
@@ -843,6 +818,29 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			}
 		}
 
+		// Fix any keyRows that don't have rowOrder entries
+		for row in keyedRows.values {
+			if !allRowOrderIDs.contains(row.id) {
+				self.rowOrder?.append(row.id)
+				requestCloudKitUpdates(for: [self.id, row.entityID])
+				foundCorruption = true
+			}
+		}
+	
+		if foundCorruption {
+			outlineContentDidChange()
+			outlineElementsDidChange(rebuildShadowTable())
+		}
+	}
+	
+	public func correctDuplicateRowCorruption() {
+		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
+		
+		var foundCorruption = false
+		
 		// Remove duplicate row order entries. It is possible that a user may have moved a row to a new parent
 		// on a disconnected device and to a different parent on a connected device. Our merge won't detect this
 		// since it is working on a per record basis and a row could end up owned by multiple rows.
