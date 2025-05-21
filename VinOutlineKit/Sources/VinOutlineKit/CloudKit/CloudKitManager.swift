@@ -264,8 +264,9 @@ public class CloudKitManager {
 private extension CloudKitManager {
 	
 	func startWorkTask() {
-		workTask = Task {
-			for await _ in workChannel.debounce(for: .seconds(5)) {
+		workTask = Task { [weak self] in
+			guard let self else { return }
+			for await _ in self.workChannel.debounce(for: .seconds(5)) {
 				guard self.isNetworkAvailable else { return }
 				if !Task.isCancelled {
 					do {
@@ -549,11 +550,11 @@ private extension CloudKitManager {
 		let combinedRequests = combine(requests: requests)
 
 		for documentUUID in combinedRequests.keys {
-			guard let combinedRequest = combinedRequests[documentUUID] else { continue }
+			guard let account, let combinedRequest = combinedRequests[documentUUID] else { continue }
 			
 			// If we don't have a document, we probably have a delete request to send.
 			// We don't have to continue processing since we cascade delete our rows.
-			guard let document = account?.findDocument(documentUUID: documentUUID) else {
+			guard let document = account.findDocument(documentUUID: documentUUID) else {
 				if let docRequest = combinedRequest.documentRequest {
 					addDelete(docRequest)
 				}
