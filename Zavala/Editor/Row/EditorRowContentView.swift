@@ -339,6 +339,9 @@ private extension EditorRowContentView {
 					barView.trailingAnchor.constraint(equalTo: numberingLabel.leadingAnchor)
 				])
 			} else {
+				if noteTextView.isFirstResponder {
+					topicTextView.becomeFirstResponder()
+				}
 				noteTextView.removeFromSuperview()
 				NSLayoutConstraint.activate([
 					numberingLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
@@ -371,6 +374,9 @@ private extension EditorRowContentView {
 					barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
 				])
 			} else {
+				if noteTextView.isFirstResponder {
+					topicTextView.becomeFirstResponder()
+				}
 				noteTextView.removeFromSuperview()
 				NSLayoutConstraint.activate([
 					topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
