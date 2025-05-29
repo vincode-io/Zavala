@@ -122,21 +122,21 @@ struct GetInfoView: View {
 					.foregroundStyle(.secondary)
 			}
 			Section(String.statisticsControlLabel) {
-				HStack {
+				HStack(alignment: .firstTextBaseline) {
 					Text(String.wordCountLabel)
 					Spacer()
 					Text(String(getInfoViewModel.wordCount))
 						.foregroundStyle(.secondary)
 				}
 				
-				HStack {
+				HStack(alignment: .firstTextBaseline) {
 					Text(String.createdControlLabel)
 					Spacer()
 					Text(getInfoViewModel.createdLabel)
 						.foregroundStyle(.secondary)
 				}
 				
-				HStack {
+				HStack(alignment: .firstTextBaseline) {
 					Text(String.updatedControlLabel)
 					Spacer()
 					Text(getInfoViewModel.updatedLabel)
