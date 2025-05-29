@@ -247,7 +247,13 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
         
 		addSearchHighlighting(isInNotes: false)
 		
-		selectedTextRange = cursorRange
+		// Sometimes this comes back as empty when it shouldn't. I don't know why, but if we use
+		// an empty range when that happens, it moves the cursor back to the start of the line,
+		// when it shouldn't. This can be recreated by creating an new row and clicking the move
+		// right button on iOS.
+		if !(cursorRange?.isEmpty ?? true) {
+			selectedTextRange = cursorRange
+		}
     }
 	
 	override func scrollEditorToVisible(rect: CGRect) {
