@@ -7027,19 +7027,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Edit Document ”%@’"
+            "value" : "Edit Document “%@”"
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Edit Document ”%@’"
+            "value" : "Edit Document ”%@”"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Edit Document ”%@’"
+            "value" : "Edit Document ”%@”"
           }
         }
       }
