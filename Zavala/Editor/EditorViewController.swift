@@ -2273,20 +2273,20 @@ private extension EditorViewController {
 		let oldOutline = outline
 		Task {
 			await oldOutline?.unload()
+		}
 
-			outline = newOutline
-			
-			outline?.load()
-			outline?.incrementBeingViewedCount()
-			outline?.prepareForViewing()
+		outline = newOutline
+		
+		outline?.load()
+		outline?.incrementBeingViewedCount()
+		outline?.prepareForViewing()
 
-			let cursorCoordinates = CursorCoordinates.bestCoordinates
-			
-			collectionView.reloadData()
-			
-			if let cursorCoordinates {
-				restoreCursorPosition(cursorCoordinates, scroll: false)
-			}
+		let cursorCoordinates = CursorCoordinates.bestCoordinates
+		
+		collectionView.reloadData()
+		
+		if let cursorCoordinates {
+			restoreCursorPosition(cursorCoordinates, scroll: false)
 		}
 	}
 	
