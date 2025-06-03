@@ -35,35 +35,11 @@ protocol EditorRowViewCellDelegate: AnyObject {
 
 class EditorRowViewCell: UICollectionViewListCell {
 
-	var row: Row? {
-		didSet {
-			setNeedsUpdateConfiguration()
-		}
-	}
-	
-	var rowIndentSize: DefaultsSize? {
-		didSet {
-			setNeedsUpdateConfiguration()
-		}
-	}
-	
-	var rowSpacingSize: DefaultsSize? {
-		didSet {
-			setNeedsUpdateConfiguration()
-		}
-	}
-	
-	var isSearching: Bool = false {
-		didSet {
-			setNeedsUpdateConfiguration()
-		}
-	}
-	
-	weak var delegate: EditorRowViewCellDelegate? {
-		didSet {
-			setNeedsUpdateConfiguration()
-		}
-	}
+	var row: Row?
+	var rowIndentSize: DefaultsSize?
+	var rowSpacingSize: DefaultsSize?
+	var isSearching: Bool = false
+	weak var delegate: EditorRowViewCellDelegate?
 	
 	var topicTextView: EditorRowTopicTextView? {
 		return (contentView as? EditorRowContentView)?.topicTextView

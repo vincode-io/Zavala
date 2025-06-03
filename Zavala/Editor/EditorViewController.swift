@@ -378,6 +378,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			cell.rowSpacingSize = self?.rowSpacingSize
 			cell.isSearching = self?.isSearching ?? false
 			cell.delegate = self
+			cell.setNeedsUpdateConfiguration()
 		}
 		
 		backlinkRegistration = UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline> { [weak self] (cell, indexPath, outline) in
