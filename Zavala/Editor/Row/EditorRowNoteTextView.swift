@@ -134,8 +134,14 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 
 		updateTextPreferences()
 		
-		let cursorRange = selectedTextRange
-		
+		// We may end up here before the actual value of the text view has registered. We don't want
+		// to restore the cursor location in that case because the cursor isn't actually at the beginning
+		// of the line.
+		var cursorRange: UITextRange? = nil
+		if text != "" {
+			cursorRange = selectedTextRange
+		}
+
 		text = ""
 		
 		let fontColor = if configuration.isSelected {
@@ -163,7 +169,9 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
         
 		addSearchHighlighting(isInNotes: true)
 		
-		selectedTextRange = cursorRange
+		if let cursorRange {
+			selectedTextRange = cursorRange
+		}
     }
 
 	override func scrollEditorToVisible(rect: CGRect) {

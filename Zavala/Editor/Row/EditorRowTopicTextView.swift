@@ -196,7 +196,13 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		
 		updateTextPreferences()
 		
-		let cursorRange = selectedTextRange
+		// We may end up here before the actual value of the text view has registered. We don't want
+		// to restore the cursor location in that case because the cursor isn't actually at the beginning
+		// of the line.
+		var cursorRange: UITextRange? = nil
+		if text != "" {
+			cursorRange = selectedTextRange
+		}
 		
 		text = ""
 		
@@ -247,11 +253,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
         
 		addSearchHighlighting(isInNotes: false)
 		
-		// Sometimes this comes back as empty when it shouldn't. I don't know why, but if we use
-		// an empty range when that happens, it moves the cursor back to the start of the line,
-		// when it shouldn't. This can be recreated by creating an new row and clicking the move
-		// right button on iOS.
-		if !(cursorRange?.isEmpty ?? true) {
+		if let cursorRange {
 			selectedTextRange = cursorRange
 		}
     }
