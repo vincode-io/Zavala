@@ -6715,19 +6715,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Created on %1$@ at %2$@"
+            "value" : " %1$@ at %2$@"
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Created on %1$@ at %2$@"
+            "value" : "%1$@ at %2$@"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Created on %1$@ at %2$@"
+            "value" : "%1$@ at %2$@"
           }
         }
       }
@@ -9264,19 +9264,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Updated on %1$@ at %2$@"
+            "value" : "%1$@ at %2$@"
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Updated on %1$@ at %2$@"
+            "value" : "%1$@ at %2$@"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Updated on %1$@ at %2$@"
+            "value" : "%1$@ at %2$@"
           }
         }
       }
