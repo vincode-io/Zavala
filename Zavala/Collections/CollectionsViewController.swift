@@ -84,36 +84,6 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
     override func viewDidLoad() {
 		super.viewDidLoad()
-
-		if traitCollection.userInterfaceIdiom == .mac {
-			navigationController?.setNavigationBarHidden(true, animated: false)
-			collectionView.allowsMultipleSelection = true
-		} else {
-			settingsBarButtonItem = UIBarButtonItem(image: .settings, style: .plain, target: nil, action: .showSettings)
-			settingsBarButtonItem.accessibilityLabel = .settingsControlLabel
-			navigationItem.leftBarButtonItem = settingsBarButtonItem
-			
-			if traitCollection.userInterfaceIdiom == .pad {
-				selectBarButtonItem = UIBarButtonItem(title: .selectControlLabel, style: .plain, target: self, action: #selector(multipleSelect))
-				selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
-
-				navigationItem.rightBarButtonItem = selectBarButtonItem
-			} else {
-				let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-				importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: .importOPML)
-				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: .createOutline)
-				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
-
-				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
-			}
-			
-			navigationItem.title = .collectionsControlLabel
-
-			collectionView.refreshControl = UIRefreshControl()
-			collectionView.alwaysBounceVertical = true
-			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
-			collectionView.refreshControl!.tintColor = .clear
-		}
         
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidReload(_:)), name: .AccountDidReload, object: nil)
@@ -140,6 +110,45 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 				reloadVisible()
 			}
 		}
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		if traitCollection.userInterfaceIdiom == .mac {
+			navigationController?.setNavigationBarHidden(true, animated: false)
+			collectionView.allowsMultipleSelection = true
+		} else {
+			settingsBarButtonItem = UIBarButtonItem(image: .settings, style: .plain, target: nil, action: .showSettings)
+			settingsBarButtonItem.accessibilityLabel = .settingsControlLabel
+			navigationItem.leftBarButtonItem = settingsBarButtonItem
+			
+			if traitCollection.userInterfaceIdiom == .pad {
+				selectBarButtonItem = UIBarButtonItem(title: .selectControlLabel, style: .plain, target: self, action: #selector(multipleSelect))
+				selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
+
+				navigationItem.rightBarButtonItem = selectBarButtonItem
+			} else {
+				let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
+				importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: .importOPML)
+				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: .createOutline)
+				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
+				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
+			}
+			
+			if #available(iOS 26.0, *) {
+				navigationItem.title = nil
+			} else {
+				navigationItem.title = .collectionsControlLabel
+			}
+
+			collectionView.refreshControl = UIRefreshControl()
+			collectionView.alwaysBounceVertical = true
+			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
+			collectionView.refreshControl!.tintColor = .clear
+		}
+
 	}
 	
 	// MARK: API

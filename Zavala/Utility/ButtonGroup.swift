@@ -45,7 +45,7 @@ class ButtonGroup: NSObject {
 
 	var containerWidth: CGFloat = 0 {
 		didSet {
-			updateBarButtonItemWidth()
+			updateStackViewWidth()
 		}
 	}
 	
@@ -54,6 +54,7 @@ class ButtonGroup: NSObject {
 	}
 
 	private let stackView: UIStackView
+	private let stackViewWidthConstraint: NSLayoutConstraint?
 	private var barButtonItem: UIBarButtonItem?
 
 	private let hostController: UIViewController
@@ -80,6 +81,9 @@ class ButtonGroup: NSObject {
 		stackView = UIStackView()
 		stackView.isLayoutMarginsRelativeArrangement = true
 
+		stackViewWidthConstraint = stackView.widthAnchor.constraint(equalToConstant: 0)
+		stackViewWidthConstraint?.isActive = true
+		
 		switch alignment {
 		case .left:
 			stackView.distribution = .fillEqually
@@ -95,12 +99,18 @@ class ButtonGroup: NSObject {
 	func addButton(label: String, image: UIImage, target: Any? = nil, selector: Selector? = nil, showMenu: Bool = false) -> Button {
 		let button = Button(type: .system)
 		button.accessibilityLabel = label
-		button.setImage(image, for: .normal)
 		if let selector {
 			button.addTarget(target, action: selector, for: .touchUpInside)
 		}
 		button.isAccessibilityElement = true
 		button.showsMenuAsPrimaryAction = showMenu
+		
+		if #available(iOS 26.0, *) {
+			button.tintColor = .label
+			button.setImage(image.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
+		} else {
+			button.setImage(image, for: .normal)
+		}
 		
 		stackView.addArrangedSubview(button)
 		
@@ -110,17 +120,17 @@ class ButtonGroup: NSObject {
 	func remove(_ button: Button) {
 		stackView.removeArrangedSubview(button)
 		button.removeFromSuperview()
-		updateBarButtonItemWidth()
+		updateStackViewWidth()
 	}
 	
 	func insert(_ button: Button, at: Int) {
 		stackView.insertArrangedSubview(button, at: at)
-		updateBarButtonItemWidth()
+		updateStackViewWidth()
 	}
 	
 	func buildBarButtonItem() -> UIBarButtonItem {
 		barButtonItem = UIBarButtonItem(customView: stackView)
-		updateBarButtonItemWidth()
+		updateStackViewWidth()
 		return barButtonItem!
 	}
 	
@@ -160,8 +170,8 @@ extension ButtonGroup: UIPopoverPresentationControllerDelegate {
 
 private extension ButtonGroup {
 	
-	func updateBarButtonItemWidth() {
-		barButtonItem?.width = width
+	func updateStackViewWidth() {
+		stackViewWidthConstraint?.constant = width
 	}
 	
 }

@@ -2150,7 +2150,11 @@ private extension EditorViewController {
 			} else {
 				let hideKeyboardBarButtonItem = UIBarButtonItem(image: .hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
 				hideKeyboardBarButtonItem.accessibilityLabel = .hideKeyboardControlLabel
-				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, hideKeyboardBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+				if #available(iOS 26.0, *) {
+					keyboardToolBar.items = [moveButtonsBarButtonItem, hideKeyboardBarButtonItem, insertButtonsBarButtonItem]
+				} else {
+					keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, hideKeyboardBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+				}
 			}
 			
 			keyboardToolBar.sizeToFit()
