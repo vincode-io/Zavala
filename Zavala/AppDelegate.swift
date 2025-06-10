@@ -530,6 +530,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 						newElements.append(oldElement)
 						newElements.append(copyRowLinkCommand)
 						newElements.append(copyDocumentLinkCommand)
+					case #selector(UIResponderStandardEditActions.pasteAndMatchStyle):
+						break
 					default:
 						newElements.append(oldElement)
 					}
