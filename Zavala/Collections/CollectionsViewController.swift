@@ -13,7 +13,7 @@ import VinOutlineKit
 import VinUtility
 
 @MainActor
-protocol CollectionsDelegate: AnyObject {
+protocol CollectionsDelegate: UINavigationControllerDelegate {
 	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, reloadDocuments: Bool, animated: Bool) async
 }
 
@@ -114,7 +114,9 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
+
+		navigationController?.delegate = delegate
+
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 			collectionView.allowsMultipleSelection = true

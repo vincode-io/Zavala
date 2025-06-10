@@ -120,13 +120,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		delegate = self
     }
 	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-		
-		collectionsViewController?.navigationController?.delegate = self
-		documentsViewController?.navigationController?.delegate = self
-	}
-	
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {

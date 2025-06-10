@@ -14,7 +14,7 @@ import VinOutlineKit
 import VinUtility
 
 @MainActor
-protocol DocumentsDelegate: AnyObject  {
+protocol DocumentsDelegate: UINavigationControllerDelegate  {
 	func openDocuments(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNavigationBranch: Bool, animated: Bool)
 	func editCurrentDocument(_: DocumentsViewController, isNew: Bool, selectRow: EntityID?)
 	func showGetInfo(_: DocumentsViewController, outline: Outline)
@@ -178,6 +178,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
+		navigationController?.delegate = delegate
+		
 		updateUI()
 	}
 	
