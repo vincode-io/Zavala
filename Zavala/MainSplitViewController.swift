@@ -120,6 +120,13 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		delegate = self
     }
 	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		collectionsViewController?.navigationController?.delegate = self
+		documentsViewController?.navigationController?.delegate = self
+	}
+	
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
@@ -137,9 +144,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 	// MARK: API
 	
 	func startUp() {
-		collectionsViewController?.navigationController?.delegate = self
 		collectionsViewController?.delegate = self
-		documentsViewController?.navigationController?.delegate = self
 		documentsViewController?.delegate = self
 		collectionsViewController?.startUp()
 		editorViewController?.delegate = self
