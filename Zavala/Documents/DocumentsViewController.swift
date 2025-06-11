@@ -153,7 +153,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
-				cell.insetBackground = true
 				contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .body)
 				contentConfiguration.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
 			}
@@ -609,8 +608,7 @@ extension DocumentsViewController {
 	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-			let isMac = layoutEnvironment.traitCollection.userInterfaceIdiom == .mac
-			var configuration = UICollectionLayoutListConfiguration(appearance: isMac ? .plain : .sidebar)
+			var configuration = UICollectionLayoutListConfiguration(appearance: .sidebar)
 			configuration.showsSeparators = false
 
 			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
