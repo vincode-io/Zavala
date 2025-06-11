@@ -85,6 +85,7 @@
 		51922210271E27FD000CDC1F /* EditorCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5192220F271E27FD000CDC1F /* EditorCollectionView.swift */; };
 		5193C8A625FD757900E63F94 /* OpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */; };
 		5196726A2B61B1CD006A564A /* AppKitDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519672692B61B1CD006A564A /* AppKitDefaults.swift */; };
+		51977AAA2DF9EC270076B7D2 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 51977AA92DF9EC270076B7D2 /* AppIcon.icon */; };
 		519897C42ADE13F3008A6FA4 /* ButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519897C32ADE13F3008A6FA4 /* ButtonGroup.swift */; };
 		519897C62ADE1C4A008A6FA4 /* About.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 519897C52ADE1C4A008A6FA4 /* About.storyboard */; };
 		519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */; };
@@ -306,6 +307,7 @@
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		519457862D18B390002D96B8 /* Zavala.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Zavala.xctestplan; path = Zavala/Zavala.xctestplan; sourceTree = "<group>"; };
 		519672692B61B1CD006A564A /* AppKitDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppKitDefaults.swift; sourceTree = "<group>"; };
+		51977AA92DF9EC270076B7D2 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		519897C32ADE13F3008A6FA4 /* ButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonGroup.swift; sourceTree = "<group>"; };
 		519897C52ADE1C4A008A6FA4 /* About.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = About.storyboard; sourceTree = "<group>"; };
 		519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAppMovementMonitor.swift; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 		515F163B255C536600FD98B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				51977AA92DF9EC270076B7D2 /* AppIcon.icon */,
 				512D375025EEFC01000FA597 /* Zavala-dev.entitlements */,
 				5181A96A2554D93B00C153E8 /* Zavala.entitlements */,
 				5181A9452554D92100C153E8 /* Info.plist */,
@@ -985,6 +988,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */,
+				51977AAA2DF9EC270076B7D2 /* AppIcon.icon in Resources */,
 				517AF6A025E08A6B0044DBAB /* Settings.storyboard in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
 				5191D43F2BA35559004D06D9 /* PrivacyInfo.xcprivacy in Resources */,
