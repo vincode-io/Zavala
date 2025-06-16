@@ -8,8 +8,6 @@ import VinOutlineKit
 class EditorRowNumberingLabel: UILabel {
 	
 	func update(configuration: EditorRowContentConfiguration) {
-		guard let numberingStyle = configuration.outlineNumberingStyle else { return }
-		
 		let attrString = if let numbering = configuration.rowOutlineNumbering {
 			NSMutableAttributedString(string: numbering)
 		} else {
