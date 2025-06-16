@@ -17,6 +17,13 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 		guard var contentConfig = contentConfiguration as? UIListContentConfiguration else { return }
 
 		if state.isSelected || state.isHighlighted {
+			if traitCollection.userInterfaceIdiom == .mac {
+				if state.isFocused {
+					contentConfig.textProperties.color = .white
+				} else {
+					contentConfig.textProperties.color = .accentColor
+				}
+			}
 			contentConfig.secondaryTextProperties.color = .lightGray
 		} else {
 			contentConfig.secondaryTextProperties.color = .tertiaryLabel
