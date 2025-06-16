@@ -1210,7 +1210,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 
 				item.itemMenu = UIMenu(title: "", children: [turnFilterOnMenu, filterOptionsMenu])
 				
-				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
+				return !UIResponder.valid(action: .toggleFilterOn)
 			}
 			item.image = .filterInactive.symbolSizedForCatalyst()
 			item.label = .filterControlLabel
