@@ -498,7 +498,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		builder.replace(menu: .about, with: UIMenu(options: .displayInline, children: [showAboutCommand]))
 		
 		// File Menu
-		builder.remove(menu: .newScene)
+		builder.remove(menu: .newItem)
 		builder.remove(menu: .openRecent)
 		builder.remove(menu: .document)
 
