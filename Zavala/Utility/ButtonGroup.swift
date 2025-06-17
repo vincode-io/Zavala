@@ -108,7 +108,8 @@ class ButtonGroup: NSObject {
 		button.setImage(image.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
 		
 		stackView.addArrangedSubview(button)
-		
+		updateStackViewWidth()
+
 		return button
 	}
 	
