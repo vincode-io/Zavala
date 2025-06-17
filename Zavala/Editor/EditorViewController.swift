@@ -779,7 +779,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func outlineTextPreferencesDidChange(_ note: Notification) {
-		collectionView.reloadData()
+		if note.object as? Outline == outline {
+			collectionView.reloadData()
+		}
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
