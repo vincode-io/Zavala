@@ -9373,29 +9373,6 @@
         }
       }
     },
-    "label.title.collections" : {
-      "comment" : "Label: Collections",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Collections"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Collections"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Collections"
-          }
-        }
-      }
-    },
     "outline.action.collapse-parent-row" : {
       "comment" : "Outline Action: Collapse Parent Row",
       "localizations" : {

@@ -139,11 +139,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 			}
 			
-			if #available(iOS 26.0, *) {
-				navigationItem.title = nil
-			} else {
-				navigationItem.title = .collectionsControlLabel
-			}
+			navigationItem.title = nil
 
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true

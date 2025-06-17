@@ -104,13 +104,8 @@ class ButtonGroup: NSObject {
 		}
 		button.isAccessibilityElement = true
 		button.showsMenuAsPrimaryAction = showMenu
-		
-		if #available(iOS 26.0, *) {
-			button.tintColor = .label
-			button.setImage(image.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
-		} else {
-			button.setImage(image, for: .normal)
-		}
+		button.tintColor = .label
+		button.setImage(image.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
 		
 		stackView.addArrangedSubview(button)
 		

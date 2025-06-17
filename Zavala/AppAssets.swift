@@ -178,7 +178,6 @@ extension String {
 	static let collapseAllInRowControlLabel = String(localized: "button.text.collapse-all-in-row", comment: "Outline Action: Collapse All in Row")
 	static let collapseControlLabel = String(localized: "button.text.collapse", comment: "Outline Action: Collapse")
 	static let collapseParentRowControlLabel = String(localized: "outline.action.collapse-parent-row", comment: "Outline Action: Collapse Parent Row")
-	static let collectionsControlLabel = String(localized: "label.title.collections", comment: "Label: Collections")
 	static let colorPalettControlLabel = String(localized: "label.text.color-palette", comment: "Label: Color Palette")
 	static let communityControlLabel = String(localized: "label.text.community-discussion", comment: "Label: Community Discussion")
 	static let completeAccessibilityLabel = String(localized: "accessibility.text.complete", comment: "Accessibility Label: Complete")
