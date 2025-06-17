@@ -39,7 +39,8 @@ class EditorTitleContentView: UIView, UIContentView {
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
 			textView.widthAnchor.constraint(greaterThanOrEqualToConstant: 20),
-			textView.widthAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.widthAnchor, constant: 8)
+			textView.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor, constant: 4),
+			textView.trailingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.trailingAnchor, constant: 4)
 		])
 
 		apply()
@@ -107,9 +108,25 @@ extension EditorTitleContentView: UITextViewDelegate {
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
 		if textViewHeight != fittingSize.height {
 			textViewHeight = fittingSize.height
-			invalidateIntrinsicContentSize()
-			titleConfiguration.delegate?.editorTitleLayoutEditor()
+			resize()
 		}
+	}
+	
+}
+
+// MARK: Helpers
+
+private extension EditorTitleContentView {
+	
+	func resize() {
+		if AppDefaults.shared.disableEditorAnimations {
+			UIView.performWithoutAnimation {
+				invalidateIntrinsicContentSize()
+			}
+		} else {
+			invalidateIntrinsicContentSize()
+		}
+
 	}
 	
 }

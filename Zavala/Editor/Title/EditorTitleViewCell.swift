@@ -11,7 +11,6 @@ import VinOutlineKit
 @MainActor
 protocol EditorTitleViewCellDelegate: AnyObject {
 	var editorTitleUndoManager: UndoManager? { get }
-	func editorTitleLayoutEditor()
 	func editorTitleTextFieldDidBecomeActive()
 	func editorTitleDidUpdate(title: String)
 	func editorTitleMoveToTagInput()

@@ -1682,10 +1682,6 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 		return undoManager
 	}
 	
-	func editorTitleLayoutEditor() {
-		layoutEditor()
-	}
-	
 	func editorTitleTextFieldDidBecomeActive() {
 		updateUI()
 		collectionView.deselectAll()
