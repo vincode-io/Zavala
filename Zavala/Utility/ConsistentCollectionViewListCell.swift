@@ -26,6 +26,7 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 			}
 			contentConfig.secondaryTextProperties.color = .lightGray
 		} else {
+			contentConfig.textProperties.color = .label
 			contentConfig.secondaryTextProperties.color = .tertiaryLabel
 		}
 
