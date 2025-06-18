@@ -12,30 +12,30 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 
 	weak var delegate: EditorRowViewCellDelegate? = nil
 
-	var rowID: String
-	var rowTopic: NSAttributedString?
-	var rowNote: NSAttributedString?
-	var rowHasChildren: Bool
-	var rowIsExpanded: Bool
-	var rowOutlineNumbering: String?
-	var rowCurrentLevel: Int
-	var rowTrueLevel: Int
-	var rowIsComplete: Bool
-	var rowIsAnyParentComplete: Bool
-	var rowSearchResultCoordinates: [SearchResultCoordinates]
+	let rowID: String
+	let rowTopic: NSAttributedString?
+	let rowNote: NSAttributedString?
+	let rowHasChildren: Bool
+	let rowIsExpanded: Bool
+	let rowOutlineNumbering: String?
+	let rowCurrentLevel: Int
+	let rowTrueLevel: Int
+	let rowIsComplete: Bool
+	let rowIsAnyParentComplete: Bool
+	let rowSearchResultCoordinates: [SearchResultCoordinates]
 	
-	var isSearching: Bool
+	let isSearching: Bool
 	
-	var outlineNumberingStyle: Outline.NumberingStyle?
-	var outlineCheckSpellingWhileTyping: Bool
-	var outlineCorrectSpellingAutomatically: Bool
+	let outlineNumberingStyle: Outline.NumberingStyle?
+	let outlineCheckSpellingWhileTyping: Bool
+	let outlineCorrectSpellingAutomatically: Bool
 	
-	var indentationWidth: CGFloat
-	var isDisclosureVisible: Bool
-	var isNotesVisible: Bool
-	var isSelected: Bool
-	var rowIndentSize: DefaultsSize?
-	var rowSpacingSize: DefaultsSize?
+	let indentationWidth: CGFloat
+	let isDisclosureVisible: Bool
+	let isNotesVisible: Bool
+	let isSelected: Bool
+	let rowIndentSize: DefaultsSize?
+	let rowSpacingSize: DefaultsSize?
 	
 	init(rowID: String,
 		 rowTopic: NSAttributedString?,
