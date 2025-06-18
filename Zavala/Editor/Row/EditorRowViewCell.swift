@@ -71,7 +71,12 @@ class EditorRowViewCell: UICollectionViewListCell {
 		let isNotesVisible = !(row.outline?.isNotesFilterOn ?? false) && !row.isNoteEmpty
 		let isSelected = state.isSelected
 		let hasChildren = row.rowCount > 0
-				
+		
+		var searchResultCoordinates = [SearchResultCoordinates]()
+		for src in row.searchResultCoordinates.allObjects {
+			searchResultCoordinates.append(SearchResultCoordinates(isCurrentResult: src.isCurrentResult, row: src.row, isInNotes: src.isInNotes, range: src.range))
+		}
+		
 		var content = EditorRowContentConfiguration(rowID: row.id,
 													rowTopic: row.topic,
 													rowNote: row.note,
@@ -82,7 +87,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 													rowTrueLevel: row.trueLevel,
 													rowIsComplete: row.isComplete ?? false,
 													rowIsAnyParentComplete: row.isAnyParentComplete,
-													rowSearchResultCoordinates: row.searchResultCoordinates.allObjects,
+													rowSearchResultCoordinates: searchResultCoordinates,
 													isSearching: isSearching,
 													outlineNumberingStyle: row.outline?.numberingStyle,
 													outlineCheckSpellingWhileTyping: row.outline?.checkSpellingWhileTyping ?? true,
