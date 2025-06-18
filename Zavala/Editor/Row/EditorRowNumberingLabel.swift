@@ -17,7 +17,7 @@ class EditorRowNumberingLabel: UILabel {
 		let fontColor = if configuration.isSelected {
 			UIColor.white.withAlphaComponent(0.66)
 		} else {
-			OutlineFontCache.shared.numberingColor(level: configuration.rowTrueLevel)
+			configuration.numberingColor
 		}
 		
 		var labelAttributes = [NSAttributedString.Key : Any]()
@@ -44,7 +44,7 @@ class EditorRowNumberingLabel: UILabel {
 			labelAttributes[.strikethroughStyle] = 0
 		}
 		
-		labelAttributes[.font] = OutlineFontCache.shared.numberingFont(level: configuration.rowTrueLevel)
+		labelAttributes[.font] = configuration.numberingFont
 
 		attrString.setAttributes(labelAttributes, range: NSRange(location: 0, length: attrString.length))
 		

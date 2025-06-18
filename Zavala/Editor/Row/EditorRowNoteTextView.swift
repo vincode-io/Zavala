@@ -147,11 +147,11 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		let fontColor = if configuration.isSelected {
 			UIColor.white.withAlphaComponent(0.66)
 		} else {
-			OutlineFontCache.shared.noteColor(level: configuration.rowTrueLevel)
+			configuration.noteColor
 		}
 		
 		baseAttributes = [NSAttributedString.Key : Any]()
-		baseAttributes[.font] = OutlineFontCache.shared.noteFont(level: configuration.rowTrueLevel)
+		baseAttributes[.font] = configuration.noteFont
 		baseAttributes[.foregroundColor] = fontColor
 
 		typingAttributes = baseAttributes

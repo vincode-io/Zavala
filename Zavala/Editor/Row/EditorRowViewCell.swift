@@ -77,6 +77,13 @@ class EditorRowViewCell: UICollectionViewListCell {
 			searchResultCoordinates.append(SearchResultCoordinates(isCurrentResult: src.isCurrentResult, row: src.row, isInNotes: src.isInNotes, range: src.range))
 		}
 		
+		let numberingFont = OutlineFontCache.shared.numberingFont(level: row.trueLevel)
+		let numberingColor = OutlineFontCache.shared.numberingColor(level: row.trueLevel)
+		let topicFont = OutlineFontCache.shared.topicFont(level: row.trueLevel)
+		let topicColor = OutlineFontCache.shared.topicColor(level: row.trueLevel)
+		let noteFont = OutlineFontCache.shared.noteFont(level: row.trueLevel)
+		let noteColor = OutlineFontCache.shared.noteColor(level: row.trueLevel)
+
 		var content = EditorRowContentConfiguration(rowID: row.id,
 													rowTopic: row.topic,
 													rowNote: row.note,
@@ -84,7 +91,6 @@ class EditorRowViewCell: UICollectionViewListCell {
 													rowIsExpanded: row.isExpanded,
 													rowOutlineNumbering: row.outlineNumbering,
 													rowCurrentLevel: row.currentLevel,
-													rowTrueLevel: row.trueLevel,
 													rowIsComplete: row.isComplete ?? false,
 													rowIsAnyParentComplete: row.isAnyParentComplete,
 													rowSearchResultCoordinates: searchResultCoordinates,
@@ -97,8 +103,14 @@ class EditorRowViewCell: UICollectionViewListCell {
 													isNotesVisible: isNotesVisible,
 													isSelected: isSelected,
 													rowIndentSize: rowIndentSize,
-													rowSpacingSize: rowSpacingSize)
-		
+													rowSpacingSize: rowSpacingSize,
+													numberingFont: numberingFont,
+													numberingColor: numberingColor,
+													topicFont: topicFont,
+													topicColor: topicColor,
+													noteFont: noteFont,
+													noteColor: noteColor)
+
 		content = content.updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
