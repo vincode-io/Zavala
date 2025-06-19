@@ -42,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	public private(set) var accountManager: AccountManager!
 	
 	let showSettings = UIKeyCommand(title: .settingsEllipsisControlLabel,
+									image: .settings,
 									action: .showSettings,
 									input: ",",
 									modifierFlags: [.command])
@@ -490,12 +491,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		guard builder.system == UIMenuSystem.main else { return }
 
 		// Application Menu
-		let appMenu = UIMenu(title: "", options: .displayInline, children: [showSettings])
-		builder.insertSibling(appMenu, afterMenu: .about)
-
+		let settingsMenu = UIMenu(title: "", options: .displayInline, children: [showSettings])
+		builder.replace(menu: .preferences, with: settingsMenu)
+		
+		#if targetEnvironment(macCatalyst)
 		let aboutMenuTitle = builder.menu(for: .about)?.children.first?.title ?? String.aboutZavala
 		let showAboutCommand = UICommand(title: aboutMenuTitle, action: #selector(showAbout(_:)))
 		builder.replace(menu: .about, with: UIMenu(options: .displayInline, children: [showAboutCommand]))
+		#endif
 		
 		// File Menu
 		builder.remove(menu: .newItem)
