@@ -496,7 +496,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		
 		#if targetEnvironment(macCatalyst)
 		let aboutMenuTitle = builder.menu(for: .about)?.children.first?.title ?? String.aboutZavala
-		let showAboutCommand = UICommand(title: aboutMenuTitle, action: #selector(showAbout(_:)))
+		let showAboutCommand = UICommand(title: aboutMenuTitle, image: .getInfo, action: #selector(showAbout(_:)))
 		builder.replace(menu: .about, with: UIMenu(options: .displayInline, children: [showAboutCommand]))
 		#endif
 		
