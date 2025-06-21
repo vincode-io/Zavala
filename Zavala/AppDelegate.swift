@@ -48,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 									modifierFlags: [.command])
 		
 	let syncCommand = UIKeyCommand(title: .syncControlLabel,
+								   image: .sync,
 								   action: .sync,
 								   input: "r",
 								   modifierFlags: [.command])
@@ -69,36 +70,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												  modifierFlags: [.control, .command])
 	
 	let importOPMLCommand = UIKeyCommand(title: .importOPMLEllipsisControlLabel,
+										 image: .importDocument,
 										 action: .importOPML,
 										 input: "i",
 										 modifierFlags: [.shift, .command])
 	
 	let newWindowCommand = UIKeyCommand(title: .newMainWindowControlLabel,
+										image: .newWindow,
 										action: .newWindow,
 										input: "n",
 										modifierFlags: [.alternate, .command])
 	
 	let newOutlineCommand = UIKeyCommand(title: .newOutlineControlLabel,
+										 image: .newOutline,
 										 action: .createOutline,
 										 input: "n",
 										 modifierFlags: [.command])
 	
 	let deleteCommand = UIKeyCommand(title: .deleteControlLabel,
+									 image: .delete,
 									 action: .delete,
 									 input: "\u{8}",
 									 modifierFlags: [])
 	
 	let goBackwardOneCommand = UIKeyCommand(title: .backControlLabel,
+											image: .goBackward,
 											action: .goBackwardOne,
 											input: "[",
 											modifierFlags: [.command])
 	
 	let goForwardOneCommand = UIKeyCommand(title: .forwardControlLabel,
+										   image: .goForward,
 										   action: .goForwardOne,
 										   input: "]",
 										   modifierFlags: [.command])
 	
 	let addRowAboveCommand = UIKeyCommand(title: .addRowAboveControlLabel,
+										  image: .add,
 										  action: .addRowAbove,
 										  input: "\n",
 										  modifierFlags: [.shift])
@@ -119,81 +127,97 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 											   modifierFlags: [.command])
 	
 	let deleteCurrentRowsCommand = UIKeyCommand(title: .deleteRowsControlLabel,
+												image: .delete,
 												action: .deleteCurrentRows,
 												input: UIKeyCommand.inputDelete,
 												modifierFlags: [.shift, .command])
 	
 	let groupCurrentRowsCommand = UIKeyCommand(title: .groupRowsControlLabel,
+											   image: .groupRows,
 											   action: .groupCurrentRows,
 											   input: "g",
 											   modifierFlags: [.alternate, .command])
 	
 	let sortCurrentRowsCommand = UIKeyCommand(title: .sortRowsControlLabel,
+											  image: .sort,
 											  action: .sortCurrentRows,
 											  input: "s",
 											  modifierFlags: [.alternate, .command])
 	
 	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowsControlLabel,
+											image: .duplicate,
 											action: .duplicateCurrentRows,
 											input: "r",
 											modifierFlags: [.command, .control])
 	
 	let moveRowsLeftCommand = UIKeyCommand(title: .moveLeftControlLabel,
+										   image: .moveLeft,
 										   action: .moveCurrentRowsLeft,
 										   input: UIKeyCommand.inputLeftArrow,
 										   modifierFlags: [.control, .command])
 	
 	let moveRowsRightCommand = UIKeyCommand(title: .moveRightControlLabel,
+											image: .moveRight,
 											action: .moveCurrentRowsRight,
 											input: UIKeyCommand.inputRightArrow,
 											modifierFlags: [.control, .command])
 	
 	let moveRowsUpCommand = UIKeyCommand(title: .moveUpControlLabel,
+										 image: .moveUp,
 										 action: .moveCurrentRowsUp,
 										 input: UIKeyCommand.inputUpArrow,
 										 modifierFlags: [.control, .command])
 	
 	let moveRowsDownCommand = UIKeyCommand(title: .moveDownControlLabel,
+										   image: .moveDown,
 										   action: .moveCurrentRowsDown,
 										   input: UIKeyCommand.inputDownArrow,
 										   modifierFlags: [.control, .command])
 	
 	let toggleCompleteRowsCommand = UIKeyCommand(title: .completeControlLabel,
+												 image: .completeRow,
 												 action: .toggleCompleteRows,
 												 input: "\n",
 												 modifierFlags: [.command])
 	
 	let deleteCompletedRowsCommand = UIKeyCommand(title: .deleteCompletedRowsControlLabel,
+												  image: .delete,
 												  action: .deleteCompletedRows,
 												  input: "d",
 												  modifierFlags: [.command])
 	
 	let rowNotesCommand = UIKeyCommand(title: .addNoteControlLabel,
+									   image: .noteAdd,
 									   action: .toggleRowNotes,
 									   input: "-",
 									   modifierFlags: [.control])
 	
 	let deleteRowNotesCommand = UIKeyCommand(title: .deleteNoteControlLabel,
+											 image: .noteDelete,
 											 action: .deleteRowNotes,
 											 input: "-",
 											 modifierFlags: [.control, .shift])
 	
 	let toggleBoldCommand = UIKeyCommand(title: .boldControlLabel,
+										 image: .bold,
 										 action: .toggleBoldface,
 										 input: "b",
 										 modifierFlags: [.command])
 	
 	let toggleItalicsCommand = UIKeyCommand(title: .italicControlLabel,
+											image: .italic,
 											action: .toggleItalics,
 											input: "i",
 											modifierFlags: [.command])
 	
 	let insertImageCommand = UIKeyCommand(title: .insertImageEllipsisControlLabel,
+										  image: .insertImage,
 										  action: .insertImage,
 										  input: "i",
 										  modifierFlags: [.alternate, .command])
 	
 	let linkCommand = UIKeyCommand(title: .linkEllipsisControlLabel,
+								   image: .link,
 								   action: .editLink,
 								   input: "k",
 								   modifierFlags: [.command])
@@ -209,16 +233,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	let sortDescendingCommand = UICommand(title: .descendingControlLabel, action: .sortDescending)
 
 	let focusInCommand = UIKeyCommand(title: .focusInControlLabel,
+									  image: .focusActive,
 									  action: .focusIn,
 									  input: UIKeyCommand.inputRightArrow,
 									  modifierFlags: [.alternate, .command])
 	
 	let focusOutCommand = UIKeyCommand(title: .focusOutControlLabel,
+									   image: .focusInactive,
 									   action: .focusOut,
 									   input: UIKeyCommand.inputLeftArrow,
 									   modifierFlags: [.alternate, .command])
 
 	let toggleFilterOnCommand = UIKeyCommand(title: .turnFilterOnControlLabel,
+											 image: .filter,
 											 action: .toggleFilterOn,
 											 input: "h",
 											 modifierFlags: [.shift, .command])
@@ -228,6 +255,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	let toggleNotesFilterCommand = UICommand(title: .filterNotesControlLabel, action: .toggleNotesFilter)
 	
 	let expandAllInOutlineCommand = UIKeyCommand(title: .expandAllInOutlineControlLabel,
+												 image: .expandAll,
 												 action: .expandAllInOutline,
 												 input: "9",
 												 modifierFlags: [.control, .command])
@@ -243,6 +271,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 										modifierFlags: [.alternate, .command])
 	
 	let collapseAllCommand = UIKeyCommand(title: .collapseAllInRowControlLabel,
+										  image: .collapseAll,
 										  action: .collapseAll,
 										  input: "0",
 										  modifierFlags: [.alternate, .command])
@@ -263,11 +292,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												modifierFlags: [.control, .alternate, .command])
 	
 	let zoomInCommand = UIKeyCommand(title: .zoomInControlLabel,
+									 image: .zoomIn,
 									 action: .zoomIn,
 									 input: ">",
 									 modifierFlags: [.command])
 	
 	let zoomOutCommand = UIKeyCommand(title: .zoomOutControlLabel,
+									  image: .zoomOut,
 									  action: .zoomOut,
 									  input: "<",
 									  modifierFlags: [.command])
@@ -281,25 +312,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	let feedbackCommand = UICommand(title: .feedbackControlLabel, action: .feedback)
 
 	let showOpenQuicklyCommand = UIKeyCommand(title: .openQuicklyEllipsisControlLabel,
+											  image: .openQuickly,
 											  action: .showOpenQuickly,
 											  input: "o",
 											  modifierFlags: [.shift, .command])
 	
 	let printDocsCommand = UIKeyCommand(title: .printDocEllipsisControlLabel,
+										image: .printDoc,
 										action: .printDocs,
 										input: "p",
 										modifierFlags: [.alternate, .command])
 	
 	let printListsCommand = UIKeyCommand(title: .printListControlEllipsisLabel,
+										 image: .printList,
 										 action: .printLists,
 										 input: "p",
 										 modifierFlags: [.command])
 
-	let shareCommand = UICommand(title: .shareEllipsisControlLabel, action: .share)
+	let shareCommand = UICommand(title: .shareEllipsisControlLabel, image: .share, action: .share)
 
 	let manageSharingCommand = UICommand(title: .manageSharingEllipsisControlLabel, action: .manageSharing)
 	
 	let showGetInfoCommand = UIKeyCommand(title: .getInfoControlLabel,
+										  image: .getInfo,
 										  action: .showGetInfo,
 										  input: "i",
 										  modifierFlags: [.control, .command])
@@ -502,6 +537,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		
 		// File Menu
 		builder.remove(menu: .newItem)
+		builder.remove(menu: .open)
 		builder.remove(menu: .openRecent)
 		builder.remove(menu: .document)
 
@@ -514,7 +550,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand])
 		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
 
-		let exportMenu = UIMenu(title: .exportControlLabel, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
+		let exportMenu = UIMenu(title: .exportControlLabel, image: .export, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, shareCommand, manageSharingCommand, exportMenu])
 		builder.insertChild(importExportMenu, atEndOfMenu: .file)
 
@@ -571,7 +607,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 
 		let sortDocumentsField = UIMenu(title: "", options: .displayInline, children: [sortByTitleCommand, sortByCreatedCommand, sortByUpdatedCommand])
 		let sortDocumentsOrdered = UIMenu(title: "", options: .displayInline, children: [sortAscendingCommand, sortDescendingCommand])
-		let sortDocumentsMenu = UIMenu(title: .sortDocumentsControlLabel, children: [sortDocumentsField, sortDocumentsOrdered])
+		let sortDocumentsMenu = UIMenu(title: .sortDocumentsControlLabel, image: .sort, children: [sortDocumentsField, sortDocumentsOrdered])
 		builder.insertChild(sortDocumentsMenu, atStartOfMenu: .view)
 
 		// Outline Menu

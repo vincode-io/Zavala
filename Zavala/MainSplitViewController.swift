@@ -936,7 +936,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = .createEntity.symbolSizedForCatalyst()
+			item.image = .newOutline.symbolSizedForCatalyst()
 			item.label = .newOutlineControlLabel
 			item.toolTip = .newOutlineControlLabel
 			item.isBordered = true

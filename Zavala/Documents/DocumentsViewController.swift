@@ -104,7 +104,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		} else {
 			let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
 			moreMenuButton = navButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
-			addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: .createOutline)
+			addButton = navButtonGroup.addButton(label: .addControlLabel, image: .newOutline, selector: .createOutline)
 			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 			searchController.delegate = self

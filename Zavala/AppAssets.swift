@@ -36,7 +36,6 @@ extension UIImage {
 	static let completeRow = UIImage(systemName: "checkmark.square")!
 	static let copy = UIImage(systemName: "doc.on.doc")!
 	static let copyRowLink = UIImage(systemName: "link.circle")!
-	static let createEntity = UIImage(systemName: "square.and.pencil")!
 	static let cut = UIImage(systemName: "scissors")!
 
 	static let delete = UIImage(systemName: "trash")!
@@ -50,6 +49,7 @@ extension UIImage {
 
 	static let favoriteSelected = UIImage(systemName: "star.fill")!
 	static let favoriteUnselected = UIImage(systemName: "star")!
+	static let filter = UIImage(systemName: "line.3.horizontal.decrease")!
 	static let filterActive = UIImage(systemName: "line.horizontal.3.decrease.circle.fill")!
 	static let filterInactive = UIImage(systemName: "line.horizontal.3.decrease.circle")!
 	static let find = UIImage(systemName: "magnifyingglass")!
@@ -79,10 +79,14 @@ extension UIImage {
 	static let moveUp = UIImage(systemName: "arrow.up.to.line.compact")!
 
 	static let newline = UIImage(systemName: "return")!
+	static let newOutline = UIImage(systemName: "square.and.pencil")!
+	static let newWindow = UIImage(systemName: "plus.app")!
 	static let noteAdd = UIImage(systemName: "doc.text")!
 	static let noteDelete = UIImage(systemName: "doc.text.fill")!
 	static let noteFont = UIImage(systemName: "textformat.size.smaller")!
 
+	static let open = UIImage(systemName: "arrow.up.right.square")!
+	static let openQuickly = UIImage(systemName: "bolt")!
 	static let outline = UIImage(named: "Outline")!
 
 	static let paste = UIImage(systemName: "doc.on.clipboard")!
@@ -109,6 +113,8 @@ extension UIImage {
 	static let undo = UIImage(systemName: "arrow.uturn.backward")!
 	static let undoMenu = UIImage(systemName: "arrow.uturn.backward.circle.badge.ellipsis")!
 
+	static let zoomIn = UIImage(systemName: "plus.magnifyingglass")!
+	static let zoomOut = UIImage(systemName: "minus.magnifyingglass")!
 }
 
 extension String {
