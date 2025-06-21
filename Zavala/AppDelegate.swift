@@ -261,6 +261,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												 modifierFlags: [.control, .command])
 	
 	let collapseAllInOutlineCommand = UIKeyCommand(title: .collapseAllInOutlineControlLabel,
+												   image: .collapseAll,
 												   action: .collapseAllInOutline,
 												   input: "0",
 												   modifierFlags: [.control, .command])
@@ -271,7 +272,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 										modifierFlags: [.alternate, .command])
 	
 	let collapseAllCommand = UIKeyCommand(title: .collapseAllInRowControlLabel,
-										  image: .collapseAll,
 										  action: .collapseAll,
 										  input: "0",
 										  modifierFlags: [.alternate, .command])
