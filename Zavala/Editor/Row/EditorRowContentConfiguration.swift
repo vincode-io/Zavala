@@ -12,30 +12,36 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 
 	weak var delegate: EditorRowViewCellDelegate? = nil
 
-	var rowID: String
-	var rowTopic: NSAttributedString?
-	var rowNote: NSAttributedString?
-	var rowHasChildren: Bool
-	var rowIsExpanded: Bool
-	var rowOutlineNumbering: String?
-	var rowCurrentLevel: Int
-	var rowTrueLevel: Int
-	var rowIsComplete: Bool
-	var rowIsAnyParentComplete: Bool
-	var rowSearchResultCoordinates: [SearchResultCoordinates]
+	let rowID: String
+	let rowTopic: NSAttributedString?
+	let rowNote: NSAttributedString?
+	let rowHasChildren: Bool
+	let rowIsExpanded: Bool
+	let rowOutlineNumbering: String?
+	let rowCurrentLevel: Int
+	let rowIsComplete: Bool
+	let rowIsAnyParentComplete: Bool
+	let rowSearchResultCoordinates: [SearchResultCoordinates]
 	
-	var isSearching: Bool
+	let isSearching: Bool
 	
-	var outlineNumberingStyle: Outline.NumberingStyle?
-	var outlineCheckSpellingWhileTyping: Bool
-	var outlineCorrectSpellingAutomatically: Bool
+	let outlineNumberingStyle: Outline.NumberingStyle?
+	let outlineCheckSpellingWhileTyping: Bool
+	let outlineCorrectSpellingAutomatically: Bool
 	
-	var indentationWidth: CGFloat
-	var isDisclosureVisible: Bool
-	var isNotesVisible: Bool
-	var isSelected: Bool
-	var rowIndentSize: DefaultsSize?
-	var rowSpacingSize: DefaultsSize?
+	let indentationWidth: CGFloat
+	let isDisclosureVisible: Bool
+	let isNotesVisible: Bool
+	let isSelected: Bool
+	let rowIndentSize: DefaultsSize?
+	let rowSpacingSize: DefaultsSize?
+	
+	let numberingFont: UIFont
+	let numberingColor: UIColor
+	let topicFont: UIFont
+	let topicColor: UIColor
+	let noteFont: UIFont
+	let noteColor: UIColor
 	
 	init(rowID: String,
 		 rowTopic: NSAttributedString?,
@@ -44,7 +50,6 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 		 rowIsExpanded: Bool,
 		 rowOutlineNumbering: String?,
 		 rowCurrentLevel: Int,
-		 rowTrueLevel: Int,
 		 rowIsComplete: Bool,
 		 rowIsAnyParentComplete: Bool,
 		 rowSearchResultCoordinates: [SearchResultCoordinates],
@@ -57,7 +62,13 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 		 isNotesVisible: Bool,
 		 isSelected: Bool,
 		 rowIndentSize: DefaultsSize?,
-		 rowSpacingSize: DefaultsSize?) {
+		 rowSpacingSize: DefaultsSize?,
+		 numberingFont: UIFont,
+		 numberingColor: UIColor,
+		 topicFont: UIFont,
+		 topicColor: UIColor,
+		 noteFont: UIFont,
+		 noteColor: UIColor) {
 		self.rowID = rowID
 		self.rowTopic = rowTopic
 		self.rowNote = rowNote
@@ -65,7 +76,6 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 		self.rowIsExpanded = rowIsExpanded
 		self.rowOutlineNumbering = rowOutlineNumbering
 		self.rowCurrentLevel = rowCurrentLevel
-		self.rowTrueLevel = rowTrueLevel
 		self.rowIsComplete = rowIsComplete
 		self.rowIsAnyParentComplete = rowIsAnyParentComplete
 		self.rowSearchResultCoordinates = rowSearchResultCoordinates
@@ -79,6 +89,12 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 		self.isDisclosureVisible = isDisclosureVisible
 		self.rowIndentSize = rowIndentSize
 		self.rowSpacingSize = rowSpacingSize
+		self.numberingFont = numberingFont
+		self.numberingColor = numberingColor
+		self.topicFont = topicFont
+		self.topicColor = topicColor
+		self.noteFont = noteFont
+		self.noteColor = noteColor
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
@@ -107,13 +123,18 @@ struct EditorRowContentConfiguration: UIContentConfiguration, Equatable {
 			&& lhs.rowIsExpanded == rhs.rowIsExpanded
 			&& lhs.rowOutlineNumbering == rhs.rowOutlineNumbering
 			&& lhs.rowCurrentLevel == rhs.rowCurrentLevel
-			&& lhs.rowTrueLevel == rhs.rowTrueLevel
 			&& lhs.rowIsComplete == rhs.rowIsComplete
 			&& lhs.rowIsAnyParentComplete == rhs.rowIsAnyParentComplete
 			&& lhs.rowSearchResultCoordinates == rhs.rowSearchResultCoordinates
 			&& lhs.isSearching == rhs.isSearching
 			&& lhs.outlineCheckSpellingWhileTyping == rhs.outlineCheckSpellingWhileTyping
 			&& lhs.outlineCorrectSpellingAutomatically == rhs.outlineCorrectSpellingAutomatically
+			&& lhs.numberingFont == rhs.numberingFont
+			&& lhs.numberingColor == rhs.numberingColor
+			&& lhs.topicFont == rhs.topicFont
+			&& lhs.topicColor == rhs.topicColor
+			&& lhs.noteFont == rhs.noteFont
+			&& lhs.noteColor == rhs.noteColor
 			&& lhs.isLayoutEqual(rhs)
 	}
 

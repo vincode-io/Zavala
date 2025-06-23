@@ -120,6 +120,64 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		delegate = self
     }
 	
+	override func validate(_ command: UICommand) {
+		switch command.action {
+		case .sortByTitle:
+			if selectedDocumentContainers?.count == 1 {
+				if documentsViewController?.currentSortOrder.field == .title {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		case .sortByCreated:
+			if selectedDocumentContainers?.count == 1 {
+				if documentsViewController?.currentSortOrder.field == .created {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		case .sortByUpdated:
+			if selectedDocumentContainers?.count == 1 {
+				if documentsViewController?.currentSortOrder.field == .updated {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		case .sortAscending:
+			if selectedDocumentContainers?.count == 1 {
+				if documentsViewController?.currentSortOrder.ordered == .ascending {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		case .sortDescending:
+			if selectedDocumentContainers?.count == 1 {
+				if documentsViewController?.currentSortOrder.ordered == .descending {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		default:
+			break
+		}
+	}
+	
+	
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {

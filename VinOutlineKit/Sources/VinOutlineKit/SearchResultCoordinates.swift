@@ -14,7 +14,7 @@ public class SearchResultCoordinates: Equatable, Hashable {
 	public var isInNotes: Bool
 	public var range: NSRange
 		
-	init(isCurrentResult: Bool, row: Row, isInNotes: Bool, range: NSRange) {
+	public init(isCurrentResult: Bool, row: Row, isInNotes: Bool, range: NSRange) {
 		self.isCurrentResult = isCurrentResult
 		self.row = row
 		self.isInNotes = isInNotes
@@ -29,7 +29,7 @@ public class SearchResultCoordinates: Equatable, Hashable {
 	}
 
 	public static func == (lhs: SearchResultCoordinates, rhs: SearchResultCoordinates) -> Bool {
-		return lhs.isCurrentResult == rhs.isCurrentResult && lhs.row == rhs.row && lhs.isInNotes && rhs.isInNotes && lhs.range == rhs.range
+		return lhs.isCurrentResult == rhs.isCurrentResult && lhs.row == rhs.row && lhs.isInNotes == rhs.isInNotes && lhs.range == rhs.range
 	}
 	
 }

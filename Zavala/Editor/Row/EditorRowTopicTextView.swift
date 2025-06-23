@@ -209,7 +209,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		let fontColor = if configuration.isSelected {
 			UIColor.white
 		} else {
-			OutlineFontCache.shared.topicColor(level: configuration.rowTrueLevel)
+			configuration.topicColor
 		}
 		
 		baseAttributes = [NSAttributedString.Key : Any]()
@@ -236,7 +236,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 			baseAttributes[.strikethroughStyle] = 0
 		}
 		
-		baseAttributes[.font] = OutlineFontCache.shared.topicFont(level: configuration.rowTrueLevel)
+		baseAttributes[.font] = configuration.topicFont
 		
 		typingAttributes = baseAttributes
 		
