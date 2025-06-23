@@ -192,63 +192,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 	
-	override func validate(_ command: UICommand) {
-		switch command.action {
-		case .sortByTitle:
-			if documentContainers?.count == 1 {
-				if currentSortOrder.field == .title {
-					command.state = .on
-				} else {
-					command.state = .off
-				}
-			} else {
-				command.attributes = [.disabled]
-			}
-		case .sortByCreated:
-			if documentContainers?.count == 1 {
-				if currentSortOrder.field == .created {
-					command.state = .on
-				} else {
-					command.state = .off
-				}
-			} else {
-				command.attributes = [.disabled]
-			}
-		case .sortByUpdated:
-			if documentContainers?.count == 1 {
-				if currentSortOrder.field == .updated {
-					command.state = .on
-				} else {
-					command.state = .off
-				}
-			} else {
-				command.attributes = [.disabled]
-			}
-		case .sortAscending:
-			if documentContainers?.count == 1 {
-				if currentSortOrder.ordered == .ascending {
-					command.state = .on
-				} else {
-					command.state = .off
-				}
-			} else {
-				command.attributes = [.disabled]
-			}
-		case .sortDescending:
-			if documentContainers?.count == 1 {
-				if currentSortOrder.ordered == .descending {
-					command.state = .on
-				} else {
-					command.state = .off
-				}
-			} else {
-				command.attributes = [.disabled]
-			}
-		default:
-			break
-		}
-	}
-	
 	// MARK: API
 	
 	func setDocumentContainers(_ documentContainers: [DocumentContainer], isNavigationBranch: Bool, reselectDocument: Bool = false) async {
