@@ -86,7 +86,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 	private static let searchBarHeight: CGFloat = 44
 	
-	@IBOutlet weak var collectionView: EditorCollectionView!
+	var collectionView: EditorCollectionView!
 	
 	override var keyCommands: [UIKeyCommand]? {
 		var keyCommands = [UIKeyCommand]()
@@ -329,7 +329,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
+		collectionView = EditorCollectionView(frame: .zero, collectionViewLayout: createLayout())
 		collectionView.translatesAutoresizingMaskIntoConstraints = false
+
+		view.addSubview(collectionView)
+		
+		NSLayoutConstraint.activate([
+			collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+			collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+			collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+		])
 		
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
@@ -340,7 +350,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			collectionView.refreshControl!.tintColor = .clear
 		}
 
-		collectionView.collectionViewLayout = createLayout()
 		collectionView.delegate = self
 		collectionView.dataSource = self
 		collectionView.dragDelegate = self

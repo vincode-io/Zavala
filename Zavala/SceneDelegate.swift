@@ -20,9 +20,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		self.scene = scene
 		
-		guard let mainSplitViewController = window?.rootViewController as? MainSplitViewController else {
-			return
-		}
+		guard let windowScene = scene as? UIWindowScene else { return }
+		window = UIWindow(windowScene: windowScene)
+		
+		mainSplitViewController = MainSplitViewController(style: .tripleColumn)
+		mainSplitViewController.setViewController(CollectionsViewController(collectionViewLayout: .init()), for: .primary)
+		mainSplitViewController.setViewController(DocumentsViewController(collectionViewLayout: .init()), for: .supplementary)
+		mainSplitViewController.setViewController(EditorViewController(), for: .secondary)
+		window!.rootViewController = mainSplitViewController
+		
+		window!.makeKeyAndVisible()
 		
 		updateUserInterfaceStyle()
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
@@ -31,13 +38,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		AppDefaults.shared.lastMainWindowWasClosed = false
 		
-		self.mainSplitViewController = mainSplitViewController
-		self.mainSplitViewController.sceneDelegate = self
-		self.mainSplitViewController.showsSecondaryOnlyButton = true
+		mainSplitViewController.sceneDelegate = self
+		mainSplitViewController.showsSecondaryOnlyButton = true
 
 		#if targetEnvironment(macCatalyst)
-		guard let windowScene = scene as? UIWindowScene else { return }
-		
 		let toolbar = NSToolbar(identifier: "main")
 		toolbar.delegate = mainSplitViewController
 		toolbar.displayMode = .iconOnly

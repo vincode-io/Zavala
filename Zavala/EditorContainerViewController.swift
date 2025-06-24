@@ -19,9 +19,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		return editorViewController?.selectedDocuments ?? []
 	}
 	
-	var editorViewController: EditorViewController? {
-		return children.first as? EditorViewController
-	}
+	var editorViewController: EditorViewController?
 
 	weak var sceneDelegate: OutlineEditorSceneDelegate?
 	
@@ -33,7 +31,13 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		editorViewController?.delegate = self
+		
+		editorViewController = EditorViewController()
+		editorViewController!.delegate = self
+
+		addChild(editorViewController!)
+		view.addSubview(editorViewController!.view)
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
     }
     

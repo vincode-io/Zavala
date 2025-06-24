@@ -19,22 +19,22 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		self.scene = scene
 		self.session = session
+
+		guard let windowScene = scene as? UIWindowScene else { return }
 		
-		guard let editorContainerViewController = window?.rootViewController as? EditorContainerViewController else {
-			return
-		}
+		window = UIWindow(windowScene: windowScene)
+		editorContainerViewController = EditorContainerViewController()
+		window!.rootViewController = editorContainerViewController
+		window!.makeKeyAndVisible()
 
 		updateUserInterfaceStyle()
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncWillBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncDidComplete, object: nil)
 
-		self.editorContainerViewController = editorContainerViewController
-		self.editorContainerViewController.sceneDelegate = self
+		editorContainerViewController.sceneDelegate = self
 		
 		#if targetEnvironment(macCatalyst)
-		guard let windowScene = scene as? UIWindowScene else { return }
-		
 		let toolbar = NSToolbar(identifier: "editor")
 		toolbar.delegate = editorContainerViewController
 		toolbar.displayMode = .iconOnly
@@ -48,8 +48,6 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		#endif
 
-		let _ = editorContainerViewController.view
-		
 		if let shareMetadata = connectionOptions.cloudKitShareMetadata {
 			acceptShare(shareMetadata)
 			return
