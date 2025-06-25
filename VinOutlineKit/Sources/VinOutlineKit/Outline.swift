@@ -3497,6 +3497,7 @@ private extension Outline {
 				return pageTitles
 			}
 			
+			var linkWasChanged = false
 			let mutableText = NSMutableAttributedString(attributedString: newText)
 			
 			mutableText.enumerateAttribute(.link, in: NSRange(location: 0, length: mutableText.length)) { (value, range, match) in
@@ -3509,8 +3510,10 @@ private extension Outline {
 				mutableText.removeAttribute(.link, range: range)
 				mutableText.replaceCharacters(in: range, with: pageTitle)
 				mutableText.addAttribute(.link, value: url, range: NSRange(location: range.location, length: pageTitle.count))
+				linkWasChanged = true
 			}
 			
+			guard linkWasChanged else { return }
 			guard let row = self.findRow(id: row.id) else { return }
 			
 			if !isInNotes {
