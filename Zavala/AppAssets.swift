@@ -62,7 +62,7 @@ extension UIImage {
 	static let goForward = UIImage(systemName: "chevron.right")!
 	static let groupRows = UIImage(systemName: "increase.indent")!
 
-	static let importDocument = UIImage(systemName: "square.and.arrow.down")!
+	static let importDocument = UIImage(systemName: "arrow.down.document")!
 	static let italic = UIImage(systemName: "italic")!
 
 	static let hideKeyboard = UIImage(systemName: "keyboard.chevron.compact.down")!
