@@ -46,11 +46,11 @@ public class RSAppMovementMonitor: NSObject {
 		self.appTrackingURL = (Bundle.main.bundleURL as NSURL).fileReferenceURL() as NSURL?
 		self.originalAppURL = appTrackingURL?.absoluteURL
 
-		let appName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String ?? NSLocalizedString("label.text.app-placeholder", comment: "'This app': Backup name if the app name cannot be deduced from the bundle")
-		let informativeTextTemplate = NSLocalizedString("label.text.%@-moved-or-renamed", comment: "%@ was moved or renamed while open.")
+		let appName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String ?? NSLocalizedString("label.text.app-placeholder", bundle: .ext, comment: "'This app': Backup name if the app name cannot be deduced from the bundle")
+		let informativeTextTemplate = NSLocalizedString("label.text.%@-moved-or-renamed", bundle: .ext, comment: "%@ was moved or renamed while open.")
 		self.alertMessageText = String(format: informativeTextTemplate, arguments: [appName])
-		self.alertInformativeText = NSLocalizedString("label.text.moving-application-informative", comment: "Infomative text: Moving an open application can cause unexpected behavior. Manually relaunch the application to continue.")
-		self.alertRelaunchButtonText = NSLocalizedString("label.text.terminate", comment: "Terminate")
+		self.alertInformativeText = NSLocalizedString("label.text.moving-application-informative", bundle: .ext, comment: "Infomative text: Moving an open application can cause unexpected behavior. Manually relaunch the application to continue.")
+		self.alertRelaunchButtonText = NSLocalizedString("label.text.terminate", bundle: .ext, comment: "Terminate")
 
 		super.init()
 

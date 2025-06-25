@@ -49,7 +49,7 @@ import UniformTypeIdentifiers
 
 	func configureOpenQuickly(_ window: NSObject?) {
 		guard let nsWindow = window as? NSWindow else { return }
-		nsWindow.title = String(localized: "label.text.open-quickly", comment: "Window Title: Open Quickly")
+		nsWindow.title = String(localized: "label.text.open-quickly", bundle: .ext, comment: "Window Title: Open Quickly")
 		nsWindow.titlebarAppearsTransparent = true
 		nsWindow.standardWindowButton(.zoomButton)?.isHidden = true
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
@@ -98,5 +98,13 @@ import UniformTypeIdentifiers
 	func activateIgnoringOtherApps() {
 		NSApplication.shared.activate(ignoringOtherApps: true)
 	}
+	
+}
+
+extension Bundle {
+	
+	static let ext: Bundle = {
+		return Bundle(for: AppKitWrapper.self)
+	}()
 	
 }

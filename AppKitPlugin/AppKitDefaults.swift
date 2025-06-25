@@ -15,11 +15,11 @@ enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
 	var description: String {
 		switch self {
 		case .automatic:
-			return String(localized: "button.text.automatic-color-palette", comment: "Label: Automatic")
+			return String(localized: "button.text.automatic-color-palette", bundle: .ext, comment: "Label: Automatic")
 		case .light:
-			return String(localized: "button.text.light-color-palette", comment: "Label: Light")
+			return String(localized: "button.text.light-color-palette", bundle: .ext, comment: "Label: Light")
 		case .dark:
-			return String(localized: "button.text.dark-color-palette", comment: "Label: Dark")
+			return String(localized: "button.text.dark-color-palette", bundle: .ext, comment: "Label: Dark")
 		}
 	}
 }
