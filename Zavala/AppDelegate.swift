@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 import OSLog
 import Intents
 import VinOutlineKit
@@ -198,17 +199,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 											 input: "-",
 											 modifierFlags: [.control, .shift])
 	
-	let toggleBoldCommand = UIKeyCommand(title: .boldControlLabel,
-										 image: .bold,
-										 action: .toggleBoldface,
-										 input: "b",
-										 modifierFlags: [.command])
+	let toggleBoldCommand: UIKeyCommand = {
+		let boldFont = UIFont.boldSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize)
+		let attributedTitle = NSAttributedString(string: .boldControlLabel, attributes: [.font: boldFont])
+		let keyCommand = UIKeyCommand(title: .boldControlLabel, action: .toggleBoldface, input: "b", modifierFlags: [.command])
+		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
+		return keyCommand
+	}()
 	
-	let toggleItalicsCommand = UIKeyCommand(title: .italicControlLabel,
-											image: .italic,
-											action: .toggleItalics,
-											input: "i",
-											modifierFlags: [.command])
+	let toggleItalicsCommand: UIKeyCommand = {
+		let italicFont = UIFont.italicSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize)
+		let attributedTitle = NSAttributedString(string: .italicControlLabel, attributes: [.font: italicFont])
+		let keyCommand = UIKeyCommand(title: .italicControlLabel, action: .toggleItalics, input: "i", modifierFlags: [.command])
+		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
+		return keyCommand
+	}()
 	
 	let insertImageCommand = UIKeyCommand(title: .insertImageEllipsisControlLabel,
 										  image: .insertImage,
@@ -792,3 +797,4 @@ private extension AppDelegate {
 	}
 	
 }
+
