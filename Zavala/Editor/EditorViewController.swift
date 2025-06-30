@@ -1919,22 +1919,24 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 		}
 		
 		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
-			guard let self else { return }
-			
-			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = UIImage.scaleImage(data, maxPixelSize: 1800) {
-				let scaledImage = UIImage(cgImage: cgImage)
+			guard let self, let image = object as? UIImage else { return }
+
+			Task(priority: .medium) {
+				guard let rotatedImage = image.rotateImage(),
+					  let data = rotatedImage.pngData(),
+					  let cgImage = UIImage.scaleImage(data, maxPixelSize: 1800) else { return }
 				
-				Task { @MainActor in
+				let scaledImage = UIImage(cgImage: cgImage)
+
+				await MainActor.run {
 					self.restoreCursorPosition(cursorCoordinates)
-					
-					guard let row = outline?.findRow(id: cursorCoordinates.rowID),
-						  let shadowTableIndex = row.shadowTableIndex else {
-						return
-					}
-					
+
+					guard let row = self.outline?.findRow(id: cursorCoordinates.rowID),
+						  let shadowTableIndex = row.shadowTableIndex else { return }
+
 					let indexPath = IndexPath(row: shadowTableIndex, section: self.adjustedRowsSection)
-					guard let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return	}
-					
+					guard let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return }
+
 					if cursorCoordinates.isInNotes, let textView = rowCell.noteTextView {
 						textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
 					} else if let textView = rowCell.topicTextView {
@@ -2009,7 +2011,6 @@ extension EditorViewController: UIFindInteractionDelegate {
 		outline?.endSearching()
 	}
 }
-
 // MARK: EditorFindSessionDelegate
 
 extension EditorViewController: EditorFindSessionDelegate {
@@ -2084,7 +2085,6 @@ extension EditorViewController: UIViewControllerTransitioningDelegate {
 		return transition
 	}
 }
-
 // MARK: ImageTransitionDelegate
 
 extension EditorViewController: ImageTransitionDelegate {
