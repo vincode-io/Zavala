@@ -2609,6 +2609,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			} else {
 				rowMove.toParent.insertRow(rowMove.row, at: rowMove.toChildIndex)
 			}
+			
+			rowMove.row.parent = rowMove.toParent
 
 			if let parentRow = rowMove.toParent as? Row {
 				autoCompleteUncomplete(row: parentRow)

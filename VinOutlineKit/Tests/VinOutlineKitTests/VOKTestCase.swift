@@ -38,6 +38,7 @@ class VOKTestCase: ErrorHandler, OutlineCommandDelegate {
 			fatalError()
 		}
 		outline.load()
+		outline.prepareForViewing()
 		return outline
 	}
 	
