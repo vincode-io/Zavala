@@ -445,8 +445,8 @@ extension MainSplitViewController: CollectionsDelegate {
 											  animated: Bool) async {
 		
 		// The window might not be quite available at launch, so put a slight delay in to help it get there
-		Task { @MainActor in
-			self.view.window?.windowScene?.title = documentContainers.title
+		Task {
+			view.window?.windowScene?.title = documentContainers.title
 		}
 		
 		if isNavigationBranch, let lastPin {
@@ -493,10 +493,13 @@ extension MainSplitViewController: DocumentsDelegate {
 					   documents: [Document],
 					   isNavigationBranch: Bool,
 					   animated: Bool) {
-		
-		// Don't overlay the Document Container title if we are just switching Document Containers
-		if !documents.isEmpty {
-			view.window?.windowScene?.title = documents.title
+
+		// Put in a delay because the window might not yet be available
+		Task {
+			// Don't overlay the Document Container title if we are just switching Document Containers
+			if !documents.isEmpty {
+				view.window?.windowScene?.title = documents.title
+			}
 		}
 		
 		guard documents.count == 1, let document = documents.first else {

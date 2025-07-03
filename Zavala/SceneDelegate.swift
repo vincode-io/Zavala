@@ -67,6 +67,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 
+		if let shortcutItem = connectionOptions.shortcutItem {
+			handleShortcut(shortcutItem)
+			return
+		}
+		
 		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
 			Task {
 				await mainSplitViewController.handle(userActivity, isNavigationBranch: true)
@@ -129,6 +134,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		#endif
 	}
 	
+	func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+		handleShortcut(shortcutItem)
+		completionHandler(true)
+	}
+	
 	func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith shareMetadata: CKShare.Metadata) {
 		acceptShare(shareMetadata)
 	}
@@ -144,7 +154,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
 }
 
+// MARK: Helpers
+
 private extension SceneDelegate {
+	
+	func handleShortcut(_ shortcutItem: UIApplicationShortcutItem) {
+		let lastPeriodIndex = shortcutItem.type.lastIndex(of: ".")!
+		let startIndex = shortcutItem.type.index(after: lastPeriodIndex)
+		let historyItemIndex = shortcutItem.type[startIndex..<shortcutItem.type.endIndex]
+		appDelegate.openHistoryItem(index: Int(historyItemIndex)!)
+	}
 	
 	@objc nonisolated func userDefaultsDidChange() {
 		Task { @MainActor in

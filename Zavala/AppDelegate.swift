@@ -430,6 +430,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		}
 	}
 	
+	// MARK: API
+	
+	func openHistoryItem(index: Int) {
+		loadHistoryIfNecessary()
+		let pin = history[index]
+		
+		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
+			Task {
+				await mainSplitViewController.handlePin(pin)
+			}
+		} else {
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [Pin.UserInfoKeys.pin: pin.userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
+		
+	}
+	
 	// MARK: UISceneSession Lifecycle
 
 	func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -698,12 +716,11 @@ private extension AppDelegate {
 		Task {
 			await accountManager.sync()
 		}
-		
-		if let userInfos = AppDefaults.shared.documentHistory {
-			history = userInfos.compactMap { Pin(accountManager: accountManager, userInfo: $0) }
-		}
+
+		loadHistoryIfNecessary()
 		cleanUpHistory()
 		UIMenuSystem.main.setNeedsRebuild()
+		updateApplicationShortcutItems()
 	}
 	
 	@objc private func didEnterBackground() {
@@ -750,6 +767,7 @@ private extension AppDelegate {
 		history = Array(history.prefix(15))
 		
 		UIMenuSystem.main.setNeedsRebuild()
+		updateApplicationShortcutItems()
 	}
 
 	@objc func accountDocumentsDidChange() {
@@ -766,24 +784,10 @@ private extension AppDelegate {
 	
 	@objc func documentTitleDidChange() {
 		UIMenuSystem.main.setNeedsRebuild()
+		updateApplicationShortcutItems()
 	}
 
-	func openHistoryItem(index: Int) {
-		let pin = history[index]
-		
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			Task {
-				await mainSplitViewController.handlePin(pin)
-			}
-		} else {
-			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-			activity.userInfo = [Pin.UserInfoKeys.pin: pin.userInfo]
-			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-		}
-		
-	}
-
-	private func cleanUpHistory() {
+	func cleanUpHistory() {
 		let allDocumentIDs = accountManager.activeDocuments.map { $0.id }
 		
 		for pin in history {
@@ -791,10 +795,31 @@ private extension AppDelegate {
 				if !allDocumentIDs.contains(documentID) {
 					history.removeFirst(object: pin)
 					UIMenuSystem.main.setNeedsRebuild()
+					updateApplicationShortcutItems()
 				}
 			}
 		}
 	}
 	
+	func loadHistoryIfNecessary() {
+		guard history.isEmpty else { return }
+		
+		if let userInfos = AppDefaults.shared.documentHistory {
+			history = userInfos.compactMap { Pin(accountManager: accountManager, userInfo: $0) }
+		}
+	}
+	
+	func updateApplicationShortcutItems() {
+		var shortcutItems = [UIApplicationShortcutItem]()
+		
+		for (index, pin) in history.prefix(4).enumerated() {
+			let title = pin.document?.title ?? .noTitleLabel
+			let icon = UIApplicationShortcutIcon(templateImageName: "Outline")
+			let shortcutItem = UIApplicationShortcutItem(type: "io.vincode.Zavala.open.\(index)", localizedTitle: title, localizedSubtitle: nil, icon: icon, userInfo: nil)
+			shortcutItems.append(shortcutItem)
+		}
+
+		UIApplication.shared.shortcutItems = shortcutItems.reversed()
+	}
 }
 
