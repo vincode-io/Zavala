@@ -37,8 +37,11 @@ class VOKTestCase: ErrorHandler, OutlineCommandDelegate {
 			  let outline = try await accountManager.localAccount?.importOPML(opmlLocation, tags: nil).outline else {
 			fatalError()
 		}
+		
 		outline.load()
 		outline.prepareForViewing()
+		outline.incrementBeingViewedCount()
+		
 		return outline
 	}
 	

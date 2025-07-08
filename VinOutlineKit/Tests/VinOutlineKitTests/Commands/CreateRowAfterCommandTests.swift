@@ -5,6 +5,7 @@ import Testing
 final class CreateRowAfterCommandTests: VOKTestCase {
 	
     @Test("CreateRowAfterCommand creates row after and is undoable")
+	
     func createAfterAndUndo() async throws {
         let accountManager = buildAccountManager()
         let undoManager = UndoManager()
