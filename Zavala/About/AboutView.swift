@@ -28,7 +28,7 @@ struct AboutView: View {
 			VStack(alignment: .center, spacing: 30) {
 				Spacer()
 				VStack {
-					Image(uiImage: UIImage.appIconImage!)
+					Image(uiImage: .aboutIcon)
 						.resizable()
 						.frame(width: 75, height: 75)
 						.clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))

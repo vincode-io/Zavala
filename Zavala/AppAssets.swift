@@ -26,6 +26,7 @@ extension UIColor {
 
 extension UIImage {
 	
+	static let aboutIcon = UIImage(named: "AboutIcon")!
 	static let add = UIImage(systemName: "plus")!
 	
 	static let bold = UIImage(systemName: "bold")!
