@@ -29,6 +29,11 @@ final class CompleteCommandTests: VOKTestCase {
 		
 		#expect(outline.rows.first!.isComplete! == false)
 		#expect(outline.rows.first!.topic!.string == "Test 1")
+		
+		undoManager.redo()
+		#expect(outline.rows.first!.isComplete!)
+		#expect(outline.rows.first!.topic!.string == "Test 1 - Changed")
 	}
 
 }
+

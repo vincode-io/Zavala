@@ -19,11 +19,18 @@ final class CollapseAllCommandTests: VOKTestCase {
         let outline = try await loadOutline(accountManager: accountManager)
         let command = CollapseAllCommand(actionName: "CollapseAll", undoManager: undoManager, delegate: self, outline: outline, containers: [outline])
         let _ = outline.expandAll(containers: [outline])
+		
         command.execute()
 		#expect(outline.rows.allSatisfy { $0.rowCount == 0 || !$0.isExpanded })
+		
         undoManager.undo()
         #expect(outline.rows.allSatisfy { $0.rowCount == 0 || $0.isExpanded })
+		
+        undoManager.redo()
+        #expect(outline.rows.allSatisfy { $0.rowCount == 0 || !$0.isExpanded })
+		
         deleteAccountManager(accountManager)
     }
 	
 }
+
