@@ -36,6 +36,7 @@ struct SettingsAccountsView: View {
 				}
 			}
 		}
+		.controlSize(.small)
 		.alert(String.removeICloudAccountTitle, isPresented: $cloudKitAlertIsPresenting) {
 			Button(String.cancelControlLabel, role: .cancel) {
 				enableCloudKit = true

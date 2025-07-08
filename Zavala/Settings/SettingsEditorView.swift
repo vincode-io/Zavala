@@ -98,6 +98,7 @@ struct SettingsEditorView: View {
 				Text(String.disableAnimationsControlLabel)
 			}
 			.toggleStyle(.switch)
+			.controlSize(.small)
 			.onChange(of: disableEditorAnimations) { old, new in
 				AppDefaults.shared.disableEditorAnimations = new
 			}

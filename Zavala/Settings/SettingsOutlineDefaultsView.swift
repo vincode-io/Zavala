@@ -41,6 +41,7 @@ struct SettingsOutlineDefaultsView: View {
 				Text(String.checkSpellingWhileTypingControlLabel)
 			}
 			.toggleStyle(.switch)
+			.controlSize(.small)
 			.onChange(of: checkSpellingWhileTyping) { old, new in
 				AppDefaults.shared.checkSpellingWhileTyping = new
 			}
@@ -49,6 +50,7 @@ struct SettingsOutlineDefaultsView: View {
 				Text(String.correctSpellingAutomaticallyControlLabel)
 			}
 			.toggleStyle(.switch)
+			.controlSize(.small)
 			.onChange(of: correctSpellingAutomatically) { old, new in
 				AppDefaults.shared.correctSpellingAutomatically = new
 			}
@@ -58,6 +60,7 @@ struct SettingsOutlineDefaultsView: View {
 				Text(String.automaticallyCreateLinksControlLabel)
 			}
 			.toggleStyle(.switch)
+			.controlSize(.small)
 			.onChange(of: automaticallyCreateLinks) { old, new in
 				AppDefaults.shared.automaticallyCreateLinks = new
 			}
@@ -66,6 +69,7 @@ struct SettingsOutlineDefaultsView: View {
 				Text(String.automaticallyChangeLinkTitlesControlLabel)
 			}
 			.toggleStyle(.switch)
+			.controlSize(.small)
 			.onChange(of: automaticallyChangeLinkTitles) { old, new in
 				AppDefaults.shared.automaticallyChangeLinkTitles = new
 			}

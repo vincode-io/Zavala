@@ -80,22 +80,26 @@ struct GetInfoView: View {
 					Text(String.checkSpellingWhileTypingControlLabel)
 				}
 				.toggleStyle(.switch)
+				.controlSize(.small)
 
 				Toggle(isOn: $getInfoViewModel.correctSpellingAutomatically) {
 					Text(String.correctSpellingAutomaticallyControlLabel)
 				}
 				.toggleStyle(.switch)
+				.controlSize(.small)
 				.disabled(getInfoViewModel.checkSpellingWhileTyping == false)
 
 				Toggle(isOn: $getInfoViewModel.automaticallyCreateLinks) {
 					Text(String.automaticallyCreateLinksControlLabel)
 				}
 				.toggleStyle(.switch)
+				.controlSize(.small)
 
 				Toggle(isOn: $getInfoViewModel.automaticallyChangeLinkTitles) {
 					Text(String.automaticallyChangeLinkTitlesControlLabel)
 				}
 				.toggleStyle(.switch)
+				.controlSize(.small)
 			}
 			Section(String.ownerControlLabel) {
 				TextField(text: $getInfoViewModel.ownerName) {

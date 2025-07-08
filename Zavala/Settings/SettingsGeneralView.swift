@@ -38,6 +38,7 @@ struct SettingsGeneralView: View {
 				Text(String.useMainWindowAsDefaultControlLabel)
 			}
 			.toggleStyle(.switch)
+			.controlSize(.small)
 			.onChange(of: enableMainWindowAsDefault) { old, new in
 				AppDefaults.shared.enableMainWindowAsDefault = new
 			}
