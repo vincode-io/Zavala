@@ -30,20 +30,13 @@ struct SettingsView: View {
 			#if !targetEnvironment(macCatalyst)
 			.toolbar {
 				ToolbarItem(placement: .confirmationAction) {
-					Button(String.doneControlLabel) {
+					Button(role: .confirm) {
 						dismiss()
 					}
 				}
 			}
 			#endif
-		}
-		.onAppear {
-			let navigationAppearance = UINavigationBarAppearance()
-			navigationAppearance.configureWithOpaqueBackground()
-			UINavigationBar.appearance().scrollEdgeAppearance = navigationAppearance
-			UINavigationBar.appearance().standardAppearance = navigationAppearance
-		}
-		
+		}		
 	}
 }
 

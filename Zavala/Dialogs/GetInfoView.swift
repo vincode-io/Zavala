@@ -20,24 +20,17 @@ struct GetInfoView: View {
 	
 #if targetEnvironment(macCatalyst)
 	var body: some View {
-		if getInfoViewModel.title.isEmpty {
-			Text(String.noTitleLabel)
-				.lineLimit(1)
-				.font(.title)
-				.padding(8)
-		} else {
-			Text(getInfoViewModel.title)
-				.lineLimit(1)
-				.font(.title)
-				.padding(8)
+		NavigationStack {
+			form
+				.navigationTitle(getInfoViewModel.title)
+				.navigationBarTitleDisplayMode(.inline)
 		}
-		form
 		HStack {
 			Spacer()
 			cancelButton
 			saveButton
 		}
-		.padding(16)
+		.padding(.init(top: 8, leading: 16, bottom: 16, trailing: 16))
 	}
 #else
 	var body: some View {
@@ -152,14 +145,14 @@ struct GetInfoView: View {
 	}
 	
 	var cancelButton: some View {
-		Button(String.cancelControlLabel, role: .cancel) {
+		Button(role: .cancel) {
 			dismiss()
 		}
 		.keyboardShortcut(.cancelAction)
 	}
 	
 	var saveButton: some View {
-		Button(String.saveControlLabel) {
+		Button(role: .confirm) {
 			getInfoViewModel.update()
 			dismiss()
 		}
