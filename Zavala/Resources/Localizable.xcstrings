@@ -8620,19 +8620,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "References: "
+            "value" : "Restore Defaults"
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "References: "
+            "value" : "Restore Defaults"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "References: "
+            "value" : "Restore Defaults"
           }
         }
       }
