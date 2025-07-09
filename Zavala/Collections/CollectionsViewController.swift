@@ -680,7 +680,7 @@ private extension CollectionsViewController {
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
 				let renameTagViewController = UIStoryboard.dialog.instantiateController(ofType: MacRenameTagViewController.self)
-				renameTagViewController.preferredContentSize = CGSize(width: 400, height: 90)
+				renameTagViewController.preferredContentSize = CGSize(width: 300, height: 90)
 				renameTagViewController.tagDocuments = firstTagDocuments
 				self.present(renameTagViewController, animated: true)
 			} else {
