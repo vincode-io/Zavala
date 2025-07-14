@@ -182,6 +182,10 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowMoveRowLeft(rowID: rowID)
 	}
 
+	func moveRowRight(_: EditorRowTopicTextView, rowID: String) {
+		appliedConfiguration?.delegate?.editorRowMoveRowRight(rowID: rowID)
+	}
+
 	func didBecomeActive(_: EditorRowTopicTextView) {
 		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive()
 	}

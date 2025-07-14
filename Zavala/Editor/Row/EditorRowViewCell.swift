@@ -21,6 +21,7 @@ protocol EditorRowViewCellDelegate: AnyObject {
 	func editorRowMoveCursorUp(rowID: String)
 	func editorRowMoveCursorDown(rowID: String)
 	func editorRowMoveRowLeft(rowID: String)
+	func editorRowMoveRowRight(rowID: String)
 	func editorRowTextChanged(rowID: String, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange)
 	func editorRowDeleteRow(rowID: String, rowStrings: RowStrings)
 	func editorRowCreateRow(beforeRowID: String, rowStrings: RowStrings?, moveCursor: Bool)

@@ -1803,6 +1803,11 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		moveRowsLeft([row])
 	}
 
+	func editorRowMoveRowRight(rowID: String) {
+		guard let row = outline?.findRow(id: rowID) else { return }
+		moveRowsRight([row])
+	}
+
 	func editorRowTextChanged(rowID: String, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
 		guard let row = outline?.findRow(id: rowID) else { return }
 		textChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)

@@ -20,6 +20,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func moveCursorUp(_: EditorRowTopicTextView, rowID: String)
 	func moveCursorDown(_: EditorRowTopicTextView, rowID: String)
 	func moveRowLeft(_: EditorRowTopicTextView, rowID: String)
+	func moveRowRight(_: EditorRowTopicTextView, rowID: String)
 	func textChanged(_: EditorRowTopicTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRow(_: EditorRowTopicTextView, rowID: String, rowStrings: RowStrings)
 	func createRow(_: EditorRowTopicTextView, beforeRowID: String, rowStrings: RowStrings, moveCursor: Bool)
@@ -293,6 +294,9 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 		guard let rowID else { return true }
 		
 		switch text {
+		case "\t":
+			editorDelegate?.moveRowRight(self, rowID: rowID)
+			return false
 		case "\n":
 			if cursorIsAtBeginning {
 				if editorDelegate?.shouldMoveLeftOnReturn(self, rowID: rowID) ?? false {
