@@ -1633,18 +1633,25 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
 		}
 		
+		var parentRows = [Row]()
+		
 		for row in rows {
 			row.parent?.removeRow(row)
 			removeImages(rowID: row.id)
 			row.visit(visitor: deleteVisitor(_:))
-			
-			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+
+			if let parentRow = row.parent as? Row {
+				parentRows.append(parentRow)
 				if let parentRowIndex = parentRow.shadowTableIndex {
 					parentReloads.insert(parentRowIndex)
 				}
 			}
 		}
 
+		for parentRow in parentRows {
+			autoCompleteUncomplete(row: parentRow)
+		}
+		
 		deleteLinkRelationships(for: rows)
 		outlineContentDidChange()
 		
