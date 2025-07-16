@@ -1765,7 +1765,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		var reloads = Set<Int>()
 		
-		if let parentRow = parent as? Row, autoCompleteUncomplete(row: parentRow) {
+		if let parentRow = parent as? Row {
+			autoCompleteUncomplete(row: parentRow)
 			if let parentRowIndex = parentRow.shadowTableIndex {
 				reloads.insert(parentRowIndex)
 			}
@@ -1826,7 +1827,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 		var reloads = Set<Int>()
 
-		if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+		if let parentRow = row.parent as? Row {
+			autoCompleteUncomplete(row: parentRow)
 			if let parentRowIndex = parentRow.shadowTableIndex {
 				reloads.insert(parentRowIndex)
 			}
@@ -1900,7 +1902,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				row.parent = self
 			}
 			
-			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+			if let parentRow = row.parent as? Row {
+				autoCompleteUncomplete(row: parentRow)
 				if let parentRowIndex = parentRow.shadowTableIndex {
 					reloads.insert(parentRowIndex)
 				}
@@ -1941,7 +1944,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			afterRowContainer.insertRow(row, at: 0)
 			row.parent = afterRowContainer
 						
-			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+			if let parentRow = row.parent as? Row {
+				autoCompleteUncomplete(row: parentRow)
 				if let parentRowIndex = parentRow.shadowTableIndex {
 					reloads.insert(parentRowIndex)
 				}
@@ -1979,7 +1983,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			afterRowContainer.appendRow(row)
 			row.parent = afterRowContainer
 			
-			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+			if let parentRow = row.parent as? Row {
+				autoCompleteUncomplete(row: parentRow)
 				if let parentRowIndex = parentRow.shadowTableIndex {
 					reloads.insert(parentRowIndex)
 				}
@@ -2012,7 +2017,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				afterRowParent.insertRow(row, at: afterRowChildIndex + i + 1)
 				row.parent = afterRowParent
 
-				if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+				if let parentRow = row.parent as? Row {
+					autoCompleteUncomplete(row: parentRow)
 					if let parentRowIndex = parentRow.shadowTableIndex {
 						reloads.insert(parentRowIndex)
 					}
@@ -2059,7 +2065,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			afterParentRowParent.insertRow(row, at: index + i + 1)
 			row.parent = afterParentRowParent
 			
-			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+			if let parentRow = row.parent as? Row {
+				autoCompleteUncomplete(row: parentRow)
 				if let parentRowIndex = parentRow.shadowTableIndex {
 					reloads.insert(parentRowIndex)
 				}
@@ -2427,10 +2434,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			
 			row.parent = oldParent.parent
 
-			if autoCompleteUncomplete(row: oldParent) {
-				if let parentRowIndex = oldParent.shadowTableIndex {
-					reloads.insert(parentRowIndex)
-				}
+			autoCompleteUncomplete(row: oldParent)
+			if let parentRowIndex = oldParent.shadowTableIndex {
+				reloads.insert(parentRowIndex)
 			}
 		}
 
@@ -2601,7 +2607,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		for rowMove in sortedRowMoves {
 			rowMove.row.parent?.removeRow(rowMove.row)
 			
-			if let parentRow = rowMove.row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+			if let parentRow = rowMove.row.parent as? Row {
+				autoCompleteUncomplete(row: parentRow)
 				if let parentRowIndex = parentRow.shadowTableIndex {
 					oldParentReloads.insert(parentRowIndex)
 				}
@@ -3110,8 +3117,8 @@ private extension Outline {
 				} else {
 					row.uncomplete()
 				}
-				if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
-					impacted.append(parentRow)
+				if let parentRow = row.parent as? Row {
+					autoCompleteUncomplete(row: parentRow)
 				}
 				impacted.append(row)
 			}
@@ -3156,19 +3163,12 @@ private extension Outline {
 		outlineElementsDidChange(changes)
 	}
 	
-	@discardableResult
-	func autoCompleteUncomplete(row: Row) -> Bool {
+	func autoCompleteUncomplete(row: Row) {
 		if row.isAutoCompletable {
 			completeUncomplete(rows: [row], isComplete: true, rowStrings: nil)
-			return true
-		}
-
-		if row.isAutoUncompletable {
+		} else if row.isAutoUncompletable {
 			completeUncomplete(rows: [row], isComplete: false, rowStrings: nil)
-			return true
 		}
-		
-		return false
 	}
 
 	func isExpandAllUnavailable(container: RowContainer) -> Bool {
