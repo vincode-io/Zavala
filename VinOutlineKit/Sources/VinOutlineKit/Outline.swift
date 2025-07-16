@@ -1522,7 +1522,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			endCloudKitBatchRequest()
 		}
 		
-		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+		if rows.count == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
 
@@ -1566,7 +1566,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			endCloudKitBatchRequest()
 		}
 		
-		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+		if rows.count == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
 
@@ -1622,7 +1622,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			endCloudKitBatchRequest()
 		}
 		
-		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+		if rows.count == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
 
@@ -2325,7 +2325,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			endCloudKitBatchRequest()
 		}
 
-		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+		if rows.count == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
 		
@@ -2395,7 +2395,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			endCloudKitBatchRequest()
 		}
 
-		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+		if rows.count == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
 
@@ -2461,7 +2461,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			endCloudKitBatchRequest()
 		}
 
-		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+		if rows.count == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
 
@@ -2499,7 +2499,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			endCloudKitBatchRequest()
 		}
 
-		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+		if rows.count == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
 
@@ -3090,7 +3090,7 @@ private extension Outline {
 			endCloudKitBatchRequest()
 		}
 
-		if rowCount > 0, let row = rows.first, let texts = rowStrings {
+		if rows.count == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
 		

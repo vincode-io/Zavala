@@ -1387,15 +1387,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard let currentRows else { return }
 
 		if isDeleteRowNotesUnavailable {
-			createRowNotes(currentRows)
+			createRowNotes(currentRows, rowStrings: currentRowStrings)
 		} else {
-			deleteRowNotes(currentRows)
+			deleteRowNotes(currentRows, rowStrings: currentRowStrings)
 		}
 	}
 	
 	@objc func deleteRowNotes(_ sender: Any?) {
 		guard let rows = currentRows else { return }
-		deleteRowNotes(rows)
+		deleteRowNotes(rows, rowStrings: currentRowStrings)
 	}
 
 	@objc func insertReturn(_ sender: Any?) {
