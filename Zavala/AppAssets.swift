@@ -32,6 +32,7 @@ extension UIImage {
 	static let bold = UIImage(systemName: "bold")!
 	static let bullet = UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
 
+	static let cancel = UIImage(systemName: "xmark")!
 	static let collaborating = UIImage(systemName: "person.crop.circle.badge.checkmark")!
 	static let collapseAll = UIImage(systemName: "arrow.down.right.and.arrow.up.left")!
 	static let completeRow = UIImage(systemName: "checkmark.square")!
@@ -42,6 +43,7 @@ extension UIImage {
 	static let delete = UIImage(systemName: "trash")!
 	static let disclosure = UIImage(systemName: "chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 12, weight: .medium))!
 	static let documentLink = UIImage(named: "DocumentLink")!.applyingSymbolConfiguration(.init(pointSize: 24, weight: .medium))!
+	static let done = UIImage(systemName: "checkmark")!
 	static let duplicate = UIImage(systemName: "plus.square.on.square")!
 
 	static let ellipsis = UIImage(systemName: "ellipsis.circle")!
