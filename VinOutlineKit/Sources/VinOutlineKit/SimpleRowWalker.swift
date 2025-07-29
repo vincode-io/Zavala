@@ -60,6 +60,26 @@ public struct SimpleRowWalker: MarkupWalker {
 		descendInto(unorderedList)
 			
 		MainActor.assumeIsolated {
+			isList = false
+			if !parentRowStack.isEmpty {
+				parentRowStack.removeLast()
+			}
+		}
+	}
+	
+	nonisolated mutating public func visitOrderedList(_ orderedList: OrderedList) {
+		MainActor.assumeIsolated {
+			isList = true
+			
+			if let parentRow = lastBuiltRow {
+				parentRowStack.append(parentRow)
+			}
+		}
+			
+		descendInto(orderedList)
+			
+		MainActor.assumeIsolated {
+			isList = false
 			if !parentRowStack.isEmpty {
 				parentRowStack.removeLast()
 			}

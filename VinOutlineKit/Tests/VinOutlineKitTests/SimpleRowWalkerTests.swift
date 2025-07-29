@@ -35,6 +35,31 @@ final class SimpleRowWalkerTests: VOKTestCase {
 		#expect(walker.rows[0].topicMarkdown(type: .markdown) == "This is _just_ a sentence.")
 	}
 	
+	@Test func orderedList() throws {
+		let outline = """
+1. Row 1
+	1. Row 1.1
+	2. Row 1.2
+2. Row 2
+	1. Row 2.1
+	2. Row 2.2
+	3. Row 2.3
+3. Row 3
+	1. Row 3.1
+		1. Row 3.1.1
+		2. Row 3.1.2
+"""
+		let document = Document(parsing: outline)
+		var walker = SimpleRowWalker()
+		walker.visit(document)
+
+		#expect(walker.rows.count == 3)
+		#expect(walker.rows[0].rows.count == 2)
+		#expect(walker.rows[1].rows.count == 3)
+		#expect(walker.rows[2].rows.count == 1)
+		#expect(walker.rows[2].rows[0].rows.count == 2)
+	}
+	
 	@Test func unorderedList() throws {
 		let outline = """
 * Row 1
