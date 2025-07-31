@@ -1342,7 +1342,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard let completedRows = outline?.allCompletedRows else { return }
 
 		guard AppDefaults.shared.confirmDeleteCompletedRows else {
-			deleteRows(completedRows)
+			deleteRows(completedRows, currentRow: currentRows?.first, rowStrings: currentRowStrings)
 			return
 		}
 		
@@ -1352,12 +1352,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		let alwaysDeleteCompletedAction = UIAlertAction(title: .deleteAlwaysControlLabel, style: .destructive) { [weak self] action in
 			AppDefaults.shared.confirmDeleteCompletedRows = false
-			self?.deleteRows(completedRows)
+			self?.deleteRows(completedRows, currentRow: self?.currentRows?.first, rowStrings: self?.currentRowStrings)
 		}
 		alertController.addAction(alwaysDeleteCompletedAction)
 
 		let deleteCompletedAction = UIAlertAction(title: .deleteOnceControlLabel, style: .destructive) { [weak self] action in
-			self?.deleteRows(completedRows)
+			self?.deleteRows(completedRows, currentRow: self?.currentRows?.first, rowStrings: self?.currentRowStrings)
 		}
 		
 		alertController.addAction(deleteCompletedAction)
@@ -3305,7 +3305,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
+	func deleteRows(_ rows: [Row], currentRow: Row? = nil, rowStrings: RowStrings? = nil) {
 		guard let undoManager, let outline else { return }
 
 		let command = DeleteRowCommand(actionName: .deleteRowsControlLabel,
@@ -3313,6 +3313,7 @@ private extension EditorViewController {
 									   delegate: self,
 									   outline: outline,
 									   rows: rows,
+									   currentRow: currentRow,
 									   rowStrings: rowStrings,
 									   isInOutlineMode: isInOutlineMode)
 
