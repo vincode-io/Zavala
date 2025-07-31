@@ -1614,7 +1614,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 	}
 	
-	public func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil, isInOutlineMode: Bool = false) {
+	public func deleteRows(_ rows: [Row], currentRow: Row? = nil, rowStrings: RowStrings? = nil, isInOutlineMode: Bool = false) {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
@@ -1622,8 +1622,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			endCloudKitBatchRequest()
 		}
 		
-		if rows.count == 1, let row = rows.first, let texts = rowStrings {
-			updateRowStrings(row, texts)
+		if let currentRow, let rowStrings {
+			updateRowStrings(currentRow, rowStrings)
 		}
 
 		var parentReloads = Set<Int>()
