@@ -9,8 +9,6 @@ import SwiftUI
 
 struct SettingsView: View {
 	
-	static var pickerWidth: CGFloat = 110
-	
 	@Environment(\.dismiss) var dismiss
 	
 	var body: some View {

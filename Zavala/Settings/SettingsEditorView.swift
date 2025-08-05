@@ -28,9 +28,6 @@ struct SettingsEditorView: View {
 					}
 				} label: {
 				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: SettingsView.pickerWidth)
-				#endif
 				.pickerStyle(.menu)
 				.onChange(of: editorMaxWidth) { old, new in
 					AppDefaults.shared.editorMaxWidth = new
@@ -47,9 +44,6 @@ struct SettingsEditorView: View {
 					}
 				} label: {
 				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: SettingsView.pickerWidth)
-				#endif
 				.pickerStyle(.menu)
 				.onChange(of: rowIndent) { old, new in
 					AppDefaults.shared.rowIndentSize = new
@@ -66,9 +60,6 @@ struct SettingsEditorView: View {
 					}
 				} label: {
 				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: SettingsView.pickerWidth)
-				#endif
 				.pickerStyle(.menu)
 				.onChange(of: rowSpacing) { old, new in
 					AppDefaults.shared.rowSpacingSize = new
@@ -85,9 +76,6 @@ struct SettingsEditorView: View {
 					}
 				} label: {
 				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: SettingsView.pickerWidth)
-				#endif
 				.pickerStyle(.menu)
 				.onChange(of: scrollMode) { old, new in
 					AppDefaults.shared.scrollMode = new

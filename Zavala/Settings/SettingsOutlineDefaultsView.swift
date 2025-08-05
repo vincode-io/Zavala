@@ -28,9 +28,6 @@ struct SettingsOutlineDefaultsView: View {
 					}
 				} label: {
 				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: SettingsView.pickerWidth)
-				#endif
 				.pickerStyle(.menu)
 				.onChange(of: numberingStyle) { old, new in
 					AppDefaults.shared.numberingStyle = new

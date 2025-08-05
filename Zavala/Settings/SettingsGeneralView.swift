@@ -24,9 +24,6 @@ struct SettingsGeneralView: View {
 					}
 				} label: {
 				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: SettingsView.pickerWidth)
-				#endif
 				.pickerStyle(.menu)
 				.onChange(of: colorPalette) { old, new in
 					AppDefaults.shared.userInterfaceColorPalette = new

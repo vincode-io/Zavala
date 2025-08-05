@@ -63,9 +63,6 @@ struct GetInfoView: View {
 						}
 					} label: {
 					}
-					#if targetEnvironment(macCatalyst)
-					.frame(width: SettingsView.pickerWidth)
-					#endif
 					.pickerStyle(.menu)
 				}
 
