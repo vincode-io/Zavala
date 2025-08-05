@@ -70,7 +70,8 @@ struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
 							 ownerName: defaults.ownerName,
 							 ownerEmail: defaults.ownerEmail,
 							 ownerURL: defaults.ownerURL)
-		
+
+		await suspend()
 		return await .result(value: OutlineAppEntity(outline: outline))
     }
 }
