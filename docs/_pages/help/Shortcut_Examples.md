@@ -39,7 +39,7 @@ This is very handy if you have an Outline of TODO’s that you want to add thing
 
 This Shortcut assumes that you have an outline named “TODO”, with completed rows, and one row with the topic “Done” at the top level. 
 
-## [Archive Account](https://www.icloud.com/shortcuts/0f198e078ee5443ba6b10e7d9156269d)
+## [Archive Account](https://www.icloud.com/shortcuts/766aa14fdc324bb680b2734acdcd3485)
 
 You can use this shortcut to create a Zavala archive. This is a zip file with OPML exports and any associated images from the selected Account. You can use this archive to backup your Account or use it to migrate to another outline application.
 
