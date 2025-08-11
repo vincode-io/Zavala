@@ -8,7 +8,7 @@ header:
 ---
 
 Zavala is an outliner written for Apple platforms by [Maurice Parker](https://vincode.io).
-It is an open source project and will be free forever.
+It is an open source project and [will be free forever](https://vincode.io/2025/08/11/zavala-will-always-be-free.html).
 You can find the source code for [Zavala on GitHub](https://github.com/vincode-io/Zavala).
 
 ### Inspiration
