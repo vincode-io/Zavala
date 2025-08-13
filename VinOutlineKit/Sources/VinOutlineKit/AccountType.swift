@@ -22,19 +22,19 @@ public enum AccountType: Int, Codable, Sendable {
 			#if canImport(UIKit)
 			switch UIDevice.current.userInterfaceIdiom {
 			case .mac:
-				return VinOutlineKitStringAssets.accountOnMyMac
+				return .accountOnMyMac
 			case .pad:
-				return VinOutlineKitStringAssets.accountOnMyIPad
+				return .accountOnMyIPad
 			case .phone:
-				return VinOutlineKitStringAssets.accountOnMyIPhone
+				return .accountOnMyIPhone
 			default:
 				fatalError()
 			}
 			#else
-			return VinOutlineKitStringAssets.accountOnMyMac
+			return .accountOnMyMac
 			#endif
 		case .cloudKit:
-			return VinOutlineKitStringAssets.accountICloud
+			return .accountICloud
 		}
 	}
 	

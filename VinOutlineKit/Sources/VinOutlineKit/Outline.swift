@@ -70,13 +70,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		public var description: String {
 			switch self {
 			case .none:
-				return "None"
+				return .noneControlLabel
 			case .simple:
-				return "Simple"
+				return .simpleControlLabel
 			case .decimal:
-				return "Decimal"
+				return .decimalControlLabel
 			case .legal:
-				return "Legal"
+				return .legalControlLabel
 			}
 		}
 		

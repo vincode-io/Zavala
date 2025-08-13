@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct VinOutlineKitStringAssets {
+extension String {
 	
     static let accountOnMyMac = String(localized: "label.text.on-my-mac", bundle: .module, comment: "Local Account Name: On My Mac")
 	static let accountOnMyIPad = String(localized: "label.text.on-my-ipad", bundle: .module, comment: "Local Account Name: On My iPad")
@@ -16,6 +16,11 @@ struct VinOutlineKitStringAssets {
 	static let noTitle = String(localized: "label.text.no-title", bundle: .module, comment: "Label: (No Title)")
 	static let all = String(localized: "label.text.all", bundle: .module, comment: "Label: All")
 	static let search = String(localized: "label.text.search", bundle: .module,  comment: "Label: Search")
+
+	static let noneControlLabel = String(localized: "button.text.none", bundle: .module,  comment: "Button: None")
+	static let simpleControlLabel = String(localized: "button.text.simple", bundle: .module,  comment: "Button: Simple")
+	static let decimalControlLabel = String(localized: "button.text.decimal", bundle: .module,  comment: "Button: Decimal")
+	static let legalControlLabel = String(localized: "button.text.legal", bundle: .module,  comment: "Button: Legal")
 
 	static let accountErrorImportRead = String(localized: "label.text.unable-to-read-import-file",
                                                bundle: .module, comment: "Label: Unable to read the import file.")

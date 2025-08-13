@@ -8,7 +8,7 @@ import OrderedCollections
 enum RowCoderError: LocalizedError {
 	case unableToDeserialize
 	var errorDescription: String? {
-		return VinOutlineKitStringAssets.rowDeserializationError
+		return .rowDeserializationError
 	}
 }
 

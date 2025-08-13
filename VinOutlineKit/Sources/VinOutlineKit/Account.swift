@@ -31,13 +31,13 @@ public enum AccountError: LocalizedError {
 	public var errorDescription: String? {
 		switch self {
 		case .fileReadError:
-			return VinOutlineKitStringAssets.accountErrorImportRead
+			return .accountErrorImportRead
 		case .opmlParserError:
-			return VinOutlineKitStringAssets.accountErrorOPMLParse
+			return .accountErrorOPMLParse
 		case .renameTagNameExistsError:
-			return VinOutlineKitStringAssets.accountErrorRenameTagExists
+			return .accountErrorRenameTagExists
 		case .securityScopeError:
-			return VinOutlineKitStringAssets.accountErrorScopedResource
+			return .accountErrorScopedResource
 		}
 	}
 }
@@ -218,7 +218,7 @@ public final class Account: Identifiable, Equatable {
 			title = rowNodes?.first?.attributes["text"]
 		}
 		if title == nil {
-			title = VinOutlineKitStringAssets.noTitle
+			title = .noTitle
 		}
 		
 		let outline = Outline(account: self, parentID: id, title: title)

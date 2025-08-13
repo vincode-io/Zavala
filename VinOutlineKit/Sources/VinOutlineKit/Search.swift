@@ -15,8 +15,8 @@ import CoreSpotlight
 public final class Search: Identifiable, DocumentContainer {
 	
 	public let id: EntityID
-	public var name: String? = VinOutlineKitStringAssets.search
-	public var partialName: String? = VinOutlineKitStringAssets.search
+	public var name: String? = .search
+	public var partialName: String? = .search
 
 	#if canImport(UIKit)
 	public var image: UIImage?
