@@ -20,7 +20,11 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 			if state.isFocused {
 				contentConfig.textProperties.color = .white
 			} else {
-				contentConfig.textProperties.color = .accentColor
+				if state.traitCollection.userInterfaceStyle == .dark {
+					contentConfig.textProperties.color = .brightenedAccentColor
+				} else {
+					contentConfig.textProperties.color = .accentColor
+				}
 			}
 			contentConfig.secondaryTextProperties.color = .lightGray
 		} else {

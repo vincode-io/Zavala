@@ -63,7 +63,7 @@ private extension EditorTitleTextView {
 	
 	func updateTintColor() {
 		if UIColor.accentColor.isDefaultAccentColor {
-			tintColor = .brightenedDefaultAccentColor
+			tintColor = .brightenedAccentColor
 		} else {
 			tintColor = .accentColor
 		}
