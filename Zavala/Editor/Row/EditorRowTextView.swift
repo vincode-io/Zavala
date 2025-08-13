@@ -384,7 +384,11 @@ extension EditorRowTextView {
 	}
 	
 	func updateTintColor() {
-		tintColor = .brightenedHighlightColor
+		if UIColor.highlightColor.isDefinedAccentColor {
+			tintColor = .brightenedHighlightColor
+		} else {
+			tintColor = .highlightColor
+		}
 	}
 	
     func findAndSelectLink() -> (String?, String?, NSRange) {

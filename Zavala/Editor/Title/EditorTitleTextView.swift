@@ -62,7 +62,11 @@ class EditorTitleTextView: UITextView, EditorTextInput {
 private extension EditorTitleTextView {
 	
 	func updateTintColor() {
-		tintColor = .brightenedHighlightColor
+		if UIColor.highlightColor.isDefinedAccentColor {
+			tintColor = .brightenedHighlightColor
+		} else {
+			tintColor = .highlightColor
+		}
 	}
 
 	@objc func appleColorPreferencesChanged(_ note: Notification? = nil) {
