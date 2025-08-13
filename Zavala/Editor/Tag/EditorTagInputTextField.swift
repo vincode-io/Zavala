@@ -163,11 +163,7 @@ private extension EditorTagInputTextField {
 	}
 	
 	func updateTintColor() {
-		if UIColor.accentColor.isDefaultAccentColor {
-			tintColor = .brightenedAccentColor
-		} else {
-			tintColor = .accentColor
-		}
+		tintColor = .brightenedHighlightColor
 	}
 
 	@objc func appleColorPreferencesChanged(_ note: Notification? = nil) {

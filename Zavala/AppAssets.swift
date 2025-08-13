@@ -20,8 +20,9 @@ extension UIColor {
 	static let barBackgroundColor = UIColor(named: "BarBackgroundColor")!
 	static let fullScreenBackgroundColor = UIColor(named: "FullScreenBackgroundColor")!
 	static let verticalBarColor = UIColor.quaternaryLabel
-	static let brightenedAccentColor = UIColor.accentColor.brighten(by: 50)
-	
+	static var brightenedAccentColor: UIColor {	UIColor.accentColor.brighten(by: 50) }
+	static var brightenedHighlightColor: UIColor {	UIColor.highlightColor.brighten(by: 50) }
+
 }
 
 extension UIImage {
