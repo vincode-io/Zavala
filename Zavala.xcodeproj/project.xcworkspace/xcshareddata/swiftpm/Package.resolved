@@ -34,7 +34,7 @@
       "location" : "https://github.com/swiftlang/swift-cmark.git",
       "state" : {
         "branch" : "gfm",
-        "revision" : "b97d09472e847a416629f026eceae0e2afcfad65"
+        "revision" : "cbd8eae0689857c873063f28b9a80419ec718e20"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
       "state" : {
-        "revision" : "c1805596154bb3a265fd91b8ac0c4433b4348fb0",
-        "version" : "1.2.0"
+        "revision" : "8c0c0a8b49e080e54e5e328cc552821ff07cd341",
+        "version" : "1.2.1"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "b57dd89b17c02c60869875ee68c38078848329fb"
+        "revision" : "c281baa59e2b0d3ddc72848741217af811f66d39"
       }
     },
     {
@@ -61,7 +61,7 @@
       "location" : "https://github.com/vincode-io/VinCloudKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "45aa7368547246b28b78a817c06125d232540608"
+        "revision" : "4b8b6eed0a74c4f9957404bf9b9c4605f46faae6"
       }
     },
     {
