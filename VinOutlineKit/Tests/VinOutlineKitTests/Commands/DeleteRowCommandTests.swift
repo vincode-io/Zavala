@@ -12,7 +12,7 @@ final class DeleteRowCommandTests: VOKTestCase {
         let row = try #require(outline.rows.first)
         let originalCount = outline.rows.count
 		
-        let command = DeleteRowCommand(actionName: "DeleteRow", undoManager: undoManager, delegate: self, outline: outline, rows: [row], rowStrings: row.rowStrings, isInOutlineMode: false)
+		let command = DeleteRowCommand(actionName: "DeleteRow", undoManager: undoManager, delegate: self, outline: outline, rows: [row], currentRow: nil, rowStrings: nil, isInOutlineMode: false)
         command.execute()
         #expect(outline.rows.count == originalCount - 1)
 		
