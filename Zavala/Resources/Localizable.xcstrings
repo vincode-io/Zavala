@@ -4,6 +4,12 @@
     "accessibility.text.complete" : {
       "comment" : "Accessibility Label: Complete",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abschließen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27,6 +33,12 @@
     "button.text.actual-size" : {
       "comment" : "View Action: Actual Size",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Originalgröße"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50,6 +62,12 @@
     "button.text.add" : {
       "comment" : "Outline Action: Add",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -73,6 +91,12 @@
     "button.text.add-note" : {
       "comment" : "Outline Action: Add Note",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -96,6 +120,12 @@
     "button.text.add-note-level" : {
       "comment" : "Action: Add Note Level",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz-Ebene hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -119,6 +149,12 @@
     "button.text.add-numbering-level" : {
       "comment" : "Action: Add Numbering Level",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nummerierungs-Ebene hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -142,6 +178,12 @@
     "button.text.add-row" : {
       "comment" : "Outline Action: Add Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -165,6 +207,12 @@
     "button.text.add-row-above" : {
       "comment" : "Outline Action: Add Row Above",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile oberhalb hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -188,6 +236,12 @@
     "button.text.add-row-after" : {
       "comment" : "Outline Action: Add Row After",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile danach hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -211,6 +265,12 @@
     "button.text.add-row-below" : {
       "comment" : "Outline Action: Add Row Below",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile unterhalb hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -234,6 +294,12 @@
     "button.text.add-row-inside" : {
       "comment" : "Outline Action: Add Row Inside",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile innen hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -257,6 +323,12 @@
     "button.text.add-row-outside" : {
       "comment" : "Outline Action: Add Row Outside",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile außen hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -280,6 +352,12 @@
     "button.text.add-tag" : {
       "comment" : "Outline Action: Add Tag",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlagwort hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -303,6 +381,12 @@
     "button.text.add-topic-level" : {
       "comment" : "Outline Action: Add Topic Level",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Themen-Ebene hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -326,6 +410,12 @@
     "button.text.always-delete-without-asking" : {
       "comment" : "Delete Action: Always Delete Without Asking",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immer ohne Nachfrage löschen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -349,6 +439,12 @@
     "button.text.ascending" : {
       "comment" : "Sort Action: Ascending",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufsteigend"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -372,6 +468,12 @@
     "button.text.automatic-color-palette" : {
       "comment" : "Set App Color Palette Action: Automatic",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -395,6 +497,12 @@
     "button.text.back" : {
       "comment" : "Navigation Action: Back",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -418,6 +526,12 @@
     "button.text.cancel" : {
       "comment" : "Action: Cancel",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -441,6 +555,12 @@
     "button.text.change-link-titles-automatically" : {
       "comment" : "Set Default Action: Change Link Titles Automatically",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link-Titel automatisch ändern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -464,6 +584,12 @@
     "button.text.check-spelling-while-typing" : {
       "comment" : "Set Default Action: Check Spelling While Typing",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechtschreibung während der Eingabe prüfen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -487,6 +613,12 @@
     "button.text.collapse" : {
       "comment" : "Outline Action: Collapse",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einklappen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -510,6 +642,12 @@
     "button.text.collapse-all" : {
       "comment" : "Outline Action: Collapse All",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einklappen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -533,6 +671,12 @@
     "button.text.collapse-all-in-outline" : {
       "comment" : "Outline Action: Collapse All in Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle in Gliederung einklappen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -556,6 +700,12 @@
     "button.text.collapse-all-in-row" : {
       "comment" : "Outline Action: Collapse All in Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle in Zeile einklappen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -579,6 +729,12 @@
     "button.text.copy" : {
       "comment" : "Action: Copy",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -602,6 +758,12 @@
     "button.text.copy-document-link" : {
       "comment" : "Document Action: Copy Document Link",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokumentlink kopieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -625,6 +787,12 @@
     "button.text.copy-document-links" : {
       "comment" : "Document Action: Copy Document Links",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokumentlinks kopieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -648,6 +816,12 @@
     "button.text.copy-row-link" : {
       "comment" : "Document Action: Copy Row Link",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilenlink kopieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -671,6 +845,12 @@
     "button.text.correct-spelling-automatically" : {
       "comment" : "Default Action: Correct Spelling Automatically",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechtschreibung automatisch korrigieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -694,6 +874,12 @@
     "button.text.create-links-automatically" : {
       "comment" : "Set Default Action: Create Links Automatically",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links automatisch erstellen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -717,6 +903,12 @@
     "button.text.cut" : {
       "comment" : "Action: Cut",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausschneiden"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -740,6 +932,12 @@
     "button.text.delete" : {
       "comment" : "Action: Delete",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -763,6 +961,12 @@
     "button.text.delete-note" : {
       "comment" : "Action: Delete Note",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz löschen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -786,6 +990,12 @@
     "button.text.delete-once" : {
       "comment" : "Action: Delete Once",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einmal löschen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -809,6 +1019,12 @@
     "button.text.delete-outline" : {
       "comment" : "Action: Delete Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung löschen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -832,6 +1048,12 @@
     "button.text.delete-outline-message" : {
       "comment" : "Alert Message: The outline will be deleted and unrecoverable.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Gliederung wird gelöscht und ist nicht wiederherstellbar."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -855,6 +1077,12 @@
     "button.text.delete-outlines-message" : {
       "comment" : "Alert Message: The outlines will be deleted and unrecoverable.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Gliederungen werden gelöscht und sind nicht wiederherstellbar."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -878,6 +1106,12 @@
     "button.text.delete-row" : {
       "comment" : "Action: Delete Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile löschen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -901,6 +1135,12 @@
     "button.text.delete-rows" : {
       "comment" : "Action: Delete Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen löschen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -924,6 +1164,12 @@
     "button.text.delete-tag-message." : {
       "comment" : "Alert Message: Any child Tag associated with this Tag will also be deleted. No Outlines associated with this Tag will be deleted.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Unter-Schlagwörter, die mit diesem Schlagwort verknüpft sind, werden ebenfalls gelöscht. Gliederungen, die mit diesem Schlagwort verknüpft sind, werden nicht gelöscht."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -947,6 +1193,12 @@
     "button.text.delete-tags-message." : {
       "comment" : "Alert Message: Any child Tag associated with these Tags will also be deleted. No Outlines associated with these Tags will be deleted.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Unter-Schlagwörter, die mit diesen Schlagwörtern verknüpft sind, werden ebenfalls gelöscht. Gliederungen, die mit diesen Schlagwörtern verknüpft sind, werden nicht gelöscht."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -970,6 +1222,12 @@
     "button.text.descending" : {
       "comment" : "Action: Descending",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Absteigend"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -993,6 +1251,12 @@
     "button.text.disable-animations" : {
       "comment" : "Action: Disable Animations",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animationen deaktivieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1016,6 +1280,12 @@
     "button.text.duplicate" : {
       "comment" : "Action: Duplicate",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplizieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1039,6 +1309,12 @@
     "button.text.duplicate-row" : {
       "comment" : "Action: Duplicate Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile duplizieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1062,6 +1338,12 @@
     "button.text.duplicate-rows" : {
       "comment" : "Action: Duplicate Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen duplizieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1085,6 +1367,12 @@
     "button.text.enable-icloud" : {
       "comment" : "Label: Enable iCloud",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud aktivieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1108,6 +1396,60 @@
     "button.text.enable-on-my-device" : {
       "comment" : "Label: Enable On My <Device>",
       "localizations" : {
+        "de" : {
+          "variations" : {
+            "device" : {
+              "appletv" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Apple TV aktivieren"
+                }
+              },
+              "applevision" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Apple Vision Pro aktivieren"
+                }
+              },
+              "applewatch" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Apple Watch aktivieren"
+                }
+              },
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem iPad aktivieren"
+                }
+              },
+              "iphone" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem iPhone aktivieren"
+                }
+              },
+              "ipod" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem iPod aktivieren"
+                }
+              },
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Mac aktivieren"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Device aktivieren"
+                }
+              }
+            }
+          }
+        },
         "en" : {
           "variations" : {
             "device" : {
@@ -1275,6 +1617,12 @@
     "button.text.expand" : {
       "comment" : "Action: Expand",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erweitern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1298,6 +1646,12 @@
     "button.text.expand-all" : {
       "comment" : "Action: Expand All",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle erweitern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1321,6 +1675,12 @@
     "button.text.expand-all-in-outline" : {
       "comment" : "Action: Expand All in Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle in Gliederung erweitern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1344,6 +1704,12 @@
     "button.text.expand-all-in-row" : {
       "comment" : "Action: Expand All in Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle in Zeile erweitern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1367,6 +1733,12 @@
     "button.text.export" : {
       "comment" : "Action: Export",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1390,6 +1762,12 @@
     "button.text.export-markdown-doc-with-ellipsis" : {
       "comment" : "Action: Export Markdown Doc…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown-Dokument exportieren…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1413,6 +1791,12 @@
     "button.text.export-markdown-list-with-ellipsis" : {
       "comment" : "Action: Export Markdown List…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown-Liste exportieren…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1436,6 +1820,12 @@
     "button.text.export-opml-ellipsis" : {
       "comment" : "Action: Export OPML…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OPML exportieren…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1459,6 +1849,12 @@
     "button.text.export-pdf-doc-with-ellipsis" : {
       "comment" : "Action: Export PDF Doc…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF-Dokument exportieren…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1482,6 +1878,12 @@
     "button.text.export-pdf-list-with-ellipsis" : {
       "comment" : "Action: Export PDF List…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF-Liste exportieren…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1505,6 +1907,12 @@
     "button.text.filter" : {
       "comment" : "Action: Filter",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1528,6 +1936,12 @@
     "button.text.filter-notes" : {
       "comment" : "Action: Filter Notes",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notizen filtern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1551,6 +1965,12 @@
     "button.text.find" : {
       "comment" : "Action: Find",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suchen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1574,6 +1994,12 @@
     "button.text.find-next" : {
       "comment" : "Action: Find Next",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitersuchen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1597,6 +2023,12 @@
     "button.text.find-previous" : {
       "comment" : "Action: Find Previous",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rückwärts suchen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1620,6 +2052,12 @@
     "button.text.find-with-ellipsis" : {
       "comment" : "Action: Find…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suchen…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1643,6 +2081,12 @@
     "button.text.fix-it" : {
       "comment" : "Action: Fix It",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beheben"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1666,6 +2110,12 @@
     "button.text.focus-in" : {
       "comment" : "Action: Focus In",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fokus hinein"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1689,6 +2139,12 @@
     "button.text.focus-out" : {
       "comment" : "Action: Focus Out",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fokus heraus"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1712,6 +2168,12 @@
     "button.text.forward" : {
       "comment" : "Action: Forward",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1735,6 +2197,12 @@
     "button.text.full-width" : {
       "comment" : "Action: Full Width",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volle Breite"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1758,6 +2226,12 @@
     "button.text.general" : {
       "comment" : "Action: General",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allgemein"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1781,6 +2255,12 @@
     "button.text.get-info" : {
       "comment" : "Action: Get Info",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informationen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1804,6 +2284,12 @@
     "button.text.go-backward" : {
       "comment" : "Action: Go Backward",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rückwärts"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1827,6 +2313,12 @@
     "button.text.go-forward" : {
       "comment" : "Action: Go Forward",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorwärts"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1850,6 +2342,12 @@
     "button.text.group-row" : {
       "comment" : "Action: Group Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile gruppieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1873,6 +2371,12 @@
     "button.text.group-rows" : {
       "comment" : "Action: Group Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen gruppieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1896,6 +2400,12 @@
     "button.text.hide-keyboard" : {
       "comment" : "Action: Hide Keyboard",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tastatur ausblenden"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1919,6 +2429,12 @@
     "button.text.import-opml" : {
       "comment" : "Action: Import OPML",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OPML importieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1942,6 +2458,12 @@
     "button.text.import-opml-with-ellipsis" : {
       "comment" : "Action: Import OPML…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OPML importieren…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1965,6 +2487,12 @@
     "button.text.insert-image" : {
       "comment" : "Action: Insert Image",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild einfügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1988,6 +2516,12 @@
     "button.text.insert-image-with-ellipsis" : {
       "comment" : "Label: Insert Image…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild einfügen…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2011,6 +2545,12 @@
     "button.text.italic" : {
       "comment" : "Set Font Action: Italic",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kursiv"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2034,6 +2574,12 @@
     "button.text.jump-to-note" : {
       "comment" : "Action: Jump to Note",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu Notiz springen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2057,6 +2603,12 @@
     "button.text.jump-to-topic" : {
       "comment" : "Action: Jump to Topic",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu Thema springen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2080,6 +2632,12 @@
     "button.text.large" : {
       "comment" : "Action: Large",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groß"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2103,6 +2661,12 @@
     "button.text.light" : {
       "comment" : "Set App Appearance Action: Light",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hell"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2126,6 +2690,12 @@
     "button.text.medium" : {
       "comment" : "Set Appearance Action: Medium",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mittel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2149,6 +2719,12 @@
     "button.text.mint" : {
       "comment" : "Set Font Color Action: Mint",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minze"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2172,6 +2748,12 @@
     "button.text.move-down" : {
       "comment" : "Action: Move Down",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach unten verschieben"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2195,6 +2777,12 @@
     "button.text.move-left" : {
       "comment" : "Action: Move Left",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach links verschieben"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2218,6 +2806,12 @@
     "button.text.move-right" : {
       "comment" : "Action: Move Right",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach rechts verschieben"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2241,6 +2835,12 @@
     "button.text.move-up" : {
       "comment" : "Action: Move Up",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach oben verschieben"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2264,6 +2864,12 @@
     "button.text.new-outline" : {
       "comment" : "Action: New Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Gliederung"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2287,6 +2893,12 @@
     "button.text.next-result" : {
       "comment" : "Action: Next Result",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nächstes Ergebnis"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2310,6 +2922,12 @@
     "button.text.normal" : {
       "comment" : "Label: Normal",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normal"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2333,6 +2951,12 @@
     "button.text.open-quickly" : {
       "comment" : "Action: Open Quickly",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schnell öffnen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2356,6 +2980,12 @@
     "button.text.open-quickly-with-ellipsis" : {
       "comment" : "Action: Open Quickly…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schnell öffnen…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2379,6 +3009,12 @@
     "button.text.orange" : {
       "comment" : "Set Font Color Action: Orange",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orange"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2402,6 +3038,12 @@
     "button.text.paste" : {
       "comment" : "Action: Paste",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einfügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2425,6 +3067,12 @@
     "button.text.pink" : {
       "comment" : "Set Font Color Action: Pink",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosa"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2448,6 +3096,12 @@
     "button.text.previous-result" : {
       "comment" : "Action: Previous Result",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorheriges Ergebnis"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2471,6 +3125,12 @@
     "button.text.print" : {
       "comment" : "Action: Print",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drucken"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2494,6 +3154,12 @@
     "button.text.print-doc" : {
       "comment" : "Action: Print Doc",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokument drucken"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2517,6 +3183,12 @@
     "button.text.print-doc-with-ellipsis" : {
       "comment" : "Action: Print Doc…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokument drucken…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2540,6 +3212,12 @@
     "button.text.print-list" : {
       "comment" : "Action: Print List",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste drucken"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2563,6 +3241,12 @@
     "button.text.print-list-with-ellipsis" : {
       "comment" : "Label: Print List…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste drucken..."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2586,6 +3270,12 @@
     "button.text.provide-feedback" : {
       "comment" : "Action: Provide Feedback",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback geben"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2609,6 +3299,12 @@
     "button.text.purple" : {
       "comment" : "Set Font Color Action: Purple",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lila"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2632,6 +3328,12 @@
     "button.text.red" : {
       "comment" : "Set Font Color Action: Red",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rot"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2655,6 +3357,12 @@
     "button.text.redo" : {
       "comment" : "Action: Redo",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederholen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2678,6 +3386,12 @@
     "button.text.remove" : {
       "comment" : "Action: Remove",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2701,6 +3415,12 @@
     "button.text.remove-tag" : {
       "comment" : "Action: Remove Tag",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlagwort entfernen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2724,6 +3444,12 @@
     "button.text.rename" : {
       "comment" : "Action: Rename",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umbenennen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2747,6 +3473,12 @@
     "button.text.replace" : {
       "comment" : "Action: Replace",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ersetzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2770,6 +3502,12 @@
     "button.text.restore" : {
       "comment" : "Action: Restore",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2793,6 +3531,12 @@
     "button.text.save" : {
       "comment" : "Action: Save",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2816,6 +3560,12 @@
     "button.text.select" : {
       "comment" : "Action: Select",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswählen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2839,6 +3589,12 @@
     "button.text.set-appearance-dark" : {
       "comment" : "Set App Color Palette Action: Dark",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dunkel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2862,6 +3618,12 @@
     "button.text.set-font-blue" : {
       "comment" : "Set Font Color Action: Blue",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blau"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2885,6 +3647,12 @@
     "button.text.set-font-bold" : {
       "comment" : "Set Font Weight Action: Bold",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fett"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2908,6 +3676,12 @@
     "button.text.set-font-brown" : {
       "comment" : "Set Font Color Action: Brown",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Braun"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2931,6 +3705,12 @@
     "button.text.set-font-cyan" : {
       "comment" : "Set Font Color Action: Cyan",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cyan"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2954,6 +3734,12 @@
     "button.text.set-font-green" : {
       "comment" : "Set Font Color Action: Green",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grün"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2977,6 +3763,12 @@
     "button.text.set-font-indigo" : {
       "comment" : "Set Font Color Action: Indigo",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indigo"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3000,6 +3792,12 @@
     "button.text.share" : {
       "comment" : "Action: Share",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3023,6 +3821,12 @@
     "button.text.share-with-ellipsis" : {
       "comment" : "Label: Share…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3046,6 +3850,12 @@
     "button.text.small" : {
       "comment" : "Action: Small",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klein"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3069,6 +3879,12 @@
     "button.text.sort-documents" : {
       "comment" : "Action: Sort Documents",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokumente sortieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3092,6 +3908,12 @@
     "button.text.sort-rows" : {
       "comment" : "Action: Sort Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen sortieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3115,6 +3937,12 @@
     "button.text.split-row" : {
       "comment" : "Action: Split Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile teilen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3138,6 +3966,12 @@
     "button.text.sync" : {
       "comment" : "Label: Sync",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3161,6 +3995,12 @@
     "button.text.teal" : {
       "comment" : "Set Font Color Appearance: Teal",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Türkis"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3184,6 +4024,12 @@
     "button.text.toggle-sidebar" : {
       "comment" : "Action: Toggle Sidebar",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seitenleiste umschalten"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3207,6 +4053,12 @@
     "button.text.turn-filter-off" : {
       "comment" : "Action: Turn Filter Off",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter ausschalten"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3230,6 +4082,12 @@
     "button.text.turn-filter-on" : {
       "comment" : "Label: Turn Filter On",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter einschalten"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3253,6 +4111,12 @@
     "button.text.uncomplete" : {
       "comment" : "Action: Uncomplete",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unvollständig"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3276,6 +4140,12 @@
     "button.text.undo" : {
       "comment" : "Action: Undo",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rückgängig machen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3299,6 +4169,12 @@
     "button.text.use-main-window-as-default" : {
       "comment" : "Action: Use Main Window as Default",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hauptfenster als Standard verwenden"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3322,6 +4198,12 @@
     "button.text.use-selection-for-find" : {
       "comment" : "Action: Use Selection For Find",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswahl für Suche verwenden"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3345,6 +4227,12 @@
     "button.text.wide" : {
       "comment" : "Label: Wide",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breit"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3368,6 +4256,12 @@
     "button.text.yellow" : {
       "comment" : "Set Font Color Action: Yellow",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelb"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3391,6 +4285,12 @@
     "button.text.zoom-in" : {
       "comment" : "Action: Zoom In",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergrößern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3414,6 +4314,12 @@
     "button.text.zoom-out" : {
       "comment" : "Action: Zoom Out",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verkleinern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3437,6 +4343,12 @@
     "iCloud" : {
       "comment" : "iCloud",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs-review",
+            "value" : "iCloud"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3449,6 +4361,12 @@
     "intent.description.add-outline" : {
       "comment" : "Intent Description: Adds an Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fügt eine Gliederung hinzu"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3472,6 +4390,12 @@
     "intent.description.add-outline-tag" : {
       "comment" : "Intent description: Add a Tag to the given Outline.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fügt ein Schlagwort zur angegebenen Gliederung hinzu."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3495,6 +4419,12 @@
     "intent.description.edit-outline" : {
       "comment" : "Intent description: Update the details of an Outline.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktualisiert die Details einer Gliederung."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3518,6 +4448,12 @@
     "intent.description.get-current-outline" : {
       "comment" : "Get the currently viewed outline from the foremost window for Zavala.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ruft die aktuell angezeigte Gliederung aus dem vordersten Zavala-Fenster ab."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3541,6 +4477,12 @@
     "intent.description.get-current-tags" : {
       "comment" : "Gets the name of the currently selected Tags if there are any.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ruft den Namen der aktuell ausgewählten Schlagwörter ab, falls vorhanden."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3564,6 +4506,12 @@
     "intent.description.get-outlines" : {
       "comment" : "Intent title: Get Outlines based on search criteria.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ruft Gliederungen basierend auf Suchkriterien ab."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3587,6 +4535,12 @@
     "intent.description.remove-outline" : {
       "comment" : "Intent title: Deletes an Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löscht eine Gliederung"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3610,6 +4564,12 @@
     "intent.description.remove-outline-tag" : {
       "comment" : "Intent title: Removes a Tag from the given Outline.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernt ein Schlagwort von der angegebenen Gliederung."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3633,6 +4593,12 @@
     "intent.description.show-outline" : {
       "comment" : "Shows the given outline in the foremost window of Zavala.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt die angegebene Gliederung im vordersten Zavala-Fenster."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3656,6 +4622,12 @@
     "intent.descrption.add-rows-to-outline" : {
       "comment" : "Add Rows to Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen zur Gliederung hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3679,6 +4651,12 @@
     "intent.descrption.copy-rows-outlines" : {
       "comment" : "Copy Rows in or between Outlines",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen in oder zwischen Gliederungen kopieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3702,6 +4680,12 @@
     "intent.descrption.delete-rows" : {
       "comment" : "Delete the specified Rows.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löscht die angegebenen Zeilen."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3725,6 +4709,12 @@
     "intent.descrption.get-images-for-outline" : {
       "comment" : "Gets all the Images associated with the given Outline. Useful for integrating with Outlines exported as Markdown.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ruft alle Bilder ab, die mit der angegebenen Gliederung verknüpft sind. Nützlich für die Integration mit als Markdown exportierten Gliederungen."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3748,6 +4738,12 @@
     "intent.descrption.get-rows-outlines" : {
       "comment" : "Get Rows from an Outline.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen aus einer Gliederung abrufen."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3771,6 +4767,12 @@
     "intent.descrption.import-outline" : {
       "comment" : "Intent description: Import an Outline.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Gliederung importieren."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3794,6 +4796,12 @@
     "intent.descrption.move-rows-outlines" : {
       "comment" : "Move Rows in or between Outlines",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen in oder zwischen Gliederungen verschieben"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3817,6 +4825,12 @@
     "intent.descrption.update-row-details" : {
       "comment" : "Update the details of a Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details einer Zeile aktualisieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3840,6 +4854,12 @@
     "intent.parameter.account-type" : {
       "comment" : "Intent Parameter: Account Type",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account-Typ"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3863,6 +4883,12 @@
     "intent.parameter.account-type-request" : {
       "comment" : "Intent request dialog: Which Account do you want to add this Outline to?",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu welchem Account möchten Sie diese Gliederung hinzufügen?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3886,6 +4912,12 @@
     "intent.parameter.complete" : {
       "comment" : "Complete",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abschließen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3909,6 +4941,12 @@
     "intent.parameter.completion-state" : {
       "comment" : "Completion State",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vervollständigungsstatus"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3932,6 +4970,12 @@
     "intent.parameter.created-end-date" : {
       "comment" : "Intent Parameter: Created End Date",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellungsenddatum"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3955,6 +4999,12 @@
     "intent.parameter.created-start-date" : {
       "comment" : "Intent Parameter: Created Start Date",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellungsstartdatum"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3978,6 +5028,12 @@
     "intent.parameter.destination" : {
       "comment" : "Destination",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4001,6 +5057,12 @@
     "intent.parameter.detail" : {
       "comment" : "Detail\nIntent parameter: Detail",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detail"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4024,6 +5086,12 @@
     "intent.parameter.end-depth" : {
       "comment" : "End Depth",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endtiefe"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4047,6 +5115,12 @@
     "intent.parameter.entity-id" : {
       "comment" : "Entity ID",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entitäts-ID"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4070,6 +5144,12 @@
     "intent.parameter.excluded-rows" : {
       "comment" : "Excluded Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgeschlossene Zeilen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4093,6 +5173,12 @@
     "intent.parameter.expanded" : {
       "comment" : "Expanded",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erweitert"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4116,6 +5202,12 @@
     "intent.parameter.expanded-state" : {
       "comment" : "Expanded State",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erweiterungsstatus"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4139,6 +5231,12 @@
     "intent.parameter.export-link-type" : {
       "comment" : "Intent parameter: Export Link Type",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export-Link-Typ"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4162,6 +5260,12 @@
     "intent.parameter.export-type" : {
       "comment" : "Intent parameter: Export Type",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export-Typ"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4185,6 +5289,12 @@
     "intent.parameter.export-type-markdown-doc" : {
       "comment" : "Export type: Markdown Doc",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown-Dokument"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4208,6 +5318,12 @@
     "intent.parameter.export-type-markdown-list" : {
       "comment" : "Export type: Markdown List",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown-Liste"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4231,6 +5347,12 @@
     "intent.parameter.export-type-pdf-doc" : {
       "comment" : "Export type: PDF Doc",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF-Dokument"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4254,6 +5376,12 @@
     "intent.parameter.export-type-pdf-list" : {
       "comment" : "Export type: PDF List",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF-Liste"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4277,6 +5405,12 @@
     "intent.parameter.import-type" : {
       "comment" : "Intent Parameter: Import Type",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import-Typ"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4300,6 +5434,12 @@
     "intent.parameter.input-file" : {
       "comment" : "Intent Parameter: Input File",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingabedatei"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4323,6 +5463,12 @@
     "intent.parameter.input-images" : {
       "comment" : "Intent Parameter: Input Images",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingabebilder"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4346,6 +5492,12 @@
     "intent.parameter.note" : {
       "comment" : "Note",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4369,6 +5521,12 @@
     "intent.parameter.outline" : {
       "comment" : "Intent parameter: Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4392,6 +5550,12 @@
     "intent.parameter.outline-title-request" : {
       "comment" : "Intent request dialog: What is the title of the new Outline?",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie lautet der Titel der neuen Gliederung?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4415,6 +5579,12 @@
     "intent.parameter.owner-email" : {
       "comment" : "Intent parameter: Owner Email",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besitzer-E-Mail"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4438,6 +5608,12 @@
     "intent.parameter.owner-name" : {
       "comment" : "Intent parameter: Owner Name",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besitzername"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4461,6 +5637,12 @@
     "intent.parameter.owner-url" : {
       "comment" : "Intent parameter: Owner URL",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besitzer-URL"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4484,6 +5666,12 @@
     "intent.parameter.regular-expression" : {
       "comment" : "Regular Expression",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regulärer Ausdruck"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4507,6 +5695,12 @@
     "intent.parameter.relative-file-links" : {
       "comment" : "Export Link Type: Relative File Links",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relative Dateilinks"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4530,6 +5724,12 @@
     "intent.parameter.rows" : {
       "comment" : "Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4553,6 +5753,12 @@
     "intent.parameter.search" : {
       "comment" : "Intent Parameter: Search\nSearch",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suchen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4576,6 +5782,12 @@
     "intent.parameter.start-depth" : {
       "comment" : "Start Depth",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starttiefe"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4599,6 +5811,12 @@
     "intent.parameter.tag" : {
       "comment" : "Intent parameter: Tag",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlagwort"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4622,6 +5840,12 @@
     "intent.parameter.tag-name" : {
       "comment" : "Intent parameter: Tag Name\nIntent paramter: Tag Name",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlagwort-Name"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4645,6 +5869,12 @@
     "intent.parameter.tag-names" : {
       "comment" : "Intent Parameter: Tag Names",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlagwort-Namen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4668,6 +5898,12 @@
     "intent.parameter.title" : {
       "comment" : "Intent Parameter: Title",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4691,6 +5927,12 @@
     "intent.parameter.topic" : {
       "comment" : "Topic",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thema"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4714,6 +5956,12 @@
     "intent.parameter.topics" : {
       "comment" : "Topics",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Themen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4737,6 +5985,12 @@
     "intent.parameter.type-opml" : {
       "comment" : "Export type: OPML\nImport type: OPML",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OPML"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4760,6 +6014,12 @@
     "intent.parameter.updated-end-date" : {
       "comment" : "Intent Parameter: Updated End Date",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktualisierungsenddatum"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4783,6 +6043,12 @@
     "intent.parameter.updated-start-date" : {
       "comment" : "Intent Parameter: Updated Start Date",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktualisierungsstartdatum"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4806,6 +6072,12 @@
     "intent.parameter.zavala-deep-links" : {
       "comment" : "Export Link Type: Zavala Deep Links",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zavala Deep Links"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4829,6 +6101,12 @@
     "intent.predicition.import-the-%@-%@-into-%@" : {
       "comment" : "Import the <ImportType> <InputFile> into <AccountType>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importieren the %1$@ %2$@ into %3$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4852,6 +6130,12 @@
     "intent.prediction.add-%@-to-%@-at-%@" : {
       "comment" : "Add <topics> to <entityID> at <destination>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen %1$@ to %2$@ at %3$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4875,6 +6159,12 @@
     "intent.prediction.add-outline-%@-to-%@" : {
       "comment" : "Intent Prediction: Add Outline titled <title> to <accountType>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen Gliederung titled %1$@ to %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4898,6 +6188,12 @@
     "intent.prediction.add-tag-%@-to-%@" : {
       "comment" : "Intent prediction: Add <tagname> to <outline>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen %1$@ to %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4921,6 +6217,12 @@
     "intent.prediction.copy-%@-to-%@-at-%@" : {
       "comment" : "Copy <rows> to <entityID> at <destination>)",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren %1$@ to %2$@ at %3$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4944,6 +6246,12 @@
     "intent.prediction.export-the-%@-as-%@-using-%@" : {
       "comment" : "Import prediction: Export the <Outline> as <ExportType> using <ExportLinkType>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportieren the %1$@ as %2$@ using %3$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4967,6 +6275,12 @@
     "intent.prediction.get-images-for-%@" : {
       "comment" : "Intent Prediction: Get Images for <Outline>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder für %@ abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4990,6 +6304,12 @@
     "intent.prediction.get-rows-matching-%@-starting-at-%@" : {
       "comment" : "Get Rows matching <search> starting at <entityID>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen abrufen matching %1$@ starting at %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5013,6 +6333,12 @@
     "intent.prediction.move-%@-to-%@-at-%@" : {
       "comment" : "Move <rows> to <entityID> at <destination>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschieben %1$@ to %2$@ at %3$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5036,6 +6362,12 @@
     "intent.prediction.remove-%@" : {
       "comment" : "Intent prediction: Remove <Outline>\nRemove <rows>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen %@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5059,6 +6391,12 @@
     "intent.prediction.remove-%@-from-%@" : {
       "comment" : "Intent prediction: Remove <tag name> from <outline>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen %1$@ from %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5082,6 +6420,12 @@
     "intent.prediction.set-%@-of-%@" : {
       "comment" : "Set <detail> of <rows>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ von %2$@ setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5105,6 +6449,12 @@
     "intent.prediction.set-%@-of-%@-to-%@" : {
       "comment" : "Set <detail> of <rows> to <complete>\nSet <detail> of <rows> to <expanded>\nSet <detail> of <rows> to <note>\nSet <detail> of <rows> to <topic>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ von %2$@ auf %3$@ setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5128,6 +6478,12 @@
     "intent.prediction.set-detail-%@-outline-%@" : {
       "comment" : "Intent prediction: Set <detail> of <outline>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ von %2$@ setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5151,6 +6507,12 @@
     "intent.prediction.set-detail-%@-outline-%@-ownerEmail-%@" : {
       "comment" : "Intent prediction: Set <detail> of <outline> to <owner Email>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ von %2$@ auf %3$@ setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5174,6 +6536,12 @@
     "intent.prediction.set-detail-%@-outline-%@-ownerName-%@" : {
       "comment" : "Intent prediction: Set <detail> of <outline> to <owner name>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ von %2$@ auf %3$@ setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5197,6 +6565,12 @@
     "intent.prediction.set-detail-%@-outline-%@-ownerURL-%@" : {
       "comment" : "Intent prediction: Set <detail> of <outline> to <owner URL>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ von %2$@ auf %3$@ setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5220,6 +6594,12 @@
     "intent.prediction.set-detail-%@-outline-%@-title-%@" : {
       "comment" : "Intent prediction: Set <detail> of <outline> to <title>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ von %2$@ auf %3$@ setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5243,6 +6623,12 @@
     "intent.prediction.show-%@" : {
       "comment" : "Show <outline>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anzeigen %@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5266,6 +6652,12 @@
     "intent.prompt.tag-name-to-add-%@" : {
       "comment" : "What is the <tagname> to add?",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was ist das %@ zum Hinzufügen?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5288,6 +6680,12 @@
     },
     "intent.summary-add-tag-${tagName}-to-outline-${outline}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen tag ${tagName} to ${outline}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5310,6 +6708,12 @@
     },
     "intent.summary-show-${outline}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anzeigen ${outline}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5332,6 +6736,12 @@
     },
     "intent.summary.add-${topics}-to-${entityID}-at-${destination}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen ${topics} to ${entityID} at ${destination}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5354,6 +6764,12 @@
     },
     "intent.summary.add-outline-${title}-to-${accountType}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen Gliederung ${title} to ${accountType}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5376,6 +6792,12 @@
     },
     "intent.summary.copy-${rows}-to-${entityID}-at-${destination}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren ${rows} to ${entityID} at ${destination}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5398,6 +6820,12 @@
     },
     "intent.summary.export-the-${outline}-as-${exportType}-using-${exportLinkType}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportieren the ${outline} as ${exportType} using ${exportLinkType}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5420,6 +6848,12 @@
     },
     "intent.summary.get-current-outline" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelle Gliederung abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5442,6 +6876,12 @@
     },
     "intent.summary.get-current-tags" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelle Schlagwörter abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5464,6 +6904,12 @@
     },
     "intent.summary.get-images-for-${outline}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder für ${outline} abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5486,6 +6932,12 @@
     },
     "intent.summary.get-outlines" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederungen abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5508,6 +6960,12 @@
     },
     "intent.summary.get-rows-matching-${search}-starting-at-${entityID}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen abrufen matching ${search} start at ${entityID}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5530,6 +6988,12 @@
     },
     "intent.summary.import-the-${importType}-${inputFile}-into-${accountType}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importieren the ${importType} ${inputFile} into ${accountType}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5552,6 +7016,12 @@
     },
     "intent.summary.move-${rows}-to-${entityID}-at-${destination}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschieben ${rows} to ${entityID} at ${destination}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5574,6 +7044,12 @@
     },
     "intent.summary.remove-${outline}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen ${outline}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5596,6 +7072,12 @@
     },
     "intent.summary.remove-${rows}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen ${rows}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5618,6 +7100,12 @@
     },
     "intent.summary.remove-${tagName}-from-${outline}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen ${tagName} from ${outline}"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5640,6 +7128,12 @@
     },
     "intent.summary.set-${detail}-of-${outline}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${outline} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5662,6 +7156,12 @@
     },
     "intent.summary.set-${detail}-of-${outline}-to-${ownerEmail}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${outline} auf ${ownerEmail} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5684,6 +7184,12 @@
     },
     "intent.summary.set-${detail}-of-${outline}-to-${ownerName}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${outline} auf ${ownerName} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5706,6 +7212,12 @@
     },
     "intent.summary.set-${detail}-of-${outline}-to-${ownerURL}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${outline} auf ${ownerURL} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5728,6 +7240,12 @@
     },
     "intent.summary.set-${detail}-of-${outline}-to-${title}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${outline} auf ${title} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5750,6 +7268,12 @@
     },
     "intent.summary.set-${detail}-of-${rows}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${rows} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5772,6 +7296,12 @@
     },
     "intent.summary.set-${detail}-of-${rows}-to-${complete}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${rows} auf ${complete} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5794,6 +7324,12 @@
     },
     "intent.summary.set-${detail}-of-${rows}-to-${expanded}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${rows} auf ${expanded} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5816,6 +7352,12 @@
     },
     "intent.summary.set-${detail}-of-${rows}-to-${note}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${rows} auf ${note} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5838,6 +7380,12 @@
     },
     "intent.summary.set-${detail}-of-${rows}-to-${topic}" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${detail} von ${rows} auf ${topic} setzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5861,6 +7409,12 @@
     "intent.title.add-outline" : {
       "comment" : "Intent Title: Add Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5884,6 +7438,12 @@
     "intent.title.add-outline-tag" : {
       "comment" : "Intent title: Add Outline Tag",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederungs-Schlagwort hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5907,6 +7467,12 @@
     "intent.title.add-rows" : {
       "comment" : "Add Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen hinzufügen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5930,6 +7496,12 @@
     "intent.title.copy-rows" : {
       "comment" : "Copy Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen kopieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5953,6 +7525,12 @@
     "intent.title.edit-outline" : {
       "comment" : "Intent title: Edit Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung bearbeiten"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5976,6 +7554,12 @@
     "intent.title.edit-rows" : {
       "comment" : "Edit Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen bearbeiten"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5999,6 +7583,12 @@
     "intent.title.export" : {
       "comment" : "Intent title: Export",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6022,6 +7612,12 @@
     "intent.title.export-description" : {
       "comment" : "Intent description: Export the outline in various formats.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Gliederung in verschiedenen Formaten exportieren."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6045,6 +7641,12 @@
     "intent.title.get-current-outline" : {
       "comment" : "Get Current Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelle Gliederung abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6068,6 +7670,12 @@
     "intent.title.get-current-tags" : {
       "comment" : "Get Current Tags",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelle Schlagwörter abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6091,6 +7699,12 @@
     "intent.title.get-images-for-outline" : {
       "comment" : "Intent title: Get Images for Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder für Gliederung abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6114,6 +7728,12 @@
     "intent.title.get-outlines" : {
       "comment" : "Intent title: Get Outlines",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederungen abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6137,6 +7757,12 @@
     "intent.title.get-rows" : {
       "comment" : "Get Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen abrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6160,6 +7786,12 @@
     "intent.title.import" : {
       "comment" : "Intent title: Import",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6183,6 +7815,12 @@
     "intent.title.move-rows" : {
       "comment" : "Move Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen verschieben"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6206,6 +7844,12 @@
     "intent.title.remove-outline" : {
       "comment" : "Intent title: Remove Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung entfernen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6229,6 +7873,12 @@
     "intent.title.remove-outline-tag" : {
       "comment" : "Intent title: Remove Outline Tag",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederungs-Schlagwort entfernen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6252,6 +7902,12 @@
     "intent.title.remove-rows" : {
       "comment" : "Remove Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen entfernen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6275,6 +7931,12 @@
     "intent.title.show-outline" : {
       "comment" : "Show Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung anzeigen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6298,6 +7960,12 @@
     "label.text.about-zavala" : {
       "comment" : "Label: About Zavala",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über Zavala"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6321,6 +7989,12 @@
     "label.text.account-type" : {
       "comment" : "Account Type",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account-Typ"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6344,6 +8018,12 @@
     "label.text.accounts" : {
       "comment" : "Label: Accounts",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konten"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6367,6 +8047,12 @@
     "label.text.acknowledgements" : {
       "comment" : "Label: Acknowledgements",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Danksagungen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6390,6 +8076,12 @@
     "label.text.app-developed-by" : {
       "comment" : "Developed by [Maurice C. Parker](https://vincode.io)",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwickelt von [Maurice C. Parker](https://vincode.io)"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6413,6 +8105,12 @@
     "label.text.app-icon-credit" : {
       "comment" : "App icon by [Brad Ellis](https://hachyderm.io/@bradellis)",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-Symbol von [Brad Ellis](https://hachyderm.io/@bradellis)"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6436,6 +8134,12 @@
     "label.text.backlinks" : {
       "comment" : "Label: Backlinks",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rückverweise"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6459,6 +8163,12 @@
     "label.text.bug-tracker" : {
       "comment" : "Label: Bug Tracker",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehlerverfolgung"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6482,6 +8192,12 @@
     "label.text.close" : {
       "comment" : "Close",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6505,6 +8221,12 @@
     "label.text.collapsed" : {
       "comment" : "Collapsed",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingeklappt"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6528,6 +8250,12 @@
     "label.text.color-palette" : {
       "comment" : "Label: Color Palette",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbpalette"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6551,6 +8279,12 @@
     "label.text.community-discussion" : {
       "comment" : "Label: Community Discussion",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Community-Diskussion"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6574,6 +8308,12 @@
     "label.text.complete" : {
       "comment" : "Complete\nLabel: Complete",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abschließen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6597,6 +8337,12 @@
     "label.text.contributers" : {
       "comment" : "Label: Complete",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitwirkende"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6620,6 +8366,12 @@
     "label.text.copyright-%@" : {
       "comment" : "Label: Copyright © Vincode, Inc. 2020-<Current Year>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copyright © Vincode, Inc. 2020-%@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6643,6 +8395,12 @@
     "label.text.corrupted-outline" : {
       "comment" : "Label: Corrupted Outline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beschädigte Gliederung"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6666,6 +8424,12 @@
     "label.text.corrupted-outline-message" : {
       "comment" : "Alert Message: This outline appears to be corrupted. Would you like to fix it?",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Gliederung scheint beschädigt zu sein. Möchten Sie sie reparieren?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6689,6 +8453,12 @@
     "label.text.created" : {
       "comment" : "Created\nLabel: Created",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellt"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6712,6 +8482,12 @@
     "label.text.created-on-%@-at-%@" : {
       "comment" : "Label: Created on <Date> at <Time>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellt am %1$@ um %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6735,6 +8511,12 @@
     "label.text.delete-completed" : {
       "comment" : "Label: Delete Completed",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen Completed"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6758,6 +8540,12 @@
     "label.text.delete-completed-rows" : {
       "comment" : "Label: Delete Completed Rows",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen Completed Rows"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6781,6 +8569,12 @@
     "label.text.delete-completed-rows-message" : {
       "comment" : "Alert Message: Are you sure you want to delete the completed rows?",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie die abgeschlossenen Zeilen löschen möchten?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6804,6 +8598,24 @@
     "label.text.delete-multiple-tags-confirmation-message-%lld" : {
       "comment" : "Alert Title: Are you sure you want to delete <Tag Count> tags?",
       "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Sind Sie sicher, dass Sie %i Schlagwort löschen möchten?"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Sind Sie sicher, dass Sie %i Schlagwörter löschen möchten?"
+                }
+              }
+            }
+          }
+        },
         "en" : {
           "variations" : {
             "plural" : {
@@ -6863,6 +8675,12 @@
     "label.text.delete-outline-confirmation-message-%@" : {
       "comment" : "Alert Title: Are you sure you want to delete the “Outline Title” outline?",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie die Gliederung “%@” löschen möchten?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6886,6 +8704,12 @@
     "label.text.delete-outlines-confirmation-message-%lld" : {
       "comment" : "Label: Are you sure you want to delete <Outline Count> outlines?",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie %lld Gliederungen löschen möchten?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6909,6 +8733,12 @@
     "label.text.delete-tag-confirmation-message-%@" : {
       "comment" : "Alert Title: Are you sure you want to delete the “Tag Name” tag?",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie das Schlagwort “%@” löschen möchten?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6932,6 +8762,12 @@
     "label.text.directly-after" : {
       "comment" : "Directly After",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direkt danach"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6955,6 +8791,12 @@
     "label.text.document-not-found" : {
       "comment" : "Label: Document Not Found",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokument Not Found"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6978,6 +8820,12 @@
     "label.text.document-not-found-message" : {
       "comment" : "Alert Message: The requested document could not be found. It was most likely deleted and is no longer available.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das angeforderte Dokument konnte nicht gefunden werden. Es wurde höchstwahrscheinlich gelöscht und ist nicht mehr verfügbar."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7001,6 +8849,12 @@
     "label.text.done" : {
       "comment" : "Label: Done",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7024,6 +8878,12 @@
     "label.text.edit-document-%@" : {
       "comment" : "Prompt:  Edit document “<Document Title>”",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bearbeiten Dokument “%@”"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7047,6 +8907,12 @@
     "label.text.editor" : {
       "comment" : "Label: Editor",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editor"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7070,6 +8936,12 @@
     "label.text.email" : {
       "comment" : "Label: Email",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-Mail"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7093,6 +8965,12 @@
     "label.text.entity-id" : {
       "comment" : "Entity ID",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entitäts-ID"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7116,6 +8994,12 @@
     "label.text.error" : {
       "comment" : "Label: Error",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7139,6 +9023,12 @@
     "label.text.expanded" : {
       "comment" : "Expanded",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erweitert"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7162,6 +9052,12 @@
     "label.text.filter-completed" : {
       "comment" : "Label: Filter Completed",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtern Completed"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7185,6 +9081,12 @@
     "label.text.fonts" : {
       "comment" : "Label: Fonts",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schriftarten"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7208,6 +9110,12 @@
     "label.text.format" : {
       "comment" : "Label: Format",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7231,6 +9139,12 @@
     "label.text.github-repository" : {
       "comment" : "Label: GitHub Repository",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs-review",
+            "value" : "GitHub Repository"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7249,11 +9163,18 @@
             "value" : "GitHub Repository"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "label.text.help" : {
       "comment" : "Label: Help",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfe"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7277,6 +9198,12 @@
     "label.text.history" : {
       "comment" : "Label: History",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlauf"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7300,6 +9227,12 @@
     "label.text.id" : {
       "comment" : "ID",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs-review",
+            "value" : "ID"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7318,11 +9251,18 @@
             "value" : "ID"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "label.text.image" : {
       "comment" : "Label: Image",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7346,6 +9286,12 @@
     "label.text.import-failed" : {
       "comment" : "Error Message Title: Import Failed",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importieren Failed"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7369,6 +9315,12 @@
     "label.text.inside-at-end" : {
       "comment" : "Inside at End",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Innen at End"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7392,6 +9344,12 @@
     "label.text.inside-at-start" : {
       "comment" : "Inside at Start",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Innen at Start"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7415,6 +9373,12 @@
     "label.text.intent-error-account-not available" : {
       "comment" : "Error text: The specified Account isn't available to be used.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das angegebene Account ist nicht verfügbar."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7438,6 +9402,12 @@
     "label.text.intent-error-invalid-destination-outline-entity-id" : {
       "comment" : "Error text: The specified Destination is not a valid for the Outline specified by the Entity ID.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das angegebene Ziel ist für die durch die Entity-ID angegebene Gliederung ungültig."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7461,6 +9431,12 @@
     "label.text.intent-error-no-outline-or-row" : {
       "comment" : "Error text: Unable to find the Outline or Row specified by the Entity ID.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung oder Zeile mit der angegebenen Entity-ID konnte nicht gefunden werden."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7484,6 +9460,12 @@
     "label.text.intent-error-no-tags-selected" : {
       "comment" : "Error text: No Tags are currently selected.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nein Schlagwörter are currently selected."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7507,6 +9489,12 @@
     "label.text.intent-error-outline-not-found" : {
       "comment" : "Error text: The requested Outline was not found.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die angeforderte Gliederung wurde nicht gefunden."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7530,6 +9518,12 @@
     "label.text.intent-error-outline-not-in-view" : {
       "comment" : "Error text: There isn't an Outline currently being viewed.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es wird derzeit keine Gliederung angezeigt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7553,6 +9547,12 @@
     "label.text.intent-error-unexpected" : {
       "comment" : "An unexpected error occurred. Please try again.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7576,6 +9576,12 @@
     "label.text.level" : {
       "comment" : "Level",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7599,6 +9605,12 @@
     "label.text.link" : {
       "comment" : "Label: Link",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7622,6 +9634,12 @@
     "label.text.link-with-ellipsis" : {
       "comment" : "Label: Link…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7645,6 +9663,12 @@
     "label.text.manage-sharing-with-ellipsis" : {
       "comment" : "Label: Manage Sharing…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Freigabe verwalten…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7668,6 +9692,12 @@
     "label.text.max-width" : {
       "comment" : "Label: Max Width",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximale Breite"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7691,6 +9721,12 @@
     "label.text.more" : {
       "comment" : "Label: More",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7714,6 +9750,12 @@
     "label.text.move" : {
       "comment" : "Label: Move",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschieben"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7737,6 +9779,12 @@
     "label.text.multiple-selections" : {
       "comment" : "Label: Multiple Selections",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehrfachauswahl"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7760,6 +9808,12 @@
     "label.text.name" : {
       "comment" : "Label: Name",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7783,6 +9837,12 @@
     "label.text.navigation" : {
       "comment" : "Label: Navigation",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7806,6 +9866,12 @@
     "label.text.new-main-window" : {
       "comment" : "Label: New Main Window",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neu Main Window"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7829,6 +9895,12 @@
     "label.text.no-selection" : {
       "comment" : "Label: No Selection",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nein Selection"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7852,6 +9924,12 @@
     "label.text.no-title" : {
       "comment" : "Label: (No Title)",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(Kein Titel)"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7875,6 +9953,12 @@
     "label.text.none" : {
       "comment" : "Label: None",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7898,6 +9982,12 @@
     "label.text.note" : {
       "comment" : "Note",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7921,6 +10011,12 @@
     "label.text.note-level-%lld" : {
       "comment" : "Label: Note Level <Note Level>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz Ebene %lld"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7944,6 +10040,12 @@
     "label.text.numbering-level-%lld" : {
       "comment" : "Label: Number Level <Numbering Level>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nummerierungsebene %lld"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7967,6 +10069,12 @@
     "label.text.numbering-style" : {
       "comment" : "Label: Numbering Style",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nummerierungsstil"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7990,6 +10098,60 @@
     "label.text.on-my-device" : {
       "comment" : "On My <device>",
       "localizations" : {
+        "de" : {
+          "variations" : {
+            "device" : {
+              "appletv" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Apple TV"
+                }
+              },
+              "applevision" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Apple Vision"
+                }
+              },
+              "applewatch" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Apple Watch"
+                }
+              },
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem iPad"
+                }
+              },
+              "iphone" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem iPhone"
+                }
+              },
+              "ipod" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem iPod"
+                }
+              },
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Mac"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf meinem Device"
+                }
+              }
+            }
+          }
+        },
         "en" : {
           "variations" : {
             "device" : {
@@ -8157,6 +10319,12 @@
     "label.text.opml-ownership-description" : {
       "comment" : "Label: This information is included in OPML documents to attribute ownership.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Information wird in OPML-Dokumenten zur Eigentumsangabe eingefügt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8180,6 +10348,12 @@
     "label.text.outline" : {
       "comment" : "Label: Outline\nOutline",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8203,6 +10377,12 @@
     "label.text.outline-defaults" : {
       "comment" : "Label: Outline Defaults",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung Defaults"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8226,6 +10406,12 @@
     "label.text.outline-detail" : {
       "comment" : "Outline Detail",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung Detail"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8249,6 +10435,12 @@
     "label.text.outline-owner" : {
       "comment" : "Label: Outline Owner",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung Owner"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8272,6 +10464,12 @@
     "label.text.outside" : {
       "comment" : "Outside",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Außen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8295,6 +10493,12 @@
     "label.text.owner" : {
       "comment" : "Label: Owner",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigentümer"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8318,6 +10522,12 @@
     "label.text.owner-email" : {
       "comment" : "Owner Email",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besitzer-E-Mail"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8341,6 +10551,12 @@
     "label.text.owner-name" : {
       "comment" : "Owner Name",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besitzername"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8364,6 +10580,12 @@
     "label.text.owner-url" : {
       "comment" : "Owner URL",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Besitzer-URL"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8387,6 +10609,12 @@
     "label.text.preferences-with-ellipsis" : {
       "comment" : "Label: Preferences…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8410,6 +10638,12 @@
     "label.text.primary-text" : {
       "comment" : "Label: Primary Text",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primärtext"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8433,6 +10667,12 @@
     "label.text.privacy-policy" : {
       "comment" : "Label: Privacy Policy",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datenschutzrichtlinie"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8456,6 +10696,12 @@
     "label.text.quaternary-text" : {
       "comment" : "Label: Quaternary Text",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quartärtext"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8479,6 +10725,12 @@
     "label.text.readable" : {
       "comment" : "Label: Readable",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lesbar"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8502,6 +10754,12 @@
     "label.text.reference" : {
       "comment" : "Label: Reference: ",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Referenz"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8525,6 +10783,12 @@
     "label.text.references" : {
       "comment" : "Label: References: ",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Referenzen: "
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8548,6 +10812,12 @@
     "label.text.release-notes" : {
       "comment" : "Label: Release Notes",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versionshinweise"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8571,6 +10841,12 @@
     "label.text.remove-icloud-account" : {
       "comment" : "Label: Remove iCloud Account",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen iCloud Account"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8594,6 +10870,12 @@
     "label.text.remove-icloud-account-message" : {
       "comment" : "Label: Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this computer.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie das iCloud-Account entfernen möchten? Alle Dokumente im iCloud-Account werden von diesem Computer entfernt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8617,6 +10899,12 @@
     "label.text.restore-defaults" : {
       "comment" : "Label: Restore Defaults",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellen Defaults"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8640,6 +10928,12 @@
     "label.text.restore-defaults-message" : {
       "comment" : "Label: Are you sure you want to restore the defaults? All your font customizations will be lost.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sind Sie sicher, dass Sie die Standardeinstellungen wiederherstellen möchten? Alle Ihre Schriftanpassungen gehen verloren."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8663,6 +10957,12 @@
     "label.text.row" : {
       "comment" : "Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8686,6 +10986,12 @@
     "label.text.row-completion-state" : {
       "comment" : "Row Completion State",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile Vervollständigungsstatus"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8709,6 +11015,12 @@
     "label.text.row-destination" : {
       "comment" : "Row Destination",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile Ziel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8732,6 +11044,12 @@
     "label.text.row-detail" : {
       "comment" : "Row Detail",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile Detail"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8755,6 +11073,12 @@
     "label.text.row-expanded-state" : {
       "comment" : "Row Expanded State",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile Erweiterungsstatus"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8778,6 +11102,12 @@
     "label.text.row-indent" : {
       "comment" : "Label: Row Indent",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile Indent"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8801,6 +11131,12 @@
     "label.text.row-spacing" : {
       "comment" : "Label: Row Spacing",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile Spacing"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8824,6 +11160,12 @@
     "label.text.scroll-mode" : {
       "comment" : "Label: Scroll Mode",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scroll-Modus"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8847,6 +11189,12 @@
     "label.text.search" : {
       "comment" : "Label: Search",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suchen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8870,6 +11218,12 @@
     "label.text.secondary-text" : {
       "comment" : "Label: Secondary Text",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sekundärtext"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8893,6 +11247,12 @@
     "label.text.see-documents-in-container-%@" : {
       "comment" : "Label:  See documents in “<Document Container Title>”",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokumente in “%@” anzeigen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8916,6 +11276,12 @@
     "label.text.settings" : {
       "comment" : "Label: Settings",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8939,6 +11305,12 @@
     "label.text.settings-with-ellipsis" : {
       "comment" : "Label: Settings…",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen…"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8962,6 +11334,12 @@
     "label.text.share" : {
       "comment" : "Share",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8985,6 +11363,12 @@
     "label.text.statistics" : {
       "comment" : "Label: Statistics",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistiken"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9008,6 +11392,12 @@
     "label.text.tag" : {
       "comment" : "Label: Tag",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlagwort"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9031,6 +11421,12 @@
     "label.text.tags" : {
       "comment" : "Label: Tags\nTags",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlagwörter"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9054,6 +11450,12 @@
     "label.text.tertiary-text" : {
       "comment" : "Label: Tertiary Text",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tertiärtext"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9077,6 +11479,12 @@
     "label.text.title" : {
       "comment" : "Font Label: Title\nTitle",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9100,6 +11508,12 @@
     "label.text.topic" : {
       "comment" : "Topic\ntopic",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thema"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9123,6 +11537,12 @@
     "label.text.topic-level-%lld" : {
       "comment" : "Label: Topic Level <Topic Level>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thema Ebene %lld"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9146,6 +11566,12 @@
     "label.text.typewriter" : {
       "comment" : "Label: Typewriter",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schreibmaschine"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9169,6 +11595,12 @@
     "label.text.typing" : {
       "comment" : "Label: Typing",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingabe"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9192,6 +11624,12 @@
     "label.text.uncomplete" : {
       "comment" : "Uncomplete",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unvollständig"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9215,6 +11653,12 @@
     "label.text.undo-menu" : {
       "comment" : "Label: Undo Menu",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rückgängig machen Menu"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9238,6 +11682,12 @@
     "label.text.updated" : {
       "comment" : "Label: Updated\nUpdated",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktualisiert"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9261,6 +11711,12 @@
     "label.text.updated-on-%@-at-%@" : {
       "comment" : "Label: Updated on <Date> at <Time>",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ um %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9284,6 +11740,12 @@
     "label.text.url" : {
       "comment" : "Label: URL\nURL",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs-review",
+            "value" : "URL"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9302,11 +11764,18 @@
             "value" : "URL"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "label.text.website" : {
       "comment" : "Label: Website",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Webseite"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9330,6 +11799,12 @@
     "label.text.word-count" : {
       "comment" : "Label: Word Count",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wortanzahl"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9353,6 +11828,12 @@
     "label.text.zavala-help" : {
       "comment" : "Label: Zavala Help",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zavala-Hilfe"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9376,6 +11857,12 @@
     "outline.action.collapse-parent-row" : {
       "comment" : "Outline Action: Collapse Parent Row",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einklappen Parent Row"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",

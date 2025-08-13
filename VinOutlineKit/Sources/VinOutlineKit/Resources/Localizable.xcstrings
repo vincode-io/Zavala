@@ -16,6 +16,12 @@
     "label.text.all" : {
       "comment" : "Label: All",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -39,6 +45,12 @@
     "label.text.cloudkit-generic-error" : {
       "comment" : "An unexpected CloudKit error occurred.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein unerwarteter CloudKit-Fehler ist aufgetreten."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -62,6 +74,12 @@
     "label.text.no-title" : {
       "comment" : "Label: (No Title)",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(Kein Titel)"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -85,6 +103,12 @@
     "label.text.on-my-ipad" : {
       "comment" : "Local Account Name: On My iPad",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf meinem iPad"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -108,6 +132,12 @@
     "label.text.on-my-iphone" : {
       "comment" : "Local Account Name: On My iPhone",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf meinem iPhone"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -131,6 +161,12 @@
     "label.text.on-my-mac" : {
       "comment" : "Local Account Name: On My Mac",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf meinem Mac"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -154,6 +190,12 @@
     "label.text.search" : {
       "comment" : "Label: Search",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suchen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -177,6 +219,12 @@
     "label.text.tag-already-exists" : {
       "comment" : "Label: This Tag name already exists. Please choose a different name.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Tag-Name existiert bereits. Bitte wählen Sie einen anderen Namen."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -200,6 +248,12 @@
     "label.text.unable-to-access-security-scoped-resoruces" : {
       "comment" : "Label: Unable to access security scoped resource.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugriff auf sicherheitsbeschränkte Ressource nicht möglich."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -223,6 +277,12 @@
     "label.text.unable-to-deserialize-row-data" : {
       "comment" : "Label: Unable to deserialize the row data.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen-Daten können nicht deserialisiert werden."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -246,6 +306,12 @@
     "label.text.unable-to-process-opml" : {
       "comment" : "Label: Unable to process the OPML data.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OPML-Daten können nicht verarbeitet werden."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -269,6 +335,12 @@
     "label.text.unable-to-read-import-file" : {
       "comment" : "Label: Unable to read the import file.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import-Datei kann nicht gelesen werden."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
