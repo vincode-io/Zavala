@@ -36,6 +36,7 @@ private extension DocumentIndexer {
 }
 
 struct DocumentIndexAttributes: Sendable {
+	
 	let title: String
 	let keywords: [String]
 	let relatedUniqueIdentifier: String
@@ -64,4 +65,5 @@ struct DocumentIndexAttributes: Sendable {
 		textContent = document.textContent
 		contentModificationDate = document.updated ?? Date()
 	}
+	
 }
