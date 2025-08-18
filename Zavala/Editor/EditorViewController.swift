@@ -864,7 +864,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func applicationWillTerminate(_ note: Notification) {
-		updateSpotlightIndex()
+		if let outline {
+			updateSpotlightIndex(with: outline)
+		}
 	}
 	
 	@objc func sceneWillDeactivate(_ note: Notification) {
@@ -946,8 +948,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			textField.endEditing(true)
 		}
 		
-		Task.detached {
-			await self.updateSpotlightIndex()
+		if let outline {
+			Task.detached {
+				await self.updateSpotlightIndex(with: outline)
+			}
 		}
 		
 		// After this point as long as we don't have this Outline open in other
@@ -3624,13 +3628,11 @@ private extension EditorViewController {
 		collectionView.scrollRectToVisibleBypass(convertedRect, animated: animated)
 	}
 
-	func updateSpotlightIndex() {
-		if let outline {
-			outline.load()
-			DocumentIndexer.updateIndex(forDocument: .outline(outline))
-			Task {
-				await outline.unload()
-			}
+	func updateSpotlightIndex(with outline: Outline) {
+		outline.load()
+		DocumentIndexer.updateIndex(forDocument: .outline(outline))
+		Task {
+			await outline.unload()
 		}
 	}
 	
