@@ -507,7 +507,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
 				if UIResponder.valid(action: .focusOut) {
-					item.image = .focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
+					item.image = .focusActive.symbolSizedForCatalyst(pointSize: 17)
 					item.label = .focusOutControlLabel
 					item.toolTip = .focusOutControlLabel
 				} else {
@@ -531,7 +531,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				let isFilterOn = self.editorViewController?.isFilterOn ?? false
 				
 				if isFilterOn {
-					item.image = .filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
+					item.image = .filterActive.symbolSizedForCatalyst(pointSize: 17)
 				} else {
 					item.image = .filterInactive.symbolSizedForCatalyst(pointSize: 17)
 				}
