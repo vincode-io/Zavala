@@ -323,11 +323,13 @@ open class SearchTextField: EnhancedTextField {
                 
 				let tableWidth = widestFilteredResult + 20
 
+				guard let screen = tableView.window?.windowScene?.screen else { return }
+				
 				var tableHeight: CGFloat = 0
                 if keyboardIsShowing, let keyboardHeight = keyboardFrame?.size.height {
-                    tableHeight = min((tableView.contentSize.height), (UIScreen.main.bounds.size.height - frame.origin.y - frame.height - keyboardHeight))
+                    tableHeight = min((tableView.contentSize.height), (screen.bounds.size.height - frame.origin.y - frame.height - keyboardHeight))
                 } else {
-                    tableHeight = min((tableView.contentSize.height), (UIScreen.main.bounds.size.height - frame.origin.y - frame.height))
+                    tableHeight = min((tableView.contentSize.height), (screen.bounds.size.height - frame.origin.y - frame.height))
                 }
                 
                 if maxResultsListHeight > 0 {
@@ -359,7 +361,9 @@ open class SearchTextField: EnhancedTextField {
                 shadowFrame.origin.y = tableView.frame.origin.y
                 shadowView!.frame = shadowFrame
             } else {
-                let tableHeight = min((tableView.contentSize.height), (UIScreen.main.bounds.size.height - frame.origin.y - theme.cellHeight))
+				guard let screen = tableView.window?.windowScene?.screen else { return }
+
+                let tableHeight = min((tableView.contentSize.height), (screen.bounds.size.height - frame.origin.y - theme.cellHeight))
                 UIView.animate(withDuration: 0.2, animations: { [weak self] in
                     self?.tableView?.frame = CGRect(x: frame.origin.x + 2, y: (frame.origin.y - tableHeight), width: frame.size.width - 4, height: tableHeight)
                     self?.shadowView?.frame = CGRect(x: frame.origin.x + 3, y: (frame.origin.y + 3), width: frame.size.width - 6, height: 1)
