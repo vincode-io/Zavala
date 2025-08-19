@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24093.9" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24123.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="mac" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24057"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24062"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
@@ -61,18 +61,18 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dmv-1O-KpY">
-                                <rect key="frame" x="621" y="93" width="159" height="22.5"/>
+                                <rect key="frame" x="668" y="93" width="112" height="31"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" role="cancel" translatesAutoresizingMaskIntoConstraints="NO" id="SqN-L1-aXl">
-                                        <rect key="frame" x="0.0" y="0.0" width="75.5" height="22.5"/>
-                                        <state key="normal" title="Cancel" image="xmark" catalog="system"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="52" height="31"/>
+                                        <state key="normal" title="Cancel"/>
                                         <connections>
                                             <action selector="cancel:" destination="B1Q-08-vEZ" eventType="touchUpInside" id="cc9-2e-rBd"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" role="primary" translatesAutoresizingMaskIntoConstraints="NO" id="5AK-ci-8I5">
-                                        <rect key="frame" x="84" y="0.0" width="75.5" height="22.5"/>
-                                        <state key="normal" title="Update" image="checkmark" catalog="system"/>
+                                        <rect key="frame" x="60" y="0.0" width="52" height="31"/>
+                                        <state key="normal" title="Update"/>
                                         <connections>
                                             <action selector="submit:" destination="B1Q-08-vEZ" eventType="touchUpInside" id="Or9-dm-1Jg"/>
                                         </connections>
@@ -83,9 +83,9 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Sd-6R-Tb9">
-                                <rect key="frame" x="67" y="94" width="109.5" height="21.5"/>
+                                <rect key="frame" x="67" y="93" width="87" height="31"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="New Outline" image="plus" catalog="system"/>
+                                <state key="normal" title="New Outline"/>
                                 <connections>
                                     <action selector="newOutline:" destination="B1Q-08-vEZ" eventType="touchUpInside" id="aaE-Ap-kO8"/>
                                 </connections>
@@ -330,18 +330,18 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dCc-Ld-fXc">
-                                <rect key="frame" x="609" y="53" width="171" height="22.5"/>
+                                <rect key="frame" x="656" y="53" width="124" height="31"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" role="cancel" translatesAutoresizingMaskIntoConstraints="NO" id="KeX-HO-OVZ">
-                                        <rect key="frame" x="0.0" y="0.0" width="81.5" height="22.5"/>
-                                        <state key="normal" title="Cancel" image="xmark" catalog="system"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="58" height="31"/>
+                                        <state key="normal" title="Cancel"/>
                                         <connections>
                                             <action selector="cancel:" destination="BOp-Ed-o1j" eventType="touchUpInside" id="1IT-R2-c3m"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" role="primary" translatesAutoresizingMaskIntoConstraints="NO" id="Kqh-2r-Qd0">
-                                        <rect key="frame" x="90" y="0.0" width="81.5" height="22.5"/>
-                                        <state key="normal" title="Rename" image="checkmark" catalog="system"/>
+                                        <rect key="frame" x="66" y="0.0" width="58" height="31"/>
+                                        <state key="normal" title="Rename"/>
                                         <connections>
                                             <action selector="submit:" destination="BOp-Ed-o1j" eventType="touchUpInside" id="7Rf-Vb-Gnh"/>
                                         </connections>
@@ -374,11 +374,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="plus" catalog="system" width="128" height="113"/>
-        <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

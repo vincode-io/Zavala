@@ -144,8 +144,6 @@ struct GetInfoView: View {
 	var cancelButton: some View {
 		Button(role: .cancel, action: {
 			dismiss()
-		}, label: {
-			Label(String.cancelControlLabel, systemImage: "xmark")
 		})
 		.keyboardShortcut(.cancelAction)
 	}
@@ -154,8 +152,6 @@ struct GetInfoView: View {
 		Button(role: .confirm, action: {
 			getInfoViewModel.update()
 			dismiss()
-		}, label: {
-			Label(String.doneControlLabel, systemImage: "checkmark")
 		})
 		.keyboardShortcut(.defaultAction)
 	}

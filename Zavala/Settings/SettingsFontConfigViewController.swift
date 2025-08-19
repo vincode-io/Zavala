@@ -59,14 +59,12 @@ class SettingsFontConfigViewController: UITableViewController {
 			
 			cancelButton = UIButton(type: .system)
 			cancelButton.setTitle(.cancelControlLabel, for: .normal)
-			cancelButton.setImage(.cancel, for: .normal)
 			cancelButton.isAccessibilityElement = true
 			cancelButton.addTarget(self, action: #selector(cancel(_:)), for: .touchUpInside)
 			cancelButton.role = .cancel
 
 			saveButton = UIButton(type: .system)
 			saveButton.setTitle(.saveControlLabel, for: .normal)
-			saveButton.setImage(.done, for: .normal)
 			saveButton.isAccessibilityElement = true
 			saveButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
 			saveButton.role = .primary
