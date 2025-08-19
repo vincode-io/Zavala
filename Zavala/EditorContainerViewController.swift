@@ -341,7 +341,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = .delete.symbolSizedForCatalyst()
+			item.image = .delete
 			item.label = .deleteOutlineControlLabel
 			item.toolTip = .deleteOutlineControlLabel
 			item.isBordered = true
@@ -353,7 +353,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !appDelegate.accountManager.isSyncAvailable
 			}
-			item.image = .sync.symbolSizedForCatalyst()
+			item.image = .sync
 			item.label = .syncControlLabel
 			item.toolTip = .syncControlLabel
 			item.isBordered = true
@@ -365,7 +365,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .insertImage)
 			}
-			item.image = .insertImage.symbolSizedForCatalyst()
+			item.image = .insertImage
 			item.label = .insertImageControlLabel
 			item.toolTip = .insertImageControlLabel
 			item.isBordered = true
@@ -373,7 +373,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .link:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.image = .link.symbolSizedForCatalyst()
+			item.image = .link
 			item.label = .linkControlLabel
 			item.toolTip = .linkControlLabel
 			item.isBordered = true
@@ -383,23 +383,23 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if !(self?.editorViewController?.isCreateRowNotesUnavailable ?? true) {
-					item.image = .noteAdd.symbolSizedForCatalyst()
+					item.image = .noteAdd
 					item.label = .addNoteControlLabel
 					item.toolTip = .addNoteControlLabel
 					return false
 				} else if !(self?.editorViewController?.isDeleteRowNotesUnavailable ?? true) {
-					item.image = .noteDelete.symbolSizedForCatalyst()
+					item.image = .noteDelete
 					item.label = .deleteNoteControlLabel
 					item.toolTip = .deleteNoteControlLabel
 					return false
 				} else {
-					item.image = .noteAdd.symbolSizedForCatalyst()
+					item.image = .noteAdd
 					item.label = .addNoteControlLabel
 					item.toolTip = .addNoteControlLabel
 					return true
 				}
 			}
-			item.image = .noteAdd.symbolSizedForCatalyst()
+			item.image = .noteAdd
 			item.label = .addNoteControlLabel
 			item.toolTip = .addNoteControlLabel
 			item.isBordered = true
@@ -409,13 +409,13 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isBoldToggledOn ?? false {
-					item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = .bold.withTintColor(.systemBlue)
 				} else {
-					item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = .bold
 				}
 				return !UIResponder.valid(action: .toggleBoldface)
 			}
-			item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
+			item.image = .bold
 			item.label = .boldControlLabel
 			item.toolTip = .boldControlLabel
 			item.isBordered = true
@@ -425,13 +425,13 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isItalicToggledOn ?? false {
-					item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = .italic.withTintColor(.systemBlue)
 				} else {
-					item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = .italic
 				}
 				return !UIResponder.valid(action: .toggleItalics)
 			}
-			item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
+			item.image = .italic
 			item.label = .italicControlLabel
 			item.toolTip = .italicControlLabel
 			item.isBordered = true
@@ -442,7 +442,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .expandAllInOutline)
 			}
-			item.image = .expandAll.symbolSizedForCatalyst()
+			item.image = .expandAll
 			item.label = .expandControlLabel
 			item.toolTip = .expandAllInOutlineControlLabel
 			item.isBordered = true
@@ -453,7 +453,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .collapseAllInOutline)
 			}
-			item.image = .collapseAll.symbolSizedForCatalyst()
+			item.image = .collapseAll
 			item.label = .collapseControlLabel
 			item.toolTip = .collapseAllInOutlineControlLabel
 			item.isBordered = true
@@ -464,7 +464,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .moveCurrentRowsLeft)
 			}
-			item.image = .moveLeft.symbolSizedForCatalyst()
+			item.image = .moveLeft
 			item.label = .moveLeftControlLabel
 			item.toolTip = .moveLeftControlLabel
 			item.isBordered = true
@@ -475,7 +475,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .moveCurrentRowsRight)
 			}
-			item.image = .moveRight.symbolSizedForCatalyst()
+			item.image = .moveRight
 			item.label = .moveRightControlLabel
 			item.toolTip = .moveRightControlLabel
 			item.isBordered = true
@@ -486,7 +486,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .moveCurrentRowsUp)
 			}
-			item.image = .moveUp.symbolSizedForCatalyst()
+			item.image = .moveUp
 			item.label = .moveUpControlLabel
 			item.toolTip = .moveUpControlLabel
 			item.isBordered = true
@@ -497,7 +497,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .moveCurrentRowsDown)
 			}
-			item.image = .moveDown.symbolSizedForCatalyst()
+			item.image = .moveDown
 			item.label = .moveDownControlLabel
 			item.toolTip = .moveDownControlLabel
 			item.isBordered = true
@@ -507,17 +507,17 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
 				if UIResponder.valid(action: .focusOut) {
-					item.image = .focusActive.symbolSizedForCatalyst(pointSize: 17)
+					item.image = .focusActive
 					item.label = .focusOutControlLabel
 					item.toolTip = .focusOutControlLabel
 				} else {
-					item.image = .focusInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.image = .focusInactive
 					item.label = .focusInControlLabel
 					item.toolTip = .focusInControlLabel
 				}
 				return !UIResponder.valid(action: .toggleFocus)
 			}
-			item.image = .focusInactive.symbolSizedForCatalyst()
+			item.image = .focusInactive
 			item.label = .focusInControlLabel
 			item.toolTip = .focusInControlLabel
 			item.isBordered = true
@@ -531,9 +531,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				let isFilterOn = self.editorViewController?.isFilterOn ?? false
 				
 				if isFilterOn {
-					item.image = .filterActive.symbolSizedForCatalyst(pointSize: 17)
+					item.image = .filterActive
 				} else {
-					item.image = .filterInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.image = .filterInactive
 				}
 				
 				let turnFilterOnAction = UIAction() { _ in
@@ -568,7 +568,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				
 				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = .filterInactive.symbolSizedForCatalyst()
+			item.image = .filterInactive
 			item.label = .filterControlLabel
 			item.toolTip = .filterControlLabel
 			item.isBordered = true
@@ -580,7 +580,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .printDocs)
 			}
-			item.image = .printDoc.symbolSizedForCatalyst()
+			item.image = .printDoc
 			item.label = .printDocControlLabel
 			item.toolTip = .printDocControlLabel
 			item.isBordered = true
@@ -592,7 +592,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .printLists)
 			}
-			item.image = .printList.symbolSizedForCatalyst()
+			item.image = .printList
 			item.label = .printListControlLabel
 			item.toolTip = .printListControlLabel
 			item.isBordered = true
@@ -610,7 +610,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .showGetInfo)
 			}
-			item.image = .getInfo.symbolSizedForCatalyst()
+			item.image = .getInfo
 			item.label = .getInfoControlLabel
 			item.toolTip = .getInfoControlLabel
 			item.isBordered = true
