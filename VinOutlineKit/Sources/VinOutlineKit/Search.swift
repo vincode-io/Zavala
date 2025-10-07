@@ -42,7 +42,7 @@ public final class Search: Identifiable, DocumentContainer {
 				return []
 			}
 			
-			let queryString = "title == \"*\(searchText)*\"c || textContent == \"*\(searchText)*\"c"
+			let queryString = "** == \"*\(searchText)*\"c"
 			searchQuery = CSSearchQuery(queryString: queryString, queryContext: nil)
 
 			var documents = [Document]()
