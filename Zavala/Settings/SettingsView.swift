@@ -28,7 +28,7 @@ struct SettingsView: View {
 			#if !targetEnvironment(macCatalyst)
 			.toolbar {
 				ToolbarItem(placement: .confirmationAction) {
-					Button(role: .close) {
+					Button(role: .confirm) {
 						dismiss()
 					}
 				}
