@@ -12,8 +12,15 @@ import VinCloudKit
 
 enum CloudKitOutlineZoneError: LocalizedError {
 	case unknown
+	case incompatibleVersion
+	
 	var errorDescription: String? {
-		return NSLocalizedString("label.text.cloudkit-generic-error", comment: "An unexpected CloudKit error occurred.")
+		switch self {
+		case .unknown:
+			return NSLocalizedString("label.text.cloudkit-generic-error", comment: "An unexpected CloudKit error occurred.")
+		case .incompatibleVersion:
+			return NSLocalizedString("label.text.cloudkit-zone-version-mismatch", comment: "The version of the Outline zone in your iCloud account is incompatible with this app.")
+		}
 	}
 }
 
@@ -27,6 +34,15 @@ final class CloudKitOutlineZone: VCKZone {
 	let container: CKContainer?
 	let database: CKDatabase?
 	let delegate: VCKZoneDelegate?
+
+	private static let currentZoneVersionNumber = 1
+	
+	private struct VersionRecord {
+		static let recordType = "ZoneVersion"
+		struct Fields {
+			static let versionNumber = "versionNumber"
+		}
+	}
 	
 	init(container: CKContainer, delegate: VCKZoneDelegate) {
 		self.container = container
@@ -55,6 +71,25 @@ final class CloudKitOutlineZone: VCKZone {
 		let result = try await self.modify(modelsToSave: modelsToSave, recordIDsToDelete: [], strategy: .overWriteServerValue)
 		
 		return result.0.first! as! CKShare
+	}
+	
+	func validateZoneVersion() async throws {
+		do {
+			let versionRecord = try await fetch(externalID: "io.vincode.Zavala.zoneVersion")
+			guard let versionNumber = versionRecord?[VersionRecord.Fields.versionNumber] as? Int else {
+				return
+			}
+			
+			if versionNumber != Self.currentZoneVersionNumber {
+				throw CloudKitOutlineZoneError.incompatibleVersion
+			}
+		} catch {
+			if let ckError = error as? CKError, ckError.code == .unknownItem {
+				return
+			} else {
+				throw error
+			}
+		}
 	}
 	
 }

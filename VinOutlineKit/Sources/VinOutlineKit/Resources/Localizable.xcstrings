@@ -59,6 +59,35 @@
         }
       }
     },
+    "label.text.cloudkit-zone-version-mismatch" : {
+      "comment" : "The version of the Outline zone in your iCloud account is incompatible with this app.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die iCloud-Datenbank ist mit dieser App-Version nicht kompatibel. Bitte aktualisieren Sie auf die neueste App-Version, um die Synchronisierung fortzusetzen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The iCloud database is incompatible with this version of the app. Please update to the latest app version to continue syncing."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The iCloud database is incompatible with this version of the app. Please update to the latest app version to continue syncing."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The iCloud database is incompatible with this version of the app. Please update to the latest app version to continue syncing."
+          }
+        }
+      }
+    },
     "label.text.no-title" : {
       "comment" : "Label: (No Title)",
       "localizations" : {
