@@ -84,6 +84,8 @@
 			<string>zavala outliner</string>
 		</dict>
 	</array>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>

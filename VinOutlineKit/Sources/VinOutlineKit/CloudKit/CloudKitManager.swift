@@ -366,6 +366,7 @@ private extension CloudKitManager {
 			
 			for zoneID in modifications.keys {
 				guard let cloudKitZone = findZone(zoneID: zoneID) else { continue }
+				try await cloudKitZone.validateZoneVersion()
 				
 				let (modelsToSave, recordIDsToDelete) = modifications[zoneID]!
 				
@@ -491,7 +492,8 @@ private extension CloudKitManager {
 		}
 		
 		guard let zone = findZone(zoneID: zoneID) else { return }
-		
+		try await zone.validateZoneVersion()
+
 		do {
 			try await zone.fetchChangesInZone(incremental: false)
 		} catch {
