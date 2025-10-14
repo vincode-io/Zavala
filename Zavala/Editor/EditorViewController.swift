@@ -1392,7 +1392,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				moveCursorToCurrentRowTopic()
 			}
 		} else {
-			createRowNotes(currentRows)
+			createRowNotes(currentRows, rowStrings: currentRowStrings)
 		}
 	}
 
