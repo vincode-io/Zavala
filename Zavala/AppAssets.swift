@@ -464,7 +464,7 @@ extension String {
 
 extension LocalizedStringResource {
 	
-	static let invalidDestinationForOutline = LocalizedStringResource("label.text.intent-error-invalid-destination-outline-entity-id", comment: "Error text: The specified Destination is not a valid for the Outline specified by the Entity ID.")
+	static let invalidDestinationForOutline = LocalizedStringResource("label.text.intent-error-invalid-destination-outline-entity-id", comment: "Error text: The specified Destination is not valid for the Entity specified by the Entity ID.")
 	
 	static let outlineNotBeingViewed = LocalizedStringResource("label.text.intent-error-outline-not-in-view", comment: "Error text: There isn't an Outline currently being viewed.")
 	

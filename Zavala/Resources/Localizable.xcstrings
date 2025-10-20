@@ -9429,7 +9429,7 @@
       }
     },
     "label.text.intent-error-invalid-destination-outline-entity-id" : {
-      "comment" : "Error text: The specified Destination is not a valid for the Outline specified by the Entity ID.",
+      "comment" : "Error text: The specified Destination is not valid for the Entity specified by the Entity ID.",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9440,19 +9440,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The specified Destination is not a valid for the Outline specified by the Entity ID."
+            "value" : "The specified Destination is not valid for the Entity specified by the Entity ID."
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The specified Destination is not a valid for the Outline specified by the Entity ID."
+            "value" : "The specified Destination is not valid for the Entity specified by the Entity ID."
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The specified Destination is not a valid for the Outline specified by the Entity ID."
+            "value" : "The specified Destination is not valid for the Entity specified by the Entity ID."
           }
         }
       }
