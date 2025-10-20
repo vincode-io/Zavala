@@ -8788,6 +8788,35 @@
         }
       }
     },
+    "label.text.directly-before" : {
+      "comment" : "Directly Before",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direkt davor"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Directly Before"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Directly Before"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Directly Before"
+          }
+        }
+      }
+    },
     "label.text.document-not-found" : {
       "comment" : "Label: Document Not Found",
       "localizations" : {

@@ -88,10 +88,20 @@ struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 			case .outside:
 				if let afterRow = rowContainer as? Row {
 					outline.moveRowsOutside(intraOutlineMoves, afterRow: afterRow)
+				} else {
+					try await suspendUnloadAndThrow(outlines: outlines)
+				}
+			case .directlyBefore:
+				if let beforeRow = rowContainer as? Row {
+					outline.moveRowsDirectlyBefore(intraOutlineMoves, beforeRow: beforeRow)
+				} else {
+					try await suspendUnloadAndThrow(outlines: outlines)
 				}
 			case .directlyAfter:
 				if let afterRow = rowContainer as? Row {
 					outline.moveRowsDirectlyAfter(intraOutlineMoves, afterRow: afterRow)
+				} else {
+					try await suspendUnloadAndThrow(outlines: outlines)
 				}
 			}
 		}
@@ -116,11 +126,22 @@ struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 				if let afterRow = rowContainer as? Row {
 					sourceOutline.deleteRows([interOutlineMove])
 					outline.createRowsOutside([attachedRow], afterRow: afterRow)
+				} else {
+					try await suspendUnloadAndThrow(outlines: outlines)
+				}
+			case .directlyBefore:
+				if let beforeRow = rowContainer as? Row {
+					sourceOutline.deleteRows([interOutlineMove])
+					outline.createRows([attachedRow], beforeRow: beforeRow, moveCursor: false)
+				} else {
+					try await suspendUnloadAndThrow(outlines: outlines)
 				}
 			case .directlyAfter:
 				if let afterRow = rowContainer as? Row {
 					sourceOutline.deleteRows([interOutlineMove])
 					outline.createRowsDirectlyAfter([attachedRow], afterRow: afterRow)
+				} else {
+					try await suspendUnloadAndThrow(outlines: outlines)
 				}
 			}
 		}
@@ -132,4 +153,13 @@ struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 		await suspend()
 		return .result(value: movedRows.map({RowAppEntity(row: $0)}))
     }
+	
+	private func suspendUnloadAndThrow(outlines: Set<Outline>) async throws {
+		for outline in outlines {
+			await outline.unload()
+		}
+		await suspend()
+		throw ZavalaAppIntentError.invalidDestinationForOutline
+	}
+	
 }

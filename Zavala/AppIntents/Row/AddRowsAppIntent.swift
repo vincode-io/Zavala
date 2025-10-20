@@ -67,17 +67,19 @@ struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
 			if let afterRow = rowContainer as? Row {
 				outline.createRowsOutside(rows, afterRow: afterRow)
 			} else {
-				await outline.unload()
-				await suspend()
-				throw ZavalaAppIntentError.invalidDestinationForOutline
+				try await suspendUnloadAndThrow(outline: outline)
+			}
+		case .directlyBefore:
+			if let beforeRow = rowContainer as? Row {
+				outline.createRows(rows, beforeRow: beforeRow, moveCursor: false)
+			} else {
+				try await suspendUnloadAndThrow(outline: outline)
 			}
 		case .directlyAfter:
 			if let afterRow = rowContainer as? Row {
 				outline.createRowsDirectlyAfter(rows, afterRow: afterRow)
 			} else {
-				await outline.unload()
-				await suspend()
-				throw ZavalaAppIntentError.invalidDestinationForOutline
+				try await suspendUnloadAndThrow(outline: outline)
 			}
 		}
 		
@@ -85,4 +87,11 @@ struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
 		await suspend()
 		return .result(value: rows.map({RowAppEntity(row: $0)}))
     }
+	
+	private func suspendUnloadAndThrow(outline: Outline) async throws {
+		await outline.unload()
+		await suspend()
+		throw ZavalaAppIntentError.invalidDestinationForOutline
+	}
+	
 }

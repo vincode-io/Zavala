@@ -82,10 +82,20 @@ struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 			case .outside:
 				if let afterRow = rowContainer as? Row {
 					outline.createRowsOutside([attachedRow], afterRow: afterRow)
+				} else {
+					try await suspendUnloadAndThrow(outlines: outlines)
+				}
+			case .directlyBefore:
+				if let beforeRow = rowContainer as? Row {
+					outline.createRows([attachedRow], beforeRow: beforeRow, moveCursor: false)
+				} else {
+					try await suspendUnloadAndThrow(outlines: outlines)
 				}
 			case .directlyAfter:
 				if let afterRow = rowContainer as? Row {
 					outline.createRowsDirectlyAfter([attachedRow], afterRow: afterRow)
+				} else {
+					try await suspendUnloadAndThrow(outlines: outlines)
 				}
 			}
 		}
@@ -97,4 +107,13 @@ struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 		await suspend()
 		return .result(value: copiedRows.map({RowAppEntity(row: $0)}))
     }
+	
+	private func suspendUnloadAndThrow(outlines: Set<Outline>) async throws {
+		for outline in outlines {
+			await outline.unload()
+		}
+		await suspend()
+		throw ZavalaAppIntentError.invalidDestinationForOutline
+	}
+	
 }

@@ -26,7 +26,7 @@ public final class GroupRowsCommand: OutlineCommand {
 	
 	public override func perform() {
 		guard let firstRow = rows.sortedByDisplayOrder().first else { return }
-		outline.createRow(newRow, beforeRow: firstRow, moveCursor: true)
+		outline.createRows([newRow], beforeRow: firstRow, moveCursor: true)
 		moveRightRows = outline.moveRowsRight(rows, rowStrings: newRowStrings)
 	}
 	

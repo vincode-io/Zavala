@@ -1742,7 +1742,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return true
 	}
 	
-	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil, moveCursor: Bool) {
+	public func createRows(_ rows: [Row], beforeRow: Row, rowStrings: RowStrings? = nil, moveCursor: Bool) {
 		beginCloudKitBatchRequest()
 		defer {
 			endCloudKitBatchRequest()
@@ -1752,7 +1752,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			updateRowStrings(beforeRow, texts)
 		}
 
-		resetPreviouslyUsed(rows: [row])
+		resetPreviouslyUsed(rows: rows)
 		
 		guard let parent = beforeRow.parent,
 			  let index = parent.firstIndexOfRow(beforeRow),
@@ -1760,8 +1760,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			return
 		}
 		
-		parent.insertRow(row, at: index)
-		row.parent = parent
+		for row in rows.reversed() {
+			parent.insertRow(row, at: index)
+			row.parent = parent
+		}
 		
 		var reloads = Set<Int>()
 		
@@ -1772,8 +1774,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			}
 		}
 		
-		createLinkRelationships(for: [row])
-		replaceLinkTitlesIfPossible(rows: [row])
+		createLinkRelationships(for: rows)
+		replaceLinkTitlesIfPossible(rows: rows)
 		outlineContentDidChange()
 
 		guard isBeingViewed else { return }
@@ -2554,6 +2556,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		var rowMoves = [RowMove]()
 		for (index, row) in rows.enumerated() {
 			rowMoves.append(RowMove(row: row, toParent: afterRowGrandParent, toChildIndex: index + startIndex + 1))
+		}
+		moveRows(rowMoves)
+	}
+
+	public func moveRowsDirectlyBefore(_ rows: [Row], beforeRow: Row) {
+		guard let beforeRowParent = beforeRow.parent,
+			  let startIndex = beforeRowParent.firstIndexOfRow(beforeRow) else { return }
+		
+		var rowMoves = [RowMove]()
+		for row in rows.reversed() {
+			rowMoves.append(RowMove(row: row, toParent: beforeRowParent, toChildIndex: startIndex))
 		}
 		moveRows(rowMoves)
 	}

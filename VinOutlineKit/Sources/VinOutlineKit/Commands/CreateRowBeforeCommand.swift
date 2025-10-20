@@ -23,7 +23,7 @@ public final class CreateRowBeforeCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		outline.createRow(row, beforeRow: beforeRow, rowStrings: rowStrings, moveCursor: moveCursor)
+		outline.createRows([row], beforeRow: beforeRow, rowStrings: rowStrings, moveCursor: moveCursor)
 	}
 	
 	public override func undo() {
