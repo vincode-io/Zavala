@@ -2746,6 +2746,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		let outline = Outline(account: account, id: .document(account.id.accountID, UUID().uuidString))
 
 		outline.title = title
+		outline.numberingStyle = numberingStyle
+		outline.checkSpellingWhileTyping = checkSpellingWhileTyping
+		outline.correctSpellingAutomatically = correctSpellingAutomatically
+		outline.automaticallyCreateLinks = automaticallyCreateLinks
+		outline.automaticallyChangeLinkTitles = automaticallyChangeLinkTitles
 		outline.ownerName = ownerName
 		outline.ownerEmail = ownerEmail
 		outline.ownerURL = ownerURL
