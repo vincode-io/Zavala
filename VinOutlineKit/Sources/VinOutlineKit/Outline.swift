@@ -3561,7 +3561,11 @@ private extension Outline {
 	func appendPrintTitle(attrString: NSMutableAttributedString) {
 		#if canImport(UIKit)
 		if let title {
-			let titleFont = UIFont.systemFont(ofSize: 18).with(traits: .traitBold)
+			let titleFont = if let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .largeTitle).withDesign(.serif) {
+				UIFont(descriptor: descriptor, size: 18)
+			} else {
+				UIFont.systemFont(ofSize: 18)
+			}
 			
 			var attrs = [NSAttributedString.Key : Any]()
 			attrs[.font] = titleFont
