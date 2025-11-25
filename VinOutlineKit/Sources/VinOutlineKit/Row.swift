@@ -52,31 +52,10 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	public let id: String
 	
 	public var isExpanded: Bool
-	public internal(set) var rows: [Row] {
+	public var rows: [Row] {
 		get {
 			guard let outline = self.outline else { return [Row]() }
 			return rowOrder.compactMap { outline.keyedRows?[$0] }
-		}
-		set {
-			guard let outline = self.outline else { return }
-			
-			outline.beginCloudKitBatchRequest()
-			outline.requestCloudKitUpdate(for: entityID)
-			
-			for id in rowOrder {
-				outline.keyedRows?.removeValue(forKey: id)
-				outline.requestCloudKitUpdate(for: entityID)
-			}
-			
-			var order = OrderedSet<String>()
-			for row in newValue {
-				order.append(row.id)
-				outline.keyedRows?[row.id] = row
-				outline.requestCloudKitUpdate(for: row.entityID)
-			}
-			rowOrder = order
-			
-			outline.endCloudKitBatchRequest()
 		}
 	}
 	
