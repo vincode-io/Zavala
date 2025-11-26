@@ -76,7 +76,7 @@ public class RowGroup: Codable {
 
 		for newChildRow in newChildRows {
 			var newChildRowRowOrder = [String]()
-			for oldRowOrder in newChildRow.rowOrder {
+			for oldRowOrder in newChildRow.rowOrder ?? [] {
 				newChildRowRowOrder.append(idMap[oldRowOrder]!)
 			}
 			
@@ -94,7 +94,7 @@ public class RowGroup: Codable {
 		// This code looks invalid to me. Delete it later if it does nothing.
 //		newRow.parent = row.parent
 		var newRowRowOrder = [String]()
-		for newRowOrder in newRow.rowOrder {
+		for newRowOrder in newRow.rowOrder ?? [] {
 			newRowRowOrder.append(idMap[newRowOrder]!)
 		}
 		

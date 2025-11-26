@@ -122,7 +122,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public var isOutlineCorrupted: Bool {
 		guard let rowOrder, let keyedRows else { return false }
 		
-		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder }))
+		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder ?? [] }))
 		allRowOrderIDs.formUnion(rowOrder)
 		
 		// If we have any extra rows that don't have an order, we have corruption
@@ -140,7 +140,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 		
 		for row in keyedRows.values {
-			for rowID in row.rowOrder {
+			for rowID in row.rowOrder ?? [] {
 				if !keyedRows.keys.contains(rowID) {
 					return true
 				}
@@ -152,7 +152,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		var foundCorruption = false
 		
 		func duplicateRowIDsVisitor(_ visited: Row) {
-			for rowID in visited.rowOrder {
+			for rowID in visited.rowOrder ?? [] {
 				if seenRowIDs.contains(rowID) {
 					foundCorruption = true
 					break
@@ -179,6 +179,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public var isCloudKitMerging: Bool = false
 
 	nonisolated public let id: EntityID
+	nonisolated public var entityID: EntityID { return id }
 
 	var ancestorTitle: String?
 	var serverTitle: String?
@@ -654,9 +655,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	var ancestorRowOrder: OrderedSet<String>?
-	var serverRowOrder: OrderedSet<String>?
-	var rowOrder: OrderedSet<String>?
+	public var ancestorRowOrder: OrderedSet<String>?
+	public var serverRowOrder: OrderedSet<String>?
+	public var rowOrder: OrderedSet<String>?
 	var keyedRows: [String: Row]? {
 		didSet {
 			if let keyedRows {
@@ -791,7 +792,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			endCloudKitBatchRequest()
 		}
 		
-		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder }))
+		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder ?? [] }))
 		allRowOrderIDs.formUnion(rowOrder)
 		
 		var foundCorruption = false
@@ -810,9 +811,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 		
 		for row in keyedRows.values {
-			for rowID in row.rowOrder {
+			for rowID in row.rowOrder ?? [] {
 				if !keyedRows.keys.contains(rowID) {
-					row.rowOrder.remove(rowID)
+					row.rowOrder?.remove(rowID)
 					foundCorruption = true
 				}
 			}
@@ -847,9 +848,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		var seenRowIDs: Set<String> = []
 
 		func duplicateRowIDsVisitor(_ visited: Row) {
-			for rowID in visited.rowOrder {
+			for rowID in visited.rowOrder ?? [] {
 				if seenRowIDs.contains(rowID) {
-					visited.rowOrder.remove(rowID)
+					visited.rowOrder?.remove(rowID)
 					requestCloudKitUpdate(for: self.id)
 					foundCorruption = true
 				} else {
@@ -884,63 +885,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public func findRow(id: String) -> Row? {
 		return keyedRows?[id]
-	}
-	
-	public func firstIndexOfRow(_ row: Row) -> Int? {
-		return rowOrder?.firstIndex(of: row.id)
-	}
-
-	public func containsRow(_ row: Row) -> Bool {
-		return rowOrder?.contains(row.id) ?? false
-	}
-
-	public func insertRow(_ row: Row, at: Int) {
-		if isCloudKit && ancestorRowOrder == nil {
-			ancestorRowOrder = rowOrder
-		}
-
-		if rowOrder == nil {
-			rowOrder = OrderedSet<String>()
-		}
-
-		if keyedRows == nil {
-			keyedRows = [String: Row]()
-		}
-
-		rowOrder?.insert(row.id, at: at)
-		keyedRows?[row.id] = row
-
-		requestCloudKitUpdates(for: [id, row.entityID])
-	}
-
-	public func removeRow(_ row: Row) {
-		if isCloudKit && ancestorRowOrder == nil {
-			ancestorRowOrder = rowOrder
-		}
-
-		rowOrder?.remove(row.id)
-		keyedRows?.removeValue(forKey: row.id)
-		
-		requestCloudKitUpdates(for: [id, row.entityID])
-	}
-
-	public func appendRow(_ row: Row) {
-		if isCloudKit && ancestorRowOrder == nil {
-			ancestorRowOrder = rowOrder
-		}
-
-		if rowOrder == nil {
-			rowOrder = OrderedSet<String>()
-		}
-		
-		if keyedRows == nil {
-			keyedRows = [String: Row]()
-		}
-		
-		rowOrder?.append(row.id)
-		keyedRows?[row.id] = row
-
-		requestCloudKitUpdates(for: [id, row.entityID])
 	}
 	
 	public func createTag(_ tag: Tag) {
@@ -2790,7 +2734,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		for key in newKeyedRows.keys {
 			if let newKeyedRow = newKeyedRows[key] {
 				var updatedRowOrder = OrderedSet<String>()
-				for orderKey in newKeyedRow.rowOrder {
+				for orderKey in newKeyedRow.rowOrder ?? [] {
 					if let newKey = rowIDMap[orderKey] {
 						updatedRowOrder.append(newKey)
 					}

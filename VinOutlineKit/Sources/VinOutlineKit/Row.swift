@@ -54,13 +54,13 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	public var isExpanded: Bool
 	public var rows: [Row] {
 		get {
-			guard let outline = self.outline else { return [Row]() }
+			guard let outline, let rowOrder else { return [Row]() }
 			return rowOrder.compactMap { outline.keyedRows?[$0] }
 		}
 	}
 	
 	public var rowCount: Int {
-		return rowOrder.count
+		return rowOrder?.count ?? 0
 	}
 	
 	public var isAnyParentComplete: Bool {
@@ -85,9 +85,9 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return entityID
 	}
 	
-	var ancestorRowOrder: OrderedSet<String>?
+	public var ancestorRowOrder: OrderedSet<String>?
 	var serverRowOrder: OrderedSet<String>?
-	var rowOrder: OrderedSet<String>
+	public var rowOrder: OrderedSet<String>?
 	
 	var isPartOfSearchResult = false {
 		didSet {
@@ -516,47 +516,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		outline?.requestCloudKitUpdate(for: entityID)
 	}
 	
-	public func firstIndexOfRow(_ row: Row) -> Int? {
-		return rowOrder.firstIndex(of: row.id)
-	}
-	
-	public func containsRow(_ row: Row) -> Bool {
-		return rowOrder.contains(row.id)
-	}
-	
-	public func insertRow(_ row: Row, at: Int) {
-		if isCloudKit && ancestorRowOrder == nil {
-			ancestorRowOrder = rowOrder
-		}
-		
-		rowOrder.insert(row.id, at: at)
-		outline?.keyedRows?[row.id] = row
-		
-		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
-	}
-	
-	public func removeRow(_ row: Row) {
-		if isCloudKit && ancestorRowOrder == nil {
-			ancestorRowOrder = rowOrder
-		}
-		
-		rowOrder.remove(row.id)
-		outline?.keyedRows?.removeValue(forKey: row.id)
-		
-		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
-	}
-	
-	public func appendRow(_ row: Row) {
-		if isCloudKit && ancestorRowOrder == nil {
-			ancestorRowOrder = rowOrder
-		}
-		
-		rowOrder.append(row.id)
-		outline?.keyedRows?[row.id] = row
-		
-		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
-	}
-	
 	public func isDecendent(_ row: Row) -> Bool {
 		if let parentRow = parent as? Row, parentRow.id == row.id || parentRow.isDecendent(row) {
 			return true
@@ -665,7 +624,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 						ancestorIsComplete: ancestorIsComplete,
 						isComplete: isComplete,
 						ancestorRowOrder: ancestorRowOrder,
-						rowOrder: rowOrder)
+						rowOrder: rowOrder ?? [])
 	}
 	
 }
