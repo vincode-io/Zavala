@@ -370,6 +370,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	init(outline: Outline, id: String) {
 		self.outline = outline
 		self.id = id
+		self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 		self.isExpanded = true
 		self.rowOrder = OrderedSet<String>()
 		super.init()
