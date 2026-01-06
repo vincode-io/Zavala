@@ -38,7 +38,8 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 					newAttributes[.foregroundColor] = UIColor.black
 				}
 				
-				if key == .underlineStyle || key == .backgroundColor {
+				// We don't allow underlines or background colors when pasting. Same goes for lists which are denoted by paragraph styles
+				if key == .underlineStyle || key == .backgroundColor || key == .paragraphStyle {
 					newAttributes[key] = nil
 				}
 				

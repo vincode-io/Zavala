@@ -1364,6 +1364,35 @@
         }
       }
     },
+    "button.text.email-feedback" : {
+      "comment" : "Action: Email Feedback",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-Mail-Feedback"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email Feedback"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email Feedback"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email Feedback"
+          }
+        }
+      }
+    },
     "button.text.enable-icloud" : {
       "comment" : "Label: Enable iCloud",
       "localizations" : {
@@ -3263,35 +3292,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Print List..."
-          }
-        }
-      }
-    },
-    "button.text.provide-feedback" : {
-      "comment" : "Action: Provide Feedback",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feedback geben"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Provide Feedback"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Provide Feedback"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Provide Feedback"
           }
         }
       }
