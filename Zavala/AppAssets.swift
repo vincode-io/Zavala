@@ -36,6 +36,7 @@ extension UIImage {
 	static let cancel = UIImage(systemName: "xmark")!
 	static let collaborating = UIImage(systemName: "person.crop.circle.badge.checkmark")!
 	static let collapseAll = UIImage(systemName: "arrow.down.right.and.arrow.up.left")!
+	static let community = UIImage(systemName: "bubble")!
 	static let completeRow = UIImage(systemName: "checkmark.square")!
 	static let copy = UIImage(systemName: "doc.on.doc")!
 	static let copyRowLink = UIImage(systemName: "link.circle")!
@@ -48,6 +49,7 @@ extension UIImage {
 	static let duplicate = UIImage(systemName: "plus.square.on.square")!
 
 	static let ellipsis = UIImage(systemName: "ellipsis.circle")!
+	static let email = UIImage(systemName: "envelope")!
 	static let expandAll = UIImage(systemName: "arrow.up.left.and.arrow.down.right")!
 	static let export = UIImage(systemName: "arrow.up.doc")!
 
@@ -69,6 +71,7 @@ extension UIImage {
 	static let importDocument = UIImage(systemName: "arrow.down.document")!
 	static let italic = UIImage(systemName: "italic")!
 
+	static let help = UIImage(systemName: "questionmark.circle")!
 	static let hideKeyboard = UIImage(systemName: "keyboard.chevron.compact.down")!
 	static let hideNotesActive = UIImage(systemName: "doc.text.fill")!
 	static let hideNotesInactive = UIImage(systemName: "doc.text")!
@@ -244,7 +247,7 @@ extension String {
 	static let expandAllInRowControlLabel = String(localized: "button.text.expand-all-in-row", comment: "Action: Expand All in Row")
 	static let expandControlLabel = String(localized: "button.text.expand", comment: "Action: Expand")
 	
-	static let feedbackControlLabel = String(localized: "button.text.provide-feedback", comment: "Action: Provide Feedback")
+	static let feedbackControlLabel = String(localized: "button.text.email-feedback", comment: "Action: Email Feedback")
 	static let filterControlLabel = String(localized: "button.text.filter", comment: "Action: Filter")
 	static let filterCompletedControlLabel = String(localized: "label.text.filter-completed", comment: "Label: Filter Completed")
 	static let filterNotesControlLabel = String(localized: "button.text.filter-notes", comment: "Action: Filter Notes")

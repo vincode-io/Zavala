@@ -310,11 +310,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: .actualSize)
 	
-	let showHelpCommand = UICommand(title: .appHelpControlLabel, action: .showHelp)
+	let showHelpCommand = UICommand(title: .appHelpControlLabel, image: .help, action: .showHelp)
 
-	let showCommunityCommand = UICommand(title: .communityControlLabel, action: .showCommunity)
+	let showCommunityCommand = UICommand(title: .communityControlLabel, image: .community, action: .showCommunity)
 
-	let feedbackCommand = UICommand(title: .feedbackControlLabel, action: .feedback)
+	let feedbackCommand = UICommand(title: .feedbackControlLabel, image: .email, action: .feedback)
 
 	let showOpenQuicklyCommand = UIKeyCommand(title: .openQuicklyEllipsisControlLabel,
 											  image: .openQuickly,
