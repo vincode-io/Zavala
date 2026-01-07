@@ -2210,7 +2210,7 @@ private extension EditorViewController {
 		let printListAction = UIAction(title: .printListControlEllipsisLabel) { [weak self] _ in
 			self?.printList()
 		}
-		shareActions.append(UIMenu(title: .printControlLabel, image: .printDoc, children: [printDocAction, printListAction]))
+		shareActions.append(UIMenu(title: .printControlLabel, image: .print, children: [printDocAction, printListAction]))
 
 		let exportPDFDoc = UIAction(title: .exportPDFDocEllipsisControlLabel) { [weak self] _ in
 			guard let self, let outline = self.outline else { return }

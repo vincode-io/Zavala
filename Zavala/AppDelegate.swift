@@ -325,13 +325,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 											  modifierFlags: [.shift, .command])
 	
 	let printDocsCommand = UIKeyCommand(title: .printDocEllipsisControlLabel,
-										image: .printDoc,
+										image: .print,
 										action: .printDocs,
 										input: "p",
 										modifierFlags: [.alternate, .command])
 	
 	let printListsCommand = UIKeyCommand(title: .printListControlEllipsisLabel,
-										 image: .printList,
 										 action: .printLists,
 										 input: "p",
 										 modifierFlags: [.command])

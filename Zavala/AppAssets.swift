@@ -102,7 +102,7 @@ extension UIImage {
 	#else
 	static let popupChevrons = UIImage(systemName: "chevron.up.chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 13, weight: .medium))!
 	#endif
-	static let printDoc = UIImage(systemName: "printer")!
+	static let print = UIImage(systemName: "printer")!
 	static let printList = UIImage(systemName: "printer.dotmatrix")!
 	
 	static let redo = UIImage(systemName: "arrow.uturn.forward")!
