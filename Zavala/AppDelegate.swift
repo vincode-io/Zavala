@@ -204,6 +204,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let attributedTitle = NSAttributedString(string: .boldControlLabel, attributes: [.font: boldFont])
 		let keyCommand = UIKeyCommand(title: .boldControlLabel, action: .toggleBoldface, input: "b", modifierFlags: [.command])
 		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
+		keyCommand.image = .bold
 		return keyCommand
 	}()
 	
@@ -212,6 +213,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let attributedTitle = NSAttributedString(string: .italicControlLabel, attributes: [.font: italicFont])
 		let keyCommand = UIKeyCommand(title: .italicControlLabel, action: .toggleItalics, input: "i", modifierFlags: [.command])
 		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
+		keyCommand.image = .italic
 		return keyCommand
 	}()
 	
