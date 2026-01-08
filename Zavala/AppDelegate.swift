@@ -310,7 +310,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 									  input: "<",
 									  modifierFlags: [.command])
 	
-	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: .actualSize)
+	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, image: .zoomActual, action: .actualSize)
 	
 	let showHelpCommand = UICommand(title: .appHelpControlLabel, image: .help, action: .showHelp)
 

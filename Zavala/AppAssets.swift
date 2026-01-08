@@ -120,6 +120,7 @@ extension UIImage {
 	static let undo = UIImage(systemName: "arrow.uturn.backward")!
 	static let undoMenu = UIImage(systemName: "arrow.uturn.backward.circle.badge.ellipsis")!
 
+	static let zoomActual = UIImage(systemName: "1.magnifyingglass")!
 	static let zoomIn = UIImage(systemName: "plus.magnifyingglass")!
 	static let zoomOut = UIImage(systemName: "minus.magnifyingglass")!
 }
