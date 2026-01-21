@@ -102,7 +102,7 @@ extension UIImage {
 	#else
 	static let popupChevrons = UIImage(systemName: "chevron.up.chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 13, weight: .medium))!
 	#endif
-	static let printDoc = UIImage(systemName: "printer")!
+	static let print = UIImage(systemName: "printer")!
 	static let printList = UIImage(systemName: "printer.dotmatrix")!
 	
 	static let redo = UIImage(systemName: "arrow.uturn.forward")!
@@ -120,6 +120,7 @@ extension UIImage {
 	static let undo = UIImage(systemName: "arrow.uturn.backward")!
 	static let undoMenu = UIImage(systemName: "arrow.uturn.backward.circle.badge.ellipsis")!
 
+	static let zoomActual = UIImage(systemName: "1.magnifyingglass")!
 	static let zoomIn = UIImage(systemName: "plus.magnifyingglass")!
 	static let zoomOut = UIImage(systemName: "minus.magnifyingglass")!
 }
@@ -172,6 +173,7 @@ extension String {
 	static let appIconCreditLabel = String(localized: "label.text.app-icon-credit", comment: "App icon by [Brad Ellis](https://hachyderm.io/@bradellis)")
 	static let appDevelopedByCreditLabel = String(localized: "label.text.app-developed-by", comment: "Developed by [Maurice C. Parker](https://vincode.io)")
 	static let ascendingControlLabel = String(localized: "button.text.ascending", comment: "Sort Action: Ascending")
+	static let atSameLevelControlLabel = String(localized: "button.text.at-same-level", comment: "Label: At Same Level")
 	static let automaticallyChangeLinkTitlesControlLabel = String(localized: "button.text.change-link-titles-automatically", comment: "Set Default Action: Change Link Titles Automatically")
 	static let automaticallyCreateLinksControlLabel = String(localized: "button.text.create-links-automatically", comment: "Set Default Action: Create Links Automatically")
 	static let automaticControlLabel = String(localized: "button.text.automatic-color-palette", comment: "Set App Color Palette Action: Automatic")
@@ -204,6 +206,7 @@ extension String {
 	static let corruptedOutlineTitle = String(localized: "label.text.corrupted-outline", comment: "Label: Corrupted Outline")
 	static let corruptedOutlineMessage = String(localized: "label.text.corrupted-outline-message", comment: "Alert Message: This outline appears to be corrupted. Would you like to fix it?")
 	static let createdControlLabel = String(localized: "label.text.created", comment: "Label: Created")
+	static let createRowsControlLabel = String(localized: "label.text.create-rows", comment: "Label: Create Rows")
 	static let cutControlLabel = String(localized: "button.text.cut", comment: "Action: Cut")
 	static let cyanControlLabel = String(localized: "button.text.set-font-cyan", comment: "Set Font Color Action: Cyan")
 
@@ -281,6 +284,7 @@ extension String {
 	static let importOPMLControlLabel = String(localized: "button.text.import-opml", comment: "Action: Import OPML")
 	static let importOPMLEllipsisControlLabel = String(localized: "button.text.import-opml-with-ellipsis", comment: "Action: Import OPML…")
 	static let indigoControlLabel = String(localized: "button.text.set-font-indigo", comment: "Set Font Color Action: Indigo")
+	static let indentedWithChildrenControlLabel = String(localized: "button.text.indented-with-children", comment: "Label: Indented with Children")
 	static let insertImageControlLabel = String(localized: "button.text.insert-image", comment: "Action: Insert Image")
 	static let insertImageEllipsisControlLabel = String(localized: "button.text.insert-image-with-ellipsis", comment: "Label: Insert Image…")
 	static let italicControlLabel = String(localized: "button.text.italic", comment: "Set Font Action: Italic")

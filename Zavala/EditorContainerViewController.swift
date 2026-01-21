@@ -580,7 +580,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !UIResponder.valid(action: .printDocs)
 			}
-			item.image = .printDoc
+			item.image = .print
 			item.label = .printDocControlLabel
 			item.toolTip = .printDocControlLabel
 			item.isBordered = true

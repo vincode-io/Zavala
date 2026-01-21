@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsEditorView: View {
 	
+	@State var createRows = AppDefaults.shared.createRows
 	@State var editorMaxWidth = AppDefaults.shared.editorMaxWidth
 	@State var scrollMode = AppDefaults.shared.scrollMode
 	@State var rowIndent = AppDefaults.shared.rowIndentSize
@@ -18,6 +19,22 @@ struct SettingsEditorView: View {
     var body: some View {
 		Section(String.editorControlLabel) {
 			
+			HStack {
+				Text(String.createRowsControlLabel)
+					.font(.body)
+				Spacer()
+				Picker(selection: $createRows) {
+					ForEach(CreateRows.allCases, id: \.self) {
+						Text($0.description)
+					}
+				} label: {
+				}
+				.pickerStyle(.menu)
+				.onChange(of: createRows) { old, new in
+					AppDefaults.shared.createRows = new
+				}
+			}
+
 			HStack {
 				Text(String.maxWidthControlLabel)
 					.font(.body)

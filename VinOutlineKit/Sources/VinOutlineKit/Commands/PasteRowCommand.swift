@@ -11,17 +11,20 @@ public final class PasteRowCommand: OutlineCommand {
 	var rowGroups: [RowGroup]
 	var rows: [Row]
 	var afterRow: Row?
-	
+	var childRowIndent: Bool
+
 	public init(actionName: String, undoManager: UndoManager,
 				delegate: OutlineCommandDelegate,
 				outline: Outline,
 				rowGroups: [RowGroup],
-				afterRow: Row?) {
-		
+				afterRow: Row?,
+				childRowIndent: Bool) {
+
 		self.rowGroups = rowGroups
 		self.rows = [Row]()
 		self.afterRow = afterRow
-		
+		self.childRowIndent = childRowIndent
+
 		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
@@ -33,7 +36,7 @@ public final class PasteRowCommand: OutlineCommand {
 		}
 		rows = newRows
 		
-		outline.createRows(rows, afterRow: afterRow)
+		outline.createRows(rows, afterRow: afterRow, childRowIndent: childRowIndent)
 	}
 	
 	public override func undo() {

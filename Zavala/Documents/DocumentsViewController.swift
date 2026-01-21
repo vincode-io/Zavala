@@ -890,7 +890,7 @@ private extension DocumentsViewController {
 			var printActions = [UIAction]()
 			printActions.append(self.printDocsAction(outlines: outlines))
 			printActions.append(self.printListsAction(outlines: outlines))
-			let printMenu = UIMenu(title: .printControlLabel, image: .printDoc, children: printActions)
+			let printMenu = UIMenu(title: .printControlLabel, image: .print, children: printActions)
 			shareMenuItems.append(printMenu)
 
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: shareMenuItems))

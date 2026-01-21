@@ -12,17 +12,20 @@ public final class SplitRowCommand: OutlineCommand {
 	var row: Row
 	var topic: NSAttributedString
 	var cursorPosition: Int
-	
+	var childRowIndent: Bool
+
 	public init(actionName: String,
 				undoManager: UndoManager,
 				delegate: OutlineCommandDelegate,
 				outline: Outline,
 				row: Row,
 				topic: NSAttributedString,
-				cursorPosition: Int) {
+				cursorPosition: Int,
+				childRowIndent: Bool) {
 		self.row = row
 		self.topic = topic
 		self.cursorPosition = cursorPosition
+		self.childRowIndent = childRowIndent
 
 		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
@@ -31,7 +34,7 @@ public final class SplitRowCommand: OutlineCommand {
 		if newRow == nil {
 			newRow = Row(outline: outline)
 		}
-		outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
+		outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition, childRowIndent: childRowIndent)
 	}
 	
 	public override func undo() {

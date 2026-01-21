@@ -204,6 +204,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let attributedTitle = NSAttributedString(string: .boldControlLabel, attributes: [.font: boldFont])
 		let keyCommand = UIKeyCommand(title: .boldControlLabel, action: .toggleBoldface, input: "b", modifierFlags: [.command])
 		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
+		keyCommand.image = .bold
 		return keyCommand
 	}()
 	
@@ -212,6 +213,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let attributedTitle = NSAttributedString(string: .italicControlLabel, attributes: [.font: italicFont])
 		let keyCommand = UIKeyCommand(title: .italicControlLabel, action: .toggleItalics, input: "i", modifierFlags: [.command])
 		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
+		keyCommand.image = .italic
 		return keyCommand
 	}()
 	
@@ -308,7 +310,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 									  input: "<",
 									  modifierFlags: [.command])
 	
-	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: .actualSize)
+	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, image: .zoomActual, action: .actualSize)
 	
 	let showHelpCommand = UICommand(title: .appHelpControlLabel, image: .help, action: .showHelp)
 
@@ -323,13 +325,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 											  modifierFlags: [.shift, .command])
 	
 	let printDocsCommand = UIKeyCommand(title: .printDocEllipsisControlLabel,
-										image: .printDoc,
+										image: .print,
 										action: .printDocs,
 										input: "p",
 										modifierFlags: [.alternate, .command])
 	
 	let printListsCommand = UIKeyCommand(title: .printListControlEllipsisLabel,
-										 image: .printList,
 										 action: .printLists,
 										 input: "p",
 										 modifierFlags: [.command])
