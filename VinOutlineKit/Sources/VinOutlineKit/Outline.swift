@@ -1809,8 +1809,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			insertRow(row, at: 0)
 			row.parent = self
 		} else if afterRow == focusRow {
-			afterRow?.insertRow(row, at: 0)
-			row.parent = afterRow
+			if childRowIndent ?? true {
+				afterRow?.insertRow(row, at: 0)
+				row.parent = afterRow
+			}
 		} else if afterRow?.isExpanded ?? true && childRowIndent ?? true && !(afterRow?.rowCount == 0) {
 			afterRow?.insertRow(row, at: 0)
 			row.parent = afterRow
@@ -1886,8 +1888,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rowCount - 1
 				parent.insertRow(row, at: insertIndex + 1)
 			} else if afterRow == focusRow {
-				afterRow?.insertRow(row, at: 0)
-				row.parent = afterRow
+				if childRowIndent ?? true {
+					afterRow?.insertRow(row, at: 0)
+					row.parent = afterRow
+				}
 			} else if afterRow?.isExpanded ?? true && childRowIndent ?? true && !(afterRow?.rowCount == 0) {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
