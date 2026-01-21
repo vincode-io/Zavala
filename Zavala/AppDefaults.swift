@@ -26,6 +26,20 @@ enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
 	
 }
 
+enum CreateRows: Int, CustomStringConvertible, CaseIterable {
+	case indentedWithChildren = 0
+	case atSameLevel = 1
+
+	var description: String {
+		switch self {
+		case .indentedWithChildren:
+			return .indentedWithChildrenControlLabel
+		case .atSameLevel:
+			return .atSameLevelControlLabel
+		}
+	}
+}
+
 enum EditorMaxWidth: Int, CustomStringConvertible, CaseIterable {
 	case normal = 0
 	case wide = 1
@@ -114,6 +128,7 @@ final class AppDefaults {
 		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
+		static let createRows = "createRows";
 		static let editorMaxWidth = "editorWidth";
 		static let scrollMode = "scrollMode";
 		static let rowIndentSize = "rowIndentSize"
@@ -296,6 +311,18 @@ final class AppDefaults {
 		}
 	}
 	
+	var createRows: CreateRows {
+		get {
+			if let result = CreateRows(rawValue: Self.int(for: Key.createRows)) {
+				return result
+			}
+			return .indentedWithChildren
+		}
+		set {
+			Self.setInt(for: Key.createRows, newValue.rawValue)
+		}
+	}
+
 	var editorMaxWidth: EditorMaxWidth {
 		get {
 			if let result = EditorMaxWidth(rawValue: Self.int(for: Key.editorMaxWidth)) {

@@ -318,6 +318,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
+	private var childRowIndent = AppDefaults.shared.createRows == .indentedWithChildren
 	private var rowIndentSize = AppDefaults.shared.rowIndentSize
 	private var rowSpacingSize = AppDefaults.shared.rowSpacingSize
 	
@@ -769,6 +770,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc nonisolated func userDefaultsDidChange() {
 		Task { @MainActor in
+			childRowIndent = AppDefaults.shared.createRows == .indentedWithChildren
+
 			if rowIndentSize != AppDefaults.shared.rowIndentSize {
 				rowIndentSize = AppDefaults.shared.rowIndentSize
 				collectionView.reloadData()
@@ -3284,8 +3287,9 @@ private extension EditorViewController {
 												  delegate: self,
 												  outline: outline,
 												  rowGroups: rowGroups,
-												  afterRow: afterRows?.last)
-				
+												  afterRow: afterRows?.last,
+												  childRowIndent: childRowIndent)
+
 					command.execute()
 				} catch {
 					presentError(error)
@@ -3300,8 +3304,9 @@ private extension EditorViewController {
 											  delegate: self,
 											  outline: outline,
 											  rowGroups: rowGroups,
-											  afterRow: afterRows?.last)
-				
+											  afterRow: afterRows?.last,
+											  childRowIndent: childRowIndent)
+
 				command.execute()
 			}
 		}
@@ -3348,8 +3353,9 @@ private extension EditorViewController {
 											delegate: self,
 											outline: outline,
 											afterRow: afterRow,
-											rowStrings: rowStrings)
-		
+											rowStrings: rowStrings,
+											childRowIndent: childRowIndent)
+
 		command.execute()
 	}
 	
@@ -3462,8 +3468,9 @@ private extension EditorViewController {
 									  outline: outline,
 									  row: row,
 									  topic: topic,
-									  cursorPosition: cursorPosition)
-												  
+									  cursorPosition: cursorPosition,
+									  childRowIndent: childRowIndent)
+
 		
 		command.execute()
 	}

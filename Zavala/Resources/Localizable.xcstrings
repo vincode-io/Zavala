@@ -465,6 +465,35 @@
         }
       }
     },
+    "button.text.at-same-level" : {
+      "comment" : "Label: At Same Level",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immer auf derselben Ebene"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Always At Same Level"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Always At Same Level"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Always At Same Level"
+          }
+        }
+      }
+    },
     "button.text.automatic-color-palette" : {
       "comment" : "Set App Color Palette Action: Automatic",
       "localizations" : {
@@ -2509,6 +2538,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Import OPML…"
+          }
+        }
+      }
+    },
+    "button.text.indented-with-children" : {
+      "comment" : "Label: Indented with Children",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingerückt mit Unterelementen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indented With Children"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indented With Children"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indented With Children"
           }
         }
       }
@@ -8446,6 +8504,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "This outline appears to be corrupted. Would you like to fix it?"
+          }
+        }
+      }
+    },
+    "label.text.create-rows" : {
+      "comment" : "Label: Create Rows",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilen erstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Rows"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Rows"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Rows"
           }
         }
       }

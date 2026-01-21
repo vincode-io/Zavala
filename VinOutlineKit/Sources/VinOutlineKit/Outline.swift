@@ -1791,7 +1791,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	@discardableResult
-	func createRow(_ row: Row, parent: RowContainer? = nil, index: Int? = nil, afterRow: Row? = nil, rowStrings: RowStrings? = nil) -> Int? {
+	func createRow(_ row: Row, parent: RowContainer? = nil, index: Int? = nil, afterRow: Row? = nil, rowStrings: RowStrings? = nil, childRowIndent: Bool? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		defer {
 			endCloudKitBatchRequest()
@@ -1811,7 +1811,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		} else if afterRow == focusRow {
 			afterRow?.insertRow(row, at: 0)
 			row.parent = afterRow
-		} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
+		} else if afterRow?.isExpanded ?? true && childRowIndent ?? true && !(afterRow?.rowCount == 0) {
 			afterRow?.insertRow(row, at: 0)
 			row.parent = afterRow
 		} else if let afterRow, let parent = afterRow.parent {
@@ -1855,7 +1855,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return row.shadowTableIndex
 	}
 
-	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false) {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false, childRowIndent: Bool? = nil) {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
@@ -1888,7 +1888,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			} else if afterRow == focusRow {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
-			} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
+			} else if afterRow?.isExpanded ?? true && childRowIndent ?? true && !(afterRow?.rowCount == 0) {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
 			} else if let afterRow, let parent = afterRow.parent {
@@ -2128,7 +2128,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return newRows
 	}
 
-	func splitRow(newRow: Row, toParent: RowContainer? = nil, toIndex: Int? = nil, row: Row, topic: NSAttributedString, cursorPosition: Int) {
+	func splitRow(newRow: Row, toParent: RowContainer? = nil, toIndex: Int? = nil, row: Row, topic: NSAttributedString, cursorPosition: Int, childRowIndent: Bool? = nil) {
 		beginCloudKitBatchRequest()
 		defer {
 			endCloudKitBatchRequest()
@@ -2141,7 +2141,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		let topicRange = NSRange(location: 0, length: cursorPosition)
 		let topicText = topic.attributedSubstring(from: topicRange)
 
-		let newCursorIndex = createRow(newRow, parent: toParent, index: toIndex, afterRow: row, rowStrings: .topic(topicText))
+		let newCursorIndex = createRow(newRow, parent: toParent, index: toIndex, afterRow: row, rowStrings: .topic(topicText), childRowIndent: childRowIndent)
 		
 		guard isBeingViewed else { return }
 		guard let rowShadowTableIndex = row.shadowTableIndex else { return }
