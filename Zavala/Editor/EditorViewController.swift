@@ -2628,6 +2628,10 @@ private extension EditorViewController {
 	func restoreOutlineCursorPosition() {
 		if let cursorCoordinates = outline?.cursorCoordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: true)
+		} else {
+			Task {
+				becomeFirstResponder()
+			}
 		}
 	}
 	
