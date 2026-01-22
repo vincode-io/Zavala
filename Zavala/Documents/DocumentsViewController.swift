@@ -112,6 +112,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			searchController.obscuresBackgroundDuringPresentation = false
 			searchController.searchBar.placeholder = .searchPlaceholder
 			navigationItem.searchController = searchController
+			navigationItem.searchBarPlacementAllowsExternalIntegration = true
 			definesPresentationContext = true
 
 			navigationItem.rightBarButtonItem = navButtonsBarButtonItem
