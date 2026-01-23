@@ -19,17 +19,15 @@ public protocol CursorCoordinatesProvider {
 @MainActor
 public struct CursorCoordinates {
 
-	public var rowID: String
-	public var isInNotes: Bool
-	public var selection: NSRange
-	
+	public let rowID: String
+	public let isInNotes: Bool
+	public let selection: NSRange
+
 	public init(rowID: String, isInNotes: Bool, selection: NSRange) {
 		self.rowID = rowID
 		self.isInNotes = isInNotes
 		self.selection = selection
 	}
-
-	public private(set) static var lastKnownCoordinates: CursorCoordinates?
 
 	@available(iOSApplicationExtension, unavailable)
 	public static var currentCoordinates: CursorCoordinates? {
@@ -41,24 +39,4 @@ public struct CursorCoordinates {
 		return nil
 	}
 
-	@available(iOSApplicationExtension, unavailable)
-	public static var bestCoordinates: CursorCoordinates? {
-		if let current = currentCoordinates {
-			return current
-		}
-		return lastKnownCoordinates
-	}
-	
-	@available(iOSApplicationExtension, unavailable)
-	public static func clearLastKnownCoordinates() {
-		lastKnownCoordinates = nil
-	}
-	
-	@available(iOSApplicationExtension, unavailable)
-	public static func updateLastKnownCoordinates() {
-		if let coordinates = currentCoordinates {
-			lastKnownCoordinates = coordinates
-		}
-	}
-	
 }

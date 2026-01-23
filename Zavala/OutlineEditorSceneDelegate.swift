@@ -83,7 +83,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
-	func sceneDidDisconnect(_ scene: UIScene) {
+	func sceneWillResignActive(_ scene: UIScene) {
 		editorContainerViewController.shutdown()
 	}
 	

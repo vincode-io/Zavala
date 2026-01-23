@@ -225,7 +225,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var messageLabel: UILabel?
 	
 	private(set) var outline: Outline?
-	
+	private var cursorCoordinates: CursorCoordinates?
+
 	private var currentTitle: String? {
 		guard let titleCell = collectionView.cellForItem(at: IndexPath(row: 0, section: Outline.Section.title.rawValue)) as? EditorTitleViewCell else {
 			return nil
@@ -834,13 +835,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	@objc func outlineSearchDidEnd(_ note: Notification) {
-		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
+		if let cursorCoordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: true, centered: true)
 		}
 	}
 	
 	@objc func outlineDidFocusOut(_ note: Notification) {
-		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
+		if let cursorCoordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: true, centered: true)
 		}
 	}
@@ -871,11 +872,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func sceneWillDeactivate(_ note: Notification) {
 		saveCurrentText()
-		
-		// If we don't update the last know coordinates, then when the container
-		// tries to save and update the outine we might not have the ability to tell
-		// what the last first responder was or where its cursor was.
-		CursorCoordinates.updateLastKnownCoordinates()
 	}
 	
 	@objc func didEnterBackground(_ note: Notification) {
@@ -936,18 +932,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		messageLabel?.removeFromSuperview()
 		messageLabel = nil
 		
-		// On the iPad if we aren't editing a field, clear out the last know coordinates
-		if traitCollection.userInterfaceIdiom == .pad && !UIResponder.isFirstResponderTextField {
-			CursorCoordinates.clearLastKnownCoordinates()
-		}
-		
-		// Get ready for the new outline, buy saving the current one
-		outline?.cursorCoordinates = CursorCoordinates.bestCoordinates
-		
 		if let textField = UIResponder.currentFirstResponder as? EditorRowTextView {
 			textField.endEditing(true)
 		}
-		
+
+		// On the iPad if we aren't editing a field, clear out the last know coordinates
+		if traitCollection.userInterfaceIdiom == .pad && !UIResponder.isFirstResponderTextField {
+			cursorCoordinates = nil
+		}
+
+		outline?.cursorCoordinates = cursorCoordinates
+
 		if let outline {
 			Task.detached {
 				await self.updateSpotlightIndex(with: outline)
@@ -1175,7 +1170,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func hideKeyboard() {
 		UIResponder.currentFirstResponder?.resignFirstResponder()
-		CursorCoordinates.clearLastKnownCoordinates()
 	}
 	
 	@objc func toggleMode() {
@@ -1546,8 +1540,8 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		if let rowInput = UIResponder.currentFirstResponder as? EditorRowTextView {
 			rowInput.resignFirstResponder()
 			if traitCollection.userInterfaceIdiom != .mac {
-				CursorCoordinates.clearLastKnownCoordinates()
-			}                      
+				cursorCoordinates = nil
+			}
 		} else if let titleOrTagInput = UIResponder.currentFirstResponder as? EditorTextInput & UIResponder {
 			if traitCollection.userInterfaceIdiom != .mac {
 				titleOrTagInput.resignFirstResponder()
@@ -1557,13 +1551,13 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	
 	func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 		if traitCollection.userInterfaceIdiom == .mac {
-			restoreBestKnownCursorPosition()
+			restoreOutlineCursorPositionAfterScroll()
 		}
 	}
 	
 	func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
 		if !decelerate && traitCollection.userInterfaceIdiom == .mac {
-			restoreBestKnownCursorPosition()
+			restoreOutlineCursorPositionAfterScroll()
 		}
 	}
 	
@@ -1690,6 +1684,7 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	func editorTitleTextFieldDidBecomeActive() {
 		updateUI()
 		collectionView.deselectAll()
+		cursorCoordinates = nil
 	}
 	
 	func editorTitleDidUpdate(title: String) {
@@ -1724,6 +1719,7 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 	func editorTagInputTextFieldDidBecomeActive() {
 		updateUI()
 		collectionView.deselectAll()
+		cursorCoordinates = nil
 	}
 		
 	func editorTagInputTextFieldDidReturn() {
@@ -1779,12 +1775,13 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		}
 	}
 
-	func editorRowTextFieldDidBecomeInactive() {
+	func editorRowTextFieldDidBecomeInactive(cursorCoordinates: CursorCoordinates?) {
 		// This makes doing row insertions much faster because this work will
 		// be performed a cycle after the actual insertion was completed.
 		Task { @MainActor in
 			self.updateUI()
 		}
+		self.cursorCoordinates = cursorCoordinates
 	}
 	
 	func editorRowToggleDisclosure(rowID: String, applyToAll: Bool) {
@@ -1913,7 +1910,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
 		picker.dismiss(animated: true, completion: nil)
 		
-		guard let cursorCoordinates = CursorCoordinates.bestCoordinates, let result = results.first else {
+		guard let cursorCoordinates, let result = results.first else {
 			return
 		}
 		
@@ -2288,15 +2285,13 @@ private extension EditorViewController {
 		outline?.incrementBeingViewedCount()
 		outline?.prepareForViewing()
 
-		let cursorCoordinates = CursorCoordinates.bestCoordinates
-		
 		collectionView.reloadData()
 		
 		if let cursorCoordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: false)
 		}
 	}
-	
+
 	func showFindInteraction(text: String? = nil, replace: Bool = false) {
 		guard !isSearching else {
 			return
@@ -2627,19 +2622,14 @@ private extension EditorViewController {
 	func restoreOutlineCursorPosition() {
 		if let cursorCoordinates = outline?.cursorCoordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: true)
-		} else {
-			Task {
-				becomeFirstResponder()
-			}
 		}
 	}
-	
-	// Currently only used on the Mac to get the cursor back while scrolling. On iOS we don't want the cursor to comeback
-	// and show the keyboard again until the user selects something. Don't try to restore the cursor on the Mac if we
-	// are selecting rows. That will deselect them.
-	func restoreBestKnownCursorPosition() {
+
+	// On iOS we don't want the cursor to comeback and show the keyboard again until the user selects something.
+	// Don't try to restore the cursor on the Mac if we are selecting rows. That will deselect them.
+	func restoreOutlineCursorPositionAfterScroll() {
 		guard collectionView.indexPathsForSelectedItems == nil || collectionView.indexPathsForSelectedItems!.isEmpty else { return }
-		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
+		if let cursorCoordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: false)
 		}
 	}
@@ -2746,7 +2736,7 @@ private extension EditorViewController {
 		
 			let linkViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacLinkViewController") as! MacLinkViewController
 			linkViewController.preferredContentSize = CGSize(width: 400, height: 126)
-			linkViewController.cursorCoordinates = CursorCoordinates.bestCoordinates
+			linkViewController.cursorCoordinates = CursorCoordinates.currentCoordinates
 			linkViewController.text = text
 			linkViewController.link = link
 			linkViewController.range = range
@@ -2760,7 +2750,7 @@ private extension EditorViewController {
 			linkNavViewController.modalPresentationStyle = .formSheet
 
 			let linkViewController = linkNavViewController.topViewController as! LinkViewController
-			linkViewController.cursorCoordinates = CursorCoordinates.bestCoordinates
+			linkViewController.cursorCoordinates = CursorCoordinates.currentCoordinates
 			linkViewController.text = text
 			linkViewController.link = link
 			linkViewController.range = range

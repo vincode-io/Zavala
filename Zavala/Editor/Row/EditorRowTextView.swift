@@ -447,7 +447,6 @@ extension EditorRowTextView {
 
         let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
         if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) > 0 {
-			CursorCoordinates.updateLastKnownCoordinates()
             textViewHeight = fittingSize.height
             resize()
         }

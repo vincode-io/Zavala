@@ -52,7 +52,6 @@ class EditorTitleTextView: UITextView, EditorTextInput {
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
 		let result = super.becomeFirstResponder()
-		CursorCoordinates.clearLastKnownCoordinates()
 		editorDelegate?.didBecomeActive(self)
 		return result
 	}

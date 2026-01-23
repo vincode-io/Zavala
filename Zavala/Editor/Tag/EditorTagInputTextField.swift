@@ -99,7 +99,6 @@ class EditorTagInputTextField: SearchTextField, EditorTextInput {
 	override func becomeFirstResponder() -> Bool {
 		resetFilterStrings()
 		let result = super.becomeFirstResponder()
-		CursorCoordinates.clearLastKnownCoordinates()
 		editorDelegate?.didBecomeActive(self)
 		return result
 	}

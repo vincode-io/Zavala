@@ -13,7 +13,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorRowTopicTextView)
-	func didBecomeInactive(_: EditorRowTopicTextView)
+	func didBecomeInactive(_: EditorRowTopicTextView, cursorCoordinates: CursorCoordinates?)
 	func resize(_: EditorRowTopicTextView)
 	func scrollIfNecessary(_: EditorRowTopicTextView)
 	func scrollEditorToVisible(_: EditorRowTopicTextView, rect: CGRect)
@@ -105,10 +105,10 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		CursorCoordinates.updateLastKnownCoordinates()
+		let cursorCoordinates = CursorCoordinates.currentCoordinates
 		let result = super.resignFirstResponder()
 		if result {
-			editorDelegate?.didBecomeInactive(self)
+			editorDelegate?.didBecomeInactive(self, cursorCoordinates: cursorCoordinates)
 		}
 		return result
 	}

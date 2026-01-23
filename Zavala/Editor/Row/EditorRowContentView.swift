@@ -190,8 +190,8 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive()
 	}
 
-	func didBecomeInactive(_: EditorRowTopicTextView) {
-		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeInactive()
+	func didBecomeInactive(_: EditorRowTopicTextView, cursorCoordinates: CursorCoordinates?) {
+		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeInactive(cursorCoordinates: cursorCoordinates)
 	}
 
 	func textChanged(_: EditorRowTopicTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
@@ -258,8 +258,8 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive()
 	}
 	
-	func didBecomeInactive(_: EditorRowNoteTextView) {
-		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeInactive()
+	func didBecomeInactive(_: EditorRowNoteTextView, cursorCoordinates: CursorCoordinates?) {
+		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeInactive(cursorCoordinates: cursorCoordinates)
 	}
 	
 	func textChanged(_: EditorRowNoteTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {

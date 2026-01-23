@@ -17,7 +17,7 @@ protocol EditorRowNoteTextViewDelegate: AnyObject {
 	func scrollIfNecessary(_ : EditorRowNoteTextView)
 	func scrollEditorToVisible(_ : EditorRowNoteTextView, rect: CGRect)
 	func didBecomeActive(_ : EditorRowNoteTextView)
-	func didBecomeInactive(_ : EditorRowNoteTextView)
+	func didBecomeInactive(_ : EditorRowNoteTextView, cursorCoordinates: CursorCoordinates?)
 	func textChanged(_ : EditorRowNoteTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRowNote(_ : EditorRowNoteTextView, rowID: String)
 	func moveCursorTo(_ : EditorRowNoteTextView, rowID: String)
@@ -76,10 +76,10 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		CursorCoordinates.updateLastKnownCoordinates()
+		let cursorCoordinates = CursorCoordinates.currentCoordinates
 		let result = super.resignFirstResponder()
 		if result {
-			editorDelegate?.didBecomeInactive(self)
+			editorDelegate?.didBecomeInactive(self, cursorCoordinates: cursorCoordinates)
 		}
 		return result
 	}
