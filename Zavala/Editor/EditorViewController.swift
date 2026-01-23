@@ -399,9 +399,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		updateUI()
 		collectionView.reloadData()
 
-		restoreScrollPosition()
-		restoreOutlineCursorPosition()
-		
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineFontCacheDidRebuild(_:)), name: .OutlineFontCacheDidRebuild, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
@@ -1014,8 +1011,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return
 		}
 		
-		guard isViewLoaded, let outline else { return }
+		guard let outline else { return }
 		
+		loadViewIfNeeded()
+
 		if let selectRow {
 			guard let index = outline.shadowTable?.first(where: { $0.entityID == selectRow })?.shadowTableIndex else { return }
 			collectionView.selectItem(at: IndexPath(row: index, section: adjustedRowsSection), animated: false, scrollPosition: [.centeredVertically])
