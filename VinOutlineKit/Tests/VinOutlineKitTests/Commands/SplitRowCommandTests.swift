@@ -13,7 +13,14 @@ final class SplitRowCommandTests: VOKTestCase {
         let attrString = NSAttributedString(string: "hello world")
 		let originalRowCount = outline.rowCount
 		
-		let command = SplitRowCommand(actionName: "SplitRow", undoManager: undoManager, delegate: self, outline: outline, row: row, topic: attrString, cursorPosition: 5)
+		let command = SplitRowCommand(actionName: "SplitRow",
+									  undoManager: undoManager,
+									  delegate: self,
+									  outline: outline,
+									  row: row,
+									  topic: attrString,
+									  cursorPosition: 5,
+									  childRowIndent: true)
         command.execute()
 		#expect(outline.rows.count == originalRowCount + 1)
 		#expect(outline.rows[outline.rows.count - 2].topic?.string == "hello")
