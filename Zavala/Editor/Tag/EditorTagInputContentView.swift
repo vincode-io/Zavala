@@ -74,10 +74,14 @@ extension EditorTagInputContentView: EditorTagInputPillDelegate {
 		delegate?.editorTagInputLayoutEditor()
 	}
 	
-	func didBecomeActive(_: EditorTagInputPill) {
-		delegate?.editorTagInputTextFieldDidBecomeActive()
+	func didBecomeActive(_ editorTagInputPill: EditorTagInputPill) {
+		delegate?.editorTagInputTextFieldDidBecomeActive(editorTagInputPill.textField)
 	}
 	
+	func didBecomeInactive(_ editorTagInputPill: EditorTagInputPill) {
+		delegate?.editorTagInputTextFieldDidBecomeInactive()
+	}
+
 	func didReturn(_: EditorTagInputPill) {
 		delegate?.editorTagInputTextFieldDidReturn()
 	}

@@ -19,7 +19,7 @@ extension NSAttributedString.Key {
 	static let searchResult: NSAttributedString.Key = .init("searchResult")
 }
 
-class EditorRowTextView: UITextView {
+class EditorRowTextView: UITextView, EditorTextInput {
 	
 	var rowID: String?
 	var rowHasChildren = false
@@ -47,6 +47,10 @@ class EditorRowTextView: UITextView {
 			stackedUndoManager = StackedUndoManger(mainUndoManager: textViewUndoManager, fallBackUndoManager: controllerUndoManager)
 		}
 		return stackedUndoManager
+	}
+
+	var coordinates: CursorCoordinates? {
+		fatalError("Unimplemented")
 	}
 	
 	var isBoldToggledOn: Bool {

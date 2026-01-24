@@ -13,7 +13,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorRowTopicTextView)
-	func didBecomeInactive(_: EditorRowTopicTextView, cursorCoordinates: CursorCoordinates?)
+	func didBecomeInactive(_: EditorRowTopicTextView)
 	func resize(_: EditorRowTopicTextView)
 	func scrollIfNecessary(_: EditorRowTopicTextView)
 	func scrollEditorToVisible(_: EditorRowTopicTextView, rect: CGRect)
@@ -32,7 +32,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func zoomImage(_: EditorRowTopicTextView, _ image: UIImage, rect: CGRect)
 }
 
-class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
+class EditorRowTopicTextView: EditorRowTextView {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorRowTopicTextViewUndoManager
@@ -59,6 +59,13 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	
 	weak var editorDelegate: EditorRowTopicTextViewDelegate?
 
+	override var coordinates: CursorCoordinates? {
+		if let rowID {
+			return CursorCoordinates(rowID: rowID, isInNotes: false, selection: selectedRange)
+		}
+		return nil
+	}
+	
 	override var rowStrings: RowStrings {
 		return RowStrings.topic(cleansedAttributedText)
 	}
@@ -105,10 +112,9 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		let cursorCoordinates = CursorCoordinates.currentCoordinates
 		let result = super.resignFirstResponder()
 		if result {
-			editorDelegate?.didBecomeInactive(self, cursorCoordinates: cursorCoordinates)
+			editorDelegate?.didBecomeInactive(self)
 		}
 		return result
 	}
@@ -263,19 +269,6 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		editorDelegate?.scrollEditorToVisible(self, rect: rect)
 	}
 	
-}
-
-// MARK: CursorCoordinatesProvider
-
-extension EditorRowTopicTextView: CursorCoordinatesProvider {
-
-	var coordinates: CursorCoordinates? {
-		if let rowID {
-			return CursorCoordinates(rowID: rowID, isInNotes: false, selection: selectedRange)
-		}
-		return nil
-	}
-
 }
 
 // MARK: UITextViewDelegate

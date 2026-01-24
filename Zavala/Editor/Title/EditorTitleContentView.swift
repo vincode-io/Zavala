@@ -76,10 +76,14 @@ extension EditorTitleContentView: EditorTitleTextViewDelegate {
 		return titleConfiguration.delegate?.editorTitleUndoManager
 	}
 	
-	func didBecomeActive(_: EditorTitleTextView) {
-		titleConfiguration.delegate?.editorTitleTextFieldDidBecomeActive()
+	func didBecomeActive(_ editorTitleTextView: EditorTitleTextView) {
+		titleConfiguration.delegate?.editorTitleTextViewDidBecomeActive(editorTitleTextView)
 	}
 	
+	func didBecomeInactive(_: EditorTitleTextView) {
+		titleConfiguration.delegate?.editorTitleTextViewDidBecomeInactive()
+	}
+
 }
 
 // MARK: UITextViewDelegate

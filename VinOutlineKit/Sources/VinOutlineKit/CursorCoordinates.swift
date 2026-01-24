@@ -12,11 +12,6 @@ import Foundation
 #endif
 
 @MainActor
-public protocol CursorCoordinatesProvider {
-	var coordinates: CursorCoordinates? { get }
-}
-
-@MainActor
 public struct CursorCoordinates {
 
 	public let rowID: String
@@ -27,16 +22,6 @@ public struct CursorCoordinates {
 		self.rowID = rowID
 		self.isInNotes = isInNotes
 		self.selection = selection
-	}
-
-	@available(iOSApplicationExtension, unavailable)
-	public static var currentCoordinates: CursorCoordinates? {
-		#if canImport(UIKit)
-		if let provider = UIResponder.currentFirstResponder as? CursorCoordinatesProvider {
-			return provider.coordinates
-		}
-		#endif
-		return nil
 	}
 
 }
