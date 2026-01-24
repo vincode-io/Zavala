@@ -1013,7 +1013,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			collectionView.selectItem(at: IndexPath(row: index, section: adjustedRowsSection), animated: false, scrollPosition: [.centeredVertically])
 		} else {
 			restoreScrollPosition()
-			restoreOutlineCursorPosition()
+			restoreOutlineResponderChain()
 		}
 	}
 	
@@ -2615,9 +2615,11 @@ private extension EditorViewController {
 		}
 	}
 
-	func restoreOutlineCursorPosition() {
+	func restoreOutlineResponderChain() {
 		if let cursorCoordinates = outline?.cursorCoordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: true)
+		} else {
+			becomeFirstResponder()
 		}
 	}
 
