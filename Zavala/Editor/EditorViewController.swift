@@ -156,7 +156,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	var isInsertNewlineUnavailable: Bool {
-		return currentTextView == nil
+		return currentRowTextView == nil
 	}
 
 	var currentRows: [Row]? {
@@ -168,7 +168,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 					return nil
 				}
 			}
-		} else if let currentRowID = currentTextView?.rowID, let currentRow = outline?.findRow(id: currentRowID) {
+		} else if let currentRowID = currentRowTextView?.rowID, let currentRow = outline?.findRow(id: currentRowID) {
 			return [currentRow]
 		}
 		return nil
@@ -177,17 +177,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	var isInOutlineMode: Bool {
 		return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 	}
-	
-	var isInEditMode: Bool {
-		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
-			return true
-		} else {
-			return false
-		}
-	}
-	
+
 	var isEditingTopic: Bool {
-		if let responder = UIResponder.currentFirstResponder, responder is EditorRowTopicTextView {
+		if currentRowTextView is EditorRowTopicTextView {
 			return true
 		} else {
 			return false
@@ -195,7 +187,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	var isEditingNote: Bool {
-		if let responder = UIResponder.currentFirstResponder, responder is EditorRowNoteTextView {
+		if currentRowTextView is EditorRowNoteTextView {
 			return true
 		} else {
 			return false
@@ -203,11 +195,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	var isBoldToggledOn: Bool {
-		return currentTextView?.isBoldToggledOn ?? false
+		return currentRowTextView?.isBoldToggledOn ?? false
 	}
 
 	var isItalicToggledOn: Bool {
-		return currentTextView?.isItalicToggledOn ?? false
+		return currentRowTextView?.isItalicToggledOn ?? false
 	}
 
 	var isSearching = false
@@ -233,13 +225,27 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 		return titleCell.textViewText
 	}
-	
-	private var currentTextView: EditorRowTextView? {
-		return UIResponder.currentFirstResponder as? EditorRowTextView
+
+	private var currentTextInput: EditorTextInput? {
+		didSet {
+			if currentTextInput != nil {
+				mostRecentTextInput = currentTextInput
+			}
+		}
+	}
+
+	private var mostRecentTextInput: EditorTextInput?
+
+	private var currentRowTextView: EditorRowTextView? {
+		return currentTextInput as? EditorRowTextView
 	}
 	
+	private var mostRecentRowTextView: EditorRowTextView? {
+		return mostRecentTextInput as? EditorRowTextView
+	}
+
 	private var currentRowStrings: RowStrings? {
-		return currentTextView?.rowStrings
+		return currentRowTextView?.rowStrings
 	}
 	
 	private var cancelledKeys = Set<UIKey>()
@@ -506,7 +512,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	override func useSelectionForFind(_ sender: Any?) {
-		showFindInteraction(text: currentTextView?.selectedText)
+		showFindInteraction(text: currentRowTextView?.selectedText)
 	}
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -526,7 +532,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		case .copyRowLink:
 			return currentRows?.count == 1
 		case .insertImage, .insertReturn:
-			return currentTextView != nil
+			return currentRowTextView != nil
 		case .focusIn:
 			return currentRows?.count == 1
 		case .focusOut:
@@ -651,7 +657,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		case .deleteCompletedRows:
 			return outline?.isAnyRowCompleted ?? false
 		case .toggleRowNotes:
-			return isInEditMode
+			return currentRowTextView != nil
 		case .deleteRowNotes:
 			return !isDeleteRowNotesUnavailable
 		default:
@@ -835,14 +841,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	@objc func outlineSearchDidEnd(_ note: Notification) {
-		if let cursorCoordinates {
-			restoreCursorPosition(cursorCoordinates, scroll: true, centered: true)
+		if let coordinates = currentRowTextView?.coordinates {
+			restoreCursorPosition(coordinates, scroll: true, centered: true)
 		}
 	}
 	
 	@objc func outlineDidFocusOut(_ note: Notification) {
-		if let cursorCoordinates {
-			restoreCursorPosition(cursorCoordinates, scroll: true, centered: true)
+		if let coordinates = currentRowTextView?.coordinates {
+			restoreCursorPosition(coordinates, scroll: true, centered: true)
 		}
 	}
 	
@@ -931,17 +937,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		messageLabel?.removeFromSuperview()
 		messageLabel = nil
-		
-		if let textField = UIResponder.currentFirstResponder as? EditorRowTextView {
-			textField.endEditing(true)
-		}
 
-		// On the iPad if we aren't editing a field, clear out the last know coordinates
-		if traitCollection.userInterfaceIdiom == .pad && !UIResponder.isFirstResponderTextField {
-			cursorCoordinates = nil
-		}
-
-		outline?.cursorCoordinates = cursorCoordinates
+		currentRowTextView?.endEditing(true)
+		outline?.cursorCoordinates = mostRecentRowTextView?.coordinates
 
 		if let outline {
 			Task.detached {
@@ -1142,13 +1140,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	func printDoc() {
 		guard let outline else { return }
-		currentTextView?.saveText()
+		currentRowTextView?.saveText()
 		delegate?.printDoc(self, outline: outline)
 	}
 	
 	func printList() {
 		guard let outline else { return }
-		currentTextView?.saveText()
+		currentRowTextView?.saveText()
 		delegate?.printList(self, outline: outline)
 	}
 	
@@ -1173,14 +1171,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func toggleMode() {
-		let currentFirstResponder = UIResponder.currentFirstResponder
-		
-		if currentFirstResponder is EditorTitleTextView || currentFirstResponder is EditorTagInputTextField {
-			currentFirstResponder?.resignFirstResponder()
+		if currentTextInput is EditorTitleTextView || currentTextInput is EditorTagInputTextField {
+			currentTextInput?.resignFirstResponder()
 			return
 		}
 		
-		if let topicView = currentFirstResponder as? EditorRowTopicTextView,
+		if let topicView = currentTextInput as? EditorRowTopicTextView,
 		   let rowID = topicView.rowID,
 		   let row = outline?.findRow(id: rowID),
 		   let shadowTableIndex = row.shadowTableIndex {
@@ -1408,22 +1404,22 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	@objc func insertReturn(_ sender: Any?) {
-		currentTextView?.insertNewline(self)
+		currentRowTextView?.insertNewline(self)
 	}
 	
 	@objc func editorLink(_ sender: Any?) {
 		rightToolbarButtonGroup.dismissPopOverMenu()
-		currentTextView?.editLink(self)
+		currentRowTextView?.editLink(self)
 	}
 
 	@objc func editorToggleBoldface(_ sender: Any? = nil) {
 		rightToolbarButtonGroup.dismissPopOverMenu()
-		currentTextView?.toggleBoldface(self)
+		currentRowTextView?.toggleBoldface(self)
 	}
 	
 	@objc func editorToggleItalics(_ sender: Any? = nil) {
 		rightToolbarButtonGroup.dismissPopOverMenu()
-		currentTextView?.toggleItalics(self)
+		currentRowTextView?.toggleItalics(self)
 	}
 	
 	func share(sourceView: UIView? = nil) {
@@ -1530,34 +1526,27 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		self.outline?.verticleScrollState = firstVisibleShadowTableIndex
 		
-		if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
+		if let tagInput = currentTextInput as? EditorTagInputTextField {
 			tagInput.setNeedsLayout()
 		}
 	}
 	
 	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
 		// We resign first responder and put it back later to work around: https://openradar.appspot.com/39604024
-		if let rowInput = UIResponder.currentFirstResponder as? EditorRowTextView {
-			rowInput.resignFirstResponder()
-			if traitCollection.userInterfaceIdiom != .mac {
-				cursorCoordinates = nil
-			}
-		} else if let titleOrTagInput = UIResponder.currentFirstResponder as? EditorTextInput & UIResponder {
-			if traitCollection.userInterfaceIdiom != .mac {
-				titleOrTagInput.resignFirstResponder()
-			}
+		if traitCollection.userInterfaceIdiom != .mac {
+			currentTextInput?.resignFirstResponder()
 		}
 	}
 	
 	func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 		if traitCollection.userInterfaceIdiom == .mac {
-			restoreOutlineCursorPositionAfterScroll()
+			restoreCursorPositionAfterScroll()
 		}
 	}
 	
 	func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
 		if !decelerate && traitCollection.userInterfaceIdiom == .mac {
-			restoreOutlineCursorPositionAfterScroll()
+			restoreCursorPositionAfterScroll()
 		}
 	}
 	
@@ -1653,9 +1642,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
-			responder.resignFirstResponder()
-		}
+		currentTextInput?.resignFirstResponder()
 		updateUI()
 	}
 	
@@ -1681,12 +1668,16 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 		return undoManager
 	}
 	
-	func editorTitleTextFieldDidBecomeActive() {
+	func editorTitleTextViewDidBecomeActive(_ editorTitleTextView: EditorTitleTextView) {
 		updateUI()
 		collectionView.deselectAll()
-		cursorCoordinates = nil
+		currentTextInput = editorTitleTextView
 	}
 	
+	func editorTitleTextViewDidBecomeInactive() {
+		currentTextInput = nil
+	}
+
 	func editorTitleDidUpdate(title: String) {
 		Task {
 			await updateTitleChannel.send(title)
@@ -1716,12 +1707,16 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 		layoutEditor()
 	}
 	
-	func editorTagInputTextFieldDidBecomeActive() {
+	func editorTagInputTextFieldDidBecomeActive(_ editorTextInputTextField: EditorTagInputTextField) {
 		updateUI()
 		collectionView.deselectAll()
-		cursorCoordinates = nil
+		currentTextInput = editorTextInputTextField
 	}
 		
+	func editorTagInputTextFieldDidBecomeInactive() {
+		currentTextInput = nil
+	}
+
 	func editorTagInputTextFieldDidReturn() {
 		if isFocusing {
 			moveCursorToFirstRow()
@@ -1766,22 +1761,23 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		scrollToVisible(textInput: textView, rect: rect, animated: true)
 	}
 
-	func editorRowTextFieldDidBecomeActive() {
+	func editorRowTextFieldDidBecomeActive(_ editorRowTextView: EditorRowTextView) {
 		// This makes doing row insertions much faster because this work will
 		// be performed a cycle after the actual insertion was completed.
 		Task { @MainActor in
 			self.collectionView.deselectAll()
 			self.updateUI()
 		}
+		currentTextInput = editorRowTextView
 	}
 
-	func editorRowTextFieldDidBecomeInactive(cursorCoordinates: CursorCoordinates?) {
+	func editorRowTextFieldDidBecomeInactive() {
 		// This makes doing row insertions much faster because this work will
 		// be performed a cycle after the actual insertion was completed.
 		Task { @MainActor in
 			self.updateUI()
 		}
-		self.cursorCoordinates = cursorCoordinates
+		currentTextInput = nil
 	}
 	
 	func editorRowToggleDisclosure(rowID: String, applyToAll: Bool) {
@@ -1894,7 +1890,7 @@ extension EditorViewController: EditorRowViewCellDelegate {
 extension EditorViewController: OutlineCommandDelegate {
 	
 	var currentCoordinates: CursorCoordinates? {
-		return CursorCoordinates.currentCoordinates
+		return currentRowTextView?.coordinates
 	}
 	
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates) {
@@ -1910,7 +1906,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
 		picker.dismiss(animated: true, completion: nil)
 		
-		guard let cursorCoordinates, let result = results.first else {
+		guard let coordinates = mostRecentRowTextView?.coordinates, let result = results.first else {
 			return
 		}
 		
@@ -1925,15 +1921,15 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 				let scaledImage = UIImage(cgImage: cgImage)
 
 				await MainActor.run {
-					self.restoreCursorPosition(cursorCoordinates)
+					self.restoreCursorPosition(coordinates)
 
-					guard let row = self.outline?.findRow(id: cursorCoordinates.rowID),
+					guard let row = self.outline?.findRow(id: coordinates.rowID),
 						  let shadowTableIndex = row.shadowTableIndex else { return }
 
 					let indexPath = IndexPath(row: shadowTableIndex, section: self.adjustedRowsSection)
 					guard let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return }
 
-					if cursorCoordinates.isInNotes, let textView = rowCell.noteTextView {
+					if coordinates.isInNotes, let textView = rowCell.noteTextView {
 						textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
 					} else if let textView = rowCell.topicTextView {
 						textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
@@ -2287,7 +2283,7 @@ private extension EditorViewController {
 
 		collectionView.reloadData()
 		
-		if let cursorCoordinates {
+		if let cursorCoordinates = currentRowTextView?.coordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: false)
 		}
 	}
@@ -2342,14 +2338,14 @@ private extension EditorViewController {
 			savedCursorRectForUpAndDownArrowing = nil
 		}
 		
-		if !(CursorCoordinates.currentCoordinates?.isInNotes ?? false) {
+		if !(currentRowTextView?.coordinates?.isInNotes ?? false) {
 			guard cancelledKeys.remove(key) == nil else {
 				return
 			}
 			
 			switch (key.keyCode, true) {
 			case (.keyboardDeleteForward, true):
-				if let topic = currentTextView as? EditorRowTopicTextView,
+				if let topic = currentTextInput as? EditorRowTopicTextView,
 				   topic.cursorIsAtEnd,
 				   let rowID = topic.rowID,
 				   let row = outline?.findRow(id: rowID),
@@ -2365,7 +2361,7 @@ private extension EditorViewController {
 					super.pressesBegan(presses, with: event)
 				}
             case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				if let topic = currentTextView as? EditorRowTopicTextView {
+				if let topic = currentTextInput as? EditorRowTopicTextView {
 					if topic.cursorIsOnTopLine {
 						isGoingUp = true
 						repeatMoveCursorUp()
@@ -2378,7 +2374,7 @@ private extension EditorViewController {
 					repeatMoveCursorUp()
 				}
 			case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				if let topic = currentTextView as? EditorRowTopicTextView {
+				if let topic = currentTextInput as? EditorRowTopicTextView {
 					if topic.cursorIsOnBottomLine {
 						isGoingDown = true
 						repeatMoveCursorDown()
@@ -2391,7 +2387,7 @@ private extension EditorViewController {
 					repeatMoveCursorDown()
 				}
 			case (.keyboardLeftArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				if let topic = currentTextView as? EditorRowTopicTextView, topic.cursorIsAtBeginning,
+				if let topic = currentTextInput as? EditorRowTopicTextView, topic.cursorIsAtBeginning,
 				   let rowID = topic.rowID,
 				   let row = outline?.findRow(id: rowID),
 				   let currentRowIndex = row.shadowTableIndex,
@@ -2403,7 +2399,7 @@ private extension EditorViewController {
 					scrollIfNecessary()
 				}
 			case (.keyboardRightArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				if let topic = currentTextView as? EditorRowTopicTextView, topic.cursorIsAtEnd,
+				if let topic = currentTextInput as? EditorRowTopicTextView, topic.cursorIsAtEnd,
 				   let rowID = topic.rowID,
 				   let row = outline?.findRow(id: rowID),
 				   let currentRowIndex = row.shadowTableIndex,
@@ -2460,9 +2456,9 @@ private extension EditorViewController {
 	}
 
 	func repeatMoveCursorUp() {
-		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
+		if let textView = currentTextInput as? EditorRowTopicTextView {
 			moveCursorUp(topicTextView: textView)
-		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
+		} else if let tagInput = currentTextInput as? EditorTagInputTextField {
 			if tagInput.isShowingResults {
 				tagInput.selectAbove()
 				return
@@ -2486,16 +2482,16 @@ private extension EditorViewController {
 	}
 	
 	func repeatMoveCursorDown() {
-		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
+		if let textView = currentTextInput as? EditorRowTopicTextView {
 			moveCursorDown(topicTextView: textView)
-		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
+		} else if let tagInput = currentTextInput as? EditorTagInputTextField {
 			if tagInput.isShowingResults {
 				tagInput.selectBelow()
 				return
 			} else {
 				moveCursorToFirstRow()
 			}
-		} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting {
+		} else if let textView = currentTextInput as? EditorTitleTextView, !textView.isSelecting {
 			moveCursorToTagInput()
 		}
 		
@@ -2627,9 +2623,9 @@ private extension EditorViewController {
 
 	// On iOS we don't want the cursor to comeback and show the keyboard again until the user selects something.
 	// Don't try to restore the cursor on the Mac if we are selecting rows. That will deselect them.
-	func restoreOutlineCursorPositionAfterScroll() {
+	func restoreCursorPositionAfterScroll() {
 		guard collectionView.indexPathsForSelectedItems == nil || collectionView.indexPathsForSelectedItems!.isEmpty else { return }
-		if let cursorCoordinates {
+		if let cursorCoordinates = currentRowTextView?.coordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: false)
 		}
 	}
@@ -2736,7 +2732,7 @@ private extension EditorViewController {
 		
 			let linkViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacLinkViewController") as! MacLinkViewController
 			linkViewController.preferredContentSize = CGSize(width: 400, height: 126)
-			linkViewController.cursorCoordinates = CursorCoordinates.currentCoordinates
+			linkViewController.cursorCoordinates = currentRowTextView?.coordinates
 			linkViewController.text = text
 			linkViewController.link = link
 			linkViewController.range = range
@@ -2750,7 +2746,7 @@ private extension EditorViewController {
 			linkNavViewController.modalPresentationStyle = .formSheet
 
 			let linkViewController = linkNavViewController.topViewController as! LinkViewController
-			linkViewController.cursorCoordinates = CursorCoordinates.currentCoordinates
+			linkViewController.cursorCoordinates = currentRowTextView?.coordinates
 			linkViewController.text = text
 			linkViewController.link = link
 			linkViewController.range = range
@@ -3153,7 +3149,7 @@ private extension EditorViewController {
 		guard let undoManager, let outline else { return }
 
 		var currentRow: Row? = nil
-		if let rowID = currentTextView?.rowID {
+		if let rowID = currentRowTextView?.rowID {
 			currentRow = outline.findRow(id: rowID)
 		}
 		
@@ -3570,13 +3566,12 @@ private extension EditorViewController {
 		// iPhone.
 		Task {
 			try? await Task.sleep(for: .seconds(0.1))
-			guard let textInput = UIResponder.currentFirstResponder as? EditorTextInput,
-				  let cursorRect = textInput.cursorRect else { return }
-			
-			self.scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
+			guard let currentTextInput, let cursorRect = currentTextInput.cursorRect else { return }
+
+			self.scrollToVisible(textInput: currentTextInput, rect: cursorRect, animated: animated)
 
 			if AppDefaults.shared.scrollMode == .typewriterCenter {
-				self.scrollToCenter(textInput: textInput, rect: cursorRect, animated: animated)
+				self.scrollToCenter(textInput: currentTextInput, rect: cursorRect, animated: animated)
 			}
 		}
 	}
@@ -3599,10 +3594,9 @@ private extension EditorViewController {
 	}
 	
 	func scrollCursorToVisible(animated: Bool = true) {
-		guard let textInput = UIResponder.currentFirstResponder as? EditorTextInput,
-			  let cursorRect = textInput.cursorRect else { return }
+		guard let currentTextInput, let cursorRect = currentTextInput.cursorRect else { return }
 
-		scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
+		scrollToVisible(textInput: currentTextInput, rect: cursorRect, animated: animated)
 	}
 	
 	func scrollToVisible(textInput: UITextInput, rect: CGRect, animated: Bool) {
@@ -3625,9 +3619,7 @@ private extension EditorViewController {
 	}
 	
 	func saveCurrentText() {
-		if let textView = UIResponder.currentFirstResponder as? EditorRowTextView {
-			textView.saveText()
-		}
+		currentRowTextView?.saveText()
 	}
 	
 	func generateBacklinkVerbaige(outline: Outline) -> NSAttributedString? {

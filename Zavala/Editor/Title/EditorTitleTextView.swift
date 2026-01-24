@@ -12,6 +12,7 @@ import VinOutlineKit
 protocol EditorTitleTextViewDelegate: AnyObject {
 	var editorTitleTextViewUndoManager: UndoManager? { get }
 	func didBecomeActive(_: EditorTitleTextView)
+	func didBecomeInactive(_: EditorTitleTextView)
 }
 
 class EditorTitleTextView: UITextView, EditorTextInput {
@@ -55,7 +56,15 @@ class EditorTitleTextView: UITextView, EditorTextInput {
 		editorDelegate?.didBecomeActive(self)
 		return result
 	}
-	
+
+	override func resignFirstResponder() -> Bool {
+		let result = super.resignFirstResponder()
+		if result {
+			editorDelegate?.didBecomeInactive(self)
+		}
+		return result
+	}
+
 }
 
 private extension EditorTitleTextView {

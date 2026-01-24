@@ -17,7 +17,7 @@ protocol EditorRowNoteTextViewDelegate: AnyObject {
 	func scrollIfNecessary(_ : EditorRowNoteTextView)
 	func scrollEditorToVisible(_ : EditorRowNoteTextView, rect: CGRect)
 	func didBecomeActive(_ : EditorRowNoteTextView)
-	func didBecomeInactive(_ : EditorRowNoteTextView, cursorCoordinates: CursorCoordinates?)
+	func didBecomeInactive(_ : EditorRowNoteTextView)
 	func textChanged(_ : EditorRowNoteTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRowNote(_ : EditorRowNoteTextView, rowID: String)
 	func moveCursorTo(_ : EditorRowNoteTextView, rowID: String)
@@ -26,7 +26,7 @@ protocol EditorRowNoteTextViewDelegate: AnyObject {
 	func zoomImage(_: EditorRowNoteTextView, _ image: UIImage, rect: CGRect)
 }
 
-class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
+class EditorRowNoteTextView: EditorRowTextView {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorRowNoteTextViewUndoManager
@@ -45,7 +45,14 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	weak var editorDelegate: EditorRowNoteTextViewDelegate?
-	
+
+	override var coordinates: CursorCoordinates? {
+		if let rowID {
+			return CursorCoordinates(rowID: rowID, isInNotes: true, selection: selectedRange)
+		}
+		return nil
+	}
+
 	override var rowStrings: RowStrings {
 		return RowStrings.note(cleansedAttributedText)
 	}
@@ -76,10 +83,9 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		let cursorCoordinates = CursorCoordinates.currentCoordinates
 		let result = super.resignFirstResponder()
 		if result {
-			editorDelegate?.didBecomeInactive(self, cursorCoordinates: cursorCoordinates)
+			editorDelegate?.didBecomeInactive(self)
 		}
 		return result
 	}
@@ -176,19 +182,6 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 
 	override func scrollEditorToVisible(rect: CGRect) {
 		editorDelegate?.scrollEditorToVisible(self, rect: rect)
-	}
-
-}
-
-// MARK: CursorCoordinatesProvider
-
-extension EditorRowNoteTextView: CursorCoordinatesProvider {
-
-	var coordinates: CursorCoordinates? {
-		if let rowID {
-			return CursorCoordinates(rowID: rowID, isInNotes: true, selection: selectedRange)
-		}
-		return nil
 	}
 
 }
