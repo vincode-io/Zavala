@@ -5141,6 +5141,35 @@
         }
       }
     },
+    "intent.parameter.document-link" : {
+      "comment" : "Intent Parameter: Document Link",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dokumentlink"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Document Link"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Document Link"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Document Link"
+          }
+        }
+      }
+    },
     "intent.parameter.end-depth" : {
       "comment" : "End Depth",
       "localizations" : {
@@ -5775,6 +5804,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Relative File Links"
+          }
+        }
+      }
+    },
+    "intent.parameter.row-link" : {
+      "comment" : "Row Link",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilenlink"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Row Link"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Row Link"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Row Link"
           }
         }
       }
@@ -9511,6 +9569,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The specified Account isn't available to be used."
+          }
+        }
+      }
+    },
+    "label.text.intent-error-entity-id-required" : {
+      "comment" : "Error text: The Entity ID is required in this context.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Entity-ID ist in diesem Kontext erforderlich."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Entity ID is required in this context."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Entity ID is required in this context."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Entity ID is required in this context."
           }
         }
       }

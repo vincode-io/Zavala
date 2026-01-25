@@ -15,7 +15,10 @@ struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
     static let description = IntentDescription(LocalizedStringResource("intent.descrption.get-rows-outlines", comment: "Get Rows from an Outline."))
 
     @Parameter(title: LocalizedStringResource("intent.parameter.entity-id", comment: "Entity ID"))
-	var entityID: EntityID
+	var entityID: EntityID?
+
+    @Parameter(title: LocalizedStringResource("intent.parameter.row-link", comment: "Row Link"))
+    var rowLink: URL?
 
     @Parameter(title: LocalizedStringResource("intent.parameter.search", comment: "Search"))
     var search: String?
@@ -46,6 +49,7 @@ struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
             \.$excludedRows
             \.$startDepth
             \.$endDepth
+            \.$rowLink
         }
     }
 
@@ -62,11 +66,30 @@ struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
 	func perform() async throws -> some IntentResult & ReturnsValue<[RowAppEntity]> {
 		resume()
 		
+        if let rowLink,
+           let entityID = EntityID(url: rowLink),
+		   let outline = appDelegate.accountManager.findDocument(entityID)?.outline {
+			outline.load()
+            defer { Task { await outline.unload() } }
+            if let row = outline.findRow(id: entityID.rowUUID) {
+                await suspend()
+                return .result(value: [RowAppEntity(row: row)])
+            } else {
+                await suspend()
+                return .result(value: [])
+            }
+        }
+		
+		guard let entityID else {
+			await suspend()
+			throw ZavalaAppIntentError.entityIDRequired
+		}
+		
 		guard let outline = findOutline(entityID) else {
 			await suspend()
 			throw ZavalaAppIntentError.outlineNotFound
 		}
-		
+
 		outline.load()
 	
 		guard let rowContainer = outline.findRowContainer(entityID: entityID) else {
@@ -207,5 +230,4 @@ private class GetRowsVisitor {
 	}
 
 }
-
 
