@@ -1306,22 +1306,22 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func moveCurrentRowsLeft(_ sender: Any?) {
 		guard let rows = currentRows else { return }
-		moveRowsLeft(rows)
+		moveRowsLeft(rows, rowStrings: currentRowStrings)
 	}
 	
 	@objc func moveCurrentRowsRight(_ sender: Any?) {
 		guard let rows = currentRows else { return }
-		moveRowsRight(rows)
+		moveRowsRight(rows, rowStrings: currentRowStrings)
 	}
 	
 	@objc func moveCurrentRowsUp(_ sender: Any?) {
 		guard let rows = currentRows else { return }
-		moveRowsUp(rows)
+		moveRowsUp(rows, rowStrings: currentRowStrings)
 	}
 	
 	@objc func moveCurrentRowsDown(_ sender: Any?) {
 		guard let rows = currentRows else { return }
-		moveRowsDown(rows)
+		moveRowsDown(rows, rowStrings: currentRowStrings)
 	}
 
 	@objc func groupCurrentRows(_ sender: Any?) {
