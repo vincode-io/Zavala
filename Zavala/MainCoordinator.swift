@@ -40,6 +40,7 @@ extension Selector {
 
 @MainActor
 protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
+	var activityManager: ActivityManager { get }
 	var editorViewController: EditorViewController? { get }
 	var selectedDocuments: [Document] { get }
 }
@@ -225,6 +226,11 @@ extension MainCoordinator {
 
 	func pinWasVisited(_ pin: Pin) {
 		NotificationCenter.default.post(name: .PinWasVisited, object: pin, userInfo: nil)
+	}
+
+	func shutdown() {
+		activityManager.invalidateSelectDocument()
+		editorViewController?.open(nil)
 	}
 	
 }

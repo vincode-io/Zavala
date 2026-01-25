@@ -27,7 +27,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		return activityManager.stateRestorationActivity
 	}
 
-    private let activityManager = ActivityManager()
+    let activityManager = ActivityManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,11 +107,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		return document
 	}
 
-	func shutdown() {
-		activityManager.invalidateSelectDocument()
-		editorViewController?.open(nil)
-	}
-	
 	// MARK: Actions
 	
 	@objc func deleteOutline(_ sender: Any?) {

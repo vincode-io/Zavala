@@ -87,6 +87,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		}
 	}
 	
+	func sceneWillResignActive(_ scene: UIScene) {
+		mainSplitViewController.shutdown()
+	}
+
 	func sceneDidDisconnect(_ scene: UIScene) {
 		if UIApplication.shared.applicationState == .active {
 			if let windows = (scene as? UIWindowScene)?.windows {
