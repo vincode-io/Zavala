@@ -125,7 +125,6 @@ final class AppDefaults {
 		static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
 		static let correctSpellingAutomatically = "correctSpellingAutomatically"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
-		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
 		static let createRows = "createRows";
@@ -281,15 +280,6 @@ final class AppDefaults {
 		}
 	}
 	
-	var lastMainWindowState: [AnyHashable: Any]? {
-		get {
-			return AppDefaults.store.object(forKey: Key.lastMainWindowState) as? [AnyHashable : Any]
-		}
-		set {
-			AppDefaults.store.set(newValue, forKey: Key.lastMainWindowState)
-		}
-	}
-
 	var openQuicklyDocumentContainerID: [AnyHashable : AnyHashable]? {
 		get {
 			return AppDefaults.store.object(forKey: Key.openQuicklyDocumentContainerID) as? [AnyHashable : AnyHashable]

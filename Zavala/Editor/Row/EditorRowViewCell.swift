@@ -14,7 +14,7 @@ protocol EditorRowViewCellDelegate: AnyObject {
 	var editorRowInputAccessoryView: UIView? { get }
 	func editorRowScrollIfNecessary()
 	func editorRowScrollEditorToVisible(textView: UITextView, rect: CGRect)
-	func editorRowTextFieldDidBecomeActive()
+	func editorRowTextFieldDidBecomeActive(_: EditorRowTextView)
 	func editorRowTextFieldDidBecomeInactive()
 	func editorRowToggleDisclosure(rowID: String, applyToAll: Bool)
 	func editorRowMoveCursorTo(rowID: String)

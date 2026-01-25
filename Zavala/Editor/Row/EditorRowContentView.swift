@@ -149,7 +149,7 @@ class EditorRowContentView: UIView, UIContentView {
 // MARK: EditorTextViewDelegate
 
 extension EditorRowContentView: EditorRowTopicTextViewDelegate {
-		
+
 	var editorRowTopicTextViewUndoManager: UndoManager? {
 		return appliedConfiguration?.delegate?.editorRowUndoManager
 	}
@@ -186,8 +186,8 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowMoveRowRight(rowID: rowID)
 	}
 
-	func didBecomeActive(_: EditorRowTopicTextView) {
-		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive()
+	func didBecomeActive(_ editorRowTopicTextView: EditorRowTopicTextView) {
+		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive(editorRowTopicTextView)
 	}
 
 	func didBecomeInactive(_: EditorRowTopicTextView) {
@@ -254,8 +254,8 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowScrollEditorToVisible(textView: textView, rect: rect)
 	}
 
-	func didBecomeActive(_: EditorRowNoteTextView) {
-		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive()
+	func didBecomeActive(_ editorRowNoteTextView: EditorRowNoteTextView) {
+		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive(editorRowNoteTextView)
 	}
 	
 	func didBecomeInactive(_: EditorRowNoteTextView) {

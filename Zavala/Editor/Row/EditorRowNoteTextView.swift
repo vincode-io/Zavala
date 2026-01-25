@@ -26,7 +26,7 @@ protocol EditorRowNoteTextViewDelegate: AnyObject {
 	func zoomImage(_: EditorRowNoteTextView, _ image: UIImage, rect: CGRect)
 }
 
-class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
+class EditorRowNoteTextView: EditorRowTextView {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorRowNoteTextViewUndoManager
@@ -45,7 +45,14 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	weak var editorDelegate: EditorRowNoteTextViewDelegate?
-	
+
+	override var coordinates: CursorCoordinates? {
+		if let rowID {
+			return CursorCoordinates(rowID: rowID, isInNotes: true, selection: selectedRange)
+		}
+		return nil
+	}
+
 	override var rowStrings: RowStrings {
 		return RowStrings.note(cleansedAttributedText)
 	}
@@ -76,7 +83,6 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		CursorCoordinates.updateLastKnownCoordinates()
 		let result = super.resignFirstResponder()
 		if result {
 			editorDelegate?.didBecomeInactive(self)
@@ -176,19 +182,6 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 
 	override func scrollEditorToVisible(rect: CGRect) {
 		editorDelegate?.scrollEditorToVisible(self, rect: rect)
-	}
-
-}
-
-// MARK: CursorCoordinatesProvider
-
-extension EditorRowNoteTextView: CursorCoordinatesProvider {
-
-	var coordinates: CursorCoordinates? {
-		if let rowID {
-			return CursorCoordinates(rowID: rowID, isInNotes: true, selection: selectedRange)
-		}
-		return nil
 	}
 
 }

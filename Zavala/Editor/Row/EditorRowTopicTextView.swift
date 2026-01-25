@@ -32,7 +32,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func zoomImage(_: EditorRowTopicTextView, _ image: UIImage, rect: CGRect)
 }
 
-class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
+class EditorRowTopicTextView: EditorRowTextView {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorRowTopicTextViewUndoManager
@@ -59,6 +59,13 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	
 	weak var editorDelegate: EditorRowTopicTextViewDelegate?
 
+	override var coordinates: CursorCoordinates? {
+		if let rowID {
+			return CursorCoordinates(rowID: rowID, isInNotes: false, selection: selectedRange)
+		}
+		return nil
+	}
+	
 	override var rowStrings: RowStrings {
 		return RowStrings.topic(cleansedAttributedText)
 	}
@@ -105,7 +112,6 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		CursorCoordinates.updateLastKnownCoordinates()
 		let result = super.resignFirstResponder()
 		if result {
 			editorDelegate?.didBecomeInactive(self)
@@ -263,19 +269,6 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		editorDelegate?.scrollEditorToVisible(self, rect: rect)
 	}
 	
-}
-
-// MARK: CursorCoordinatesProvider
-
-extension EditorRowTopicTextView: CursorCoordinatesProvider {
-
-	var coordinates: CursorCoordinates? {
-		if let rowID {
-			return CursorCoordinates(rowID: rowID, isInNotes: false, selection: selectedRange)
-		}
-		return nil
-	}
-
 }
 
 // MARK: UITextViewDelegate

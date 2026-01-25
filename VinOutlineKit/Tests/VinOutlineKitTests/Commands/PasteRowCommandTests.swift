@@ -14,7 +14,13 @@ final class PasteRowCommandTests: VOKTestCase {
 		pasteRow.topic = NSAttributedString(string: "Test Row")
         let rowGroup = RowGroup(pasteRow)
 		
-        let command = PasteRowCommand(actionName: "PasteRow", undoManager: undoManager, delegate: self, outline: outline, rowGroups: [rowGroup], afterRow: row)
+		let command = PasteRowCommand(actionName: "PasteRow",
+									  undoManager: undoManager,
+									  delegate: self,
+									  outline: outline,
+									  rowGroups: [rowGroup],
+									  afterRow: row,
+									  childRowIndent: true)
         command.execute()
 		#expect(outline.rows.last?.topic?.string == "Test Row")
 		

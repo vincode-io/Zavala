@@ -14,6 +14,7 @@ protocol EditorTagInputPillDelegate: AnyObject {
 	var editorTagInputPillTags: [Tag]? { get }
 	func invalidateLayout(_: EditorTagInputPill)
 	func didBecomeActive(_ : EditorTagInputPill)
+	func didBecomeInactive(_ : EditorTagInputPill)
 	func didReturn(_ : EditorTagInputPill)
 	func createTag(_ : EditorTagInputPill, name: String)
 }
@@ -129,6 +130,10 @@ extension EditorTagInputPill: EditorTagInputTextFieldDelegate {
 	
 	func didBecomeActive(_: EditorTagInputTextField) {
 		editorDelegate?.didBecomeActive(self)
+	}
+
+	func didBecomeInactive(_: EditorTagInputTextField) {
+		editorDelegate?.didBecomeInactive(self)
 	}
 
 	func textDidChange(_: EditorTagInputTextField) {

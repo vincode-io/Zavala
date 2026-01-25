@@ -13,6 +13,7 @@ protocol EditorTagInputTextFieldDelegate: AnyObject {
 	var editorTagInputTextFieldUndoManager: UndoManager? { get }
 	var editorTagInputTextFieldTags: [Tag]? { get }
 	func didBecomeActive(_ : EditorTagInputTextField)
+	func didBecomeInactive(_ : EditorTagInputTextField)
 	func textDidChange(_ : EditorTagInputTextField)
 	func didReturn(_ : EditorTagInputTextField)
 	func createTag(_ : EditorTagInputTextField, name: String)
@@ -28,7 +29,9 @@ class EditorTagInputTextField: SearchTextField, EditorTextInput {
 	#endif
 	
 	weak var editorDelegate: EditorTagInputTextFieldDelegate?
-	
+
+	var coordinates: CursorCoordinates? = nil
+
 	override var undoManager: UndoManager? {
 		guard let textViewUndoManager = super.undoManager, let controllerUndoManager = editorDelegate?.editorTagInputTextFieldUndoManager else { return nil }
 		if stackedUndoManager == nil {
@@ -99,11 +102,18 @@ class EditorTagInputTextField: SearchTextField, EditorTextInput {
 	override func becomeFirstResponder() -> Bool {
 		resetFilterStrings()
 		let result = super.becomeFirstResponder()
-		CursorCoordinates.clearLastKnownCoordinates()
 		editorDelegate?.didBecomeActive(self)
 		return result
 	}
-	
+
+	override func resignFirstResponder() -> Bool {
+		let result = super.resignFirstResponder()
+		if result {
+			editorDelegate?.didBecomeInactive(self)
+		}
+		return result
+	}
+
 	override func textFieldDidChange() {
 		super.textFieldDidChange()
 		invalidateIntrinsicContentSize()

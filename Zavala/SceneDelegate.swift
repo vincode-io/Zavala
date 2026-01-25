@@ -85,13 +85,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			}
 			return
 		}
-		
-		if let userInfo = AppDefaults.shared.lastMainWindowState {
-			Task {
-				await mainSplitViewController.handle(userInfo, isNavigationBranch: true)
-			}
-			AppDefaults.shared.lastMainWindowState = nil
-		}
 	}
 	
 	func sceneDidDisconnect(_ scene: UIScene) {
@@ -99,7 +92,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			if let windows = (scene as? UIWindowScene)?.windows {
 				if windows.contains(where: { $0.rootViewController is MainSplitViewController }) {
 					AppDefaults.shared.lastMainWindowWasClosed = true
-					AppDefaults.shared.lastMainWindowState = mainSplitViewController.stateRestorationActivity.userInfo
 				}
 			}
 		}

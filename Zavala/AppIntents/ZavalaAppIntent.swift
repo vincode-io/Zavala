@@ -40,6 +40,7 @@ extension ZavalaAppIntent {
 }
 
 enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {
+	case entityIDRequired
 	case invalidDestinationForOutline
 	case outlineNotBeingViewed
 	case outlineNotFound
@@ -50,6 +51,8 @@ enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {
 
 	var localizedStringResource: LocalizedStringResource {
 		switch self {
+		case .entityIDRequired:
+			return .entityIDRequired
 		case .invalidDestinationForOutline:
 			return .invalidDestinationForOutline
 		case .outlineNotBeingViewed:
