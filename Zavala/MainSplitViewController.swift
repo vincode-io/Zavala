@@ -85,7 +85,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		viewController(for: .secondary) as? EditorViewController
 	}
 	
-    private let activityManager = ActivityManager()
+    let activityManager = ActivityManager()
 	
 	private var collectionsViewController: CollectionsViewController? {
 		return viewController(for: .primary) as? CollectionsViewController

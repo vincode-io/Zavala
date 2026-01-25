@@ -422,9 +422,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(didRedoChange(_:)), name: .NSUndoManagerDidRedoChange, object: nil)
 
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)),	name: UIScene.willDeactivateNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
 		
@@ -868,20 +865,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func didRedoChange(_ note: Notification) {
 		updateUI()
-	}
-	
-	@objc func applicationWillTerminate(_ note: Notification) {
-		if let outline {
-			updateSpotlightIndex(with: outline)
-		}
-	}
-	
-	@objc func sceneWillDeactivate(_ note: Notification) {
-		saveCurrentText()
-	}
-	
-	@objc func didEnterBackground(_ note: Notification) {
-		saveCurrentText()
 	}
 	
 	@objc func adjustForKeyboard(_ note: Notification) {
