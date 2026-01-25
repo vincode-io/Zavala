@@ -15,6 +15,9 @@ struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, ZavalaApp
     static let title: LocalizedStringResource = LocalizedStringResource("intent.title.get-outlines", comment: "Intent title: Get Outlines")
     static let description = IntentDescription(LocalizedStringResource("intent.description.get-outlines", comment: "Intent title: Get Outlines based on search criteria."))
 
+	@Parameter(title: LocalizedStringResource("intent.parameter.document-link", comment: "Intent Parameter: Document Link"))
+	var documentLink: URL?
+
     @Parameter(title: LocalizedStringResource("intent.parameter.search", comment: "Intent Parameter: Search"))
     var search: String?
 
@@ -50,11 +53,18 @@ struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, ZavalaApp
             \.$updatedStartDate
             \.$updatedEndDate
             \.$search
+			\.$documentLink
         }
     }
 
+	@MainActor
 	func perform() async throws -> some IntentResult & ReturnsValue<[OutlineAppEntity]> {
-        await resume()
+        resume()
+
+        if let documentLink, let entityID = EntityID(url: documentLink), let document = appDelegate.accountManager.findDocument(entityID), let outline = document.outline {
+            await suspend()
+            return .result(value: [OutlineAppEntity(outline: outline)])
+        }
 
 		guard let searchText = search, !searchText.isEmpty else {
 			let outlines = await filter(documents: appDelegate.accountManager.documents)
@@ -62,7 +72,7 @@ struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, ZavalaApp
 			return .result(value: outlines)
 		}
 
-		let searchContainer = await Search(accountManager: appDelegate.accountManager, searchText: searchText)
+		let searchContainer = Search(accountManager: appDelegate.accountManager, searchText: searchText)
 		let documents = try await searchContainer.documents
 		let outlines = await filter(documents: documents)
 
@@ -186,3 +196,4 @@ private extension GetOutlinesAppIntent {
 	}
 	
 }
+
