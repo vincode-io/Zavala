@@ -26,36 +26,33 @@ public extension RowContainer {
 	}
 
 	func firstIndexOfRow(_ row: Row) -> Int? {
-		// Use fractional indexing: find position in sorted children
-		guard let outline else { return nil }
-		let children = outline.childRows(of: containerParentID)
-		return children.firstIndex(where: { $0.id == row.id })
+		return rows.firstIndex(where: { $0.id == row.id })
 	}
 
 	func containsRow(_ row: Row) -> Bool {
-		// Check if row's parentID matches this container
-		return row.parentID == containerParentID
+		return rows.contains(where: { $0.id == row.id })
 	}
 
 	func insertRow(_ row: Row, at index: Int) {
 		guard let outline else { return }
 
-		// Fractional indexing: Calculate order between siblings
-		let siblings = outline.childRows(of: containerParentID)
-		let beforeOrder: String? = index > 0 && index <= siblings.count ? siblings[index - 1].order : nil
-		let afterOrder: String? = index < siblings.count ? siblings[index].order : nil
+		// Calculate order between siblings using stored rows array
+		let beforeOrder: String? = index > 0 && index <= rows.count ? rows[index - 1].order : nil
+		let afterOrder: String? = index < rows.count ? rows[index].order : nil
 
 		row.order = FractionalIndex.between(beforeOrder, afterOrder)
 		row.parentID = containerParentID
-
-		// Add to keyedRows
-		if outline.keyedRows == nil {
-			outline.keyedRows = [String: Row]()
-		}
-		outline.keyedRows?[row.id] = row
-
-		// Set the row's parent reference
 		row.parent = self
+
+		// Insert into the rows array at the correct position
+		if let selfRow = self as? Row {
+			selfRow.rows.insert(row, at: index)
+		} else if let selfOutline = self as? Outline {
+			selfOutline.rows.insert(row, at: index)
+		}
+
+		// Add to outline's index
+		outline.addToIndex(row)
 
 		outline.requestCloudKitUpdates(for: [entityID, row.entityID])
 
@@ -66,7 +63,15 @@ public extension RowContainer {
 	func removeRow(_ row: Row) {
 		guard let outline else { return }
 
-		outline.keyedRows?.removeValue(forKey: row.id)
+		// Remove from the rows array
+		if let selfRow = self as? Row {
+			selfRow.rows.removeAll { $0.id == row.id }
+		} else if let selfOutline = self as? Outline {
+			selfOutline.rows.removeAll { $0.id == row.id }
+		}
+
+		// Remove from outline's index (including all descendants)
+		outline.removeFromIndex(row)
 
 		outline.requestCloudKitUpdates(for: [entityID, row.entityID])
 	}
@@ -74,21 +79,22 @@ public extension RowContainer {
 	func appendRow(_ row: Row) {
 		guard let outline else { return }
 
-		// Fractional indexing: Calculate order after the last sibling
-		let siblings = outline.childRows(of: containerParentID)
-		let lastOrder = siblings.last?.order
+		// Calculate order after the last sibling using stored rows array
+		let lastOrder = rows.last?.order
 
 		row.order = FractionalIndex.between(lastOrder, nil)
 		row.parentID = containerParentID
-
-		// Add to keyedRows
-		if outline.keyedRows == nil {
-			outline.keyedRows = [String: Row]()
-		}
-		outline.keyedRows?[row.id] = row
-
-		// Set the row's parent reference
 		row.parent = self
+
+		// Append to the rows array
+		if let selfRow = self as? Row {
+			selfRow.rows.append(row)
+		} else if let selfOutline = self as? Outline {
+			selfOutline.rows.append(row)
+		}
+
+		// Add to outline's index
+		outline.addToIndex(row)
 
 		outline.requestCloudKitUpdates(for: [entityID, row.entityID])
 

@@ -97,91 +97,102 @@ extension Outline: VCKModel {
 
 	func apply(_ update: CloudKitOutlineUpdate) {
 		var updatedRowIDs = Set<String>()
-		
+		var needsHierarchyRebuild = false
+
 		if let record = update.saveOutlineRecord {
 			let outlineUpdatedRows = apply(record)
 			updatedRowIDs.formUnion(outlineUpdatedRows)
 		}
-		
-		if keyedRows == nil {
-			keyedRows = [String: Row]()
-		}
-		
+
 		for saveRecord in update.saveRowRecords {
 			guard let entityID = EntityID(description: saveRecord.recordID.recordName) else { continue }
 
 			var row: Row
-			if let existingRow = keyedRows?[entityID.rowUUID] {
+			var isNewRow = false
+			if let existingRow = rowIndex[entityID.rowUUID] {
 				row = existingRow
 			} else {
 				row = Row(outline: self, id: entityID.rowUUID)
+				isNewRow = true
 			}
 
 			if row.apply(saveRecord) {
 				updatedRowIDs.insert(row.id)
+				needsHierarchyRebuild = true
 			}
-			
-			keyedRows?[entityID.rowUUID] = row
+
+			if isNewRow {
+				addToIndex(row)
+				needsHierarchyRebuild = true
+			}
 		}
-		
+
 		for saveRecord in update.saveImageRecords {
 			guard let entityID = EntityID(description: saveRecord.recordID.recordName),
-				  let row = keyedRows?[entityID.rowUUID] else { continue }
-			
+				  let row = rowIndex[entityID.rowUUID] else { continue }
+
 			var image: Image
 			if let existingImage = row.findImage(id: entityID) {
 				image = existingImage
 			} else {
 				image = Image(outline: self, id: entityID)
 			}
-			
+
 			if image.apply(saveRecord) {
 				updatedRowIDs.insert(row.id)
 				row.saveImage(image)
 			}
 		}
-		
+
 		for deleteRecordID in update.deleteRowRecordIDs {
-			keyedRows?.removeValue(forKey: deleteRecordID.rowUUID)
+			if let row = rowIndex[deleteRecordID.rowUUID] {
+				removeFromIndex(row)
+				needsHierarchyRebuild = true
+			}
 		}
-		
+
 		for deleteRecordID in update.deleteImageRecordIDs {
-			if let row = keyedRows?[deleteRecordID.rowUUID] {
+			if let row = rowIndex[deleteRecordID.rowUUID] {
 				if row.findImage(id: deleteRecordID) != nil {
 					row.deleteImage(id: deleteRecordID)
 					updatedRowIDs.insert(deleteRecordID.rowUUID)
 				}
 			}
 		}
-		
+
+		// Rebuild hierarchy if rows were added, removed, or their parentID changed
+		if needsHierarchyRebuild {
+			rebuildRowsHierarchy()
+		}
+
 		correctDuplicateRowCorruption()
-		
+
 		if !updatedRowIDs.isEmpty || !update.deleteRowRecordIDs.isEmpty  {
 			rowsFile?.markAsDirty()
 			documentDidChangeBySync()
 		}
-		
+
 		guard isBeingViewed else { return }
 
 		var changes = rebuildShadowTable()
 
 		var reloadRows = [Row]()
-		
+
 		func reloadVisitor(_ visited: Row) {
 			reloadRows.append(visited)
 			visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 		}
 
 		for updatedRowID in updatedRowIDs {
-			if let updatedRow = keyedRows?[updatedRowID] {
+			if let updatedRow = rowIndex[updatedRowID] {
 				reloadRows.append(updatedRow)
 				updatedRow.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 		}
-		
+
 		let reloadIndexes = reloadRows.compactMap { $0.shadowTableIndex }
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloadIndexes)))
-		
+
 		if !changes.isEmpty {
 			outlineElementsDidChange(changes)
 		}

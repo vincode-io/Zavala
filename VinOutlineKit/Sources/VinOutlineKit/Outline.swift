@@ -120,19 +120,19 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	public var isOutlineCorrupted: Bool {
-		guard let keyedRows else { return false }
+		guard !rowIndex.isEmpty else { return false }
 
 		// Check for orphaned rows - rows whose parentID references a non-existent row
-		for row in keyedRows.values {
+		for row in rowIndex.values {
 			if let parentID = row.parentID {
-				if !keyedRows.keys.contains(parentID) {
+				if rowIndex[parentID] == nil {
 					return true
 				}
 			}
 		}
 
 		// Check for rows with empty order values (except during migration)
-		for row in keyedRows.values {
+		for row in rowIndex.values {
 			if row.order.isEmpty && row.migrationRowOrder == nil {
 				return true
 			}
@@ -413,11 +413,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 	}
 
-	public var rows: [Row] {
-		get {
-			return childRows(of: nil)
-		}
-	}
+	/// Direct storage of top-level rows in sorted order by their `order` property.
+	public internal(set) var rows: [Row] = []
 	
 	public var allRows: [Row] {
 		get {
@@ -435,7 +432,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	public var rowCount: Int {
-		return childRows(of: nil).count
+		return rows.count
 	}
 
 	public var isCloudKit: Bool {
@@ -445,7 +442,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public private(set) var shadowTable: [Row]?
 	
 	public var isEmpty: Bool {
-		return (title == nil || title?.isEmpty ?? true) && childRows(of: nil).isEmpty
+		return (title == nil || title?.isEmpty ?? true) && rows.isEmpty
 	}
 	
 	public var iCollaborating: Bool {
@@ -541,18 +538,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	public var isAnyRowCompleted: Bool {
-		var anyCompleted = false
-		
-		if let keyedRows {
-			for row in keyedRows.values {
-				if row.isComplete ?? false {
-					anyCompleted = true
-					break
-				}
+		for row in rowIndex.values {
+			if row.isComplete ?? false {
+				return true
 			}
 		}
-		
-		return anyCompleted
+		return false
 	}
 	
 	public var allCompletedRows: [Row] {
@@ -622,15 +613,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	var keyedRows: [String: Row]? {
-		didSet {
-			if let keyedRows {
-				for row in keyedRows.values {
-					row.outline = self
-				}
-			}
-		}
-	}
+	/// Index for O(1) row lookup by ID. The hierarchy is stored in `rows` arrays.
+	var rowIndex: [String: Row] = [:]
 	
 	var ancestorTagIDs: [String]?
 	var serverTagIDs: [String]?
@@ -751,7 +735,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	/// Fix orphaned rows - rows whose parentID references a non-existent row.
 	/// These rows are moved to the top level (parentID = nil).
 	public func correctOrphanedRowCorruption() {
-		guard let keyedRows else { return }
+		guard !rowIndex.isEmpty else { return }
 
 		beginCloudKitBatchRequest()
 		defer {
@@ -761,20 +745,22 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		var foundCorruption = false
 
 		// Fix any rows whose parentID references a non-existent row
-		for row in keyedRows.values {
-			if let parentID = row.parentID, !keyedRows.keys.contains(parentID) {
+		for row in rowIndex.values {
+			if let parentID = row.parentID, rowIndex[parentID] == nil {
 				// Move orphaned row to top level
 				row.parentID = nil
-				row.order = FractionalIndex.between(childRows(of: nil).last?.order, nil)
+				row.parent = self
+				row.order = FractionalIndex.between(rows.last?.order, nil)
+				insertRowSorted(row, intoParentID: nil)
 				requestCloudKitUpdate(for: row.entityID)
 				foundCorruption = true
 			}
 		}
 
 		// Fix any rows with empty order values
-		for row in keyedRows.values {
+		for row in rowIndex.values {
 			if row.order.isEmpty {
-				let siblings = childRows(of: row.parentID)
+				let siblings = row.parentID == nil ? rows : (findRow(id: row.parentID!)?.rows ?? [])
 				row.order = FractionalIndex.between(siblings.last?.order, nil)
 				requestCloudKitUpdate(for: row.entityID)
 				foundCorruption = true
@@ -782,6 +768,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 
 		if foundCorruption {
+			rebuildRowsHierarchy()
 			outlineContentDidChange()
 			outlineElementsDidChange(rebuildShadowTable())
 		}
@@ -806,27 +793,105 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	public func findRow(id: String) -> Row? {
-		return keyedRows?[id]
+		return rowIndex[id]
+	}
+
+	/// Add a row to the index (called when row is added anywhere in the outline)
+	func addToIndex(_ row: Row) {
+		rowIndex[row.id] = row
+		row.outline = self
+	}
+
+	/// Remove a row and all its descendants from the index
+	func removeFromIndex(_ row: Row) {
+		rowIndex.removeValue(forKey: row.id)
+		for child in row.rows {
+			removeFromIndex(child)
+		}
 	}
 
 	// MARK: - Fractional Indexing Support
 
 	/// Get sorted children of a row (or top-level rows if parentID is nil).
-	/// Uses the new fractional indexing `order` property for sorting.
+	/// Now returns the directly stored rows arrays.
 	/// - Parameter parentID: The ID of the parent row, or nil for top-level rows
 	/// - Returns: An array of child rows sorted by their order property
 	public func childRows(of parentID: String?) -> [Row] {
-		guard let keyedRows else { return [] }
-		return keyedRows.values
-			.filter { $0.parentID == parentID }
-			.sorted { $0.order < $1.order }
+		if let parentID {
+			return findRow(id: parentID)?.rows ?? []
+		} else {
+			return rows
+		}
+	}
+
+	/// Insert a row at the correct sorted position based on its order value.
+	/// - Parameters:
+	///   - row: The row to insert
+	///   - parentID: The parent's ID, or nil for top-level
+	func insertRowSorted(_ row: Row, intoParentID parentID: String?) {
+		let insertIndex: Int
+		if let parentID, let parentRow = findRow(id: parentID) {
+			insertIndex = parentRow.rows.firstIndex { $0.order > row.order } ?? parentRow.rows.count
+			parentRow.rows.insert(row, at: insertIndex)
+			row.parent = parentRow
+		} else {
+			insertIndex = rows.firstIndex { $0.order > row.order } ?? rows.count
+			rows.insert(row, at: insertIndex)
+			row.parent = self
+		}
+	}
+
+	/// Rebuild the rows hierarchy from the rowIndex using parentID references.
+	/// Called after loading from persistence or fixing corruption.
+	func rebuildRowsHierarchy() {
+		// Clear existing hierarchy
+		rows = []
+		for row in rowIndex.values {
+			row.rows = []
+		}
+
+		// Separate top-level rows from child rows
+		var topLevel = [Row]()
+		var childrenByParent = [String: [Row]]()
+
+		for row in rowIndex.values {
+			if let parentID = row.parentID {
+				childrenByParent[parentID, default: []].append(row)
+			} else {
+				topLevel.append(row)
+			}
+		}
+
+		// Sort top-level rows by order and assign
+		rows = topLevel.sorted { $0.order < $1.order }
+
+		// Recursively assign children to each row
+		func assignChildren(to row: Row) {
+			if let children = childrenByParent[row.id] {
+				row.rows = children.sorted { $0.order < $1.order }
+				for child in row.rows {
+					child.parent = row
+					assignChildren(to: child)
+				}
+			}
+		}
+
+		for row in rows {
+			row.parent = self
+			assignChildren(to: row)
+		}
 	}
 
 	/// Rebalance children's order values if any exceed the threshold length.
 	/// This assigns new evenly-distributed order values to all children.
 	/// - Parameter parentID: The ID of the parent row, or nil for top-level rows
 	public func rebalanceChildrenIfNeeded(parentID: String?) {
-		let children = childRows(of: parentID)
+		let children: [Row]
+		if let parentID {
+			children = findRow(id: parentID)?.rows ?? []
+		} else {
+			children = rows
+		}
 		guard children.contains(where: { FractionalIndex.needsRebalancing($0.order) }) else { return }
 
 		let newOrders = FractionalIndex.rebalance(count: children.count)
@@ -2578,7 +2643,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		rowsFile?.suspend()
 		rowsFile = nil
 		shadowTable = nil
-		keyedRows = nil
+		rowIndex = [:]
+		rows = []
 
 		await imagesFile?.saveIfNecessary()
 		imagesFile?.suspend()
@@ -2661,28 +2727,26 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			}
 		}
 		
-		guard let keyedRows else { return outline }
+		guard !rowIndex.isEmpty else { return outline }
 
 		// First pass: create all new rows and build the ID mapping
 		var rowIDMap = [String: String]()
-		var newKeyedRows = [String: Row]()
-		for key in keyedRows.keys {
-			if let row = keyedRows[key] {
-				let duplicateRow = row.duplicate(newOutline: outline)
-				newKeyedRows[duplicateRow.id] = duplicateRow
-				rowIDMap[row.id] = duplicateRow.id
-			}
+		for row in rowIndex.values {
+			let duplicateRow = row.duplicate(newOutline: outline)
+			outline.rowIndex[duplicateRow.id] = duplicateRow
+			rowIDMap[row.id] = duplicateRow.id
 		}
 
 		// Second pass: update parentID references to use new IDs
-		for newRow in newKeyedRows.values {
+		for newRow in outline.rowIndex.values {
 			if let oldParentID = newRow.parentID, let newParentID = rowIDMap[oldParentID] {
 				newRow.parentID = newParentID
 			}
 			// order values stay the same since they're self-contained
 		}
 
-		outline.keyedRows = newKeyedRows
+		// Rebuild hierarchy from the new rowIndex
+		outline.rebuildRowsHierarchy()
 
 		return outline
 	}
@@ -2755,32 +2819,32 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 	public func fixAltLinks() {
 		guard hasAltLinks ?? false else { return }
-		
-		load()
-		
-		if let keyedRows {
-			beginCloudKitBatchRequest()
-			defer {
-				endCloudKitBatchRequest()
-			}
 
-			var cumulativeActionsTaken = AltLinkResolvingActions()
-			
-			for row in keyedRows.values {
-				let actionsTaken = row.resolveAltLinks()
-				cumulativeActionsTaken.formUnion(actionsTaken)
-				
-				if actionsTaken.contains(.fixedAltLink) {
-					createLinkRelationships(for: [row])
-					requestCloudKitUpdate(for: row.entityID)
-					outlineContentDidChange()
-				}
+		load()
+
+		guard !rowIndex.isEmpty else { return }
+
+		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
+
+		var cumulativeActionsTaken = AltLinkResolvingActions()
+
+		for row in rowIndex.values {
+			let actionsTaken = row.resolveAltLinks()
+			cumulativeActionsTaken.formUnion(actionsTaken)
+
+			if actionsTaken.contains(.fixedAltLink) {
+				createLinkRelationships(for: [row])
+				requestCloudKitUpdate(for: row.entityID)
+				outlineContentDidChange()
 			}
-			
-			if !cumulativeActionsTaken.contains(.foundAltLink) {
-				hasAltLinks = false
-				requestCloudKitUpdate(for: id)
-			}
+		}
+
+		if !cumulativeActionsTaken.contains(.foundAltLink) {
+			hasAltLinks = false
+			requestCloudKitUpdate(for: id)
 		}
 		
 		Task {

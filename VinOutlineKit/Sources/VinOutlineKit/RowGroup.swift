@@ -68,18 +68,14 @@ public class RowGroup: Codable {
 			}
 		}
 
-		if outline.keyedRows == nil {
-			outline.keyedRows = [:]
-		}
-
 		outline.beginCloudKitBatchRequest()
 
-		// Update parentID references to use new IDs
+		// Update parentID references to use new IDs and add to index
 		for newChildRow in newChildRows {
 			if let oldParentID = newChildRow.parentID, let newParentID = idMap[oldParentID] {
 				newChildRow.parentID = newParentID
 			}
-			outline.keyedRows?[newChildRow.id] = newChildRow
+			outline.addToIndex(newChildRow)
 			outline.requestCloudKitUpdate(for: newChildRow.entityID)
 		}
 
@@ -89,10 +85,34 @@ public class RowGroup: Codable {
 
 		outline.endCloudKitBatchRequest()
 
-		// Update the main row's parentID if needed
+		// Update the main row's parentID if needed (will be overwritten by caller's insertRow)
 		if let oldParentID = newRow.parentID, let newParentID = idMap[oldParentID] {
 			newRow.parentID = newParentID
 		}
+
+		// Build the local hierarchy for the returned row and its descendants.
+		// Group child rows by their parentID and assign to parent's rows array.
+		var childrenByParent = [String: [Row]]()
+		for newChildRow in newChildRows {
+			if let parentID = newChildRow.parentID {
+				childrenByParent[parentID, default: []].append(newChildRow)
+			}
+		}
+
+		// Recursively assign children to their parents
+		func assignChildren(to row: Row) {
+			if let children = childrenByParent[row.id] {
+				row.rows = children.sorted { $0.order < $1.order }
+				for child in row.rows {
+					child.parent = row
+					assignChildren(to: child)
+				}
+			}
+		}
+		assignChildren(to: newRow)
+
+		// Note: The main row is NOT added to the index here - that happens when
+		// the caller inserts it into the outline using insertRow/appendRow
 
 		return newRow
 	}

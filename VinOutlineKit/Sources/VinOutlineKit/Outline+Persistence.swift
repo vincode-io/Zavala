@@ -18,25 +18,31 @@ public extension Outline {
 			return
 		}
 
-		var keyedRows = [String: Row]()
+		// Build the row index from decoded data
+		var tempIndex = [String: Row]()
 		for (key, rowCoder) in outlineRows.keyedRows {
-			keyedRows[key] = Row(coder: rowCoder)
+			let row = Row(coder: rowCoder)
+			row.outline = self
+			tempIndex[key] = row
 		}
-
-		self.keyedRows = keyedRows
 
 		// Check if migration to fractional indexing is needed
-		let needsMigration = keyedRows.values.contains { $0.order.isEmpty }
+		let needsMigration = tempIndex.values.contains { $0.order.isEmpty }
 		if needsMigration {
-			migrateToFractionalIndexing(topLevelRowOrder: outlineRows.rowOrder)
+			migrateToFractionalIndexing(rowIndex: tempIndex, topLevelRowOrder: outlineRows.rowOrder)
 		}
+
+		// Set the row index and rebuild the hierarchy
+		rowIndex = tempIndex
+		rebuildRowsHierarchy()
 
 		rowsFileDidLoad()
 	}
 
 	func buildRowFileData() -> Data? {
+		// Collect all rows from the row index
 		var keyedRowCoders = [String: RowCoder]()
-		for (key, row) in keyedRows ?? [:] {
+		for (key, row) in rowIndex {
 			keyedRowCoders[key] = row.toCoder()
 		}
 
@@ -105,13 +111,13 @@ public extension Outline {
 
 	/// Migrate from rowOrder-based ordering to fractional indexing.
 	/// This walks the tree using the old rowOrder arrays and assigns order/parentID values.
-	private func migrateToFractionalIndexing(topLevelRowOrder: [String]) {
+	private func migrateToFractionalIndexing(rowIndex: [String: Row], topLevelRowOrder: [String]) {
 		logger.info("Migrating outline to fractional indexing")
 
 		func assignOrders(parentID: String?, rowIDs: [String]) {
 			let orders = FractionalIndex.initial(count: rowIDs.count)
 			for (index, rowID) in rowIDs.enumerated() {
-				guard let row = keyedRows?[rowID] else { continue }
+				guard let row = rowIndex[rowID] else { continue }
 				row.order = orders.isEmpty ? FractionalIndex.between(nil, nil) : orders[index]
 				row.parentID = parentID
 

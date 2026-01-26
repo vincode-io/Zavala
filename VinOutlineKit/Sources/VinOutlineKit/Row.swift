@@ -52,15 +52,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	public let id: String
 	
 	public var isExpanded: Bool
-	public var rows: [Row] {
-		get {
-			guard let outline else { return [Row]() }
-			return outline.childRows(of: id)
-		}
-	}
+
+	/// Direct storage of child rows in sorted order by their `order` property.
+	public internal(set) var rows: [Row] = []
 
 	public var rowCount: Int {
-		return outline?.childRows(of: id).count ?? 0
+		return rows.count
 	}
 	
 	public var isAnyParentComplete: Bool {
