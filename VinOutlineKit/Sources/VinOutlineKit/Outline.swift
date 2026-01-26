@@ -741,7 +741,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	// MARK: - Fractional Indexing Support
 
 	/// Rebuild the rows hierarchy from the rowIndex using parentID references.
-	/// Called after loading from persistence or fixing corruption.
+	/// Called after loading from persistence or syncing.
 	func rebuildRowsHierarchy() {
 		// Clear existing hierarchy
 		rows = []
@@ -763,11 +763,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 		// Sort top-level rows by order and assign
 		rows = topLevel.sorted { $0.order < $1.order }
+		rebalanceIfDuplicateOrders(&rows)
 
 		// Recursively assign children to each row
 		func assignChildren(to row: Row) {
 			if let children = childrenByParent[row.id] {
 				row.rows = children.sorted { $0.order < $1.order }
+				rebalanceIfDuplicateOrders(&row.rows)
 				for child in row.rows {
 					child.parent = row
 					assignChildren(to: child)
@@ -778,6 +780,30 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		for row in rows {
 			row.parent = self
 			assignChildren(to: row)
+		}
+	}
+
+	/// Check if any adjacent rows in a sorted array have duplicate order values.
+	/// If duplicates are found, rebalance all rows with new evenly-distributed order values.
+	private func rebalanceIfDuplicateOrders(_ rows: inout [Row]) {
+		guard rows.count > 1 else { return }
+
+		// Check for duplicate orders in the sorted array
+		var hasDuplicates = false
+		for i in 0..<(rows.count - 1) {
+			if rows[i].order == rows[i + 1].order {
+				hasDuplicates = true
+				break
+			}
+		}
+
+		guard hasDuplicates else { return }
+
+		// Rebalance with new evenly-distributed order values
+		let newOrders = FractionalIndex.rebalance(count: rows.count)
+		for (index, row) in rows.enumerated() {
+			row.order = newOrders[index]
+			requestCloudKitUpdate(for: row.entityID)
 		}
 	}
 
