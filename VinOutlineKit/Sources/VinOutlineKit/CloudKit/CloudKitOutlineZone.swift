@@ -35,8 +35,9 @@ final class CloudKitOutlineZone: VCKZone {
 	let database: CKDatabase?
 	let delegate: VCKZoneDelegate?
 
-	private static let currentZoneVersionNumber = 1
-	
+	private let currentZoneVersionNumber = 2
+	private let zoneVersionRecordName = "io.vincode.Zavala.zoneVersion"
+
 	private struct VersionRecord {
 		static let recordType = "ZoneVersion"
 		struct Fields {
@@ -75,21 +76,35 @@ final class CloudKitOutlineZone: VCKZone {
 	
 	func validateZoneVersion() async throws {
 		do {
-			let versionRecord = try await fetch(externalID: "io.vincode.Zavala.zoneVersion")
+			let versionRecord = try await fetch(externalID: zoneVersionRecordName)
 			guard let versionNumber = versionRecord?[VersionRecord.Fields.versionNumber] as? Int else {
 				return
 			}
 			
-			if versionNumber != Self.currentZoneVersionNumber {
+			if versionNumber != currentZoneVersionNumber {
 				throw CloudKitOutlineZoneError.incompatibleVersion
 			}
 		} catch {
 			if let ckError = error as? CKError, ckError.code == .unknownItem {
-				return
+				try await saveZoneVersionRecord()
 			} else {
 				throw error
 			}
 		}
 	}
 	
+}
+
+// MARK: Helpers
+
+private extension CloudKitOutlineZone {
+
+	func saveZoneVersionRecord() async throws {
+		let recordID = CKRecord.ID(recordName: zoneVersionRecordName, zoneID: zoneID)
+		let newVersionRecord = CKRecord(recordType: VersionRecord.recordType, recordID: recordID)
+		newVersionRecord[VersionRecord.Fields.versionNumber] = VersionRecord.Fields.versionNumber
+
+		try await save(newVersionRecord)
+	}
+
 }
