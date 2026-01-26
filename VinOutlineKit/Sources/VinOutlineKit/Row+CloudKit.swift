@@ -50,6 +50,11 @@ extension Row: VCKModel {
 			}
 		}
 
+		// Read legacy rowOrder for migration from old CloudKit format
+		if let legacyRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String], !legacyRowOrder.isEmpty {
+			migrationRowOrder = OrderedSet(legacyRowOrder)
+		}
+
 		// Handle parentRowID field
 		let serverParentIDValue = record[Row.CloudKitRecord.Fields.parentRowID] as? String
 		if serverParentIDValue != parentID {

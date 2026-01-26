@@ -393,6 +393,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	/// Direct storage of top-level rows in sorted order by their `order` property.
 	public internal(set) var rows: [Row] = []
+
+	/// Legacy rowOrder from CloudKit - used during migration from old format
+	var migrationTopLevelRowOrder: [String]?
 	
 	public var allRows: [Row] {
 		get {

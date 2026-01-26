@@ -159,6 +159,11 @@ extension Outline: VCKModel {
 			}
 		}
 
+		// Check if migration from legacy ordering is needed
+		if needsCloudKitMigration() {
+			migrateFromCloudKitLegacyOrdering()
+		}
+
 		// Rebuild hierarchy if rows were added, removed, or their parentID changed
 		if needsHierarchyRebuild {
 			rebuildRowsHierarchy()
@@ -241,9 +246,14 @@ extension Outline: VCKModel {
 		applyTags(record, account)
 		applyDocumentLinks(record)
 		applyDocumentBacklinks(record)
-        
+
         let serverHasAltLinks = record[Outline.CloudKitRecord.Fields.hasAltLinks] as? Bool
         hasAltLinks = merge(client: hasAltLinks, ancestor: ancestorHasAltLinks, server: serverHasAltLinks)
+
+		// Read legacy rowOrder for migration from old CloudKit format
+		if let legacyRowOrder = record[Outline.CloudKitRecord.Fields.rowOrder] as? [String], !legacyRowOrder.isEmpty {
+			migrationTopLevelRowOrder = legacyRowOrder
+		}
 
         clearSyncData()
         
@@ -408,10 +418,56 @@ extension Outline: VCKModel {
     
 }
 
+// MARK: Migration
+
+private extension Outline {
+
+	/// Check if this outline needs migration from legacy rowOrder to fractional indexing.
+	/// Returns true if we have legacy rowOrder data and rows lack fractional indices.
+	func needsCloudKitMigration() -> Bool {
+		// Check if we have legacy ordering data
+		let hasLegacyTopLevel = migrationTopLevelRowOrder != nil && !migrationTopLevelRowOrder!.isEmpty
+		let hasLegacyRowOrders = rowIndex.values.contains { $0.migrationRowOrder != nil && !$0.migrationRowOrder!.isEmpty }
+
+		guard hasLegacyTopLevel || hasLegacyRowOrders else { return false }
+
+		// Check if rows are missing fractional indices
+		let rowsMissingOrder = rowIndex.values.contains { $0.order.isEmpty }
+		return rowsMissingOrder
+	}
+
+	/// Migrate from CloudKit legacy rowOrder to fractional indexing.
+	func migrateFromCloudKitLegacyOrdering() {
+		logger.info("Migrating CloudKit outline to fractional indexing: \(self.id)")
+
+		func assignOrders(parentID: String?, rowIDs: [String]) {
+			let orders = FractionalIndex.initial(count: rowIDs.count)
+			for (index, rowID) in rowIDs.enumerated() {
+				guard let row = rowIndex[rowID] else { continue }
+				row.order = orders.isEmpty ? FractionalIndex.between(nil, nil) : orders[index]
+				row.parentID = parentID
+				requestCloudKitUpdate(for: row.entityID)
+
+				// Recursively process children
+				let childIDs = Array(row.migrationRowOrder ?? [])
+				if !childIDs.isEmpty {
+					assignOrders(parentID: rowID, rowIDs: childIDs)
+				}
+				row.migrationRowOrder = nil
+			}
+		}
+
+		let topLevelIDs = migrationTopLevelRowOrder ?? []
+		assignOrders(parentID: nil, rowIDs: topLevelIDs)
+		migrationTopLevelRowOrder = nil
+	}
+
+}
+
 // MARK: Helpers
 
 private extension Outline {
-	
+
 	func applyTags(_ record: CKRecord, _ account: Account) {
 		let serverTagNames = record[Outline.CloudKitRecord.Fields.tagNames] as? [String] ?? []
 		let serverTagIDs = serverTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
