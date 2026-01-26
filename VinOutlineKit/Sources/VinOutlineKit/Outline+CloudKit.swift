@@ -100,8 +100,7 @@ extension Outline: VCKModel {
 		var needsHierarchyRebuild = false
 
 		if let record = update.saveOutlineRecord {
-			let outlineUpdatedRows = apply(record)
-			updatedRowIDs.formUnion(outlineUpdatedRows)
+			apply(record)
 		}
 
 		for saveRecord in update.saveRowRecords {
@@ -196,8 +195,8 @@ extension Outline: VCKModel {
 		}
 	}
 	
-	public func apply(_ record: CKRecord) -> [String] {
-		guard let account else { return [] }
+	public func apply(_ record: CKRecord) {
+		guard let account else { return }
 		
 		if let shareReference = record.share {
 			cloudKitShareRecordName = shareReference.recordID.recordName
@@ -208,7 +207,7 @@ extension Outline: VCKModel {
 		if let metaData = cloudKitMetaData,
 		   let recordChangeTag = CKRecord(metaData)?.recordChangeTag,
 		   record.recordChangeTag == recordChangeTag {
-			return []
+			return
 		}
 
 		cloudKitMetaData = record.metadata
@@ -239,7 +238,6 @@ extension Outline: VCKModel {
         ownerEmail = record[Outline.CloudKitRecord.Fields.ownerEmail] as? String
         ownerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
 
-		let updatedRowIDs = applyRowOrder(record)
 		applyTags(record, account)
 		applyDocumentLinks(record)
 		applyDocumentBacklinks(record)
@@ -249,7 +247,7 @@ extension Outline: VCKModel {
 
         clearSyncData()
         
-		return updatedRowIDs
+		return
 	}
 	
     public func apply(_ error: CKError) {
@@ -413,14 +411,6 @@ extension Outline: VCKModel {
 // MARK: Helpers
 
 private extension Outline {
-	
-	/// Legacy method - rowOrder is no longer used for ordering.
-	/// Ordering is now handled by fractional indexing (order/parentID) on each Row.
-	func applyRowOrder(_ record: CKRecord) -> [String] {
-		// Row ordering is now managed via fractional indexing on individual Row records.
-		// This method is kept for API compatibility but always returns an empty array.
-		return []
-	}
 	
 	func applyTags(_ record: CKRecord, _ account: Account) {
 		let serverTagNames = record[Outline.CloudKitRecord.Fields.tagNames] as? [String] ?? []
