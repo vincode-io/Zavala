@@ -47,7 +47,7 @@ public extension Outline {
 		}
 
 		// Write empty rowOrder arrays - ordering is now handled by fractional indexing on each Row
-		let outlineRows = OutlineRows(ancestorRowOrder: nil, rowOrder: [], keyedRows: keyedRowCoders)
+		let outlineRows = OutlineRows(keyedRows: keyedRowCoders)
 
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary
@@ -168,11 +168,9 @@ struct OutlineRows: Codable {
 		case keyedRows
 	}
 
-	public init(ancestorRowOrder: OrderedSet<String>?, rowOrder: [String], keyedRows: [String: RowCoder]) {
-		if let ancestorRowOrder {
-			self.ancestorRowOrder = Array(ancestorRowOrder)
-		}
-		self.rowOrder = rowOrder
+	public init(keyedRows: [String: RowCoder]) {
+		ancestorRowOrder = nil
+		rowOrder = []
 		self.keyedRows = keyedRows
 	}
 
