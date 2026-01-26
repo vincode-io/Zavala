@@ -119,28 +119,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return beingViewedCount > 0
 	}
 	
-	public var isOutlineCorrupted: Bool {
-		guard !rowIndex.isEmpty else { return false }
-
-		// Check for orphaned rows - rows whose parentID references a non-existent row
-		for row in rowIndex.values {
-			if let parentID = row.parentID {
-				if rowIndex[parentID] == nil {
-					return true
-				}
-			}
-		}
-
-		// Check for rows with empty order values (except during migration)
-		for row in rowIndex.values {
-			if row.order.isEmpty && row.migrationRowOrder == nil {
-				return true
-			}
-		}
-
-		return false
-	}
-	
 	public var cloudKitMetaData: Data? {
 		didSet {
 			documentMetaDataDidChange()
@@ -730,56 +708,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		
 		outlineElementsDidChange(changes)
-	}
-	
-	/// Fix orphaned rows - rows whose parentID references a non-existent row.
-	/// These rows are moved to the top level (parentID = nil).
-	public func correctOrphanedRowCorruption() {
-		guard !rowIndex.isEmpty else { return }
-
-		beginCloudKitBatchRequest()
-		defer {
-			endCloudKitBatchRequest()
-		}
-
-		var foundCorruption = false
-
-		// Fix any rows whose parentID references a non-existent row
-		for row in rowIndex.values {
-			if let parentID = row.parentID, rowIndex[parentID] == nil {
-				// Move orphaned row to top level
-				row.parentID = nil
-				row.parent = self
-				row.order = FractionalIndex.between(rows.last?.order, nil)
-				insertRowSorted(row, intoParentID: nil)
-				requestCloudKitUpdate(for: row.entityID)
-				foundCorruption = true
-			}
-		}
-
-		// Fix any rows with empty order values
-		for row in rowIndex.values {
-			if row.order.isEmpty {
-				let siblings = row.parentID == nil ? rows : (findRow(id: row.parentID!)?.rows ?? [])
-				row.order = FractionalIndex.between(siblings.last?.order, nil)
-				requestCloudKitUpdate(for: row.entityID)
-				foundCorruption = true
-			}
-		}
-
-		if foundCorruption {
-			rebuildRowsHierarchy()
-			outlineContentDidChange()
-			outlineElementsDidChange(rebuildShadowTable())
-		}
-	}
-
-	/// Legacy method - no longer needed with fractional indexing since each row
-	/// stores its own parentID, eliminating the possibility of duplicate entries.
-	public func correctDuplicateRowCorruption() {
-		// With fractional indexing, each row stores its own parentID, so the concept
-		// of duplicate row entries in multiple parents' rowOrder arrays no longer applies.
-		// This method is kept for API compatibility but is now a no-op.
 	}
 	
 	public func findRowContainer(entityID: EntityID) -> RowContainer? {

@@ -165,8 +165,6 @@ extension Outline: VCKModel {
 			rebuildRowsHierarchy()
 		}
 
-		correctDuplicateRowCorruption()
-
 		if !updatedRowIDs.isEmpty || !update.deleteRowRecordIDs.isEmpty  {
 			rowsFile?.markAsDirty()
 			documentDidChangeBySync()

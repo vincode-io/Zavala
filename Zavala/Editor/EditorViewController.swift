@@ -952,7 +952,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		outline.load()
 		outline.incrementBeingViewedCount()
-		checkForCorruptOutline()
 		outline.prepareForViewing()
 			
 		guard isViewLoaded else { return }
@@ -2288,26 +2287,6 @@ private extension EditorViewController {
 		if outline?.shadowTable?.count ?? 0 > 0  {
 			collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
 		}
-	}
-	
-	func checkForCorruptOutline() {
-		guard let outline, outline.isOutlineCorrupted else { return }
-		
-		let alertController = UIAlertController(title: .corruptedOutlineTitle,
-												message: .corruptedOutlineMessage,
-												preferredStyle: .alert)
-		
-		let recoverAction = UIAlertAction(title: .fixItControlLabel, style: .default) { [weak self] action in
-			self?.outline?.correctOrphanedRowCorruption()
-			self?.outline?.correctDuplicateRowCorruption()
-		}
-		alertController.addAction(recoverAction)
-		alertController.preferredAction = recoverAction
-
-		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel)
-		alertController.addAction(cancelAction)
-
-		present(alertController, animated: true)
 	}
 	
 	func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
