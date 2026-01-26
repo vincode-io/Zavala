@@ -230,7 +230,7 @@ extension MainCoordinator {
 
 	func shutdown() {
 		activityManager.invalidateSelectDocument()
-		editorViewController?.open(nil)
+		editorViewController?.checkPointOutline()
 	}
 	
 }

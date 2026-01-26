@@ -921,15 +921,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		messageLabel?.removeFromSuperview()
 		messageLabel = nil
 
-		currentRowTextView?.endEditing(true)
-		outline?.cursorCoordinates = mostRecentRowTextView?.coordinates
+		checkPointOutline()
 
-		if let outline {
-			Task.detached {
-				await self.updateSpotlightIndex(with: outline)
-			}
-		}
-		
 		// After this point as long as we don't have this Outline open in other
 		// windows, no more collection view updates should happen for it.
 		outline?.decrementBeingViewedCount()
@@ -999,7 +992,18 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			restoreOutlineResponderChain()
 		}
 	}
-	
+
+	func checkPointOutline() {
+		currentRowTextView?.endEditing(true)
+		outline?.cursorCoordinates = mostRecentRowTextView?.coordinates
+
+		if let outline {
+			Task.detached {
+				await self.updateSpotlightIndex(with: outline)
+			}
+		}
+	}
+
 	func selectAllRows() {
 		for i in 0..<collectionView.numberOfItems(inSection: adjustedRowsSection) {
 			collectionView.selectItem(at: IndexPath(row: i, section: adjustedRowsSection), animated: false, scrollPosition: [])
