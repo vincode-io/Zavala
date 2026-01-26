@@ -88,7 +88,36 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	public var ancestorRowOrder: OrderedSet<String>?
 	var serverRowOrder: OrderedSet<String>?
 	public var rowOrder: OrderedSet<String>?
-	
+
+	// MARK: - Fractional Indexing Properties
+
+	/// The order value for this row within its parent, used for fractional indexing.
+	/// This value determines sort order via lexicographic string comparison.
+	public var order: String = "" {
+		willSet {
+			if isCloudKit && ancestorOrder == nil {
+				ancestorOrder = order
+			}
+		}
+	}
+
+	/// The ID of this row's parent row. If nil, the row is a top-level row (parent is Outline).
+	public var parentID: String? {
+		willSet {
+			if isCloudKit && ancestorParentID == nil {
+				ancestorParentID = parentID
+			}
+		}
+	}
+
+	/// CloudKit merge support for order
+	var ancestorOrder: String?
+	var serverOrder: String?
+
+	/// CloudKit merge support for parentID
+	var ancestorParentID: String?
+	var serverParentID: String?
+
 	var isPartOfSearchResult = false {
 		didSet {
 			guard isPartOfSearchResult else { return }
@@ -401,6 +430,11 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		self.isComplete = coder.isComplete
 		self.ancestorRowOrder = coder.ancestorRowOrder
 		self.rowOrder = coder.rowOrder
+		// Fractional indexing properties
+		self.order = coder.order
+		self.parentID = coder.parentID
+		self.ancestorOrder = coder.ancestorOrder
+		self.ancestorParentID = coder.ancestorParentID
 	}
 	
 	public func topicMarkdown(type: UTType, useAltLinks: Bool = false) -> String? {
@@ -413,12 +447,14 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	
 	public func duplicate(newOutline: Outline) -> Row {
 		let row = Row(outline: newOutline)
-		
+
 		row.topicData = topicData
 		row.noteData = noteData
 		row.isExpanded = isExpanded
 		row.isComplete = isComplete
 		row.rowOrder = rowOrder
+		row.order = order
+		row.parentID = parentID
 		row.images = images?.map { $0.duplicate(outline: newOutline, accountID: newOutline.id.accountID, documentUUID: newOutline.id.documentUUID, rowUUID: row.id) }
 
 		return row
@@ -615,7 +651,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	}
 	
 	func toCoder() -> RowCoder {
-		return RowCoder(cloudKitMetaData: cloudKitMetaData, 
+		return RowCoder(cloudKitMetaData: cloudKitMetaData,
 						id: id,
 						ancestorTopicData: ancestorTopicData,
 						topicData: topicData,
@@ -625,7 +661,11 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 						ancestorIsComplete: ancestorIsComplete,
 						isComplete: isComplete,
 						ancestorRowOrder: ancestorRowOrder,
-						rowOrder: rowOrder ?? [])
+						rowOrder: rowOrder ?? [],
+						order: order,
+						parentID: parentID,
+						ancestorOrder: ancestorOrder,
+						ancestorParentID: ancestorParentID)
 	}
 	
 }

@@ -1,0 +1,87 @@
+{
+  "originHash" : "fceac6fca871b9f39898fbdfc29825910b0b483c3929128f9d0ba9bf0c1c7e13",
+  "pins" : [
+    {
+      "identity" : "markdownattributedstring",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vincode-io/MarkdownAttributedString.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "2b284b2fb6ac3d58c5e9d58763d7517dbd84ee2b"
+      }
+    },
+    {
+      "identity" : "semaphore",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/groue/Semaphore.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "2543679282aa6f6c8ecf2138acd613ed20790bc2"
+      }
+    },
+    {
+      "identity" : "swift-async-algorithms",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-async-algorithms",
+      "state" : {
+        "revision" : "6c050d5ef8e1aa6342528460db614e9770d7f804",
+        "version" : "1.1.1"
+      }
+    },
+    {
+      "identity" : "swift-cmark",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-cmark.git",
+      "state" : {
+        "branch" : "gfm",
+        "revision" : "924936d0427cb25a61169739a7660230bffa6ea6"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections.git",
+      "state" : {
+        "revision" : "7b847a3b7008b2dc2f47ca3110d8c782fb2e5c7e",
+        "version" : "1.3.0"
+      }
+    },
+    {
+      "identity" : "swift-markdown",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-markdown.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b2135f426fca19029430fbf26564e953b2d0f3d3"
+      }
+    },
+    {
+      "identity" : "vincloudkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vincode-io/VinCloudKit.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4b8b6eed0a74c4f9957404bf9b9c4605f46faae6"
+      }
+    },
+    {
+      "identity" : "vinutility",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vincode-io/VinUtility.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "783b36127ef196be368ced03a9a227c584dcd6d4"
+      }
+    },
+    {
+      "identity" : "vinxml",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vincode-io/VinXML.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "38e83e0cf0c631e7f2aa1a0b73ac83e16f929c81"
+      }
+    }
+  ],
+  "version" : 3
+}

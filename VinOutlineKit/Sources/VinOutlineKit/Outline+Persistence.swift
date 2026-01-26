@@ -6,10 +6,10 @@ import Foundation
 import OrderedCollections
 
 public extension Outline {
-	
+
 	func loadRowFileData(_ data: Data) {
 		let decoder = PropertyListDecoder()
-		
+
 		let outlineRows: OutlineRows
 		do {
 			outlineRows = try decoder.decode(OutlineRows.self, from: data)
@@ -21,24 +21,31 @@ public extension Outline {
 		if let ancestorRowOrder = outlineRows.ancestorRowOrder {
 			self.ancestorRowOrder = OrderedSet(ancestorRowOrder)
 		}
-		
+
 		self.rowOrder = OrderedSet(outlineRows.rowOrder)
-		
+
 		var keyedRows = [String: Row]()
 		for (key, rowCoder) in outlineRows.keyedRows {
 			keyedRows[key] = Row(coder: rowCoder)
 		}
-		
+
 		self.keyedRows = keyedRows
+
+		// Check if migration to fractional indexing is needed
+		let needsMigration = keyedRows.values.contains { $0.order.isEmpty }
+		if needsMigration {
+			migrateToFractionalIndexing(topLevelRowOrder: outlineRows.rowOrder)
+		}
+
 		rowsFileDidLoad()
 	}
-	
+
 	func buildRowFileData() -> Data? {
 		var keyedRowCoders = [String: RowCoder]()
 		for (key, row) in keyedRows ?? [:] {
 			keyedRowCoders[key] = row.toCoder()
 		}
-		
+
 		let outlineRows = OutlineRows(ancestorRowOrder: outline?.ancestorRowOrder, rowOrder: rowOrder ?? [], keyedRows: keyedRowCoders)
 
 		let encoder = PropertyListEncoder()
@@ -51,10 +58,10 @@ public extension Outline {
 			logger.error("Rows save serialization failed: \(error.localizedDescription, privacy: .public)")
 			return nil
 		}
-		
+
 		return rowsData
 	}
-	
+
 	func loadImageFileData(_ data: Data) {
 		let decoder = PropertyListDecoder()
 		let outlineImageCoders: [String: [ImageCoder]]
@@ -64,7 +71,7 @@ public extension Outline {
 			logger.error("Images read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return
 		}
-		
+
 		var outlineImages = [String: [Image]]()
 		for (key, imageCoders) in outlineImageCoders {
 			outlineImages[key] = imageCoders.map{ Image(coder: $0) }
@@ -73,18 +80,18 @@ public extension Outline {
 		// We probably shoudld be trying to update the UI when this happens.
 		outline?.images = outlineImages
 	}
-	
+
 	func buildImageFileData() -> Data? {
 		guard let images, !images.isEmpty else {
 			imagesFile?.delete()
 			return nil
 		}
-		
+
 		var imageCoders = [String: [ImageCoder]]()
 		for (key, images) in images {
 			imageCoders[key] = images.map{ $0.toCoder() }
 		}
-		
+
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary
 
@@ -95,16 +102,44 @@ public extension Outline {
 			logger.error("Images save serialization failed: \(error.localizedDescription, privacy: .public)")
 			return nil
 		}
-		
+
 		return imagesData
 	}
-	
+
+	// MARK: - Migration
+
+	/// Migrate from rowOrder-based ordering to fractional indexing.
+	/// This walks the tree using the old rowOrder arrays and assigns order/parentID values.
+	private func migrateToFractionalIndexing(topLevelRowOrder: [String]) {
+		logger.info("Migrating outline to fractional indexing")
+
+		func assignOrders(parentID: String?, rowIDs: [String]) {
+			let orders = FractionalIndex.initial(count: rowIDs.count)
+			for (index, rowID) in rowIDs.enumerated() {
+				guard let row = keyedRows?[rowID] else { continue }
+				row.order = orders.isEmpty ? FractionalIndex.between(nil, nil) : orders[index]
+				row.parentID = parentID
+
+				// Recursively process children using the old rowOrder
+				let childIDs = Array(row.rowOrder ?? [])
+				if !childIDs.isEmpty {
+					assignOrders(parentID: rowID, rowIDs: childIDs)
+				}
+			}
+		}
+
+		assignOrders(parentID: nil, rowIDs: topLevelRowOrder)
+
+		// Mark file as dirty to save the migrated data
+		rowsFile?.markAsDirty()
+	}
+
 }
 
 struct OldRow: Decodable {
-	
+
 	var row: RowCoder?
-	
+
 	private enum CodingKeys: String, CodingKey {
 		case type
 		case textRow
@@ -114,11 +149,11 @@ struct OldRow: Decodable {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		row = try container.decode(RowCoder.self, forKey: .textRow)
 	}
-	
+
 }
 
 struct OutlineRows: Codable {
-	let fileVersion = 3
+	let fileVersion = 4
 	var ancestorRowOrder: [String]?
 	var rowOrder: [String]
 	var keyedRows: [String: RowCoder]
@@ -129,7 +164,7 @@ struct OutlineRows: Codable {
 		case rowOrder
 		case keyedRows
 	}
-	
+
 	public init(ancestorRowOrder: OrderedSet<String>?, rowOrder: OrderedSet<String>, keyedRows: [String: RowCoder]) {
 		if let ancestorRowOrder {
 			self.ancestorRowOrder = Array(ancestorRowOrder)
@@ -137,10 +172,10 @@ struct OutlineRows: Codable {
 		self.rowOrder = Array(rowOrder)
 		self.keyedRows = keyedRows
 	}
-	
+
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
-		
+
 		let fileVersion = (try? container.decode(Int.self, forKey: .fileVersion)) ?? 1
 
 		let allRows: [RowCoder]
@@ -168,7 +203,8 @@ struct OutlineRows: Codable {
 			} else {
 				allRows = []
 			}
-		case 3:
+		case 3, 4:
+			// Version 3 and 4 have the same structure, but 4 includes fractional indexing fields in RowCoder
 			if let ancestorRowOrder = try? container.decode([String].self, forKey: .ancestorRowOrder) {
 				self.ancestorRowOrder = ancestorRowOrder
 			}
@@ -185,7 +221,7 @@ struct OutlineRows: Codable {
 		default:
 			fatalError("Unrecognized Row File Version")
 		}
-		
+
 		self.keyedRows = allRows.reduce([String: RowCoder]()) { result, row in
 			var mutableResult = result
 			mutableResult[row.id] = row

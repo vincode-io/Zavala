@@ -886,7 +886,34 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public func findRow(id: String) -> Row? {
 		return keyedRows?[id]
 	}
-	
+
+	// MARK: - Fractional Indexing Support
+
+	/// Get sorted children of a row (or top-level rows if parentID is nil).
+	/// Uses the new fractional indexing `order` property for sorting.
+	/// - Parameter parentID: The ID of the parent row, or nil for top-level rows
+	/// - Returns: An array of child rows sorted by their order property
+	public func childRows(of parentID: String?) -> [Row] {
+		guard let keyedRows else { return [] }
+		return keyedRows.values
+			.filter { $0.parentID == parentID }
+			.sorted { $0.order < $1.order }
+	}
+
+	/// Rebalance children's order values if any exceed the threshold length.
+	/// This assigns new evenly-distributed order values to all children.
+	/// - Parameter parentID: The ID of the parent row, or nil for top-level rows
+	public func rebalanceChildrenIfNeeded(parentID: String?) {
+		let children = childRows(of: parentID)
+		guard children.contains(where: { FractionalIndex.needsRebalancing($0.order) }) else { return }
+
+		let newOrders = FractionalIndex.rebalance(count: children.count)
+		for (index, row) in children.enumerated() {
+			row.order = newOrders[index]
+			requestCloudKitUpdate(for: row.entityID)
+		}
+	}
+
 	public func createTag(_ tag: Tag) {
 		guard !hasTag(tag) else { return }
 		

@@ -330,6 +330,8 @@ extension Outline: VCKModel {
         let recordOwnerURL = merge(client: ownerURL, ancestor: ancestorOwnerURL, server: serverOwnerURL)
         record[Outline.CloudKitRecord.Fields.ownerURL] = recordOwnerURL
 
+        // Write legacy rowOrder for backward compatibility with older clients
+        // Primary ordering now uses fractional indexing (order/parentID on each Row)
         let recordRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: serverRowOrder)
         record[Outline.CloudKitRecord.Fields.rowOrder] = Array(recordRowOrder)
 
