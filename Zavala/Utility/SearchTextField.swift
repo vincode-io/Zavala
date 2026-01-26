@@ -562,13 +562,7 @@ open class SearchTextField: EnhancedTextField {
                 if titleFilterRange.location != NSNotFound || subtitleFilterRange.location != NSNotFound || addAll {
                     item.attributedTitle = NSMutableAttributedString(string: item.title)
                     item.attributedSubtitle = NSMutableAttributedString(string: (item.subtitle != nil ? item.subtitle! : ""))
-                    
-//                    item.attributedTitle!.setAttributes(highlightAttributes, range: titleFilterRange)
-//                    
-//                    if subtitleFilterRange.location != NSNotFound {
-//                        item.attributedSubtitle!.setAttributes(highlightAttributesForSubtitle(), range: subtitleFilterRange)
-//                    }
-                    
+
                     filteredResults.append(item)
                 }
             } else {

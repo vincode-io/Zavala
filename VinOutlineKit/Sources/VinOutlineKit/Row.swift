@@ -680,12 +680,7 @@ private extension Row {
 				insertImageAttachment(attrString: mutableAttrString, image: image, offset: image.offset ?? 0)
 			}
 		}
-		
-//		let attachment = MetadataTextAttachment(data: nil, ofType: DataRepresentation.opml.typeIdentifier)
-//		attachment.configure(key: "Due", value: "12/25/2021", level: level)
-//		let metaAttrText = NSAttributedString(attachment: attachment)
-//		mutableAttrString.insert(metaAttrText, at: mutableAttrString.length)
-		
+
 		return mutableAttrString
 	}
 	

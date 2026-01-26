@@ -90,7 +90,7 @@ final public class Image: Identifiable {
 	}
 
 	func toCoder() -> ImageCoder {
-		return ImageCoder(cloudKitMetaData: cloudKitMetaData, 
+		return ImageCoder(cloudKitMetaData: cloudKitMetaData,
 						  id: id,
 						  ancestorIsInNotes: ancestorIsInNotes,
 						  isInNotes: isInNotes,
@@ -99,9 +99,5 @@ final public class Image: Identifiable {
 						  ancestorData: ancestorData,
 						  data: data)
 	}
-	
-//	public static func == (lhs: Image, rhs: Image) -> Bool {
-//		return lhs.id == rhs.id && lhs.isInNotes == rhs.isInNotes && lhs.offset == rhs.offset && lhs.data == rhs.data
-//	}
-	
+
 }
