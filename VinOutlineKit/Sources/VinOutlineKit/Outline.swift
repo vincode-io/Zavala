@@ -740,35 +740,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	// MARK: - Fractional Indexing Support
 
-	/// Get sorted children of a row (or top-level rows if parentID is nil).
-	/// Now returns the directly stored rows arrays.
-	/// - Parameter parentID: The ID of the parent row, or nil for top-level rows
-	/// - Returns: An array of child rows sorted by their order property
-	public func childRows(of parentID: String?) -> [Row] {
-		if let parentID {
-			return findRow(id: parentID)?.rows ?? []
-		} else {
-			return rows
-		}
-	}
-
-	/// Insert a row at the correct sorted position based on its order value.
-	/// - Parameters:
-	///   - row: The row to insert
-	///   - parentID: The parent's ID, or nil for top-level
-	func insertRowSorted(_ row: Row, intoParentID parentID: String?) {
-		let insertIndex: Int
-		if let parentID, let parentRow = findRow(id: parentID) {
-			insertIndex = parentRow.rows.firstIndex { $0.order > row.order } ?? parentRow.rows.count
-			parentRow.rows.insert(row, at: insertIndex)
-			row.parent = parentRow
-		} else {
-			insertIndex = rows.firstIndex { $0.order > row.order } ?? rows.count
-			rows.insert(row, at: insertIndex)
-			row.parent = self
-		}
-	}
-
 	/// Rebuild the rows hierarchy from the rowIndex using parentID references.
 	/// Called after loading from persistence or fixing corruption.
 	func rebuildRowsHierarchy() {
