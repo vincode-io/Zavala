@@ -17,9 +17,9 @@ enum CloudKitOutlineZoneError: LocalizedError {
 	var errorDescription: String? {
 		switch self {
 		case .unknown:
-			return NSLocalizedString("label.text.cloudkit-generic-error", comment: "An unexpected CloudKit error occurred.")
+			return NSLocalizedString("label.text.cloudkit-generic-error", bundle: .module, comment: "An unexpected CloudKit error occurred.")
 		case .incompatibleVersion:
-			return NSLocalizedString("label.text.cloudkit-zone-version-mismatch", comment: "The version of the Outline zone in your iCloud account is incompatible with this app.")
+			return NSLocalizedString("label.text.cloudkit-zone-version-mismatch", bundle: .module, comment: "The version of the Outline zone in your iCloud account is incompatible with this app.")
 		}
 	}
 }
