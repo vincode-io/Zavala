@@ -59,14 +59,29 @@ public struct FractionalIndex {
 	public static func initial(count: Int) -> [String] {
 		guard count > 0 else { return [] }
 
+		// Calculate minimum digits needed to ensure uniqueness
+		// We need base^digits > count to have enough distinct values
+		let digitsNeeded = max(1, Int(ceil(log(Double(count + 1)) / log(Double(base)))))
+
+		// Total number of slots with this many digits
+		let totalSlots = Int(pow(Double(base), Double(digitsNeeded)))
+
 		var result = [String]()
 
-		// Distribute evenly across the range
+		// Distribute evenly across the range, leaving room at boundaries
 		for i in 1...count {
 			let position = Double(i) / Double(count + 1)
-			let index = Int(position * Double(base))
-			let clampedIndex = min(max(index, 1), base - 2) // Leave room at boundaries
-			result.append(String(digits[clampedIndex]))
+			// Map to slot index within the available range
+			let slotIndex = Int(position * Double(totalSlots - 2)) + 1
+
+			// Convert slot index to base-62 string with fixed width
+			var index = slotIndex
+			var chars = [Character]()
+			for _ in 0..<digitsNeeded {
+				chars.insert(digits[index % base], at: 0)
+				index /= base
+			}
+			result.append(String(chars))
 		}
 
 		return result

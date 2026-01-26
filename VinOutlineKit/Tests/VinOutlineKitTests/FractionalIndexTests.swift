@@ -162,6 +162,14 @@ struct FractionalIndexTests {
 		#expect(orders == sorted)
 	}
 
+	@Test func rebalanceWithLargeCountHasNoDuplicates() {
+		let orders = FractionalIndex.rebalance(count: 152)
+		#expect(orders.count == 152)
+
+		let uniqueOrders = Set(orders)
+		#expect(uniqueOrders.count == orders.count, "Found \(orders.count - uniqueOrders.count) duplicate(s) in rebalanced orders")
+	}
+
 	// MARK: - Edge Cases
 
 	@Test func beforeFirstCharacter() {
