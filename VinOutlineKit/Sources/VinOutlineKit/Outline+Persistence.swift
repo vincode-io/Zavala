@@ -18,12 +18,6 @@ public extension Outline {
 			return
 		}
 
-		if let ancestorRowOrder = outlineRows.ancestorRowOrder {
-			self.ancestorRowOrder = OrderedSet(ancestorRowOrder)
-		}
-
-		self.rowOrder = OrderedSet(outlineRows.rowOrder)
-
 		var keyedRows = [String: Row]()
 		for (key, rowCoder) in outlineRows.keyedRows {
 			keyedRows[key] = Row(coder: rowCoder)
@@ -46,7 +40,8 @@ public extension Outline {
 			keyedRowCoders[key] = row.toCoder()
 		}
 
-		let outlineRows = OutlineRows(ancestorRowOrder: outline?.ancestorRowOrder, rowOrder: rowOrder ?? [], keyedRows: keyedRowCoders)
+		// Write empty rowOrder arrays - ordering is now handled by fractional indexing on each Row
+		let outlineRows = OutlineRows(ancestorRowOrder: nil, rowOrder: [], keyedRows: keyedRowCoders)
 
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary
@@ -120,11 +115,13 @@ public extension Outline {
 				row.order = orders.isEmpty ? FractionalIndex.between(nil, nil) : orders[index]
 				row.parentID = parentID
 
-				// Recursively process children using the old rowOrder
-				let childIDs = Array(row.rowOrder ?? [])
+				// Recursively process children using the old migrationRowOrder
+				let childIDs = Array(row.migrationRowOrder ?? [])
 				if !childIDs.isEmpty {
 					assignOrders(parentID: rowID, rowIDs: childIDs)
 				}
+				// Clear the migration data after processing
+				row.migrationRowOrder = nil
 			}
 		}
 
@@ -165,11 +162,11 @@ struct OutlineRows: Codable {
 		case keyedRows
 	}
 
-	public init(ancestorRowOrder: OrderedSet<String>?, rowOrder: OrderedSet<String>, keyedRows: [String: RowCoder]) {
+	public init(ancestorRowOrder: OrderedSet<String>?, rowOrder: [String], keyedRows: [String: RowCoder]) {
 		if let ancestorRowOrder {
 			self.ancestorRowOrder = Array(ancestorRowOrder)
 		}
-		self.rowOrder = Array(rowOrder)
+		self.rowOrder = rowOrder
 		self.keyedRows = keyedRows
 	}
 

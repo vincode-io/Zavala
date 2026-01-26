@@ -42,17 +42,6 @@ extension Row: VCKModel {
 
 		var updated = false
 
-		// Handle legacy rowOrder field
-		if let serverRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
-			let serverRowOrderedSet = OrderedSet(serverRowOrder)
-			if serverRowOrderedSet != rowOrder {
-				updated = true
-				rowOrder = serverRowOrderedSet
-			}
-		} else {
-			rowOrder = OrderedSet<String>()
-		}
-
 		// Handle fractional indexing order field
 		if let serverOrderValue = record[Row.CloudKitRecord.Fields.order] as? String {
 			if serverOrderValue != order {
@@ -95,12 +84,6 @@ extension Row: VCKModel {
 		guard let record = error.serverRecord else { return }
 		cloudKitMetaData = record.metadata
 
-		if let errorRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
-			serverRowOrder = OrderedSet(errorRowOrder)
-		} else {
-			serverRowOrder = nil
-		}
-
 		// Capture server values for fractional indexing fields
 		serverOrder = record[Row.CloudKitRecord.Fields.order] as? String
 		serverParentID = record[Row.CloudKitRecord.Fields.parentRowID] as? String
@@ -137,9 +120,8 @@ extension Row: VCKModel {
 		record[Row.CloudKitRecord.Fields.outline] = CKRecord.Reference(recordID: parentRecordID, action: .deleteSelf)
 		record[Row.CloudKitRecord.Fields.subtype] = "text"
 
-		// Write legacy rowOrder (empty for backward compatibility with older clients)
-		let recordRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: serverRowOrder)
-		record[Row.CloudKitRecord.Fields.rowOrder] = Array(recordRowOrder)
+		// Write empty rowOrder for backward compatibility with older clients
+		record[Row.CloudKitRecord.Fields.rowOrder] = [String]()
 
 		// Write fractional indexing order with three-way merge
 		let recordOrder = merge(client: order, ancestor: ancestorOrder, server: serverOrder) ?? ""
@@ -171,9 +153,6 @@ extension Row: VCKModel {
 
 	public func clearSyncData() {
 		isCloudKitMerging = false
-
-		ancestorRowOrder = nil
-		serverRowOrder = nil
 
 		ancestorOrder = nil
 		serverOrder = nil

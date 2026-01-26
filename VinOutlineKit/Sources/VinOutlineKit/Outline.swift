@@ -120,54 +120,25 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	public var isOutlineCorrupted: Bool {
-		guard let rowOrder, let keyedRows else { return false }
-		
-		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder ?? [] }))
-		allRowOrderIDs.formUnion(rowOrder)
-		
-		// If we have any extra rows that don't have an order, we have corruption
+		guard let keyedRows else { return false }
+
+		// Check for orphaned rows - rows whose parentID references a non-existent row
 		for row in keyedRows.values {
-			if !allRowOrderIDs.contains(row.id) {
-				return true
-			}
-		}
-		
-		// If we have any rowOrder values that don't have keyedRows, we have corruption
-		for rowID in rowOrder {
-			if !keyedRows.keys.contains(rowID) {
-				return true
-			}
-		}
-		
-		for row in keyedRows.values {
-			for rowID in row.rowOrder ?? [] {
-				if !keyedRows.keys.contains(rowID) {
+			if let parentID = row.parentID {
+				if !keyedRows.keys.contains(parentID) {
 					return true
 				}
 			}
 		}
 
-		// Duplicate row IDs are a sign of curruption
-		var seenRowIDs: Set<String> = []
-		var foundCorruption = false
-		
-		func duplicateRowIDsVisitor(_ visited: Row) {
-			for rowID in visited.rowOrder ?? [] {
-				if seenRowIDs.contains(rowID) {
-					foundCorruption = true
-					break
-				} else {
-					seenRowIDs.insert(rowID)
-				}
+		// Check for rows with empty order values (except during migration)
+		for row in keyedRows.values {
+			if row.order.isEmpty && row.migrationRowOrder == nil {
+				return true
 			}
-			visited.rows.forEach { $0.visit(visitor: duplicateRowIDsVisitor) }
 		}
 
-		for row in rows {
-			row.visit(visitor: duplicateRowIDsVisitor)
-		}
-
-		return foundCorruption
+		return false
 	}
 	
 	public var cloudKitMetaData: Data? {
@@ -444,11 +415,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	public var rows: [Row] {
 		get {
-			if let rowOrder, let rowData = keyedRows {
-				return rowOrder.compactMap { rowData[$0] }
-			} else {
-				return [Row]()
-			}
+			return childRows(of: nil)
 		}
 	}
 	
@@ -468,7 +435,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	public var rowCount: Int {
-		return rowOrder?.count ?? 0
+		return childRows(of: nil).count
 	}
 
 	public var isCloudKit: Bool {
@@ -478,7 +445,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public private(set) var shadowTable: [Row]?
 	
 	public var isEmpty: Bool {
-		return (title == nil || title?.isEmpty ?? true) && (rowOrder == nil || rowOrder?.isEmpty ?? true)
+		return (title == nil || title?.isEmpty ?? true) && childRows(of: nil).isEmpty
 	}
 	
 	public var iCollaborating: Bool {
@@ -655,9 +622,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	public var ancestorRowOrder: OrderedSet<String>?
-	public var serverRowOrder: OrderedSet<String>?
-	public var rowOrder: OrderedSet<String>?
 	var keyedRows: [String: Row]? {
 		didSet {
 			if let keyedRows {
@@ -784,93 +748,51 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outlineElementsDidChange(changes)
 	}
 	
-	public func correctRowToRowOrderCorruption() {
-		guard let rowOrder, let keyedRows else { return }
-		
+	/// Fix orphaned rows - rows whose parentID references a non-existent row.
+	/// These rows are moved to the top level (parentID = nil).
+	public func correctOrphanedRowCorruption() {
+		guard let keyedRows else { return }
+
 		beginCloudKitBatchRequest()
 		defer {
 			endCloudKitBatchRequest()
 		}
-		
-		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder ?? [] }))
-		allRowOrderIDs.formUnion(rowOrder)
-		
+
 		var foundCorruption = false
 
-		// Fix any rowOrder values that don't have keyedRows. Sync the RowContainer with the bad
-		// rowOrder as well as any missing rows that it had referenced. Another device might still
-		// have that row causing a back and forth between devices about which rowOrder is correct or not.
-		//
-		// Do not request CloudKit updates for any rows removed from the the rowOrder tables. They may actually
-		// have just not synced to the current device yet and we don't want to remove them from iCloud if so.
-		for rowID in rowOrder {
-			if !keyedRows.keys.contains(rowID) {
-				self.rowOrder?.remove(rowID)
-				foundCorruption = true
-			}
-		}
-		
+		// Fix any rows whose parentID references a non-existent row
 		for row in keyedRows.values {
-			for rowID in row.rowOrder ?? [] {
-				if !keyedRows.keys.contains(rowID) {
-					row.rowOrder?.remove(rowID)
-					foundCorruption = true
-				}
+			if let parentID = row.parentID, !keyedRows.keys.contains(parentID) {
+				// Move orphaned row to top level
+				row.parentID = nil
+				row.order = FractionalIndex.between(childRows(of: nil).last?.order, nil)
+				requestCloudKitUpdate(for: row.entityID)
+				foundCorruption = true
 			}
 		}
 
-		// Fix any keyRows that don't have rowOrder entries
+		// Fix any rows with empty order values
 		for row in keyedRows.values {
-			if !allRowOrderIDs.contains(row.id) {
-				self.rowOrder?.append(row.id)
-				requestCloudKitUpdates(for: [self.id, row.entityID])
+			if row.order.isEmpty {
+				let siblings = childRows(of: row.parentID)
+				row.order = FractionalIndex.between(siblings.last?.order, nil)
+				requestCloudKitUpdate(for: row.entityID)
 				foundCorruption = true
 			}
 		}
-	
+
 		if foundCorruption {
 			outlineContentDidChange()
 			outlineElementsDidChange(rebuildShadowTable())
 		}
 	}
-	
+
+	/// Legacy method - no longer needed with fractional indexing since each row
+	/// stores its own parentID, eliminating the possibility of duplicate entries.
 	public func correctDuplicateRowCorruption() {
-		beginCloudKitBatchRequest()
-		defer {
-			endCloudKitBatchRequest()
-		}
-		
-		var foundCorruption = false
-		
-		// Remove duplicate row order entries. It is possible that a user may have moved a row to a new parent
-		// on a disconnected device and to a different parent on a connected device. Our merge won't detect this
-		// since it is working on a per record basis and a row could end up owned by multiple rows.
-		var seenRowIDs: Set<String> = []
-
-		func duplicateRowIDsVisitor(_ visited: Row) {
-			for rowID in visited.rowOrder ?? [] {
-				if seenRowIDs.contains(rowID) {
-					visited.rowOrder?.remove(rowID)
-					requestCloudKitUpdate(for: self.id)
-					foundCorruption = true
-				} else {
-					seenRowIDs.insert(rowID)
-				}
-			}
-			visited.rows.forEach { $0.visit(visitor: duplicateRowIDsVisitor) }
-		}
-		
-		for row in rows {
-			row.visit(visitor: duplicateRowIDsVisitor)
-		}
-
-		// Row order corruption happens when merging the row orders during an iCloud sync. When an indent may have
-		// happened on a connected device to a row that was deleted on an unconnected device, an insert will happen
-		// into a row order array for the unconnected device once it is connected again and syncs.
-		if foundCorruption {
-			outlineContentDidChange()
-			outlineElementsDidChange(rebuildShadowTable())
-		}
+		// With fractional indexing, each row stores its own parentID, so the concept
+		// of duplicate row entries in multiple parents' rowOrder arrays no longer applies.
+		// This method is kept for API compatibility but is now a no-op.
 	}
 	
 	public func findRowContainer(entityID: EntityID) -> RowContainer? {
@@ -2070,31 +1992,30 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 		var newRows = [Row]()
 		var idDict = [String: Row]()
-		
+
 		let sortedRows = rows.sortedWithDecendentsFiltered().sortedByReverseDisplayOrder()
 		guard let afterRow = sortedRows.first else { return newRows }
-		
+
 		func duplicatingVisitor(_ visited: Row) {
 			let newRow = visited.duplicate(newOutline: self)
-			newRow.rowOrder = OrderedSet<String>()
-			
+
 			if let parentRow = visited.parent as? Row {
 				newRow.parent = idDict[parentRow.id] ?? visited.parent
 			} else {
 				newRow.parent = self
 			}
-			
+
 			let insertIndex = newRow.parent!.firstIndexOfRow(afterRow) ?? newRow.parent!.rowCount - 1
 			newRow.parent!.insertRow(newRow, at: insertIndex + 1)
 
 			newRows.append(newRow)
 			idDict[visited.id] = newRow
-			
+
 			visited.rows.forEach { $0.visit(visitor: duplicatingVisitor) }
 		}
 
 		sortedRows.forEach { $0.visit(visitor: duplicatingVisitor(_:)) }
-		
+
 		guard isBeingViewed else { return newRows }
 
 		outlineContentDidChange()
@@ -2657,7 +2578,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		rowsFile?.suspend()
 		rowsFile = nil
 		shadowTable = nil
-		rowOrder = nil
 		keyedRows = nil
 
 		await imagesFile?.saveIfNecessary()
@@ -2743,6 +2663,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		guard let keyedRows else { return outline }
 
+		// First pass: create all new rows and build the ID mapping
 		var rowIDMap = [String: String]()
 		var newKeyedRows = [String: Row]()
 		for key in keyedRows.keys {
@@ -2752,32 +2673,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				rowIDMap[row.id] = duplicateRow.id
 			}
 		}
-		
-		var newRowOrder = OrderedSet<String>()
-		for orderKey in rowOrder ?? OrderedSet<String>() {
-			if let newKey = rowIDMap[orderKey] {
-				newRowOrder.append(newKey)
+
+		// Second pass: update parentID references to use new IDs
+		for newRow in newKeyedRows.values {
+			if let oldParentID = newRow.parentID, let newParentID = rowIDMap[oldParentID] {
+				newRow.parentID = newParentID
 			}
+			// order values stay the same since they're self-contained
 		}
-		outline.rowOrder = newRowOrder
-		
-		var updatedNewKeyedRows = [String: Row]()
-		for key in newKeyedRows.keys {
-			if let newKeyedRow = newKeyedRows[key] {
-				var updatedRowOrder = OrderedSet<String>()
-				for orderKey in newKeyedRow.rowOrder ?? [] {
-					if let newKey = rowIDMap[orderKey] {
-						updatedRowOrder.append(newKey)
-					}
-				}
-				newKeyedRow.rowOrder = updatedRowOrder
-				updatedNewKeyedRows[newKeyedRow.id] = newKeyedRow
-			}
-			
-		}
-		
-		outline.keyedRows = updatedNewKeyedRows
-		
+
+		outline.keyedRows = newKeyedRows
+
 		return outline
 	}
 	

@@ -15,10 +15,6 @@ public protocol RowContainer: AnyObject {
 	var entityID: EntityID { get }
 	var rows: [Row] { get }
 	var rowCount: Int { get }
-
-	// Legacy rowOrder for backward compatibility during migration
-	var ancestorRowOrder: OrderedSet<String>? { get set }
-	var rowOrder: OrderedSet<String>? { get set }
 }
 
 public extension RowContainer {
@@ -43,18 +39,6 @@ public extension RowContainer {
 
 	func insertRow(_ row: Row, at index: Int) {
 		guard let outline else { return }
-
-		// Legacy: Update rowOrder for backward compatibility
-		if outline.isCloudKit && ancestorRowOrder == nil {
-			ancestorRowOrder = rowOrder
-		}
-
-		if rowOrder == nil {
-			rowOrder = OrderedSet<String>()
-		}
-
-		let insertIndex = min(index, rowOrder?.count ?? 0)
-		rowOrder?.insert(row.id, at: insertIndex)
 
 		// Fractional indexing: Calculate order between siblings
 		let siblings = outline.childRows(of: containerParentID)
@@ -82,12 +66,6 @@ public extension RowContainer {
 	func removeRow(_ row: Row) {
 		guard let outline else { return }
 
-		// Legacy: Update rowOrder for backward compatibility
-		if outline.isCloudKit && ancestorRowOrder == nil {
-			ancestorRowOrder = rowOrder
-		}
-
-		rowOrder?.remove(row.id)
 		outline.keyedRows?.removeValue(forKey: row.id)
 
 		outline.requestCloudKitUpdates(for: [entityID, row.entityID])
@@ -95,17 +73,6 @@ public extension RowContainer {
 
 	func appendRow(_ row: Row) {
 		guard let outline else { return }
-
-		// Legacy: Update rowOrder for backward compatibility
-		if outline.isCloudKit && ancestorRowOrder == nil {
-			ancestorRowOrder = rowOrder
-		}
-
-		if rowOrder == nil {
-			rowOrder = OrderedSet<String>()
-		}
-
-		rowOrder?.append(row.id)
 
 		// Fractional indexing: Calculate order after the last sibling
 		let siblings = outline.childRows(of: containerParentID)

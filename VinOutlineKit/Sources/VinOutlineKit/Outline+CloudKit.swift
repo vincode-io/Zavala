@@ -265,12 +265,6 @@ extension Outline: VCKModel {
         serverOwnerEmail = record[Outline.CloudKitRecord.Fields.ownerEmail] as? String
         serverOwnerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
 
-        if let errorRowOrder = record[Outline.CloudKitRecord.Fields.rowOrder] as? [String] {
-            serverRowOrder = OrderedSet(errorRowOrder)
-        } else {
-            serverRowOrder = nil
-        }
-
         let errorTagNames = record[Outline.CloudKitRecord.Fields.tagNames] as? [String] ?? [String]()
         serverTagIDs = errorTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
         
@@ -330,10 +324,9 @@ extension Outline: VCKModel {
         let recordOwnerURL = merge(client: ownerURL, ancestor: ancestorOwnerURL, server: serverOwnerURL)
         record[Outline.CloudKitRecord.Fields.ownerURL] = recordOwnerURL
 
-        // Write legacy rowOrder for backward compatibility with older clients
+        // Write empty rowOrder for backward compatibility with older clients
         // Primary ordering now uses fractional indexing (order/parentID on each Row)
-        let recordRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: serverRowOrder)
-        record[Outline.CloudKitRecord.Fields.rowOrder] = Array(recordRowOrder)
+        record[Outline.CloudKitRecord.Fields.rowOrder] = [String]()
 
         if let recordTagIDs = merge(client: tagIDs, ancestor: ancestorTagIDs, server: serverTagIDs) {
             let recordTags = recordTagIDs.compactMap{ account!.findTag(tagID: $0) }
@@ -393,9 +386,6 @@ extension Outline: VCKModel {
         ancestorOwnerURL = nil
         serverOwnerURL = nil
 
-        ancestorRowOrder = nil
-        serverRowOrder = nil
-        
         ancestorTagIDs = nil
         serverTagIDs = nil
 
@@ -415,29 +405,12 @@ extension Outline: VCKModel {
 
 private extension Outline {
 	
+	/// Legacy method - rowOrder is no longer used for ordering.
+	/// Ordering is now handled by fractional indexing (order/parentID) on each Row.
 	func applyRowOrder(_ record: CKRecord) -> [String] {
-		var updatedRowIDs = [String]()
-
-		if let serverRowOrder = record[Outline.CloudKitRecord.Fields.rowOrder] as? [String] {
-			let serverRowOrderedSet = OrderedSet(serverRowOrder)
-			
-			//  We only count newly added children as updated for reloading so that they can indent or outdent
-			let rowDiff = serverRowOrderedSet.difference(from: rowOrder ?? OrderedSet<String>())
-			for change in rowDiff {
-				switch change {
-				case .insert(_, let newRowID, _):
-					updatedRowIDs.append(newRowID)
-				default:
-					break
-				}
-			}
-			
-			rowOrder = serverRowOrderedSet
-		} else {
-			rowOrder = OrderedSet<String>()
-		}
-		
-		return updatedRowIDs
+		// Row ordering is now managed via fractional indexing on individual Row records.
+		// This method is kept for API compatibility but always returns an empty array.
+		return []
 	}
 	
 	func applyTags(_ record: CKRecord, _ account: Account) {

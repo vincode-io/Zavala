@@ -54,13 +54,13 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	public var isExpanded: Bool
 	public var rows: [Row] {
 		get {
-			guard let outline, let rowOrder else { return [Row]() }
-			return rowOrder.compactMap { outline.keyedRows?[$0] }
+			guard let outline else { return [Row]() }
+			return outline.childRows(of: id)
 		}
 	}
-	
+
 	public var rowCount: Int {
-		return rowOrder?.count ?? 0
+		return outline?.childRows(of: id).count ?? 0
 	}
 	
 	public var isAnyParentComplete: Bool {
@@ -85,9 +85,9 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return entityID
 	}
 	
-	public var ancestorRowOrder: OrderedSet<String>?
-	var serverRowOrder: OrderedSet<String>?
-	public var rowOrder: OrderedSet<String>?
+	/// Legacy rowOrder - only used during migration from old file format.
+	/// This is populated when loading from RowCoder and used to migrate to fractional indexing.
+	var migrationRowOrder: OrderedSet<String>?
 
 	// MARK: - Fractional Indexing Properties
 
@@ -392,27 +392,24 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 			self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 		}
 		self.isExpanded = true
-		self.rowOrder = OrderedSet<String>()
 		super.init()
 	}
-	
+
 	init(outline: Outline, id: String) {
 		self.outline = outline
 		self.id = id
 		self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 		self.isExpanded = true
-		self.rowOrder = OrderedSet<String>()
 		super.init()
 	}
-	
-	
+
+
 	public init(outline: Outline, topicMarkdown: String?, noteMarkdown: String? = nil) {
 		self.isComplete = false
 		self.id = UUID().uuidString
 		self.outline = outline
 		self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 		self.isExpanded = true
-		self.rowOrder = OrderedSet<String>()
 		super.init()
 		self.topic = convertMarkdown(topicMarkdown, isInNotes: false)
 		self.note = convertMarkdown(noteMarkdown, isInNotes: true)
@@ -428,8 +425,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		self.isExpanded = coder.isExpanded
 		self.ancestorIsComplete = coder.ancestorIsComplete
 		self.isComplete = coder.isComplete
-		self.ancestorRowOrder = coder.ancestorRowOrder
-		self.rowOrder = coder.rowOrder
+		// Load legacy rowOrder for migration purposes only
+		self.migrationRowOrder = coder.rowOrder.isEmpty ? nil : coder.rowOrder
 		// Fractional indexing properties
 		self.order = coder.order
 		self.parentID = coder.parentID
@@ -452,7 +449,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		row.noteData = noteData
 		row.isExpanded = isExpanded
 		row.isComplete = isComplete
-		row.rowOrder = rowOrder
 		row.order = order
 		row.parentID = parentID
 		row.images = images?.map { $0.duplicate(outline: newOutline, accountID: newOutline.id.accountID, documentUUID: newOutline.id.documentUUID, rowUUID: row.id) }
@@ -660,8 +656,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 						isExpanded: isExpanded,
 						ancestorIsComplete: ancestorIsComplete,
 						isComplete: isComplete,
-						ancestorRowOrder: ancestorRowOrder,
-						rowOrder: rowOrder ?? [],
+						ancestorRowOrder: nil,
+						rowOrder: [],
 						order: order,
 						parentID: parentID,
 						ancestorOrder: ancestorOrder,
