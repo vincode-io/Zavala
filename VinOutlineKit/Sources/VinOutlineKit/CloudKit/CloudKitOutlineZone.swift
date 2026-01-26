@@ -102,7 +102,7 @@ private extension CloudKitOutlineZone {
 	func saveZoneVersionRecord() async throws {
 		let recordID = CKRecord.ID(recordName: zoneVersionRecordName, zoneID: zoneID)
 		let newVersionRecord = CKRecord(recordType: VersionRecord.recordType, recordID: recordID)
-		newVersionRecord[VersionRecord.Fields.versionNumber] = VersionRecord.Fields.versionNumber
+		newVersionRecord[VersionRecord.Fields.versionNumber] = currentZoneVersionNumber
 
 		try await save(newVersionRecord)
 	}
