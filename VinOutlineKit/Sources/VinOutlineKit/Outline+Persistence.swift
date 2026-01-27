@@ -121,6 +121,8 @@ public extension Outline {
 				row.order = orders.isEmpty ? FractionalIndex.between(nil, nil) : orders[index]
 				row.parentID = parentID
 
+				requestCloudKitUpdate(for: row.entityID)
+
 				// Recursively process children using the old migrationRowOrder
 				let childIDs = Array(row.migrationRowOrder ?? [])
 				if !childIDs.isEmpty {
@@ -131,7 +133,12 @@ public extension Outline {
 			}
 		}
 
+		beginCloudKitBatchRequest()
+
 		assignOrders(parentID: nil, rowIDs: topLevelRowOrder)
+		
+		requestCloudKitUpdate(for: id)
+		endCloudKitBatchRequest()
 
 		// Mark file as dirty to save the migrated data
 		rowsFile?.markAsDirty()
