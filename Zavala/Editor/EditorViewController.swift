@@ -1323,9 +1323,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func toggleCompleteRows(_ sender: Any?) {
 		guard let outline, let rows = currentRows else { return }
 		if !outline.isCompleteUnavailable(rows: rows) {
-			completeRows(rows)
+			completeRows(rows, rowStrings: currentRowStrings)
 		} else if !outline.isUncompleteUnavailable(rows: rows) {
-			uncompleteRows(rows)
+			uncompleteRows(rows, rowStrings: currentRowStrings)
 		}
 	}
 	
