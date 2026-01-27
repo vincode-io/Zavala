@@ -412,10 +412,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	public var rowCount: Int {
-		return rows.count
-	}
-
 	public var isCloudKit: Bool {
 		return AccountType(rawValue: id.accountID) == .cloudKit
 	}
@@ -1577,8 +1573,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	func joinRows(topRow: Row, bottomRow: Row, topic: NSAttributedString? = nil) {
 		// If we Join a Row with children we need to transfer the child Rows or they will
 		// be orphaned. For now, I've opted to just not allow this action.
-		guard bottomRow.rowCount == 0 else { return }
-		
+		guard bottomRow.rows.count == 0 else { return }
+
 		beginCloudKitBatchRequest()
 		defer {
 			endCloudKitBatchRequest()
@@ -1699,7 +1695,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
 			}
-		} else if afterRow?.isExpanded ?? true && childRowIndent ?? true && !(afterRow?.rowCount == 0) {
+		} else if afterRow?.isExpanded ?? true && childRowIndent ?? true && !(afterRow?.rows.count == 0) {
 			afterRow?.insertRow(row, at: 0)
 			row.parent = afterRow
 		} else if let afterRow, let parent = afterRow.parent {
@@ -1758,7 +1754,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		resetPreviouslyUsed(rows: rows)
 		
 		var reloads = Set<Int>()
-		let beginningRowCount = rowCount
+		let beginningRowCount = rows.count
 
 		for row in rows.sortedByReverseDisplayOrder() {
 			if afterRow == nil {
@@ -1771,14 +1767,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			} else if let parent = row.parent, parent as? Row == afterRow {
 				parent.insertRow(row, at: 0)
 			} else if let parent = row.parent, let afterRow {
-				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rowCount - 1
+				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rows.count - 1
 				parent.insertRow(row, at: insertIndex + 1)
 			} else if afterRow == focusRow {
 				if childRowIndent ?? true {
 					afterRow?.insertRow(row, at: 0)
 					row.parent = afterRow
 				}
-			} else if afterRow?.isExpanded ?? true && childRowIndent ?? true && !(afterRow?.rowCount == 0) {
+			} else if afterRow?.isExpanded ?? true && childRowIndent ?? true && !(afterRow?.rows.count == 0) {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
 			} else if let afterRow, let parent = afterRow.parent {
@@ -1998,7 +1994,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				newRow.parent = self
 			}
 
-			let insertIndex = newRow.parent!.firstIndexOfRow(afterRow) ?? newRow.parent!.rowCount - 1
+			let insertIndex = newRow.parent!.firstIndexOfRow(afterRow) ?? newRow.parent!.rows.count - 1
 			newRow.parent!.insertRow(newRow, at: insertIndex + 1)
 
 			newRows.append(newRow)
@@ -2063,7 +2059,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		expandAllInOutlineUnavailableNeedsUpdate = true
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 
-		if rowCount == 1, let row = expandableRows.first {
+		if rows.count == 1, let row = expandableRows.first {
 			expand(row: row)
 			return [row]
 		}
@@ -2078,7 +2074,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		expandAllInOutlineUnavailableNeedsUpdate = true
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
-		if rowCount == 1, let row = collapsableRows.first {
+		if rows.count == 1, let row = collapsableRows.first {
 			collapse(row: row)
 			return [row]
 		}
@@ -2316,7 +2312,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			impacted.append(row)
 			
 			var siblingsToMove = [Row]()
-			for i in (oldRowIndex + 1)..<oldParent.rowCount {
+			for i in (oldRowIndex + 1)..<oldParent.rows.count {
 				siblingsToMove.append(oldParent.rows[i])
 			}
 
@@ -2394,7 +2390,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		guard let index = last.parent?.rows.firstIndex(of: last) else { return true }
 		
-		return index == (last.parent?.rowCount ?? -1) - 1
+		return index == (last.parent?.rows.count ?? -1) - 1
 	}
 
 	func moveRowsDown(_ rows: [Row], rowStrings: RowStrings?) {
@@ -2408,7 +2404,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 
 		for row in rows.sortedByReverseDisplayOrder() {
-			if let parent = row.parent, let index = parent.firstIndexOfRow(row), index + 1 < parent.rowCount {
+			if let parent = row.parent, let index = parent.firstIndexOfRow(row), index + 1 < parent.rows.count {
 				parent.removeRow(row)
 				parent.insertRow(row, at: index + 1)
 			}
@@ -2432,7 +2428,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public func moveRowsInsideAtEnd(_ rows: [Row], afterRowContainer: RowContainer) {
 		var rowMoves = [RowMove]()
 		for (index, row) in rows.enumerated() {
-			rowMoves.append(RowMove(row: row, toParent: afterRowContainer, toChildIndex: index + afterRowContainer.rowCount))
+			rowMoves.append(RowMove(row: row, toParent: afterRowContainer, toChildIndex: index + afterRowContainer.rows.count))
 		}
 		moveRows(rowMoves)
 	}
@@ -2520,7 +2516,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				oldParentReloads.insert(oldParentShadowTableIndex)
 			}
 			
-			if rowMove.toChildIndex >= rowMove.toParent.rowCount {
+			if rowMove.toChildIndex >= rowMove.toParent.rows.count {
 				rowMove.toParent.appendRow(rowMove.row)
 			} else {
 				rowMove.toParent.insertRow(rowMove.row, at: rowMove.toChildIndex)

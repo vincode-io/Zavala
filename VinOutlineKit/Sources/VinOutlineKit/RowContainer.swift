@@ -13,7 +13,6 @@ import VinXML
 public protocol RowContainer: AnyObject {
 	var outline: Outline? { get }
 	var rows: [Row] { get }
-	var rowCount: Int { get }
 }
 
 public extension RowContainer {

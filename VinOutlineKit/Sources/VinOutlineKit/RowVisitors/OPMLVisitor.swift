@@ -32,7 +32,7 @@ final class OPMLVisitor {
 			opml.append(" _status=\"checked\"")
 		}
 		
-		if visited.rowCount == 0 {
+		if visited.rows.count == 0 {
 			opml.append("/>\n")
 		} else {
 			opml.append(">\n")

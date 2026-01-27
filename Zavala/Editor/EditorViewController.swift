@@ -1139,7 +1139,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	// MARK: Actions
 	
 	@objc func createInitialRowIfNecessary() {
-		guard let outline, outline.rowCount == 0 else { return }
+		guard let outline, outline.rows.count == 0 else { return }
 		createRow(afterRows: nil)
 	}
 	

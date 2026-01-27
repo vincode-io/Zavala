@@ -68,10 +68,10 @@ class EditorRowViewCell: UICollectionViewListCell {
 			indentationWidth = 16
 		}
 		
-		let isDisclosureVisible = row.rowCount != 0
+		let isDisclosureVisible = row.rows.count != 0
 		let isNotesVisible = !(row.outline?.isNotesFilterOn ?? false) && !row.isNoteEmpty
 		let isSelected = state.isSelected
-		let hasChildren = row.rowCount > 0
+		let hasChildren = row.rows.count > 0
 		
 		var searchResultCoordinates = [SearchResultCoordinates]()
 		for src in row.searchResultCoordinates.allObjects {

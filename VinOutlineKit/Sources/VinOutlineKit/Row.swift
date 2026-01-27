@@ -56,10 +56,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	/// Direct storage of child rows in sorted order by their `order` property.
 	public internal(set) var rows: [Row] = []
 
-	public var rowCount: Int {
-		return rows.count
-	}
-	
 	public var isAnyParentComplete: Bool {
 		if let parentRow = parent as? Row {
 			return parentRow.isComplete ?? false || parentRow.isAnyParentComplete
@@ -190,12 +186,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	}
 	
 	public var isExpandable: Bool {
-		guard rowCount > 0 else { return false }
+		guard rows.count > 0 else { return false }
 		return !isExpanded
 	}
 	
 	public var isCollapsable: Bool {
-		guard rowCount > 0 else { return false }
+		guard rows.count > 0 else { return false }
 		return isExpanded
 	}
 	
