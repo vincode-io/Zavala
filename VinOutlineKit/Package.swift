@@ -28,14 +28,14 @@ let package = Package(
 				"VinXML",
 				"VinCloudKit",
 			],
-			swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
+			resources: [.copy("Resources")]
 		),
 		.testTarget(
 			name: "VinOutlineKitTests",
 			dependencies: [
 				"VinOutlineKit",
 			],
-			resources: [.copy("Resources")
-		]),
+			resources: [.copy("Resources")]
+		),
 	]
 )
