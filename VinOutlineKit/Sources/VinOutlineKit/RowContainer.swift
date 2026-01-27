@@ -12,7 +12,6 @@ import VinXML
 @MainActor
 public protocol RowContainer: AnyObject {
 	var outline: Outline? { get }
-	var entityID: EntityID { get }
 	var rows: [Row] { get }
 	var rowCount: Int { get }
 }
@@ -54,7 +53,7 @@ public extension RowContainer {
 		// Add to outline's index
 		outline.addToIndex(row)
 
-		outline.requestCloudKitUpdates(for: [entityID, row.entityID])
+		outline.requestCloudKitUpdates(for: [row.entityID])
 
 		// Check if rebalancing is needed
 		outline.rebalanceChildrenIfNeeded(parentID: containerParentID)
@@ -73,7 +72,7 @@ public extension RowContainer {
 		// Remove from outline's index (including all descendants)
 		outline.removeFromIndex(row)
 
-		outline.requestCloudKitUpdates(for: [entityID, row.entityID])
+		outline.requestCloudKitUpdates(for: [row.entityID])
 	}
 
 	func appendRow(_ row: Row) {
@@ -96,7 +95,7 @@ public extension RowContainer {
 		// Add to outline's index
 		outline.addToIndex(row)
 
-		outline.requestCloudKitUpdates(for: [entityID, row.entityID])
+		outline.requestCloudKitUpdates(for: [row.entityID])
 
 		// Check if rebalancing is needed
 		outline.rebalanceChildrenIfNeeded(parentID: containerParentID)
