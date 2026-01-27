@@ -457,8 +457,12 @@ private extension Outline {
 			}
 		}
 
-		let topLevelIDs = migrationTopLevelRowOrder ?? []
-		assignOrders(parentID: nil, rowIDs: topLevelIDs)
+		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
+
+		assignOrders(parentID: nil, rowIDs: migrationTopLevelRowOrder ?? [])
 		migrationTopLevelRowOrder = nil
 	}
 
