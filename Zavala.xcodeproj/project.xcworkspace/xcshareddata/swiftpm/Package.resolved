@@ -1,5 +1,5 @@
 {
-  "originHash" : "fceac6fca871b9f39898fbdfc29825910b0b483c3929128f9d0ba9bf0c1c7e13",
+  "originHash" : "30a3fb16966cfe4f8073ce145a0aee270dd73fb6262b621637eaece37cc68660",
   "pins" : [
     {
       "identity" : "markdownattributedstring",
@@ -61,7 +61,7 @@
       "location" : "https://github.com/vincode-io/VinCloudKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "cd87d44422d0f9097d031ef2dc7b0b415a96609a"
+        "revision" : "bffa73124f31e49e7f6ca167cf3ef9b8e9dd149e"
       }
     },
     {
@@ -70,7 +70,7 @@
       "location" : "https://github.com/vincode-io/VinUtility.git",
       "state" : {
         "branch" : "main",
-        "revision" : "783b36127ef196be368ced03a9a227c584dcd6d4"
+        "revision" : "d6403774ae244d55ca6548438ce8352a75772eec"
       }
     },
     {
