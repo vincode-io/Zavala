@@ -42,15 +42,8 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 
 		if state.traitCollection.userInterfaceIdiom == .mac {
 			backgroundConfig.cornerRadius = 5
-			
 			if insetBackground {
 				backgroundConfig.backgroundInsets = NSDirectionalEdgeInsets(top: 2, leading: 9, bottom: 2, trailing: 9)
-			}
-			
-			if state.isSelected || state.isHighlighted {
-				backgroundConfig.backgroundColor = .systemGray5
-			} else {
-				backgroundConfig.backgroundColor = .clear
 			}
 		}
 		
