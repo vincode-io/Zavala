@@ -28,7 +28,6 @@ let package = Package(
 				"VinXML",
 				"VinCloudKit",
 			],
-			resources: [.copy("Resources")]
 		),
 		.testTarget(
 			name: "VinOutlineKitTests",
