@@ -995,8 +995,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	func checkPointOutline() {
+		outline?.cursorCoordinates = currentRowTextView?.coordinates
 		currentRowTextView?.endEditing(true)
-		outline?.cursorCoordinates = mostRecentRowTextView?.coordinates
 
 		if let outline {
 			Task.detached {
