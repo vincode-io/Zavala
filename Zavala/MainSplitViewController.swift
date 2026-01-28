@@ -700,7 +700,15 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 // MARK: UINavigationControllerDelegate
 
 extension MainSplitViewController: UINavigationControllerDelegate {
-	
+
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+		if isCollapsed && viewController === documentsViewController && lastMainControllerToAppear == .editor {
+			activityManager.invalidateSelectDocument()
+			documentsViewController?.openDocument(nil, isNavigationBranch: false, animated: false)
+			return
+		}
+	}
+
 	func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
 		if UIApplication.shared.applicationState == .background {
 			return
@@ -719,12 +727,6 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 			Task {
 				await collectionsViewController?.selectDocumentContainers(nil, isNavigationBranch: false, animated: false)
 			}
-			return
-		}
-
-		if isCollapsed && viewController === documentsViewController && lastMainControllerToAppear == .editor {
-			activityManager.invalidateSelectDocument()
-			documentsViewController?.openDocument(nil, isNavigationBranch: false, animated: false)
 			return
 		}
 	}
