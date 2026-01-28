@@ -203,8 +203,6 @@ extension String {
 	static let copyDocumentLinksControlLabel = String(localized: "button.text.copy-document-links", comment: "Document Action: Copy Document Links")
 	static let copyRowLinkControlLabel = String(localized: "button.text.copy-row-link", comment: "Document Action: Copy Row Link")
 	static let correctSpellingAutomaticallyControlLabel = String(localized: "button.text.correct-spelling-automatically", comment: "Default Action: Correct Spelling Automatically")
-	static let corruptedOutlineTitle = String(localized: "label.text.corrupted-outline", comment: "Label: Corrupted Outline")
-	static let corruptedOutlineMessage = String(localized: "label.text.corrupted-outline-message", comment: "Alert Message: This outline appears to be corrupted. Would you like to fix it?")
 	static let createdControlLabel = String(localized: "label.text.created", comment: "Label: Created")
 	static let createRowsControlLabel = String(localized: "label.text.create-rows", comment: "Label: Create Rows")
 	static let cutControlLabel = String(localized: "button.text.cut", comment: "Action: Cut")

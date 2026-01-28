@@ -8508,64 +8508,6 @@
         }
       }
     },
-    "label.text.corrupted-outline" : {
-      "comment" : "Label: Corrupted Outline",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Beschädigte Gliederung"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Corrupted Outline"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Corrupted Outline"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Corrupted Outline"
-          }
-        }
-      }
-    },
-    "label.text.corrupted-outline-message" : {
-      "comment" : "Alert Message: This outline appears to be corrupted. Would you like to fix it?",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Gliederung scheint beschädigt zu sein. Möchten Sie sie reparieren?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This outline appears to be corrupted. Would you like to fix it?"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This outline appears to be corrupted. Would you like to fix it?"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This outline appears to be corrupted. Would you like to fix it?"
-          }
-        }
-      }
-    },
     "label.text.create-rows" : {
       "comment" : "Label: Create Rows",
       "localizations" : {
