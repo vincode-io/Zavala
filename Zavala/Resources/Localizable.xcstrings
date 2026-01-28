@@ -674,25 +674,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einklappen"
+            "value" : "Alle einklappen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Collapse"
+            "value" : "Collapse All"
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Collapse"
+            "value" : "Collapse All"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Collapse"
+            "value" : "Collapse All"
           }
         }
       }
