@@ -270,6 +270,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var redoButton: ButtonGroup.Button!
 
 	private var navButtonGroup: ButtonGroup!
+	private var actionsButtonGroup: ButtonGroup!
 	private var goBackwardButton: ButtonGroup.Button!
 	private var goForwardButton: ButtonGroup.Button!
 	private var moreMenuButton: ButtonGroup.Button!
@@ -448,6 +449,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 		
 		navButtonGroup.containerWidth = size.width
+		actionsButtonGroup.containerWidth = size.width
 		leftToolbarButtonGroup.containerWidth = size.width
 		rightToolbarButtonGroup.containerWidth = size.width
 	}
@@ -468,23 +470,23 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	override func cut(_ sender: Any?) {
-		navButtonGroup?.dismissPopOverMenu()
-		
+		actionsButtonGroup?.dismissPopOverMenu()
+
 		if let currentRows {
 			cutRows(currentRows)
 		}
 	}
-	
+
 	override func copy(_ sender: Any?) {
-		navButtonGroup?.dismissPopOverMenu()
-		
+		actionsButtonGroup?.dismissPopOverMenu()
+
 		if let currentRows {
 			copyRows(currentRows)
 		}
 	}
-	
+
 	override func paste(_ sender: Any?) {
-		navButtonGroup?.dismissPopOverMenu()
+		actionsButtonGroup?.dismissPopOverMenu()
 		pasteRows(afterRows: currentRows)
 	}
 
@@ -1428,7 +1430,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func showUndoMenu(_ sender: Any?) {
 		updateUI()
-		navButtonGroup.showPopOverMenu(for: undoMenuButton)
+		actionsButtonGroup.showPopOverMenu(for: undoMenuButton)
 	}
 
 	@objc func showFormatMenu(_ sender: Any?) {
@@ -2097,12 +2099,15 @@ private extension EditorViewController {
 		navButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
 		goBackwardButton = navButtonGroup.addButton(label: .goBackwardControlLabel, image: .goBackward, selector: .goBackwardOne)
 		goForwardButton = navButtonGroup.addButton(label: .goForwardControlLabel, image: .goForward, selector: .goForwardOne)
-		undoMenuButton = navButtonGroup.addButton(label: .undoMenuControlLabel, image: .undoMenu, selector: .showUndoMenu)
-		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
-		moreMenuButton = navButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
-		focusButton = navButtonGroup.addButton(label: .focusInControlLabel, image: .focusInactive, selector: .toggleFocus)
-		filterButton = navButtonGroup.addButton(label: .filterControlLabel, image: .filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
+		actionsButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
+		undoMenuButton = actionsButtonGroup.addButton(label: .undoMenuControlLabel, image: .undoMenu, selector: .showUndoMenu)
+		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
+		moreMenuButton = actionsButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
+		focusButton = actionsButtonGroup.addButton(label: .focusInControlLabel, image: .focusInactive, selector: .toggleFocus)
+		filterButton = actionsButtonGroup.addButton(label: .filterControlLabel, image: .filterInactive, showMenu: true)
+		let actionsBarButtonItem = actionsButtonGroup.buildBarButtonItem()
 
 		leftToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .left)
 		moveLeftButton = leftToolbarButtonGroup.addButton(label: .moveLeftControlLabel, image: .moveLeft, selector: .moveCurrentRowsLeft)
@@ -2135,20 +2140,21 @@ private extension EditorViewController {
 			} else {
 				let hideKeyboardBarButtonItem = UIBarButtonItem(image: .hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
 				hideKeyboardBarButtonItem.accessibilityLabel = .hideKeyboardControlLabel
-				keyboardToolBar.items = [moveButtonsBarButtonItem, .fixedSpace(0), hideKeyboardBarButtonItem, .fixedSpace(0), insertButtonsBarButtonItem]
+				keyboardToolBar.items = [moveButtonsBarButtonItem, .fixedSpace(), hideKeyboardBarButtonItem, .fixedSpace(), insertButtonsBarButtonItem]
 			}
 			
 			keyboardToolBar.sizeToFit()
-			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
+			navigationItem.rightBarButtonItems = [actionsBarButtonItem, .fixedSpace(), navButtonsBarButtonItem]
 
 			if traitCollection.userInterfaceIdiom == .pad {
-				navButtonGroup.remove(undoMenuButton)
+				actionsButtonGroup.remove(undoMenuButton)
 				rightToolbarButtonGroup.remove(formatMenuButton)
 				formatMenuButtonGroup.remove(linkButton)
 				rightToolbarButtonGroup.insert(linkButton, at: 1)
 			}
 
 			navButtonGroup.containerWidth = size.width
+			actionsButtonGroup.containerWidth = size.width
 			leftToolbarButtonGroup.containerWidth = size.width
 			rightToolbarButtonGroup.containerWidth = size.width
 		}
