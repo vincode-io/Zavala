@@ -75,6 +75,10 @@ final class CloudKitOutlineZone: VCKZone {
 	}
 	
 	func validateZoneVersion() async throws {
+		guard zoneID == Self.defaultZoneID else {
+			return
+		}
+
 		do {
 			let versionRecord = try await fetch(externalID: zoneVersionRecordName)
 			guard let versionNumber = versionRecord?[VersionRecord.Fields.versionNumber] as? Int else {
