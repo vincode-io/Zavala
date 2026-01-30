@@ -13,7 +13,7 @@ You can export Outlines using the File menu on macOS and by using the context me
 
 ## PDF Doc
 
-This exports a PDF file by treating the Outline as a document. See [The Notes Field.](The_Notes_Field.md)
+This exports a PDF file by treating the Outline as a document. See the [The Notes Field](The_Notes_Field.md).
 
 ## PDF List
 
@@ -21,7 +21,7 @@ This exports a PDF file as a traditional outilne.
 
 ## Markdown Doc
 
-This exports a Markdown file by treating the Outline as a document. See [The Notes Field.](The_Notes_Field.md)
+This exports a Markdown file by treating the Outline as a document. See [The Notes Field](The_Notes_Field.md).
 
 ## Markdown List
 

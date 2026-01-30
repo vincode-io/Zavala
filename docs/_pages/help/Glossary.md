@@ -35,7 +35,7 @@ The right-most column of the Main Window. The editor shows the currently selecte
 
 ## Main Window
 
-This is the first window you see when you start Zavala for the first time. It has 3 columns or views. They are called from left to right, Collections, Documents, and the Editor. See [Main Window.](Main_Window.md)
+This is the first window you see when you start Zavala for the first time. It has 3 columns or views. They are called from left to right, Collections, Documents, and the Editor. See [Main Window](Main_Window.md).
 
 ## Markdown
 
@@ -51,7 +51,7 @@ A type of Tag that has multiple elements separated with forward slashes. For exa
 
 ## Note
 
-Detail information about the Topic is associated with. See [The Notes Field.](The_Notes_Field.md)
+Detail information about the Topic is associated with. See [The Notes Field](The_Notes_Field.md).
 
 ## OPML
 

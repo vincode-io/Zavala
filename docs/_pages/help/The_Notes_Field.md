@@ -11,7 +11,7 @@ header:
 
 ## ![](/assets/images/help/F65AD672-ED7D-4F95-8A3D-DA6F6F33E413.png)￼
 
-Notes don’t get a leading bullet, only Topics do. Notes are shown in a slightly smaller, lighter colored font directly below the Topic they are associated with although this can be changed in [Settings.](Settings.md) 
+Notes don’t get a leading bullet, only Topics do. Notes are shown in a slightly smaller, lighter colored font directly below the Topic they are associated with although this can be changed in [Settings](Settings.md). 
 
 ## Proper Usage
 

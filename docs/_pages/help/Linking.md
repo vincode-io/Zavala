@@ -17,7 +17,7 @@ Linking enables us to create links to other Outlines within Zavala. As you would
 
 ## Linking in Zavala
 
-Linking between outlines is easy. Use the Link button or the ⌘-K shortcut to open the [Link Dialog.](Link_Dialog.md) It will help you autocomplete the Outline title and link to use.
+Linking between outlines is easy. Use the Link button or the ⌘-K shortcut to open the [Link Dialog](Link_Dialog.md). It will help you autocomplete the Outline title and link to use.
 
 You use the same [Link Dialog](Link_Dialog.md) to create links other links, say to a web page. Just enter a the text you want to have underlined and clickable with the link and hit Add.
 
@@ -31,7 +31,7 @@ You can ask Zavala to automatically pull the title of a web page and make a link
 
 This is very useful for doing research or making lists. For example, if you are trying to find the best product of some kind, you may end up looking at multiple products on the web. Just drag the link from your browser into Zavala. Zavala will turn it into a nice link. You can then use the [The Notes Field](The_Notes_Field.md) to make comments on the different products.
 
-Since you may be doing research on sensitive subjects, we don’t enable this feature by default. If you want to use it for all new Outlines, there is a setting to enable in [Settings.](Settings.md)
+Since you may be doing research on sensitive subjects, we don’t enable this feature by default. If you want to use it for all new Outlines, there is a setting to enable in [Settings](Settings.md).
 
 ## Linking from Zavala to an App
 

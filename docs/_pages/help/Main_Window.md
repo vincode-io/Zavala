@@ -39,7 +39,7 @@ You can select multiple collections in the Collections View to make it easier to
 
 This view is primarily used to select the Outline that you want to edit or view in the Editor. It also has a context menu where you can do things like get the current document link, export the document, delete it, and more.
 
-Double clicking an Outline in this area on macOS will open the [Individual Editor Window.](Individual_Editor_Window.md) 
+Double clicking an Outline in this area on macOS will open the [Individual Editor Window](Individual_Editor_Window.md).
 
 This view is sortable by Title, Created Date, or Updated Date. On macOS there is a Main Menu item under View as well as a Toolbar Button. On iOS there is a Navigation Bar item.
 
