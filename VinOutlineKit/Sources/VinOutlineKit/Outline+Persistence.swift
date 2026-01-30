@@ -112,7 +112,8 @@ public extension Outline {
 	/// Migrate from rowOrder-based ordering to fractional indexing.
 	/// This walks the tree using the old rowOrder arrays and assigns order/parentID values.
 	private func migrateToFractionalIndexing(rowIndex: [String: Row], topLevelRowOrder: [String]) {
-		logger.info("Migrating outline to fractional indexing")
+		logger.info("Migrating local outline to fractional indexing: \(self.title ?? .noTitle)")
+
 
 		func assignOrders(parentID: String?, rowIDs: [String]) {
 			let orders = FractionalIndex.initial(count: rowIDs.count)

@@ -438,7 +438,7 @@ private extension Outline {
 
 	/// Migrate from CloudKit legacy rowOrder to fractional indexing.
 	func migrateFromCloudKitLegacyOrdering() {
-		logger.info("Migrating CloudKit outline to fractional indexing: \(self.id)")
+		logger.info("Migrating CloudKit outline to fractional indexing: \(self.title ?? .noTitle)")
 
 		func assignOrders(parentID: String?, rowIDs: [String]) {
 			let orders = FractionalIndex.initial(count: rowIDs.count)
