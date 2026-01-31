@@ -27,13 +27,11 @@ This is a demo of how to create an Outline and populate it with Rows.
 
 We get input, typically from another Shortcut, and append it to an Outline called “Personal Tasks”.
 
-## [Add Link to Personal Tasks](https://www.icloud.com/shortcuts/07295f257a6848f883212a5e5ba97518)
+## [Add Link to Personal Tasks](https://www.icloud.com/shortcuts/87f264909c164b9995169c48ae280550)
 
 This Shortcut only works on iOS because some Safari features are currently missing on macOS.
 
-We add an item to the Share Sheet on iOS that is the name of this Shortcut. If an application shares a URL, we will take it and look up the page Title of the URL. This is passed to the “Append to Personal Tasks” Shortcut that will add it to an Outline called “Personal Tasks”.
-
-This is very handy if you have an Outline of TODO’s that you want to add things to read later.
+We add an item to the Share Sheet on iOS that is the name of this Shortcut. If an application shares a URL, we will take it and append it to the end of an Outline called “Personal Tasks”. This is an easy way to track things that you want to read later along with other tasks you may be working on.
 
 ## [Move Completed Rows to Done](https://www.icloud.com/shortcuts/0c71eb789f594ee69f11944c7f7de150)
 
