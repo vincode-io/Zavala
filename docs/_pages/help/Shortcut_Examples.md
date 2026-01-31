@@ -56,3 +56,7 @@ This shortcut will take the currently selected Outline and export it to Reminder
 ## [Migraine Log](https://www.icloud.com/shortcuts/60a2681372eb43919810721878a14753)
 
 This example is useful for logging information using a template Row as a starting point. In this case, we are logging migraine headaches and associated symptoms. See the comments in the Shortcut for more information.
+
+## [No Tag Outline Search](https://www.icloud.com/shortcuts/c3c00f5f032748f7b224cfc50b97a53d)
+
+If you want to make sure that every one of your Outlines has a Tag this is the Shortcut for you. It scans for Outlines with missing Tags and gives them a “No Tag” Tag. You can then add Tags to the found Outlines and delete the “No Tag” Tag when done.
