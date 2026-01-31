@@ -84,7 +84,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 
 	func sceneWillResignActive(_ scene: UIScene) {
-		editorContainerViewController.shutdown()
+		editorContainerViewController.checkPointOutline()
 	}
 	
 	func stateRestorationActivity(for scene: UIScene) -> NSUserActivity? {

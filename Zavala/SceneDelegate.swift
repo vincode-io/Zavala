@@ -88,7 +88,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func sceneWillResignActive(_ scene: UIScene) {
-		mainSplitViewController.shutdown()
+		mainSplitViewController.checkPointOutline()
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {

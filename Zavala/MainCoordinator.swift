@@ -228,8 +228,7 @@ extension MainCoordinator {
 		NotificationCenter.default.post(name: .PinWasVisited, object: pin, userInfo: nil)
 	}
 
-	func shutdown() {
-		activityManager.invalidateSelectDocument()
+	func checkPointOutline() {
 		editorViewController?.checkPointOutline()
 	}
 	
