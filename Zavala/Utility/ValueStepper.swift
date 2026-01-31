@@ -170,6 +170,8 @@ private enum Button: Int {
 	}
 
 	private func setUp() {
+		backgroundColor = .clear
+
 		addSubview(decreaseButton)
 		addSubview(valueLabel)
 		addSubview(increaseButton)
@@ -221,7 +223,6 @@ private enum Button: Int {
 		layer.borderColor = tintColor.cgColor
 		layer.borderWidth = 1.0
 		layer.cornerRadius = 4.0
-		backgroundColor = .clear
 		clipsToBounds = true
 
 		let leftPath = UIBezierPath()
