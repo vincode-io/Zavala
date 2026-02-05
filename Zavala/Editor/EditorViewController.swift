@@ -2532,7 +2532,13 @@ private extension EditorViewController {
 		let hasSectionOtherThanRows = reloads.contains(where: { $0.section != adjustedRowsSection })
 		
 		if !hasSectionOtherThanRows {
-			collectionView.reconfigureItems(at: reloads)
+			if AppDefaults.shared.disableEditorAnimations {
+				UIView.performWithoutAnimation {
+					collectionView.reconfigureItems(at: reloads)
+				}
+			} else {
+				collectionView.reconfigureItems(at: reloads)
+			}
 		} else {
 			if changes.isReloadsAnimatable {
 				collectionView.reloadItems(at: reloads)
