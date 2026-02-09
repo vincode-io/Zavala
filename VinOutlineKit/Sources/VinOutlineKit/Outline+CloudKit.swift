@@ -178,22 +178,29 @@ extension Outline: VCKModel {
 
 		var changes = rebuildShadowTable()
 
-		var reloadRows = [Row]()
+		var reloadIndexes = Set<Int>()
 
 		func reloadVisitor(_ visited: Row) {
-			reloadRows.append(visited)
+			if let index = visited.shadowTableIndex {
+				reloadIndexes.insert(index)
+			}
 			visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 		}
 
+		// Reload the previous row and any children of a changed row incase its indent level was modified
 		for updatedRowID in updatedRowIDs {
 			if let updatedRow = rowIndex[updatedRowID] {
-				reloadRows.append(updatedRow)
+				if let updatedRowIndex = updatedRow.shadowTableIndex {
+					if updatedRowIndex > 0 {
+						reloadIndexes.insert(updatedRowIndex - 1)
+					}
+					reloadIndexes.insert(updatedRowIndex)
+				}
 				updatedRow.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 		}
 
-		let reloadIndexes = reloadRows.compactMap { $0.shadowTableIndex }
-		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloadIndexes)))
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloadIndexes))
 
 		if !changes.isEmpty {
 			outlineElementsDidChange(changes)
