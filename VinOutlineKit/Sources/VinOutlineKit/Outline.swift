@@ -723,9 +723,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return rowIndex[id]
 	}
 
-	/// Add a row to the index (called when row is added anywhere in the outline)
+	/// Add a row and all its decendents to the index (called when row is added anywhere in the outline)
 	func addToIndex(_ row: Row) {
 		rowIndex[row.id] = row
+		for child in row.rows {
+			addToIndex(child)
+		}
 		row.outline = self
 	}
 
