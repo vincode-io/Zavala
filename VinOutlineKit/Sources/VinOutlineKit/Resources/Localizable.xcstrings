@@ -27,6 +27,12 @@
             "state" : "translated",
             "value" : "Decimal"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "十进制"
+          }
         }
       }
     },
@@ -55,6 +61,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Legal"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "法律项目"
           }
         }
       }
@@ -85,6 +97,12 @@
             "state" : "translated",
             "value" : "None"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无"
+          }
         }
       }
     },
@@ -113,6 +131,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simple"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简单"
           }
         }
       }
@@ -155,6 +179,12 @@
             "state" : "translated",
             "value" : "All"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部"
+          }
         }
       }
     },
@@ -183,6 +213,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "An unexpected CloudKit error occurred."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发生了一个意外的 CloudKit 错误。"
           }
         }
       }
@@ -213,6 +249,12 @@
             "state" : "translated",
             "value" : "The iCloud database is incompatible with this version of the app. Please update to the latest app version to continue syncing."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 数据库与此版本的应用不兼容。请更新到最新版本的应用以继续同步。"
+          }
         }
       }
     },
@@ -241,6 +283,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "(No Title)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(无标题)"
           }
         }
       }
@@ -271,6 +319,12 @@
             "state" : "translated",
             "value" : "On My iPad"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在我的 iPad 上"
+          }
         }
       }
     },
@@ -299,6 +353,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "On My iPhone"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在我的 iPhone 上"
           }
         }
       }
@@ -329,6 +389,12 @@
             "state" : "translated",
             "value" : "On My Mac"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在我的 Mac 上"
+          }
         }
       }
     },
@@ -357,6 +423,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索"
           }
         }
       }
@@ -387,6 +459,12 @@
             "state" : "translated",
             "value" : "This Tag name already exists. Please choose a different name."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此标签名称已存在。请选择其他名称。"
+          }
         }
       }
     },
@@ -415,6 +493,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to access security scoped resource."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法访问受安全限制的资源。"
           }
         }
       }
@@ -445,6 +529,12 @@
             "state" : "translated",
             "value" : "Unable to deserialise the row data."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法反序列化行数据。"
+          }
         }
       }
     },
@@ -474,6 +564,12 @@
             "state" : "translated",
             "value" : "Unable to process the OPML data."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法处理 OPML 数据。"
+          }
         }
       }
     },
@@ -502,6 +598,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to read the import file."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取导入文件。"
           }
         }
       }
