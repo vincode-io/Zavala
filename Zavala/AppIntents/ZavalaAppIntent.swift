@@ -47,6 +47,7 @@ enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {
 	case noTagsSelected
 	case rowContainerNotFound
 	case unavailableAccount
+	case unableToParseOPML
 	case unexpectedError
 
 	var localizedStringResource: LocalizedStringResource {
@@ -65,6 +66,8 @@ enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {
 			return .rowContainerNotFound
 		case .unavailableAccount:
 			return .unavailableAccount
+		case .unableToParseOPML:
+			return .unableToParseOPML
 		case .unexpectedError:
 			return .unexpectedError
 		}

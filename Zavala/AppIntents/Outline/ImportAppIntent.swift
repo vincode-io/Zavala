@@ -60,10 +60,9 @@ struct ImportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
 		
 		guard let outline = try? await account.importOPML(inputFile.data, tags: nil, images: images).outline else {
 			await suspend()
-			throw ZavalaAppIntentError.unexpectedError
+			throw ZavalaAppIntentError.unableToParseOPML
 		}
 
-		
 		await suspend()
 		return await .result(value: OutlineAppEntity(outline: outline))
     }

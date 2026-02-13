@@ -14118,6 +14118,41 @@
         }
       }
     },
+    "label.text.unable-to-parse-opml" : {
+      "comment" : "Error text: The provided OPML input could not be parsed.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die bereitgestellte OPML-Eingabe konnte nicht analysiert werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The provided OPML input could not be parsed."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The provided OPML input could not be parsed."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The provided OPML input could not be parsed."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提供的 OPML 输入无法解析。"
+          }
+        }
+      }
+    },
     "label.text.uncomplete" : {
       "comment" : "Uncomplete",
       "localizations" : {
