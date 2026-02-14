@@ -521,7 +521,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "总是直接删除而不询问"
+            "value" : "永远直接删除，无需询问"
           }
         }
       }
@@ -1326,7 +1326,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "大纲将被删除且无法恢复。"
+            "value" : "此大纲将被彻底删除且无法恢复。"
           }
         }
       }
@@ -1361,7 +1361,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这些大纲将被删除且无法恢复。"
+            "value" : "这些大纲将被彻底删除且无法恢复。"
           }
         }
       }
@@ -5462,7 +5462,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "获取当前选中的标签名称（如果有）。"
+            "value" : "获取当前选中的标签名称（如果存在）。"
           }
         }
       }
@@ -6127,7 +6127,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "目的地"
+            "value" : "目标"
           }
         }
       }
@@ -6897,7 +6897,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "所有者 URL"
+            "value" : "所有者主页网址"
           }
         }
       }
@@ -9321,7 +9321,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "以各种格式导出大纲。"
+            "value" : "将大纲导出为多种格式。"
           }
         }
       }
@@ -10664,7 +10664,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "紧随其后"
+            "value" : "直接后方"
           }
         }
       }
@@ -10699,7 +10699,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "紧随其前"
+            "value" : "直接前方"
           }
         }
       }
@@ -11506,7 +11506,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "指定的目的地对于实体 ID 指定的实体无效。"
+            "value" : "指定的目标对于实体ID所指的实体无效。"
           }
         }
       }
@@ -12573,7 +12573,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此信息包含在 OPML 文档中，用于归属所有权。"
+            "value" : "此信息包含在 OPML 文档中，用于标注所有权。"
           }
         }
       }
@@ -12888,7 +12888,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "所有者 URL"
+            "value" : "所有者主页网址"
           }
         }
       }
@@ -13413,7 +13413,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "行目的地"
+            "value" : "行目标"
           }
         }
       }
@@ -14148,7 +14148,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "提供的 OPML 输入无法解析。"
+            "value" : "所提供的 OPML 导入后无法解析。"
           }
         }
       }
