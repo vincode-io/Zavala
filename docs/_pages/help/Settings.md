@@ -66,6 +66,13 @@ Zavala can automatically change a link into something readable buy fetching the 
 This is the default information that gets added to each Outline that you create. It is used when exporting OPML files.
 
 * Editor
+	* Create Rows
+
+	  When you are at the end of a row typing and hit return, the Editor can act in two different ways. The first is that it creates a Row directly under the current one as a child row. This is called “Indented With Children” and is the default. The other way is that it creates a Row at the same level under the children. This is called “Always At Same Level”.
+
+	  Different outliners do this differently and this setting is to accommodate users who might be used to a different outline behavior.
+
+
 	* Max Width
 
 	  Limiting the width of the Editor helps with readability. The Normal setting is generally considered the optimal readable width on computer screen. If that doesn’t feel like enough, there is a Wide setting and a Full Width one. 
