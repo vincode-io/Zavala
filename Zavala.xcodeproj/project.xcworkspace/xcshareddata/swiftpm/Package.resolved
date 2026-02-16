@@ -1,5 +1,5 @@
 {
-  "originHash" : "587267b8803208532b1f3541a16ff01b422fd3581ddde90b3447a42298a52f38",
+  "originHash" : "86c0600ea06f51b9b854dc96b6d3061fa02c627bb47ea32a905bbb6fdfbb0b41",
   "pins" : [
     {
       "identity" : "markdownattributedstring",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vincode-io/VinCloudKit.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "a8f400e10022512c4b7810378137ed02c10f3ec8"
+        "branch" : "release",
+        "revision" : "16038292caf595e58192e2f4f63e546f474e69f1"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vincode-io/VinUtility.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "1ad63056e01d008f3b3f373fee4d035411ba2b4f"
+        "branch" : "release",
+        "revision" : "ea6dfa874fa272ea39e9fce16a6a552ffe3e5677"
       }
     },
     {
@@ -78,7 +78,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vincode-io/VinXML.git",
       "state" : {
-        "branch" : "main",
+        "branch" : "release",
         "revision" : "38e83e0cf0c631e7f2aa1a0b73ac83e16f929c81"
       }
     }
