@@ -644,9 +644,9 @@ extension DocumentsViewController {
 		let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.documents[$0.row] }).first
 
 		let diff = sortedDocuments.difference(from: self.documents).inferringMoves()
-		self.documents = sortedDocuments
 
 		self.collectionView.performBatchUpdates {
+			self.documents = sortedDocuments
 			for change in diff {
 				switch change {
 				case .insert(let offset, _, let associated):
