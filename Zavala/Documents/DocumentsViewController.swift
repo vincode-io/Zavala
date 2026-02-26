@@ -312,7 +312,9 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 				do {
 					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
 					let document = try await account.importOPML(url, tags: tags)
-					
+
+					try await Task.sleep(for: .seconds(0.5))
+
 					await loadDocuments(animated: true)
 					openDocument(document, animated: true)
 					
