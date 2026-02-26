@@ -52,9 +52,11 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 			  let container = appDelegate.accountManager.findDocumentContainer(entityID),
 			  let account = container.account else { return }
 		
-		var tags: [Tag]? = nil
+		let tags: [Tag]?
 		if let tag = (container as? TagDocuments)?.tag {
 			tags = [tag]
+		} else {
+			tags = nil
 		}
 
 		// Dragging an OPML file into the Collections View
