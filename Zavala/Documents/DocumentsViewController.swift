@@ -308,7 +308,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			  let account = documentContainers.uniqueAccount else { return }
 
 		for url in urls {
-			Task {
+			Task { @MainActor in
 				do {
 					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
 					let document = try await account.importOPML(url, tags: tags)
