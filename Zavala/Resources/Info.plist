@@ -23,7 +23,7 @@
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>org.opml.opml</string>
+				<string>public.opml</string>
 			</array>
 		</dict>
 		<dict>
@@ -227,27 +227,8 @@ All Rights Reserved.</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UTExportedTypeDeclarations</key>
+	<key>UTImportedTypeDeclarations</key>
 	<array>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.xml</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>OPML</string>
-			<key>UTTypeIconFiles</key>
-			<array/>
-			<key>UTTypeIdentifier</key>
-			<string>org.opml.opml</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>opml</string>
-				</array>
-			</dict>
-		</dict>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -264,28 +245,6 @@ All Rights Reserved.</string>
 				<key>public.filename-extension</key>
 				<array>
 					<string>md</string>
-				</array>
-			</dict>
-		</dict>
-	</array>
-	<key>UTImportedTypeDeclarations</key>
-	<array>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.xml</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>OPML</string>
-			<key>UTTypeIconFiles</key>
-			<array/>
-			<key>UTTypeIdentifier</key>
-			<string>org.opml.opml</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>opml</string>
 				</array>
 			</dict>
 		</dict>

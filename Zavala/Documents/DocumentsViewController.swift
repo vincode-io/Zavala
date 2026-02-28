@@ -308,11 +308,13 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			  let account = documentContainers.uniqueAccount else { return }
 
 		for url in urls {
-			Task {
+			Task { @MainActor in
 				do {
 					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
 					let document = try await account.importOPML(url, tags: tags)
-					
+
+					try await Task.sleep(for: .seconds(0.5))
+
 					await loadDocuments(animated: true)
 					openDocument(document, animated: true)
 					
@@ -642,9 +644,9 @@ extension DocumentsViewController {
 		let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.documents[$0.row] }).first
 
 		let diff = sortedDocuments.difference(from: self.documents).inferringMoves()
-		self.documents = sortedDocuments
 
 		self.collectionView.performBatchUpdates {
+			self.documents = sortedDocuments
 			for change in diff {
 				switch change {
 				case .insert(let offset, _, let associated):
