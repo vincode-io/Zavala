@@ -58,3 +58,7 @@ This example is useful for logging information using a template Row as a startin
 ## [No Tag Outline Search](https://www.icloud.com/shortcuts/c3c00f5f032748f7b224cfc50b97a53d)
 
 If you want to make sure that every one of your Outlines has a Tag this is the Shortcut for you. It scans for Outlines with missing Tags and gives them a “No Tag” Tag. You can then add Tags to the found Outlines and delete the “No Tag” Tag when done.
+
+## [Use ChatGPT to Create an Outline](https://www.icloud.com/shortcuts/b05a939b9fb74e7fb20925b204a51d22)
+
+Sometimes just getting started is the hardest part. Here we use ChatGPT to create an outline of features that an outliner application should have. You can customize this Shortcut by changing the first sentence in the ChatGPT box to what ever interests you. Now you have an outline you can edit and customize in Zavala to get you started.
