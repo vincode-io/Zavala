@@ -26,6 +26,9 @@ private let emphasisSingleEnd = "_"
 private let emphasisDoubleStart = "**"
 private let emphasisDoubleEnd = "**"
 
+private let codeInlineStart = "`"
+private let codeInlineEnd = "`"
+
 private let escapeCharacter: unichar = UInt16(("\\").utf16.first!)
 private let spaceCharacter: unichar = UInt16((" ").utf16.first!)
 private let tabCharacter: unichar = UInt16(("\t").utf16.first!)
@@ -51,6 +54,7 @@ struct AttributedStringMarkdownEmitter {
 
 		var inBoldRun = false
 		var inItalicRun = false
+		var inCodeRun = false
 
 		var index = 0
 		while index < normalizedLength {
@@ -79,7 +83,8 @@ struct AttributedStringMarkdownEmitter {
 						currentAttributes: currentAttributes,
 						nextAttributes: nextAttributes,
 						inBoldRun: &inBoldRun,
-						inItalicRun: &inItalicRun
+						inItalicRun: &inItalicRun,
+						inCodeRun: &inCodeRun
 					)
 					currentComponentRange.location = currentComponentRange.location + (component as NSString).length + visualLineBreakOffset
 					visualLineBreakOffset = (visualLineBreak as NSString).length
@@ -93,7 +98,8 @@ struct AttributedStringMarkdownEmitter {
 					currentAttributes: currentAttributes,
 					nextAttributes: nextAttributes,
 					inBoldRun: &inBoldRun,
-					inItalicRun: &inItalicRun
+					inItalicRun: &inItalicRun,
+					inCodeRun: &inCodeRun
 				)
 			}
 
@@ -129,10 +135,13 @@ struct AttributedStringMarkdownEmitter {
 				}
 			}
 
+			let rangeHasCode = attributes[.codeInline] != nil
+
 			let text = (attributedString.string as NSString).substring(with: range)
 			let boldChar = rangeHasBold ? "B" : " "
 			let italicChar = rangeHasItalic ? "I" : " "
-			result += "[\(text)](\(boldChar)\(italicChar))\(linkString)"
+			let codeChar = rangeHasCode ? "C" : " "
+			result += "[\(text)](\(boldChar)\(italicChar)\(codeChar))\(linkString)"
 		}
 
 		result = result.replacingOccurrences(of: "\n", with: "\\n")
@@ -307,7 +316,8 @@ private func emitMarkdown(
 	currentAttributes: [NSAttributedString.Key: Any],
 	nextAttributes: [NSAttributedString.Key: Any]?,
 	inBoldRun: inout Bool,
-	inItalicRun: inout Bool
+	inItalicRun: inout Bool,
+	inCodeRun: inout Bool
 ) {
 	let trimmed = currentString.trimmingCharacters(in: .whitespaces)
 	if trimmed.isEmpty {
@@ -372,6 +382,9 @@ private func emitMarkdown(
 		let nextRangeHasItalic = nextSymbolicTraits.contains(.italic)
 		#endif
 
+		let currentRangeHasCode = currentAttributes[.codeInline] != nil
+		let nextRangeHasCode = nextAttributes?[.codeInline] != nil
+
 		var needsEscaping = true
 
 		if currentRangeHasBold {
@@ -387,6 +400,14 @@ private func emitMarkdown(
 			}
 		}
 
+		if currentRangeHasCode {
+			needsEscaping = false
+			if !inCodeRun {
+				prefixString += codeInlineStart
+				inCodeRun = true
+			}
+		}
+
 		if currentRangeHasLink {
 			if let currentRangeURL {
 				prefixString += linkInlineStart
@@ -398,6 +419,12 @@ private func emitMarkdown(
 			}
 		}
 
+		if !nextRangeHasCode {
+			if inCodeRun {
+				suffixString += codeInlineEnd
+				inCodeRun = false
+			}
+		}
 		if !nextRangeHasItalic {
 			if inItalicRun {
 				suffixString += emphasisSingleEnd

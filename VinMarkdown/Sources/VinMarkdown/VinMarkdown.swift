@@ -22,6 +22,10 @@ let vinItalicTrait = NSFontDescriptor.SymbolicTraits.italic
 let vinFamilyAttribute = NSFontDescriptor.AttributeName.family
 #endif
 
+public extension NSAttributedString.Key {
+	static let codeInline: NSAttributedString.Key = .init("io.vincode.VinMarkdown.CodeInline")
+}
+
 public extension NSAttributedString {
 
 	var markdownRepresentation: String {

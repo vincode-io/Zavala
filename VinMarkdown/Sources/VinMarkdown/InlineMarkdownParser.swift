@@ -51,11 +51,15 @@ private let spaceCharacter: unichar = UInt16((" ").utf16.first!)
 private let tabCharacter: unichar = UInt16(("\t").utf16.first!)
 private let newlineCharacter: unichar = UInt16(("\n").utf16.first!)
 
+private let codeInlineStart = "`"
+private let codeInlineEnd = "`"
+
 private enum MarkdownSpanType {
 	case emphasisSingle
 	case emphasisDouble
 	case linkInline
 	case linkAutomatic
+	case codeInline
 }
 
 struct InlineMarkdownParser {
@@ -87,6 +91,9 @@ struct InlineMarkdownParser {
 		let linkInlineDividerMarker = linkInlineStartDivider + linkInlineEndDivider
 		updateAttributedString(result, beginMarker: linkInlineStart, dividerMarker: linkInlineDividerMarker, endMarker: linkInlineEnd, spanType: .linkInline)
 		updateAttributedString(result, beginMarker: linkAutomaticStart, dividerMarker: nil, endMarker: linkAutomaticEnd, spanType: .linkAutomatic)
+
+		// Process inline code (backticks) before emphasis so content inside code is not styled
+		updateAttributedString(result, beginMarker: codeInlineStart, dividerMarker: nil, endMarker: codeInlineEnd, spanType: .codeInline)
 
 		// Process double emphasis (** and __)
 		updateAttributedString(result, beginMarker: emphasisDoubleStart, dividerMarker: nil, endMarker: emphasisDoubleEnd, spanType: .emphasisDouble)
@@ -176,7 +183,7 @@ private func updateAttributedString(_ result: NSMutableAttributedString, beginMa
 		let skipEscapedMarker = hasCharacterRelative(scanString, range: beginRange, offset: -1, character: escapeCharacter)
 
 		var skipLiteralOrListMarker = false
-		if beginRange.length == 1 {
+		if beginRange.length == 1 && spanType != .codeInline {
 			let hasPrefixStartOfLine = beginRange.location == 0 || hasCharacterRelative(scanString, range: beginRange, offset: -1, character: newlineCharacter)
 			let hasPrefixSpace = hasCharacterRelative(scanString, range: beginRange, offset: -1, character: spaceCharacter)
 			let hasSuffixSpace = hasCharacterRelative(scanString, range: beginRange, offset: +1, character: spaceCharacter)
@@ -188,10 +195,14 @@ private func updateAttributedString(_ result: NSMutableAttributedString, beginMa
 		}
 
 		var skipLinkedText = false
+		var skipCodeBlock = false
 		let mutatedIndex = Int(beginRange.location) - mutationOffset
 		if mutatedIndex >= 0 && mutatedIndex < result.length {
 			if result.attribute(.link, at: mutatedIndex, effectiveRange: nil) != nil {
 				skipLinkedText = true
+			}
+			if result.attribute(.codeInline, at: mutatedIndex, effectiveRange: nil) != nil {
+				skipCodeBlock = true
 			}
 		}
 
@@ -202,7 +213,7 @@ private func updateAttributedString(_ result: NSMutableAttributedString, beginMa
 			}
 		}
 
-		if skipEscapedMarker || skipLiteralOrListMarker || skipLinkedText || skipHorizontalRule {
+		if skipEscapedMarker || skipLiteralOrListMarker || skipLinkedText || skipCodeBlock || skipHorizontalRule {
 			scanIndex = beginRange.location + beginRange.length
 		} else {
 			let beginIndex = beginRange.location + beginRange.length
@@ -248,7 +259,7 @@ private func updateAttributedString(_ result: NSMutableAttributedString, beginMa
 						let hasEscapeMarker = hasCharacterRelative(scanString, range: endRange, offset: -1, character: escapeCharacter)
 						let hasPrefixSpace = hasCharacterRelative(scanString, range: endRange, offset: -1, character: spaceCharacter)
 						let hasSuffixSpace = hasCharacterRelative(scanString, range: endRange, offset: +1, character: spaceCharacter)
-						if !hasEscapeMarker && !(hasPrefixSpace && hasSuffixSpace) {
+						if !hasEscapeMarker && (spanType == .codeInline || !(hasPrefixSpace && hasSuffixSpace)) {
 							foundEndMarker = true
 							break
 						}
@@ -283,6 +294,12 @@ private func updateAttributedString(_ result: NSMutableAttributedString, beginMa
 				case .emphasisDouble:
 					if beginIndex != endIndex {
 						replaceMarkers = true
+					}
+
+				case .codeInline:
+					if beginIndex != endIndex {
+						replaceMarkers = true
+						replacementAttributes = [.codeInline: true]
 					}
 
 				case .linkInline:
