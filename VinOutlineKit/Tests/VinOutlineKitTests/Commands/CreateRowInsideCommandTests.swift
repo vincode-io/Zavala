@@ -10,17 +10,17 @@ final class CreateRowInsideCommandTests: VOKTestCase {
         let undoManager = UndoManager()
         let outline = try await loadOutline(accountManager: accountManager)
         let parentRow = try #require(outline.rows.first)
-        let originalChildCount = parentRow.rowCount
-		
+        let originalChildCount = parentRow.rows.count
+
         let command = CreateRowInsideCommand(actionName: "CreateInside", undoManager: undoManager, delegate: self, outline: outline, afterRow: parentRow, rowStrings: nil)
         command.execute()
-        #expect(parentRow.rowCount == originalChildCount + 1)
-		
+        #expect(parentRow.rows.count == originalChildCount + 1)
+
         undoManager.undo()
-        #expect(parentRow.rowCount == originalChildCount)
-		
+        #expect(parentRow.rows.count == originalChildCount)
+
         undoManager.redo()
-        #expect(parentRow.rowCount == originalChildCount + 1)
+        #expect(parentRow.rows.count == originalChildCount + 1)
 		
         deleteAccountManager(accountManager)
     }

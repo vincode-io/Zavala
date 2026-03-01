@@ -10,7 +10,7 @@ final class RemoteDropRowCommandTests: VOKTestCase {
         let undoManager = UndoManager()
         let outline = try await loadOutline(accountManager: accountManager)
         let afterRow = try #require(outline.rows.last)
-		let origingalRowCount = outline.rowCount
+		let origingalRowCount = outline.rows.count
 		
 		let row = Row(outline: outline, topicMarkdown: "This is a test.")
         let rowGroup = RowGroup(row)

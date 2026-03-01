@@ -14,15 +14,15 @@ final class GroupRowsCommandTests: VOKTestCase {
 		
         let command = GroupRowsCommand(actionName: "GroupRows", undoManager: undoManager, delegate: self, outline: outline, rows: [first, second], rowStrings: nil)
         command.execute()
-		#expect(outline.rows[4].rowCount == 2)
+		#expect(outline.rows[4].rows.count == 2)
 		#expect(outline.rows[4] == first.parent as? Row)
 		#expect(outline.rows[4] == second.parent as? Row)
 		
         undoManager.undo()
-		#expect(outline.rows[4].rowCount == 0)
-		
+		#expect(outline.rows[4].rows.count == 0)
+
         undoManager.redo()
-		#expect(outline.rows[4].rowCount == 2)
+		#expect(outline.rows[4].rows.count == 2)
 		
         deleteAccountManager(accountManager)
     }

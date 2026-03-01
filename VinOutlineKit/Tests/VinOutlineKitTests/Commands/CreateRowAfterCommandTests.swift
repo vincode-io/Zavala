@@ -18,12 +18,12 @@ final class CreateRowAfterCommandTests: VOKTestCase {
 											afterRow: afterRow,
 											rowStrings: nil,
 											childRowIndent: true)
-		let originalCount = outline.rows.first?.rowCount ?? 0
+		let originalCount = outline.rows.first?.rows.count ?? 0
         command.execute()
-        #expect(outline.rows.first?.rowCount ?? 0 == originalCount + 1)
+        #expect(outline.rows.first?.rows.count ?? 0 == originalCount + 1)
 
         undoManager.undo()
-        #expect(outline.rows.first?.rowCount ?? 0 == originalCount)
+        #expect(outline.rows.first?.rows.count ?? 0 == originalCount)
         deleteAccountManager(accountManager)
     }
 	
@@ -41,12 +41,12 @@ final class CreateRowAfterCommandTests: VOKTestCase {
 											afterRow: afterRow,
 											rowStrings: nil,
 											childRowIndent: false)
-		let originalCount = outline.rowCount
+		let originalCount = outline.rows.count
 		command.execute()
-		#expect(outline.rowCount == originalCount + 1)
+		#expect(outline.rows.count == originalCount + 1)
 
 		undoManager.undo()
-		#expect(outline.rowCount == originalCount)
+		#expect(outline.rows.count == originalCount)
 		deleteAccountManager(accountManager)
 	}
 

@@ -11,7 +11,7 @@ final class SplitRowCommandTests: VOKTestCase {
         let outline = try await loadOutline(accountManager: accountManager)
         let row = try #require(outline.rows.last)
         let attrString = NSAttributedString(string: "hello world")
-		let originalRowCount = outline.rowCount
+		let originalRowCount = outline.rows.count
 		
 		let command = SplitRowCommand(actionName: "SplitRow",
 									  undoManager: undoManager,
