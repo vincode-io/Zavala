@@ -463,7 +463,25 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 #if canImport(UIKit)
 			if let markdown {
 				let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
-				let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+				let baseFont = UIFont.preferredFont(forTextStyle: .body)
+				let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : baseFont])
+				
+				// Apply monospace font to code inline ranges so that the font trait survives
+				// RTF serialization. The restoreCodeInlineAttributes() method will detect the
+				// monospace trait and re-apply the .codeInline attribute on deserialization.
+				attrString.enumerateAttribute(.codeInline, in: NSRange(location: 0, length: attrString.length), options: []) { value, range, _ in
+					guard value != nil else { return }
+					let size = baseFont.pointSize
+					var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
+					if let currentFont = attrString.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont {
+						let traits = currentFont.fontDescriptor.symbolicTraits
+						if let descriptor = monoFont.fontDescriptor.withSymbolicTraits(traits) {
+							monoFont = UIFont(descriptor: descriptor, size: size)
+						}
+					}
+					attrString.addAttribute(.font, value: monoFont, range: range)
+				}
+				
 				let strippedString = attrString.string
 				let matches = regEx.allMatches(in: strippedString)
 				
@@ -746,7 +764,25 @@ private extension Row {
 
 		#if canImport(UIKit)
 		let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
-		let result = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+		let baseFont = UIFont.preferredFont(forTextStyle: .body)
+		let result = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : baseFont])
+		
+		// Apply monospace font to code inline ranges so that the font trait survives
+		// RTF serialization. The restoreCodeInlineAttributes() method will detect the
+		// monospace trait and re-apply the .codeInline attribute on deserialization.
+		result.enumerateAttribute(.codeInline, in: NSRange(location: 0, length: result.length), options: []) { value, range, _ in
+			guard value != nil else { return }
+			let size = baseFont.pointSize
+			var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
+			if let currentFont = result.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont {
+				let traits = currentFont.fontDescriptor.symbolicTraits
+				if let descriptor = monoFont.fontDescriptor.withSymbolicTraits(traits) {
+					monoFont = UIFont(descriptor: descriptor, size: size)
+				}
+			}
+			result.addAttribute(.font, value: monoFont, range: range)
+		}
+		
 		let strippedString = result.string
 		let matches = regEx.allMatches(in: strippedString)
 		
