@@ -1,0 +1,12 @@
+# VinMarkdown
+
+This is a fairly faithful port of Craig Chockenberry's [MarkdownAttributedString](https://github.com/chockenberry/MarkdownAttributedString).
+
+I needed some enhancements made to the original MarkdownAttributedString for [Zavala](https://github.com/vincode-io/Zavala). Because I was
+struggling with the Objective-C in MarkdownAttributedString, I had [Claude](https://claude.ai) translate it to Swift. It was also supposed
+to use [swift-markdown](https://github.com/apple/swift-markdown.git) for parsing and emitting. Claude and I even discussed this and agreed
+together to use swift-markdown. Claude didn't use it.
+
+You can consider this project to be a Swift fork of MarkdownAttributedString with some stuff specific to Zavala that may or may not work
+with what you are doing. You are probably better off using the original MarkdownAttributedString than this project. It is production
+proven and I haven't gotten my fingers into it.
