@@ -7,6 +7,7 @@
 
 import UIKit
 import AsyncAlgorithms
+import VinMarkdown
 import VinOutlineKit
 import VinUtility
 
@@ -70,7 +71,27 @@ class EditorRowTextView: UITextView, EditorTextInput {
 		}
 		return false
 	}
-		
+	
+	var isCodeInlineToggledOn: Bool {
+		if typingAttributes[.codeInline] != nil {
+			return true
+		}
+		// Also check the text storage at the cursor, since UIKit doesn't propagate
+		// custom attributes into typingAttributes on click/tap.
+		guard selectedRange.length == 0 else { return false }
+		if selectedRange.location > 0 {
+			if textStorage.attribute(.codeInline, at: selectedRange.location - 1, effectiveRange: nil) != nil {
+				return true
+			}
+		}
+		if selectedRange.location < textStorage.length {
+			if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
+				return true
+			}
+		}
+		return false
+	}
+	
 	var isSelecting: Bool {
 		return !(selectedTextRange?.isEmpty ?? true)
 	}
@@ -163,6 +184,8 @@ class EditorRowTextView: UITextView, EditorTextInput {
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .editLink:
+			return isFirstResponder
+		case .toggleCodeInline:
 			return isFirstResponder
 		case .toggleUnderline:
 			return false
@@ -290,11 +313,32 @@ class EditorRowTextView: UITextView, EditorTextInput {
         fatalError("editLink has not been implemented")
     }
 
+	@objc func toggleCodeInline(_ sender: Any?) {
+		if selectedRange.length > 0 {
+			textStorage.beginEditing()
+			if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
+				textStorage.removeAttribute(.codeInline, range: selectedRange)
+			} else {
+				textStorage.addAttribute(.codeInline, value: true, range: selectedRange)
+			}
+			textStorage.endEditing()
+			processTextChanges()
+		} else {
+			if typingAttributes[.codeInline] != nil {
+				typingAttributes.removeValue(forKey: .codeInline)
+			} else {
+				typingAttributes[.codeInline] = true
+			}
+		}
+	}
+
 	@objc func insertNewline(_ sender: Any) {
 		insertText("\n")
 	}
 	
 	func handleDidChangeSelection() {
+		syncCodeInlineTypingAttributes()
+
 		guard let selectedTextRange, !selectedTextRange.isEmpty else {
 			previousSelectedTextRange = nil
 			return
@@ -358,7 +402,39 @@ extension EditorRowTextView: UITextDropDelegate {
 // MARK: Helpers
 
 extension EditorRowTextView {
-   
+
+	/// Syncs .codeInline and its visual attributes in typingAttributes based on the character at the cursor.
+	/// UIKit doesn't natively propagate custom attributes, so we must do this manually.
+	func syncCodeInlineTypingAttributes() {
+		guard selectedRange.length == 0 else { return }
+		
+		var isCodeInline = false
+		
+		// Check the character before the cursor
+		if selectedRange.location > 0 {
+			if textStorage.attribute(.codeInline, at: selectedRange.location - 1, effectiveRange: nil) != nil {
+				isCodeInline = true
+			}
+		}
+		
+		// Also check the character at the cursor position (for tapping at the start of a code inline run)
+		if !isCodeInline && selectedRange.location < textStorage.length {
+			if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
+				isCodeInline = true
+			}
+		}
+		
+		if isCodeInline {
+			typingAttributes[.codeInline] = true
+		} else {
+			typingAttributes[.codeInline] = nil
+			if let baseForeground = baseAttributes[.foregroundColor] {
+				typingAttributes[.foregroundColor] = baseForeground
+			}
+			typingAttributes[.backgroundColor] = nil
+		}
+	}
+
 	func startActivityMonitoring() {
 		inactivityTask = Task {
 			for await _ in activityChannel.debounce(for: .seconds(5.0)) {
@@ -446,6 +522,8 @@ extension EditorRowTextView {
         if selectedRange.location == 0 && selectedRange.length == 0 {
 			typingAttributes[.link] = nil
 		}
+		
+		syncCodeInlineTypingAttributes()
         
         isTextChanged = true
 

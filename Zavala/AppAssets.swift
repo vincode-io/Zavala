@@ -34,6 +34,7 @@ extension UIImage {
 	static let bullet = UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
 
 	static let cancel = UIImage(systemName: "xmark")!
+	static let codeInline = UIImage(systemName: "chevron.left.forwardslash.chevron.right")!
 	static let collaborating = UIImage(systemName: "person.crop.circle.badge.checkmark")!
 	static let collapseAll = UIImage(systemName: "arrow.down.right.and.arrow.up.left")!
 	static let community = UIImage(systemName: "bubble")!
@@ -182,6 +183,7 @@ extension String {
 	static let backlinksLabel = String(localized: "label.text.backlinks", comment: "Label: Backlinks")
 	static let blueControlLabel = String(localized: "button.text.set-font-blue", comment: "Set Font Color Action: Blue")
 	static let boldControlLabel = String(localized: "button.text.set-font-bold", comment: "Set Font Weight Action: Bold")
+	static let codeInlineControlLabel = String(localized: "button.text.set-font-code-inline", comment: "Set Font Action: Code Inline")
 	static let brownControlLabel = String(localized: "button.text.set-font-brown", comment: "Set Font Color Action: Brown")
 	static let bugTrackerControlLabel = String(localized: "label.text.bug-tracker", comment: "Label: Bug Tracker")
 	

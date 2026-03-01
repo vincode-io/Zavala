@@ -255,6 +255,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 			guard let topic = topicData else { return nil }
 			if topicCache == nil {
 				topicCache = topic.toAttributedString()
+				topicCache = restoreCodeInlineAttributes(topicCache)
 				topicCache = replaceImages(attrString: topicCache, isNotes: false)
 			}
 			return topicCache
@@ -286,6 +287,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 			guard let note = noteData else { return nil }
 			if noteCache == nil {
 				noteCache = note.toAttributedString()
+				noteCache = restoreCodeInlineAttributes(noteCache)
 				noteCache = replaceImages(attrString: noteCache, isNotes: true)
 			}
 			return noteCache
@@ -789,6 +791,27 @@ private extension Row {
 		} else {
 			attrString.insert(imageAttrText, at: attrString.length)
 		}
+		#endif
+	}
+
+	// This hack really sucks, but since RTF doesn't encode custom attributes, we don't have much choice. Should have persisted
+	// using Markdown.
+	func restoreCodeInlineAttributes(_ attrString: NSAttributedString?) -> NSAttributedString? {
+		#if canImport(UIKit)
+		guard let attrString, attrString.length > 0 else { return attrString }
+		
+		let mutable = NSMutableAttributedString(attributedString: attrString)
+		
+		mutable.enumerateAttribute(.font, in: NSRange(location: 0, length: mutable.length), options: []) { value, range, _ in
+			guard let font = value as? UIFont else { return }
+			if font.fontDescriptor.symbolicTraits.contains(.traitMonoSpace) {
+				mutable.addAttribute(.codeInline, value: true, range: range)
+			}
+		}
+		
+		return mutable
+		#else
+		return attrString
 		#endif
 	}
 	

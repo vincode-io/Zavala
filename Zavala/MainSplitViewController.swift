@@ -873,6 +873,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.link,
 			.boldface,
 			.italic,
+			.codeInline,
 			.flexibleSpace,
 			.share,
 			.space,
@@ -880,7 +881,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.filter,
 		]
 	}
-	
+
 	func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 		return [
 			.sync,
@@ -895,6 +896,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.note,
 			.boldface,
 			.italic,
+			.codeInline,
 			.focus,
 			.filter,
 			.expandAllInOutline,
@@ -1141,6 +1143,22 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = .italicControlLabel
 			item.isBordered = true
 			item.action = .toggleItalics
+			toolbarItem = item
+		case .codeInline:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if self?.editorViewController?.isCodeInlineToggledOn ?? false {
+					item.image = .codeInline.withTintColor(.systemBlue)
+				} else {
+					item.image = .codeInline
+				}
+				return !UIResponder.valid(action: .toggleCodeInline)
+			}
+			item.image = .codeInline
+			item.label = .codeInlineControlLabel
+			item.toolTip = .codeInlineControlLabel
+			item.isBordered = true
+			item.action = .toggleCodeInline
 			toolbarItem = item
 		case .expandAllInOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

@@ -59,6 +59,7 @@ extension Selector {
 	static let editorLink = #selector(EditorViewController.editorLink(_:))
 	static let editorToggleBoldface = #selector(EditorViewController.editorToggleBoldface(_:))
 	static let editorToggleItalics = #selector(EditorViewController.editorToggleItalics(_:))
+	static let editorToggleCodeInline = #selector(EditorViewController.editorToggleCodeInline(_:))
 }
 
 @MainActor
@@ -202,6 +203,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return currentRowTextView?.isItalicToggledOn ?? false
 	}
 
+	var isCodeInlineToggledOn: Bool {
+		return currentRowTextView?.isCodeInlineToggledOn ?? false
+	}
+
 	var isSearching = false
 	var isFocusing: Bool {
 		guard let outline else { return false }
@@ -281,6 +286,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var formatMenuButtonGroup: ButtonGroup!
 	private var boldButton: ButtonGroup.Button!
 	private var italicButton: ButtonGroup.Button!
+	private var codeInlineButton: ButtonGroup.Button!
 	private var linkButton: ButtonGroup.Button!
 
 	private var keyboardToolBar: UIToolbar!
@@ -1096,6 +1102,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		linkButton.isEnabled = UIResponder.valid(action: .editLink)
 		boldButton.isEnabled = UIResponder.valid(action: .toggleBoldface)
 		italicButton.isEnabled = UIResponder.valid(action: .toggleItalics)
+		codeInlineButton.isEnabled = UIResponder.valid(action: .toggleCodeInline)
 		
 		// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
 		// only have one row selected at a time while editing and that row either has a note
@@ -1409,7 +1416,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentRowTextView?.toggleItalics(self)
 	}
-	
+
+	@objc func editorToggleCodeInline(_ sender: Any? = nil) {
+		rightToolbarButtonGroup.dismissPopOverMenu()
+		currentRowTextView?.toggleCodeInline(self)
+	}
+
 	func share(sourceView: UIView? = nil) {
 		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
 		if let sourceView {
@@ -2122,6 +2134,8 @@ private extension EditorViewController {
 		boldButton = formatMenuButtonGroup.addButton(label: .boldControlLabel, image: boldImage, target: self, selector: .editorToggleBoldface)
 		let italicImage = UIImage.italic.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
 		italicButton = formatMenuButtonGroup.addButton(label: .italicControlLabel, image: italicImage, target: self, selector: .editorToggleItalics)
+		let codeInlineImage = UIImage.codeInline.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		codeInlineButton = formatMenuButtonGroup.addButton(label: .codeInlineControlLabel, image: codeInlineImage, target: self, selector: .editorToggleCodeInline)
 
 		rightToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
 		insertImageButton = rightToolbarButtonGroup.addButton(label: .insertImageControlLabel, image: .insertImage, selector: .insertImage)

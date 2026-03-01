@@ -271,6 +271,7 @@ extension NSToolbarItem.Identifier {
 	static let note = NSToolbarItem.Identifier("io.vincode.Zavala.note")
 	static let boldface = NSToolbarItem.Identifier("io.vincode.Zavala.boldface")
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
+	static let codeInline = NSToolbarItem.Identifier("io.vincode.Zavala.codeInline")
 	static let expandAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.expandAllInOutline")
 	static let collapseAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.collapseAllInOutline")
 	static let moveRight = NSToolbarItem.Identifier("io.vincode.Zavala.moveRight")

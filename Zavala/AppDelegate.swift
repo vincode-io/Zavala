@@ -216,7 +216,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		keyCommand.image = .italic
 		return keyCommand
 	}()
-	
+
+	let toggleCodeInlineCommand: UIKeyCommand = {
+		let monoFont = UIFont.monospacedSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize, weight: .regular)
+		let attributedTitle = NSAttributedString(string: .codeInlineControlLabel, attributes: [.font: monoFont])
+		let keyCommand = UIKeyCommand(title: .codeInlineControlLabel, action: .toggleCodeInline, input: "c", modifierFlags: [.command, .shift])
+		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
+		keyCommand.image = .codeInline
+		return keyCommand
+	}()
+
 	let insertImageCommand = UIKeyCommand(title: .insertImageEllipsisControlLabel,
 										  image: .insertImage,
 										  action: .insertImage,
@@ -611,7 +620,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 
 		// Format
 		builder.remove(menu: .format)
-		let formatMenu = UIMenu(title: .formatControlLabel, children: [toggleBoldCommand, toggleItalicsCommand])
+		let formatMenu = UIMenu(title: .formatControlLabel, children: [toggleBoldCommand, toggleItalicsCommand, toggleCodeInlineCommand])
 		builder.insertSibling(formatMenu, afterMenu: .edit)
 
 		// View Menu

@@ -24,4 +24,5 @@ extension Selector {
 	static let toggleBoldface = #selector(UIResponder.toggleBoldface(_:))
 	static let toggleItalics = #selector(UIResponder.toggleItalics(_:))
 	static let toggleUnderline = #selector(UIResponder.toggleUnderline(_:))
+	static let toggleCodeInline = #selector(EditorRowTextView.toggleCodeInline(_:))
 }

@@ -3,6 +3,7 @@
 //
 
 import UIKit
+import VinMarkdown
 import VinOutlineKit
 
 final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
@@ -23,6 +24,9 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 			textStorage.ensureAttributesAreFixed(in: attributeRange)
 			newTypingAttributes = textStorage.attributes(at: attributeLocation, effectiveRange: nil)
 			newTypingAttributes.removeValue(forKey: .font)
+			newTypingAttributes.removeValue(forKey: .codeInline)
+			newTypingAttributes.removeValue(forKey: .foregroundColor)
+			newTypingAttributes.removeValue(forKey: .backgroundColor)
 		} else {
 			newTypingAttributes = baseAttributes
 		}
@@ -38,8 +42,12 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 					newAttributes[.foregroundColor] = UIColor.black
 				}
 				
-				// We don't allow underlines or background colors when pasting. Same goes for lists which are denoted by paragraph styles
-				if key == .underlineStyle || key == .backgroundColor || key == .paragraphStyle {
+				// We don't allow underlines or background colors when pasting. Same goes for lists which are denoted by paragraph styles.
+				// Background colors are preserved for inline code styling.
+				if key == .underlineStyle || key == .paragraphStyle {
+					newAttributes[key] = nil
+				}
+				if key == .backgroundColor && attributes[.codeInline] == nil {
 					newAttributes[key] = nil
 				}
 				
@@ -51,19 +59,38 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 				}
 
 				if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = baseAttributes[.font] as? UIFont {
-					let charsInRange = textStorage.attributedSubstring(from: range).string
-					if charsInRange.containsEmoji || charsInRange.containsSymbols {
-						newAttributes[key] = oldFont.withSize(newFont.pointSize)
-					} else {
-						let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
-						let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
-						
-						if newFont.isValidFor(value: charsInRange) {
-							newAttributes[key] = newFont
+					// Skip font normalization for inline code; the .codeInline handler sets the monospaced font.
+					if attributes[.codeInline] == nil {
+						let charsInRange = textStorage.attributedSubstring(from: range).string
+						if charsInRange.containsEmoji || charsInRange.containsSymbols {
+							newAttributes[key] = oldFont.withSize(newFont.pointSize)
 						} else {
-							newAttributes[key] = oldFont
+							let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
+							let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
+							
+							if newFont.isValidFor(value: charsInRange) {
+								newAttributes[key] = newFont
+							} else {
+								newAttributes[key] = oldFont
+							}
 						}
 					}
+				}
+				
+				if key == .codeInline {
+					if let baseFont = baseAttributes[.font] as? UIFont {
+						let size = baseFont.pointSize - 1
+						var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
+						if let currentFont = newAttributes[.font] as? UIFont {
+							let traits = currentFont.fontDescriptor.symbolicTraits
+							if let descriptor = monoFont.fontDescriptor.withSymbolicTraits(traits) {
+								monoFont = UIFont(descriptor: descriptor, size: size)
+							}
+						}
+						newAttributes[.font] = monoFont
+					}
+					newAttributes[.foregroundColor] = UIColor.secondaryLabel
+					newAttributes[.backgroundColor] = UIColor.secondarySystemFill
 				}
 				
 				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {
