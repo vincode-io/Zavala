@@ -21,3 +21,25 @@ let vinBoldTrait = NSFontDescriptor.SymbolicTraits.bold
 let vinItalicTrait = NSFontDescriptor.SymbolicTraits.italic
 let vinFamilyAttribute = NSFontDescriptor.AttributeName.family
 #endif
+
+public extension NSAttributedString {
+
+	var markdownRepresentation: String {
+		return AttributedStringMarkdownEmitter.markdownRepresentation(of: self)
+	}
+
+	var markdownDebug: String {
+		return AttributedStringMarkdownEmitter.debugRepresentation(of: self)
+	}
+
+}
+
+public extension NSMutableAttributedString {
+
+	convenience init(markdownRepresentation: String, attributes: [NSAttributedString.Key: Any]) {
+		let parsed = InlineMarkdownParser.parse(markdown: markdownRepresentation, baseAttributes: attributes)
+		self.init(attributedString: parsed)
+	}
+
+}
+
