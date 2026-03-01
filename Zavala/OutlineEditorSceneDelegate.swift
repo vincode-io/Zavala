@@ -7,7 +7,9 @@
 
 import UIKit
 import CloudKit
+import UniformTypeIdentifiers
 import VinOutlineKit
+import VinUtility
 
 class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -26,8 +28,8 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		editorContainerViewController = EditorContainerViewController()
 		window!.rootViewController = editorContainerViewController
 		window!.makeKeyAndVisible()
-
 		updateUserInterfaceStyle()
+
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncWillBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncDidComplete, object: nil)
@@ -101,18 +103,36 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 			if let scene =  UIApplication.shared.connectedScenes.first(where: {
 				(($0 as? UIWindowScene)?.keyWindow?.rootViewController as? MainCoordinator)?.selectedDocuments.first?.id == documentID
 			}) {
-				
 				UIApplication.shared.requestSceneSessionActivation(scene.session, userActivity: nil, options: nil, errorHandler: nil)
-				
 			} else {
-				
 				let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 				activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, documentID: documentID).userInfo]
 				UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-				
+			}
+
+			return
+		}
+
+		guard let account = appDelegate.accountManager.activeAccounts.first else { return }
+
+		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == UTType.opml.preferredFilenameExtension }).map({ $0.url })
+
+		for url in opmlURLs {
+			Task { @MainActor in
+				if let document = try? await account.importOPML(url, tags: nil) {
+					DocumentIndexer.updateIndex(forDocument: document)
+					let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+					activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, document: document).userInfo]
+					UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+				}
 			}
 		}
-		
+		#if targetEnvironment(macCatalyst)
+		Task { @MainActor in
+			try? await Task.sleep(for: .seconds(1))
+			appDelegate.appKitPlugin?.clearRecentDocuments()
+		}
+		#endif
 	}
 	
 	func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
