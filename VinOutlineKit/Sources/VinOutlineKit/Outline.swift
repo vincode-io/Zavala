@@ -1757,7 +1757,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		resetPreviouslyUsed(rows: rows)
 		
 		var reloads = Set<Int>()
-		let beginningRowCount = rows.count
+		let beginningRowCount = self.rows.count
 
 		for row in rows.sortedByReverseDisplayOrder() {
 			if afterRow == nil {
