@@ -9,4 +9,4 @@ together to use swift-markdown. Claude didn't use it.
 
 You can consider this project to be a Swift fork of MarkdownAttributedString with some stuff specific to Zavala that may or may not work
 with what you are doing. You are probably better off using the original MarkdownAttributedString than this project. It is production
-proven and I haven't gotten my fingers into it.
+proven and written by a brilliant programmer.
