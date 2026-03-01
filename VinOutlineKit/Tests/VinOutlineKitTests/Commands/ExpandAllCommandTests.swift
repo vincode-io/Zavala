@@ -20,9 +20,9 @@ final class ExpandAllCommandTests: VOKTestCase {
         let command = ExpandAllCommand(actionName: "ExpandAll", undoManager: undoManager, delegate: self, outline: outline, containers: [outline])
         let _ = outline.collapseAll(containers: [outline])
         command.execute()
-		#expect(outline.rows.allSatisfy { $0.rowCount == 0 || $0.isExpanded })
+		#expect(outline.rows.allSatisfy { $0.rows.count == 0 || $0.isExpanded })
         undoManager.undo()
-		#expect(outline.rows.allSatisfy { $0.rowCount == 0 || !$0.isExpanded })
+		#expect(outline.rows.allSatisfy { $0.rows.count == 0 || !$0.isExpanded })
         deleteAccountManager(accountManager)
     }
 	

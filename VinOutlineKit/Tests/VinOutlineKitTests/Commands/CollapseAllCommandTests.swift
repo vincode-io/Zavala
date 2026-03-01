@@ -21,13 +21,13 @@ final class CollapseAllCommandTests: VOKTestCase {
         let _ = outline.expandAll(containers: [outline])
 		
         command.execute()
-		#expect(outline.rows.allSatisfy { $0.rowCount == 0 || !$0.isExpanded })
-		
+		#expect(outline.rows.allSatisfy { $0.rows.count == 0 || !$0.isExpanded })
+
         undoManager.undo()
-        #expect(outline.rows.allSatisfy { $0.rowCount == 0 || $0.isExpanded })
-		
+        #expect(outline.rows.allSatisfy { $0.rows.count == 0 || $0.isExpanded })
+
         undoManager.redo()
-        #expect(outline.rows.allSatisfy { $0.rowCount == 0 || !$0.isExpanded })
+        #expect(outline.rows.allSatisfy { $0.rows.count == 0 || !$0.isExpanded })
 		
         deleteAccountManager(accountManager)
     }

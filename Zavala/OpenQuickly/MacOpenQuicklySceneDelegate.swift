@@ -6,7 +6,9 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 import VinOutlineKit
+import VinUtility
 
 class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -45,11 +47,35 @@ class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
 		closeWindow()
+
 		if let url = urlContexts.first?.url, let documentID = EntityID(url: url) {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, documentID: documentID).userInfo]
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+			return
 		}
+
+		guard let account = appDelegate.accountManager.activeAccounts.first else { return }
+
+		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == UTType.opml.preferredFilenameExtension }).map({ $0.url })
+		
+		for url in opmlURLs {
+			Task { @MainActor in
+				if let document = try? await account.importOPML(url, tags: nil) {
+					DocumentIndexer.updateIndex(forDocument: document)
+					let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+					activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, document: document).userInfo]
+					UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+				}
+			}
+		}
+
+		#if targetEnvironment(macCatalyst)
+		Task { @MainActor in
+			try? await Task.sleep(for: .seconds(1))
+			appDelegate.appKitPlugin?.clearRecentDocuments()
+		}
+		#endif
 	}
 
 	// MARK: API
