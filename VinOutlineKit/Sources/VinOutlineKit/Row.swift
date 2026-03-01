@@ -5,10 +5,10 @@
 //  Created by Maurice Parker on 12/24/20.
 //
 
-import Foundation
+import UIKit
 import UniformTypeIdentifiers
-import MarkdownAttributedString
 import OrderedCollections
+import VinMarkdown
 
 public enum RowStrings {
 	case topicMarkdown(String?)

@@ -344,6 +344,7 @@
 		51B4B4A72C334D75005DCCEB /* EntityID+AppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntityID+AppEntity.swift"; sourceTree = "<group>"; };
 		51B4B4E72C349ECC005DCCEB /* ZavalaAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZavalaAppIntent.swift; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
+		51BC6B892F54AB2200985B26 /* VinMarkdown */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VinMarkdown; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
 		51C030A5257E084E00609262 /* EditorTitleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentView.swift; sourceTree = "<group>"; };
 		51C030B3257E192100609262 /* EditorTitleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleViewCell.swift; sourceTree = "<group>"; };
@@ -581,6 +582,7 @@
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
 				51C4C3AB2555E8EA004E0206 /* xcconfig */,
+				51BC6B892F54AB2200985B26 /* VinMarkdown */,
 				51408FF42AEF41C8006AEE75 /* VinOutlineKit */,
 			);
 			sourceTree = "<group>";

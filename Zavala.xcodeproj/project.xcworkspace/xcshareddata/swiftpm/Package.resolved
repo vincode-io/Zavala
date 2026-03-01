@@ -1,15 +1,6 @@
 {
-  "originHash" : "86c0600ea06f51b9b854dc96b6d3061fa02c627bb47ea32a905bbb6fdfbb0b41",
+  "originHash" : "3133407ed730afa586f57fc5d3dbeab538c1dfabd24236a76ca0eaf454fd8996",
   "pins" : [
-    {
-      "identity" : "markdownattributedstring",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vincode-io/MarkdownAttributedString.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "2b284b2fb6ac3d58c5e9d58763d7517dbd84ee2b"
-      }
-    },
     {
       "identity" : "semaphore",
       "kind" : "remoteSourceControl",
