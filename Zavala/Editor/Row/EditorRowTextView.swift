@@ -15,8 +15,8 @@ extension Selector {
 }
 
 extension NSAttributedString.Key {
-	static let selectedSearchResult: NSAttributedString.Key = .init("selectedSearchResult")
-	static let searchResult: NSAttributedString.Key = .init("searchResult")
+	static let selectedSearchResult: NSAttributedString.Key = .init("io.vincode.Zavala.SelectedSearchResult")
+	static let searchResult: NSAttributedString.Key = .init("io.vincode.Zavala.SearchResult")
 }
 
 class EditorRowTextView: UITextView, EditorTextInput {
