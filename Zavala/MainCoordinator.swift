@@ -147,33 +147,48 @@ extension MainCoordinator {
 	}
 	
 	func exportMarkdownDocsForOutlines(_ outlines: [Outline]) {
-        export(outlines.compactMap {
-            if let data = $0.markdownDoc().data(using: .utf8) {
-				return (data: data, filename: $0.filename(type: .markdown))
-            }
-            return nil
-        })
+		var exports = [(data: Data, filename: String)]()
+		var imageDirectoryURLs = [URL]()
+		
+		for outline in outlines {
+			if let data = outline.markdownDoc().data(using: .utf8) {
+				exports.append((data: data, filename: outline.filename(type: .markdown)))
+				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
+			}
+		}
+		
+		export(exports, additionalURLs: imageDirectoryURLs)
 	}
 	
 	func exportMarkdownListsForOutlines(_ outlines: [Outline]) {
-        export(outlines.compactMap {
-            if let data = $0.markdownList().data(using: .utf8) {
-                return (data: data, filename: $0.filename(type: .markdown))
-            }
-            return nil
-        })
+		var exports = [(data: Data, filename: String)]()
+		var imageDirectoryURLs = [URL]()
+		
+		for outline in outlines {
+			if let data = outline.markdownList().data(using: .utf8) {
+				exports.append((data: data, filename: outline.filename(type: .markdown)))
+				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
+			}
+		}
+		
+		export(exports, additionalURLs: imageDirectoryURLs)
 	}
 	
 	func exportOPMLsForOutlines(_ outlines: [Outline]) {
-        export(outlines.compactMap {
-            if let data = $0.opml().data(using: .utf8) {
-				return (data: data, filename: $0.filename(type: .opml))
-            }
-            return nil
-        })
+		var exports = [(data: Data, filename: String)]()
+		var imageDirectoryURLs = [URL]()
+		
+		for outline in outlines {
+			if let data = outline.opml().data(using: .utf8) {
+				exports.append((data: data, filename: outline.filename(type: .opml)))
+				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
+			}
+		}
+		
+		export(exports, additionalURLs: imageDirectoryURLs)
 	}
 	
-    func export(_ exports: [(data: Data, filename: String)]) {
+    func export(_ exports: [(data: Data, filename: String)], additionalURLs: [URL] = []) {
         var tempFiles = [URL]()
         for export in exports {
             let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(export.filename)
@@ -185,9 +200,44 @@ extension MainCoordinator {
             tempFiles.append(tempFile)
         }
 		
+		tempFiles.append(contentsOf: additionalURLs)
+		
 		let docPicker = UIDocumentPickerViewController(forExporting: tempFiles, asCopy: true)
 		docPicker.modalPresentationStyle = .formSheet
 		self.present(docPicker, animated: true)
+	}
+	
+	func writeImageDirectory(for outline: Outline) -> [URL] {
+		guard let imageGroups = outline.images?.values, !imageGroups.isEmpty else {
+			return []
+		}
+		
+		let allImages = imageGroups.flatMap({ $0 })
+		guard !allImages.isEmpty else {
+			return []
+		}
+		
+		let dirName = outline.assetDirectoryName()
+		let dirURL = FileManager.default.temporaryDirectory.appendingPathComponent(dirName)
+		
+		do {
+			try FileManager.default.createDirectory(at: dirURL, withIntermediateDirectories: true)
+		} catch {
+			self.presentError(title: "Export Error", message: error.localizedDescription)
+			return []
+		}
+		
+		for image in allImages {
+			guard let data = image.data else { continue }
+			let imageURL = dirURL.appendingPathComponent("\(image.id.imageUUID).png")
+			do {
+				try data.write(to: imageURL)
+			} catch {
+				self.presentError(title: "Export Error", message: error.localizedDescription)
+			}
+		}
+		
+		return [dirURL]
 	}
 	
 	func printLists() {
