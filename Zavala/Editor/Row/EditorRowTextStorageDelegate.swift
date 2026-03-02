@@ -26,7 +26,6 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 			newTypingAttributes.removeValue(forKey: .font)
 			newTypingAttributes.removeValue(forKey: .codeInline)
 			newTypingAttributes.removeValue(forKey: .foregroundColor)
-			newTypingAttributes.removeValue(forKey: .backgroundColor)
 		} else {
 			newTypingAttributes = baseAttributes
 		}
@@ -90,7 +89,6 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 						newAttributes[.font] = monoFont
 					}
 					newAttributes[.foregroundColor] = UIColor.secondaryLabel
-					newAttributes[.backgroundColor] = UIColor.secondarySystemFill
 				}
 				
 				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {

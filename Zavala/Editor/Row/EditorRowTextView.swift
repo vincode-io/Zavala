@@ -318,7 +318,6 @@ class EditorRowTextView: UITextView, EditorTextInput {
 			textStorage.beginEditing()
 			if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
 				textStorage.removeAttribute(.codeInline, range: selectedRange)
-				textStorage.removeAttribute(.backgroundColor, range: selectedRange)
 				if let baseForeground = baseAttributes[.foregroundColor] {
 					textStorage.addAttribute(.foregroundColor, value: baseForeground, range: selectedRange)
 				}
@@ -381,7 +380,7 @@ class EditorRowTextView: UITextView, EditorTextInput {
 
 extension EditorRowTextView: NSTextLayoutManagerDelegate {
 	nonisolated func textLayoutManager(_ textLayoutManager: NSTextLayoutManager, textLayoutFragmentFor location: NSTextLocation, in textElement: NSTextElement) -> NSTextLayoutFragment {
-		return EditorRowSearchLayoutFragment(textElement: textElement, range: textElement.elementRange)
+		return EditorRowHighlightLayoutFragment(textElement: textElement, range: textElement.elementRange)
 	}
 }
 
@@ -435,7 +434,6 @@ extension EditorRowTextView {
 			if let baseForeground = baseAttributes[.foregroundColor] {
 				typingAttributes[.foregroundColor] = baseForeground
 			}
-			typingAttributes[.backgroundColor] = nil
 		}
 	}
 

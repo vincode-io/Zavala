@@ -4,7 +4,7 @@
 
 import UIKit
 
-final class EditorRowSearchLayoutFragment: NSTextLayoutFragment {
+final class EditorRowHighlightLayoutFragment: NSTextLayoutFragment {
 	
 	override init(textElement: NSTextElement, range rangeInElement: NSTextRange?) {
 		super.init(textElement: textElement, range: rangeInElement)
@@ -23,6 +23,9 @@ final class EditorRowSearchLayoutFragment: NSTextLayoutFragment {
 				if attributes[.searchResult] as? Bool == true {
 					highlight(lineFragment: lineFragment, range: range, color: UIColor.systemGray.cgColor, in: ctx)
 				}
+				if attributes[.codeInline] as? Bool == true {
+					highlight(lineFragment: lineFragment, range: range, color: UIColor.secondarySystemFill.cgColor, in: ctx)
+				}
 			}
 		}
 		
@@ -30,7 +33,7 @@ final class EditorRowSearchLayoutFragment: NSTextLayoutFragment {
 	}
 }
 
-private extension EditorRowSearchLayoutFragment {
+private extension EditorRowHighlightLayoutFragment {
 	
 	private func highlight(lineFragment: NSTextLineFragment, range: NSRange, color: CGColor, in ctx: CGContext) {
 		var lineFragmentBounds = lineFragment.typographicBounds
