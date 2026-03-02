@@ -469,17 +469,18 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 				// Apply monospace font to code inline ranges so that the font trait survives
 				// RTF serialization. The restoreCodeInlineAttributes() method will detect the
 				// monospace trait and re-apply the .codeInline attribute on deserialization.
+				nonisolated(unsafe) let unsafeAttrString = attrString
 				attrString.enumerateAttribute(.codeInline, in: NSRange(location: 0, length: attrString.length), options: []) { value, range, _ in
 					guard value != nil else { return }
 					let size = baseFont.pointSize
 					var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
-					if let currentFont = attrString.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont {
+					if let currentFont = unsafeAttrString.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont {
 						let traits = currentFont.fontDescriptor.symbolicTraits
 						if let descriptor = monoFont.fontDescriptor.withSymbolicTraits(traits) {
 							monoFont = UIFont(descriptor: descriptor, size: size)
 						}
 					}
-					attrString.addAttribute(.font, value: monoFont, range: range)
+					unsafeAttrString.addAttribute(.font, value: monoFont, range: range)
 				}
 				
 				let strippedString = attrString.string
