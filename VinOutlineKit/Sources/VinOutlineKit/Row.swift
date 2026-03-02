@@ -755,7 +755,8 @@ private extension Row {
 			}
 		}
 
-		return result.markdownRepresentation
+		// Markdown will try to escape our underscores here, but we don't want that. Most likely they are file names.
+		return result.markdownRepresentation.replacingOccurrences(of: "\\_", with: "_")
 	}
 	
 	func convertMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
