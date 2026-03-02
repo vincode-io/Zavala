@@ -747,10 +747,10 @@ private extension Row {
 			}
 		}
 
-		if let images = images?.filter({ $0.isInNotes == isInNotes }), !images.isEmpty {
+		if let images = images?.filter({ $0.isInNotes == isInNotes }), !images.isEmpty, let dirName = outline?.assetDirectoryName() {
 			let sortedImages = images.sorted(by: { $0.offset ?? 0 > $1.offset ?? 0 })
 			for image in sortedImages {
-				let markdown = NSAttributedString(string: "![](\(image.id.imageUUID).png)")
+				let markdown = NSAttributedString(string: "![](\(dirName)/\(image.id.imageUUID).png)")
 				result.insert(markdown, at: image.offset ?? 0)
 			}
 		}

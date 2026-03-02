@@ -888,23 +888,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		guard let tagIDs else { return false }
 		return tagIDs.contains(tag.id)
 	}
-	
+
 	public func filename(type: UTType) -> String {
-		var filename = title ?? "Outline"
-		
-		filename = filename
-			.replacingOccurrences(of: " ", with: "_")
-			.replacingOccurrences(of: "/", with: "-")
-			.trimmingCharacters(in: .whitespaces)
-		
-		if let disambiguator {
-			filename = "\(filename)-\(disambiguator)"
-		}
-		
-		filename = "\(filename).\(type.preferredFilenameExtension!)"
-		return filename
+		return "\(persistenceName()).\(type.preferredFilenameExtension!)"
 	}
-		
+
+	public func assetDirectoryName() -> String {
+		return "\(persistenceName())_files"
+	}
+
 	public func childrenIndexes(forIndex: Int) -> [Int] {
 		guard let row = shadowTable?[forIndex] else { return [Int]() }
 		var children = [Int]()
@@ -2947,7 +2939,22 @@ private extension Outline {
 	func outlineDidFocusOut() {
 		NotificationCenter.default.post(name: .OutlineDidFocusOut, object: self, userInfo: nil)
 	}
-	
+
+	func persistenceName() -> String {
+		var name = title ?? .noTitle
+
+		name = name
+			.replacingOccurrences(of: " ", with: "_")
+			.replacingOccurrences(of: "/", with: "-")
+			.trimmingCharacters(in: .whitespaces)
+
+		if let disambiguator {
+			name = "\(name)-\(disambiguator)"
+		}
+
+		return name
+	}
+
 	func changeSearchResult(_ changeToResult: Int) {
 		var reloads = Set<Int>()
 		
