@@ -2165,6 +2165,7 @@ private extension EditorViewController {
 				rightToolbarButtonGroup.remove(formatMenuButton)
 				formatMenuButtonGroup.remove(linkButton)
 				rightToolbarButtonGroup.insert(linkButton, at: 1)
+				rightToolbarButtonGroup.insert(codeInlineButton, at: 2)
 			}
 
 			navButtonGroup.containerWidth = size.width
