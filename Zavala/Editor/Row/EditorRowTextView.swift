@@ -78,20 +78,45 @@ class EditorRowTextView: UITextView, EditorTextInput {
 		}
 		// Also check the text storage at the cursor, since UIKit doesn't propagate
 		// custom attributes into typingAttributes on click/tap.
-		guard selectedRange.length == 0 else { return false }
-		if selectedRange.location > 0 {
-			if textStorage.attribute(.codeInline, at: selectedRange.location - 1, effectiveRange: nil) != nil {
-				return true
+		if selectedRange.length == 0 {
+			if selectedRange.location > 0 {
+				if textStorage.attribute(.codeInline, at: selectedRange.location - 1, effectiveRange: nil) != nil {
+					return true
+				}
 			}
-		}
-		if selectedRange.location < textStorage.length {
-			if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
-				return true
+			if selectedRange.location < textStorage.length {
+				if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
+					return true
+				}
+			}
+		} else {
+			for i in selectedRange.lowerBound..<selectedRange.upperBound {
+				if textStorage.attribute(.codeInline, at: i, effectiveRange: nil) != nil {
+					return true
+				}
 			}
 		}
 		return false
 	}
 	
+	var isLinkToggledOn: Bool {
+		if selectedRange.length == 0 {
+			if selectedRange.location > 0, textStorage.attribute(.link, at: selectedRange.location - 1, effectiveRange: nil) != nil {
+				return true
+			}
+			if selectedRange.location < textStorage.length, textStorage.attribute(.link, at: selectedRange.location, effectiveRange: nil) != nil {
+				return true
+			}
+		} else {
+			for i in selectedRange.lowerBound..<selectedRange.upperBound {
+				if textStorage.attribute(.link, at: i, effectiveRange: nil) != nil {
+					return true
+				}
+			}
+		}
+		return false
+	}
+
 	var isSelecting: Bool {
 		return !(selectedTextRange?.isEmpty ?? true)
 	}
@@ -215,6 +240,27 @@ class EditorRowTextView: UITextView, EditorTextInput {
 			guard menu.identifier != .font else { continue }
 			guard menu.identifier != .spelling else { continue }
 			guard menu.identifier != .substitutions else { continue }
+
+			if menu.identifier == .format {
+				let linkAction = UIAction(title: .linkEllipsisControlLabel, image: .link, state: isLinkToggledOn ? .on : .off) { [weak self] _ in
+					self?.editLink(nil)
+				}
+				
+				let codeInlineAction = UIAction(title: .codeInlineControlLabel, image: .codeInline, state: isCodeInlineToggledOn ? .on : .off) { [weak self] _ in
+					self?.toggleCodeInline(nil)
+				}
+
+				var formatChildren = [UIMenuElement]()
+				formatChildren.append(linkAction)
+				for child in menu.children {
+					formatChildren.append(child)
+				}
+				formatChildren.append(codeInlineAction)
+				
+				let customFormatMenu = menu.replacingChildren(formatChildren)
+				results.append(customFormatMenu)
+				continue
+			}
 
 			results.append(menu)
 		}
