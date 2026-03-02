@@ -318,6 +318,10 @@ class EditorRowTextView: UITextView, EditorTextInput {
 			textStorage.beginEditing()
 			if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
 				textStorage.removeAttribute(.codeInline, range: selectedRange)
+				textStorage.removeAttribute(.backgroundColor, range: selectedRange)
+				if let baseForeground = baseAttributes[.foregroundColor] {
+					textStorage.addAttribute(.foregroundColor, value: baseForeground, range: selectedRange)
+				}
 			} else {
 				textStorage.addAttribute(.codeInline, value: true, range: selectedRange)
 			}
