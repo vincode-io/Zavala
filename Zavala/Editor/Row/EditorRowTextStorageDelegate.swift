@@ -79,7 +79,7 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 				
 				if key == .codeInline {
 					if let baseFont = baseAttributes[.font] as? UIFont {
-						let size = baseFont.pointSize - 1
+						let size = baseFont.pointSize - 2
 						var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
 						if let currentFont = newAttributes[.font] as? UIFont {
 							let traits = currentFont.fontDescriptor.symbolicTraits
