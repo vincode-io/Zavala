@@ -19,7 +19,7 @@ This Shortcut will scan all the Outlines in Zavala for the word “Paris” and 
 
 This one searches all the Outlines for any that contain the word “Blog” and then tags found Outlines with the “Blog” tag.
 
-## [Make Most Played Outine](https://www.icloud.com/shortcuts/524f34a693964c8d820fbc5b0f98f678)
+## [Make Most Played Outline](https://www.icloud.com/shortcuts/524f34a693964c8d820fbc5b0f98f678)
 
 This is a demo of how to create an Outline and populate it with Rows.
 
