@@ -710,8 +710,15 @@ private extension Row {
 		var images = [Image]()
 		
 		#if canImport(UIKit)
+		var attachmentRanges = [(NSRange, ImageTextAttachment)]()
 		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (value, range, _) in
-			if let imageTextAttachment = value as? ImageTextAttachment, let imageUUID = imageTextAttachment.imageUUID, let pngData = imageTextAttachment.image?.pngData() {
+			if let imageTextAttachment = value as? ImageTextAttachment {
+				attachmentRanges.append((range, imageTextAttachment))
+			}
+		}
+		
+		for (range, imageTextAttachment) in attachmentRanges.reversed() {
+			if let imageUUID = imageTextAttachment.imageUUID, let pngData = imageTextAttachment.image?.pngData() {
 				let entityID = EntityID.image(outline.id.accountID, outline.id.documentUUID, id, imageUUID)
 				
 				if let image = findImage(id: entityID) {
@@ -722,7 +729,7 @@ private extension Row {
 					images.append(image)
 				}
 			}
-			mutableAttrString.removeAttribute(.attachment, range: range)
+			mutableAttrString.replaceCharacters(in: range, with: "")
 		}
 		#endif
 		
@@ -750,12 +757,22 @@ private extension Row {
 		if let images = images?.filter({ $0.isInNotes == isInNotes }), !images.isEmpty, let dirName = outline?.assetDirectoryName {
 			let sortedImages = images.sorted(by: { $0.offset ?? 0 > $1.offset ?? 0 })
 			for image in sortedImages {
-				let markdown = if useSidecar {
-					NSAttributedString(string: "![](\(dirName)/\(image.id.imageUUID).png)")
+				let markdownString = if useSidecar {
+					"![](\(dirName)/\(image.id.imageUUID).png)"
 				} else {
-					NSAttributedString(string: "![](\(image.id.imageUUID).png)")
+					"![](\(image.id.imageUUID).png)"
 				}
-				result.insert(markdown, at: image.offset ?? 0)
+
+				let offset = image.offset ?? 0
+				let attachmentRange = NSRange(location: offset, length: 1)
+
+				// The \u{fffc} character is a placeholder character for RTF. It should always be there, but if not
+				// we will insert the image markdown string anyway.
+				if offset < result.length, result.attributedSubstring(from: attachmentRange).string == "\u{fffc}" {
+					result.replaceCharacters(in: attachmentRange, with: markdownString)
+				} else {
+					result.insert(NSAttributedString(string: markdownString), at: offset)
+				}
 			}
 		}
 
