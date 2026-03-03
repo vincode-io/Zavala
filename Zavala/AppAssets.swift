@@ -112,6 +112,7 @@ extension UIImage {
 
 	static let settings = UIImage(systemName: "gear")!
 	static let share = UIImage(systemName: "square.and.arrow.up")!
+	static let shortcuts = UIImage(named: "Shortcuts")!.withTintColor(.label)
 	static let sort = UIImage(systemName: "arrow.up.arrow.down")!
 	static let sync = UIImage(systemName: "arrow.clockwise")!
 

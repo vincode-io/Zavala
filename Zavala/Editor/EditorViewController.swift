@@ -2218,7 +2218,7 @@ private extension EditorViewController {
 			appDelegate.mainCoordinator?.editShortcutsMenu()
 		}
 		let editShortcutsMenu = UIMenu(title: "", options: .displayInline, children: [editShortcutsMenuAction])
-		let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: nil, children: [shortcutListMenu, editShortcutsMenu])
+		let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: .shortcuts, children: [shortcutListMenu, editShortcutsMenu])
 		shareActions.append(shortcutsMenu)
 		
 		let printDocAction = UIAction(title: .printDocEllipsisControlLabel) { [weak self] _ in
