@@ -6,75 +6,6 @@ import Testing
 import Foundation
 @testable import VinMarkdown
 
-#if canImport(AppKit)
-import AppKit
-private nonisolated(unsafe) let testFont = NSFont.systemFont(ofSize: 12.0)
-private nonisolated(unsafe) let testFont17 = NSFont.systemFont(ofSize: 17.0)
-#elseif canImport(UIKit)
-import UIKit
-private nonisolated(unsafe) let testFont = UIFont.systemFont(ofSize: 12.0)
-private nonisolated(unsafe) let testFont17 = UIFont.systemFont(ofSize: 17.0)
-#endif
-
-// MARK: - Test Helpers
-
-private func checkMarkdownToRichText(_ markdown: String, _ expected: String) -> Bool {
-	let attr = NSMutableAttributedString(markdownRepresentation: markdown, attributes: [.font: testFont])
-	let debug = attr.markdownDebug
-	return debug == expected
-}
-
-private func checkRichTextToMarkdown(_ attr: NSAttributedString, _ expected: String) -> Bool {
-	return attr.markdownRepresentation == expected
-}
-
-private func checkRoundTrip(_ markdown: String) -> Bool {
-	let attr = NSMutableAttributedString(markdownRepresentation: markdown, attributes: [.font: testFont])
-	return attr.markdownRepresentation == markdown
-}
-
-#if canImport(AppKit)
-private func attributedString(_ text: String, withTraits traits: NSFontDescriptor.SymbolicTraits) -> NSAttributedString {
-	let font = NSFont.systemFont(ofSize: 17.0)
-	let fontDescriptor = font.fontDescriptor
-	let newSymbolicTraits = fontDescriptor.symbolicTraits.union(traits)
-	let newFontDescriptor = fontDescriptor.withSymbolicTraits(newSymbolicTraits)
-	guard let newFont = NSFont(descriptor: newFontDescriptor, size: font.pointSize) else {
-		return NSAttributedString(string: text, attributes: [.font: font])
-	}
-	return NSAttributedString(string: text, attributes: [.font: newFont])
-}
-
-private func applySymbolicTraits(_ traits: NSFontDescriptor.SymbolicTraits, to attrString: NSMutableAttributedString, range: NSRange) {
-	let font = NSFont.systemFont(ofSize: 17.0)
-	let fontDescriptor = font.fontDescriptor
-	let newSymbolicTraits = fontDescriptor.symbolicTraits.union(traits)
-	let newFontDescriptor = fontDescriptor.withSymbolicTraits(newSymbolicTraits)
-	guard let newFont = NSFont(descriptor: newFontDescriptor, size: font.pointSize) else { return }
-	attrString.setAttributes([.font: newFont], range: range)
-}
-#elseif canImport(UIKit)
-private func attributedString(_ text: String, withTraits traits: UIFontDescriptor.SymbolicTraits) -> NSAttributedString {
-	let font = UIFont.systemFont(ofSize: 17.0)
-	let fontDescriptor = font.fontDescriptor
-	let newSymbolicTraits = fontDescriptor.symbolicTraits.union(traits)
-	guard let newFontDescriptor = fontDescriptor.withSymbolicTraits(newSymbolicTraits) else {
-		return NSAttributedString(string: text, attributes: [.font: font])
-	}
-	let newFont = UIFont(descriptor: newFontDescriptor, size: font.pointSize)
-	return NSAttributedString(string: text, attributes: [.font: newFont])
-}
-
-private func applySymbolicTraits(_ traits: UIFontDescriptor.SymbolicTraits, to attrString: NSMutableAttributedString, range: NSRange) {
-	let font = UIFont.systemFont(ofSize: 17.0)
-	let fontDescriptor = font.fontDescriptor
-	let newSymbolicTraits = fontDescriptor.symbolicTraits.union(traits)
-	guard let newFontDescriptor = fontDescriptor.withSymbolicTraits(newSymbolicTraits) else { return }
-	let newFont = UIFont(descriptor: newFontDescriptor, size: font.pointSize)
-	attrString.setAttributes([.font: newFont], range: range)
-}
-#endif
-
 // MARK: - Markdown to Rich Text Tests
 
 @Test func testPlainText() {
@@ -385,6 +316,13 @@ private func applySymbolicTraits(_ traits: UIFontDescriptor.SymbolicTraits, to a
 	let testString = "Test \\`not code\\` end"
 	let compareString = "[Test `not code` end](   )"
 	#expect(checkMarkdownToRichText(testString, compareString))
+}
+
+@Test func testImageURLWithUnderscores() {
+	let url = URL(string: "https://example.com/assets/my_image_file.png")!
+	let attrTestString = NSMutableAttributedString(string: "my_image", attributes: [.link: url])
+	let compareString = "[my\\_image](https://example.com/assets/my_image_file.png)"
+	#expect(checkRichTextToMarkdown(attrTestString, compareString))
 }
 
 @Test func testInlineCodeWithBoldAround() {
