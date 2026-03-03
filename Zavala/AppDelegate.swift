@@ -26,6 +26,8 @@ extension Selector {
 	static let showHelp = #selector(AppDelegate.showHelp(_:))
 	static let showCommunity = #selector(AppDelegate.showCommunity(_:))
 	static let feedback = #selector(AppDelegate.feedback(_:))
+	static let editShortcutsMenu = #selector(AppDelegate.editShortcutsMenu(_:))
+
 }
 
 @MainActor
@@ -41,7 +43,7 @@ extension Selector {
 class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	public private(set) var accountManager: AccountManager!
-	
+
 	let showSettings = UIKeyCommand(title: .settingsEllipsisControlLabel,
 									image: .settings,
 									action: .showSettings,
@@ -198,7 +200,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 											 action: .deleteRowNotes,
 											 input: "-",
 											 modifierFlags: [.control, .shift])
-	
+
+	let editShortcutsMenuCommand = UICommand(title: .editShortcutsMenuControlLabel, action: .editShortcutsMenu)
+
 	let toggleBoldCommand: UIKeyCommand = {
 		let boldFont = UIFont.boldSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize)
 		let attributedTitle = NSAttributedString(string: .boldControlLabel, attributes: [.font: boldFont])
@@ -360,6 +364,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	private var history = [Pin]()
 	private var documentIndexer: DocumentIndexer?
+	private let shortcutRunner = ShortcutRunner()
 	private var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala")
 	
 	#if targetEnvironment(macCatalyst)
@@ -457,7 +462,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		}
 		
 	}
-	
+
+	func runShortcut(index: Int) {
+		let shortcutName = AppDefaults.shared.shortcutsMenuEntries.items[index]
+		do {
+			try shortcutRunner.runShortcut(named: shortcutName)
+		} catch {
+			presentError(error, title: .shortcutErrorTitle)
+		}
+	}
+
 	// MARK: UISceneSession Lifecycle
 
 	func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -528,7 +542,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	@objc func actualSize(_ sender: Any?) {
 		AppDefaults.shared.textZoom = 0
 	}
-	
+
+	@objc func editShortcutsMenu(_ sender: Any?) {
+		print("********* Edit Shortcuts Menu")
+	}
+
 	@objc func showHelp(_ sender: Any?) {
 		UIApplication.shared.open(URL(string: .helpURL)!)
 	}
@@ -642,6 +660,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let sortDocumentsOrdered = UIMenu(title: "", options: .displayInline, children: [sortAscendingCommand, sortDescendingCommand])
 		let sortDocumentsMenu = UIMenu(title: .sortDocumentsControlLabel, image: .sort, children: [sortDocumentsField, sortDocumentsOrdered])
 		builder.insertChild(sortDocumentsMenu, atStartOfMenu: .view)
+
+		// Shortcuts Menu
+		var shortcutItems = [UIAction]()
+		for (index, shortcutName) in AppDefaults.shared.shortcutsMenuEntries.enumerated() {
+			shortcutItems.append(UIAction(title: shortcutName) { [weak self] _ in
+				Task { @MainActor in
+					self?.runShortcut(index: index)
+				}
+			})
+		}
+		let shortcutsListMenu = UIMenu(title: "", options: .displayInline, children: shortcutItems)
+
+		let editShortcutsMenuMenu = UIMenu(title: "", options: .displayInline, children: [editShortcutsMenuCommand])
+
+		let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, children: [shortcutsListMenu, editShortcutsMenuMenu])
+		builder.insertSibling(shortcutsMenu, afterMenu: .view)
 
 		// Outline Menu
 		let mainOutlineMenu = UIMenu(title: "",

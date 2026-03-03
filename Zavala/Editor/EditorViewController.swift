@@ -50,7 +50,7 @@ extension Selector {
 	static let toggleRowNotes = #selector(EditorViewController.toggleRowNotes(_:))
 	static let createOrDeleteNotes = #selector(EditorViewController.createOrDeleteNotes(_:))
 	static let deleteRowNotes = #selector(EditorViewController.deleteRowNotes(_:))
-	
+
 	static let undo = Selector(("undo:"))
 	static let redo = Selector(("redo:"))
 	static let showUndoMenu = #selector(EditorViewController.showUndoMenu(_:))

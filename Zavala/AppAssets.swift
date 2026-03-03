@@ -235,6 +235,7 @@ extension String {
 	static let duplicateRowsControlLabel = String(localized: "button.text.duplicate-rows", comment: "Action: Duplicate Rows")
 
 	static let editorControlLabel = String(localized: "label.text.editor", comment: "Label: Editor")
+	static let editShortcutsMenuControlLabel = String(localized: "label.text.edit-shortcuts-menu", comment: "Label: Edit Menu")
 	static let emailControlLabel = String(localized: "label.text.email", comment: "Label: Email")
 	static let enableCloudKitControlLabel = String(localized: "button.text.enable-icloud", comment: "Label: Enable iCloud")
 	static let enableOnMyDevice = String(localized: "button.text.enable-on-my-device", comment: "Label: Enable On My <Device>")
@@ -374,6 +375,8 @@ extension String {
 	static let settingsEllipsisControlLabel = String(localized: "label.text.settings-with-ellipsis", comment: "Label: Settings…")
 	static let shareControlLabel = String(localized: "button.text.share", comment: "Action: Share")
 	static let shareEllipsisControlLabel = String(localized: "button.text.share-with-ellipsis", comment: "Label: Share…")
+	static let shortcutsControlLabel = String(localized: "button.text.shortcuts", comment: "Action: Shortcuts")
+	static let shortcutErrorTitle = String(localized: "label.text.shortcut-error", comment: "Label: Shortcut Error")
 	static let smallControlLabel = String(localized: "button.text.small", comment: "Action: Small")
 	static let sortDocumentsControlLabel = String(localized: "button.text.sort-documents", comment: "Action: Sort Documents")
 	static let sortRowsControlLabel = String(localized: "button.text.sort-rows", comment: "Action: Sort Rows")

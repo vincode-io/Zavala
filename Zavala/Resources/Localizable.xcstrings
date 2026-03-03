@@ -4708,6 +4708,17 @@
         }
       }
     },
+    "button.text.shortcuts" : {
+      "comment" : "Action: Shortcuts",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcuts"
+          }
+        }
+      }
+    },
     "button.text.small" : {
       "comment" : "Action: Small",
       "localizations" : {
@@ -10879,6 +10890,17 @@
         }
       }
     },
+    "label.text.edit-shortcuts-menu" : {
+      "comment" : "Label: Edit Menu",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Menu"
+          }
+        }
+      }
+    },
     "label.text.editor" : {
       "comment" : "Label: Editor",
       "localizations" : {
@@ -13834,6 +13856,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分享"
+          }
+        }
+      }
+    },
+    "label.text.shortcut-error" : {
+      "comment" : "Label: Shortcut Error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcut Error"
           }
         }
       }
