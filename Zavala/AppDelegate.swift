@@ -546,9 +546,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	}
 
 	@objc func editShortcutsMenu(_ sender: Any?) {
-		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.editShortcutsMenu)
-		let scene = UIApplication.shared.connectedScenes.first(where: { $0.delegate is EditShortcutsMenuSceneDelegate })
-		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: activity, options: nil, errorHandler: nil)
+		mainCoordinator?.editShortcutsMenu()
 	}
 
 	@objc func showHelp(_ sender: Any?) {

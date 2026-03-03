@@ -9,44 +9,56 @@ import SwiftUI
 
 struct EditShortcutsMenuView: View {
 
+	@Environment(\.dismiss) var dismiss
 	@State private var entries: [String] = AppDefaults.shared.shortcutsMenuEntries
 	@State private var newEntryName = ""
 	@FocusState private var isNewEntryFocused: Bool
 
 	var body: some View {
-		VStack(spacing: 0) {
-			List {
-				ForEach(entries, id: \.self) { entry in
-					Text(entry)
-						.contextMenu {
-							Button(role: .destructive) {
-								if let index = entries.firstIndex(of: entry) {
-									deleteEntries(at: IndexSet(integer: index))
+		NavigationStack {
+			VStack(spacing: 0) {
+				List {
+					ForEach(entries, id: \.self) { entry in
+						Text(entry)
+							.contextMenu {
+								Button(role: .destructive) {
+									if let index = entries.firstIndex(of: entry) {
+										deleteEntries(at: IndexSet(integer: index))
+									}
+								} label: {
+									Label(String.deleteControlLabel, systemImage: "trash")
 								}
-							} label: {
-								Label(String.deleteControlLabel, systemImage: "trash")
 							}
-						}
+					}
+					.onDelete(perform: deleteEntries)
 				}
-				.onDelete(perform: deleteEntries)
-			}
-			Divider()
-			HStack {
-				TextField(String.shortcutNamePlaceholderLabel, text: $newEntryName)
-					.textFieldStyle(.roundedBorder)
-					.focused($isNewEntryFocused)
-					.onSubmit {
+				Divider()
+				HStack {
+					TextField(String.shortcutNamePlaceholderLabel, text: $newEntryName)
+						.textFieldStyle(.roundedBorder)
+						.focused($isNewEntryFocused)
+						.onSubmit {
+							addEntry()
+						}
+					Button(String.addControlLabel) {
 						addEntry()
 					}
-				Button(String.addControlLabel) {
-					addEntry()
+					.disabled(newEntryName.trimmingCharacters(in: .whitespaces).isEmpty)
 				}
-				.disabled(newEntryName.trimmingCharacters(in: .whitespaces).isEmpty)
+				.padding()
 			}
-			.padding()
-		}
-		.onAppear {
-			isNewEntryFocused = true
+			.onAppear {
+				isNewEntryFocused = true
+			}
+			#if !targetEnvironment(macCatalyst)
+			.toolbar {
+				ToolbarItem(placement: .confirmationAction) {
+					Button(role: .confirm) {
+						dismiss()
+					}
+				}
+			}
+			#endif
 		}
 	}
 
