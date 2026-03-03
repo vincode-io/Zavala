@@ -486,6 +486,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 			return UISceneConfiguration(name: "About Configuration", sessionRole: connectingSceneSession.role)
 		case NSUserActivity.ActivityType.showSettings:
 			return UISceneConfiguration(name: "Settings Configuration", sessionRole: connectingSceneSession.role)
+		case NSUserActivity.ActivityType.editShortcutsMenu:
+			return UISceneConfiguration(name: "Edit Shortcuts Menu Configuration", sessionRole: connectingSceneSession.role)
 		default:
 			guard options.userActivities.first?.userInfo == nil else {
 				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
@@ -544,7 +546,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	}
 
 	@objc func editShortcutsMenu(_ sender: Any?) {
-		print("********* Edit Shortcuts Menu")
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.editShortcutsMenu)
+		let scene = UIApplication.shared.connectedScenes.first(where: { $0.delegate is EditShortcutsMenuSceneDelegate })
+		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
 	@objc func showHelp(_ sender: Any?) {

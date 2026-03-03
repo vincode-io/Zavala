@@ -13871,6 +13871,17 @@
         }
       }
     },
+    "label.text.shortcut-name" : {
+      "comment" : "Label: Shortcut Name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcut Name"
+          }
+        }
+      }
+    },
     "label.text.statistics" : {
       "comment" : "Label: Statistics",
       "localizations" : {

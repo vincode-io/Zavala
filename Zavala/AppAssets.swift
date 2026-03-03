@@ -375,6 +375,7 @@ extension String {
 	static let settingsEllipsisControlLabel = String(localized: "label.text.settings-with-ellipsis", comment: "Label: Settings…")
 	static let shareControlLabel = String(localized: "button.text.share", comment: "Action: Share")
 	static let shareEllipsisControlLabel = String(localized: "button.text.share-with-ellipsis", comment: "Label: Share…")
+	static let shortcutNamePlaceholderLabel = String(localized: "label.text.shortcut-name", comment: "Label: Shortcut Name")
 	static let shortcutsControlLabel = String(localized: "button.text.shortcuts", comment: "Action: Shortcuts")
 	static let shortcutErrorTitle = String(localized: "label.text.shortcut-error", comment: "Label: Shortcut Error")
 	static let smallControlLabel = String(localized: "button.text.small", comment: "Action: Small")
