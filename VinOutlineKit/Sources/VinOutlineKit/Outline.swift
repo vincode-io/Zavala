@@ -565,7 +565,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		guard currentSearchResult >= 0 else { return false }
 		return searchResultCoordinates[currentSearchResult].range.length != 0
 	}
-	
+
+	public var assetDirectoryName: String {
+		return "\(persistenceName)_files"
+	}
+
 	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
 	var zoneID: CKRecordZone.ID? {
@@ -611,6 +615,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	private var selectionIsInNotes: Bool?
 	private var selectionLocation: Int?
 	private var selectionLength: Int?
+
+	private var persistenceName: String {
+		var name = title ?? .noTitle
+
+		name = name
+			.replacingOccurrences(of: " ", with: "_")
+			.replacingOccurrences(of: "/", with: "-")
+			.trimmingCharacters(in: .whitespaces)
+
+		if let disambiguator {
+			name = "\(name)-\(disambiguator)"
+		}
+
+		return name
+	}
 
 	init(account: Account?, id: EntityID) {
 		self.account = account
@@ -890,11 +909,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 
 	public func filename(type: UTType) -> String {
-		return "\(persistenceName()).\(type.preferredFilenameExtension!)"
-	}
-
-	public func assetDirectoryName() -> String {
-		return "\(persistenceName())_files"
+		return "\(persistenceName).\(type.preferredFilenameExtension!)"
 	}
 
 	public func childrenIndexes(forIndex: Int) -> [Int] {
@@ -2938,21 +2953,6 @@ private extension Outline {
 	
 	func outlineDidFocusOut() {
 		NotificationCenter.default.post(name: .OutlineDidFocusOut, object: self, userInfo: nil)
-	}
-
-	func persistenceName() -> String {
-		var name = title ?? .noTitle
-
-		name = name
-			.replacingOccurrences(of: " ", with: "_")
-			.replacingOccurrences(of: "/", with: "-")
-			.trimmingCharacters(in: .whitespaces)
-
-		if let disambiguator {
-			name = "\(name)-\(disambiguator)"
-		}
-
-		return name
 	}
 
 	func changeSearchResult(_ changeToResult: Int) {

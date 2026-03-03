@@ -217,9 +217,8 @@ extension MainCoordinator {
 			return []
 		}
 		
-		let dirName = outline.assetDirectoryName()
-		let dirURL = FileManager.default.temporaryDirectory.appendingPathComponent(dirName)
-		
+		let dirURL = FileManager.default.temporaryDirectory.appendingPathComponent(outline.assetDirectoryName)
+
 		do {
 			try FileManager.default.createDirectory(at: dirURL, withIntermediateDirectories: true)
 		} catch {
