@@ -52,11 +52,12 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 		
 		let itemProviders: [NSItemProvider] = selectedDocuments.compactMap { document in
 			let itemProvider = NSItemProvider()
-			
-			let data = document.formattedPlainText.data(using: .utf8)
 
 			itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
-				completion(data, nil)
+				Task { @MainActor in
+					let data = document.formattedPlainText.data(using: .utf8)
+					completion(data, nil)
+				}
 				return nil
 			}
 			
