@@ -12,13 +12,15 @@ import VinUtility
 final class MarkdownDocVisitor {
 	
 	let useAltLinks: Bool
+	let useSidecar: Bool
 	var indentLevel = 0
 	var markdown = String()
 	
 	var previousRowWasParagraph = false
 	
-	init(useAltLinks: Bool) {
+	init(useAltLinks: Bool, useSidecar: Bool) {
 		self.useAltLinks = useAltLinks
+		self.useSidecar = useSidecar
 	}
 	
 	func visitor(_ visited: Row) {
@@ -31,8 +33,8 @@ final class MarkdownDocVisitor {
 			indentLevel = indentLevel - 1
 		}
 
-		if let topicMarkdown = visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks), !topicMarkdown.isEmpty {
-			if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
+		if let topicMarkdown = visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar), !topicMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
 				markdown.append("\n\n")
 				markdown.append(String(repeating: "#", count: indentLevel + 2))
 				markdown.append(" \(topicMarkdown)")
@@ -45,7 +47,7 @@ final class MarkdownDocVisitor {
 					markdown.append("\n")
 				}
 
-				let listVisitor = MarkdownListVisitor(useAltLinks: useAltLinks, numberingStyle: .none)
+				let listVisitor = MarkdownListVisitor(useAltLinks: useAltLinks, useSidecar: useSidecar, numberingStyle: .none)
 				markdown.append("\n")
 				visited.visit(visitor: listVisitor.visitor)
 				markdown.append(listVisitor.markdown)
@@ -53,7 +55,7 @@ final class MarkdownDocVisitor {
 				previousRowWasParagraph = false
 			}
 		} else {
-			if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
 				markdown.append("\n\n\(noteMarkdown)")
 				previousRowWasParagraph = true
 			} else {

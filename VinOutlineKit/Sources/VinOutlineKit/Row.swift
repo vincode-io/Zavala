@@ -429,12 +429,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		self.ancestorParentID = coder.ancestorParentID
 	}
 	
-	public func topicMarkdown(type: UTType, useAltLinks: Bool = false) -> String? {
-		return convertAttrString(topic, isInNotes: false, type: type, useAltLinks: useAltLinks)
+	public func topicMarkdown(type: UTType, useAltLinks: Bool = false, useSidecar: Bool = false) -> String? {
+		return convertAttrString(topic, isInNotes: false, type: type, useAltLinks: useAltLinks, useSidecar: useSidecar)
 	}
 	
-	public func noteMarkdown(type: UTType, useAltLinks: Bool = false) -> String? {
-		return convertAttrString(note, isInNotes: true, type: type, useAltLinks: useAltLinks)
+	public func noteMarkdown(type: UTType, useAltLinks: Bool = false, useSidecar: Bool = false) -> String? {
+		return convertAttrString(note, isInNotes: true, type: type, useAltLinks: useAltLinks, useSidecar: useSidecar)
 	}
 	
 	public func duplicate(newOutline: Outline) -> Row {
@@ -596,7 +596,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	}
 	
 	public func markdownList(numberingStyle: Outline.NumberingStyle) -> String {
-		let visitor = MarkdownListVisitor(useAltLinks: false, numberingStyle: numberingStyle)
+		let visitor = MarkdownListVisitor(useAltLinks: false, useSidecar: false, numberingStyle: numberingStyle)
 		visit(visitor: visitor.visitor)
 		return visitor.markdown
 	}
@@ -729,7 +729,7 @@ private extension Row {
 		return (mutableAttrString, images)
 	}
 	
-	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, type: UTType, useAltLinks: Bool) -> String? {
+	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, type: UTType, useAltLinks: Bool, useSidecar: Bool) -> String? {
 		guard let attrString else { return nil	}
 
 		let result = NSMutableAttributedString(attributedString: attrString)
@@ -750,7 +750,11 @@ private extension Row {
 		if let images = images?.filter({ $0.isInNotes == isInNotes }), !images.isEmpty, let dirName = outline?.assetDirectoryName {
 			let sortedImages = images.sorted(by: { $0.offset ?? 0 > $1.offset ?? 0 })
 			for image in sortedImages {
-				let markdown = NSAttributedString(string: "![](\(dirName)/\(image.id.imageUUID).png)")
+				let markdown = if useSidecar {
+					NSAttributedString(string: "![](\(dirName)/\(image.id.imageUUID).png)")
+				} else {
+					NSAttributedString(string: "![](\(image.id.imageUUID).png)")
+				}
 				result.insert(markdown, at: image.offset ?? 0)
 			}
 		}

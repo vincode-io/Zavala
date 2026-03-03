@@ -12,19 +12,22 @@ import VinUtility
 final class OPMLVisitor {
 	
 	let useAltLinks: Bool
+	let useSidecar: Bool
+
 	var indentLevel = 0
 	var opml = String()
 	
-	init(useAltLinks: Bool) {
+	init(useAltLinks: Bool, useSidecar: Bool) {
 		self.useAltLinks = useAltLinks
+		self.useSidecar = useSidecar
 	}
 	
 	func visitor(_ visited: Row) {
 		let indent = String(repeating: " ", count: (indentLevel + 1) * 2)
-		let escapedText = visited.topicMarkdown(type: .opml, useAltLinks: useAltLinks)?.escapingXMLCharacters ?? ""
-		
+		let escapedText = visited.topicMarkdown(type: .opml, useAltLinks: useAltLinks, useSidecar: useSidecar)?.escapingXMLCharacters ?? ""
+
 		opml.append(indent + "<outline text=\"\(escapedText)\"")
-		if let escapedNote = visited.noteMarkdown(type: .opml, useAltLinks: useAltLinks)?.escapingXMLCharacters {
+		if let escapedNote = visited.noteMarkdown(type: .opml, useAltLinks: useAltLinks, useSidecar: useSidecar)?.escapingXMLCharacters {
 			opml.append(" _note=\"\(escapedNote)\"")
 		}
 

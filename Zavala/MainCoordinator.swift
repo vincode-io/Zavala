@@ -151,7 +151,7 @@ extension MainCoordinator {
 		var imageDirectoryURLs = [URL]()
 		
 		for outline in outlines {
-			if let data = outline.markdownDoc().data(using: .utf8) {
+			if let data = outline.markdownDoc(useSidecar: true).data(using: .utf8) {
 				exports.append((data: data, filename: outline.filename(type: .markdown)))
 				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
 			}
@@ -165,7 +165,7 @@ extension MainCoordinator {
 		var imageDirectoryURLs = [URL]()
 		
 		for outline in outlines {
-			if let data = outline.markdownList().data(using: .utf8) {
+			if let data = outline.markdownList(useSidecar: true).data(using: .utf8) {
 				exports.append((data: data, filename: outline.filename(type: .markdown)))
 				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
 			}
@@ -179,7 +179,7 @@ extension MainCoordinator {
 		var imageDirectoryURLs = [URL]()
 		
 		for outline in outlines {
-			if let data = outline.opml().data(using: .utf8) {
+			if let data = outline.opml(useSidecar: true).data(using: .utf8) {
 				exports.append((data: data, filename: outline.filename(type: .opml)))
 				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
 			}

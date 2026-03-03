@@ -11,13 +11,15 @@ import Foundation
 final class MarkdownListVisitor {
 	
 	let useAltLinks: Bool
+	let useSidecar: Bool
 	let numberingStyle: Outline.NumberingStyle
 	
 	var indentLevel = 0
 	var markdown = String()
 	
-	init(useAltLinks: Bool, numberingStyle: Outline.NumberingStyle) {
+	init(useAltLinks: Bool, useSidecar: Bool, numberingStyle: Outline.NumberingStyle) {
 		self.useAltLinks = useAltLinks
+		self.useSidecar = useSidecar
 		self.numberingStyle = numberingStyle
 	}
 	
@@ -26,19 +28,19 @@ final class MarkdownListVisitor {
 		
 		if numberingStyle == .none {
 			if visited.isComplete ?? false {
-				markdown.append("* ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")~~")
+				markdown.append("* ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")~~")
 			} else {
-				markdown.append("* \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")")
+				markdown.append("* \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")")
 			}
 		} else {
 			if visited.isComplete ?? false {
-				markdown.append("\(visited.simpleNumbering) ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")~~")
+				markdown.append("\(visited.simpleNumbering) ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")~~")
 			} else {
-				markdown.append("\(visited.simpleNumbering) \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")")
+				markdown.append("\(visited.simpleNumbering) \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")")
 			}
 		}
 		
-		if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
+		if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
 			markdown.append("\n\n")
 			let paragraphs = noteMarkdown.components(separatedBy: "\n\n")
 			for paragraph in paragraphs {
