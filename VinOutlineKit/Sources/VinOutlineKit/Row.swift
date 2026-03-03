@@ -755,8 +755,20 @@ private extension Row {
 			}
 		}
 
-		// Markdown will try to escape our underscores here, but we don't want that. Most likely they are file names.
-		return result.markdownRepresentation.replacingOccurrences(of: "\\_", with: "_")
+		// Markdown will try to escape underscores in link URLs, but we don't want that. Most likely they are file names.
+		let markdown = result.markdownRepresentation
+		guard let linkURLPattern = try? NSRegularExpression(pattern: "(!?\\[[^\\]]*\\])\\(([^)]+)\\)") else {
+			return markdown
+		}
+		let mutableMarkdown = NSMutableString(string: markdown)
+		let matches = linkURLPattern.matches(in: markdown, range: NSRange(location: 0, length: mutableMarkdown.length))
+		for match in matches.reversed() {
+			let urlRange = match.range(at: 2)
+			let urlString = (markdown as NSString).substring(with: urlRange)
+			let fixedURL = urlString.replacingOccurrences(of: "\\_", with: "_")
+			mutableMarkdown.replaceCharacters(in: urlRange, with: fixedURL)
+		}
+		return mutableMarkdown as String
 	}
 	
 	func convertMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
