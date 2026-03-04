@@ -364,7 +364,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	private var history = [Pin]()
 	private var documentIndexer: DocumentIndexer?
-	private let shortcutRunner = ShortcutRunner()
+	let shortcutRunner = ShortcutRunner()
 	private var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala")
 	
 	#if targetEnvironment(macCatalyst)
@@ -464,12 +464,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	}
 
 	func runShortcut(index: Int) {
-		let shortcutName = AppDefaults.shared.shortcutsMenuEntries.items[index]
-		do {
-			try shortcutRunner.runShortcut(named: shortcutName)
-		} catch {
-			presentError(error, title: .shortcutErrorTitle)
-		}
+		let shortcutName = AppDefaults.shared.shortcutsMenuEntries[index]
+		shortcutRunner.runShortcut(named: shortcutName)
 	}
 
 	// MARK: UISceneSession Lifecycle

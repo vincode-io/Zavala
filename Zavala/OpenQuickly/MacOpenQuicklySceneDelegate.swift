@@ -46,6 +46,11 @@ class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 
 	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
+		if let url = urlContexts.first?.url, url.host == "x-callback-url" {
+			appDelegate.shortcutRunner.handleCallbackURL(url)
+			return
+		}
+
 		closeWindow()
 
 		if let url = urlContexts.first?.url, let documentID = EntityID(url: url) {

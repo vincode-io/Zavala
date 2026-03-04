@@ -1576,6 +1576,17 @@
         }
       }
     },
+    "button.text.download" : {
+      "comment" : "Action: Download",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
+          }
+        }
+      }
+    },
     "button.text.duplicate" : {
       "comment" : "Action: Duplicate",
       "localizations" : {
@@ -10855,6 +10866,28 @@
         }
       }
     },
+    "label.text.download-shortcut" : {
+      "comment" : "Label: Download Shortcut",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download Shortcut"
+          }
+        }
+      }
+    },
+    "label.text.download-shortcut-message" : {
+      "comment" : "Alert Message: This shortcut isn't installed. Would you like to download and install it?",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This shortcut isn't installed. Would you like to download and install it?"
+          }
+        }
+      }
+    },
     "label.text.edit-document-%@" : {
       "comment" : "Prompt:  Edit document “<Document Title>”",
       "localizations" : {
@@ -14302,6 +14335,17 @@
         }
       }
     },
+    "label.text.unknown" : {
+      "comment" : "Label: Unknown",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        }
+      }
+    },
     "label.text.updated" : {
       "comment" : "Label: Updated\nUpdated",
       "localizations" : {
@@ -14544,6 +14588,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "收起父级行"
+          }
+        }
+      }
+    },
+    "The shortcut \"%@\" returned an error: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" returned an error: %@"
+          }
+        }
+      }
+    },
+    "The shortcut \"%@\" was cancelled." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" was cancelled."
+          }
+        }
+      }
+    },
+    "The shortcut \"%@\" was not found." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" was not found."
+          }
+        }
+      }
+    },
+    "Unable to open the Shortcuts app." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to open the Shortcuts app."
           }
         }
       }
