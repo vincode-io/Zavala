@@ -79,11 +79,6 @@ class EditorRowTextView: UITextView, EditorTextInput {
 		// Also check the text storage at the cursor, since UIKit doesn't propagate
 		// custom attributes into typingAttributes on click/tap.
 		if selectedRange.length == 0 {
-			if selectedRange.location > 0 {
-				if textStorage.attribute(.codeInline, at: selectedRange.location - 1, effectiveRange: nil) != nil {
-					return true
-				}
-			}
 			if selectedRange.location < textStorage.length {
 				if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
 					return true
