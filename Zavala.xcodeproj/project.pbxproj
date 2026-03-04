@@ -627,13 +627,13 @@
 				517B41D62B267479001EC361 /* About */,
 				51F13F01255E13D1004B85CA /* Dialogs */,
 				517A9E31260512DC00EF346A /* OpenQuickly */,
+				51B5E5A92F579AF70033090F /* EditShortcutsMenu */,
 				517AF69E25E08A350044DBAB /* Settings */,
 				51C71C70273F22A500F6C779 /* Image */,
 				51E508E82B4A1DBE0041B826 /* OutlineFonts */,
 				514BB9D5255B595300C8DBDF /* Utility */,
 				51B4B4822C333F9B005DCCEB /* AppIntents */,
 				515F163B255C536600FD98B8 /* Resources */,
-				51B5E5A92F579AF70033090F /* EditShortcutsMenu */,
 			);
 			path = Zavala;
 			sourceTree = "<group>";
