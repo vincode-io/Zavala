@@ -56,26 +56,12 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 					}
 				}
 
-				if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = baseAttributes[.font] as? UIFont {
-					// Skip font normalization for inline code; the .codeInline handler sets the monospaced font.
-					if attributes[.codeInline] == nil {
-						let charsInRange = textStorage.attributedSubstring(from: range).string
-						if charsInRange.containsEmoji || charsInRange.containsSymbols {
-							newAttributes[key] = oldFont.withSize(newFont.pointSize)
-						} else {
-							let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
-							let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
-							
-							if newFont.isValidFor(value: charsInRange) {
-								newAttributes[key] = newFont
-							} else {
-								newAttributes[key] = oldFont
-							}
-						}
-					}
-				}
-				
-				if key == .codeInline {
+				// This is fun. First we detect if we are in a code inline run in two different ways. First is the code inline attribute key.
+				// The second is by checking the font trait. Since UIKit and RTF don't pass around custom attributed string keys, we use the
+				// monospace font as a marker as well.
+				//
+				// Then if it isn't a code inline stretch, we strip out any font formatting we don't like, unless it is an emoji or special character.
+				if key == .codeInline || key == .font, let oldFont = attributes[key] as? UIFont, oldFont.fontDescriptor.symbolicTraits.contains(.traitMonoSpace) {
 					if let baseFont = baseAttributes[.font] as? UIFont {
 						let size = baseFont.pointSize - 2
 						var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
@@ -86,9 +72,24 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 							}
 						}
 						newAttributes[.font] = monoFont
+						newAttributes[.codeInline] = true
+					}
+				} else if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = baseAttributes[.font] as? UIFont {
+					let charsInRange = textStorage.attributedSubstring(from: range).string
+					if charsInRange.containsEmoji || charsInRange.containsSymbols {
+						newAttributes[key] = oldFont.withSize(newFont.pointSize)
+					} else {
+						let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
+						let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
+
+						if newFont.isValidFor(value: charsInRange) {
+							newAttributes[key] = newFont
+						} else {
+							newAttributes[key] = oldFont
+						}
 					}
 				}
-				
+
 				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {
 					guard !(nsAttachment is ImageTextAttachment) else { continue }
 					if let image = nsAttachment.image {
