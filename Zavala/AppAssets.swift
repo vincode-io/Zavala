@@ -112,6 +112,7 @@ extension UIImage {
 
 	static let settings = UIImage(systemName: "gear")!
 	static let share = UIImage(systemName: "square.and.arrow.up")!
+	static let shortcuts = UIImage(named: "Shortcuts")!.withTintColor(.label)
 	static let sort = UIImage(systemName: "arrow.up.arrow.down")!
 	static let sync = UIImage(systemName: "arrow.clockwise")!
 
@@ -235,6 +236,7 @@ extension String {
 	static let duplicateRowsControlLabel = String(localized: "button.text.duplicate-rows", comment: "Action: Duplicate Rows")
 
 	static let editorControlLabel = String(localized: "label.text.editor", comment: "Label: Editor")
+	static let editShortcutsMenuControlLabel = String(localized: "label.text.edit-shortcuts-menu", comment: "Label: Edit Menu")
 	static let emailControlLabel = String(localized: "label.text.email", comment: "Label: Email")
 	static let enableCloudKitControlLabel = String(localized: "button.text.enable-icloud", comment: "Label: Enable iCloud")
 	static let enableOnMyDevice = String(localized: "button.text.enable-on-my-device", comment: "Label: Enable On My <Device>")
@@ -374,6 +376,10 @@ extension String {
 	static let settingsEllipsisControlLabel = String(localized: "label.text.settings-with-ellipsis", comment: "Label: Settings…")
 	static let shareControlLabel = String(localized: "button.text.share", comment: "Action: Share")
 	static let shareEllipsisControlLabel = String(localized: "button.text.share-with-ellipsis", comment: "Label: Share…")
+	static let showShortcutsMenuControlLabel = String(localized: "button.text.show-shortcuts-menu", comment: "Label: Show Shortcuts Menu")
+	static let shortcutNamePlaceholderLabel = String(localized: "label.text.shortcut-name", comment: "Label: Shortcut Name")
+	static let shortcutsControlLabel = String(localized: "button.text.shortcuts", comment: "Action: Shortcuts")
+	static let shortcutErrorTitle = String(localized: "label.text.shortcut-error", comment: "Label: Shortcut Error")
 	static let smallControlLabel = String(localized: "button.text.small", comment: "Action: Small")
 	static let sortDocumentsControlLabel = String(localized: "button.text.sort-documents", comment: "Action: Sort Documents")
 	static let sortRowsControlLabel = String(localized: "button.text.sort-rows", comment: "Action: Sort Rows")
@@ -392,9 +398,11 @@ extension String {
 	static let typingControlLabel = String(localized: "label.text.typing", comment: "Label: Typing")
 	static let typewriterCenterControlLabel = String(localized: "label.text.typewriter", comment: "Label: Typewriter")
 
+	static let unableToOpenShortcutsAppLabel = String(localized: "label.text.unable-to-open-shortcuts-app", comment: "Label: Unable to open Shortcuts app")
 	static let uncompleteControlLabel = String(localized: "button.text.uncomplete", comment: "Action: Uncomplete")
 	static let undoControlLabel = String(localized: "button.text.undo", comment: "Action: Undo")
 	static let undoMenuControlLabel = String(localized: "label.text.undo-menu", comment: "Label: Undo Menu")
+	static let unknownLabel = String(localized: "label.text.unknown", comment: "Label: Unknown")
 	static let updatedControlLabel = String(localized: "label.text.updated", comment: "Label: Updated")
 	static let urlControlLabel = String(localized: "label.text.url", comment: "Label: URL")
 	static let useSelectionForFindControlLabel = String(localized: "button.text.use-selection-for-find", comment: "Action: Use Selection For Find")
@@ -460,7 +468,15 @@ extension String {
 	static func noteLevelLabel(level: Int) -> String {
 		return String(localized: "label.text.note-level-\(level)", comment: "Label: Note Level <Note Level>")
 	}
-	
+
+	static func shortcutCancelled(name: String) -> String {
+		return String(localized: "label.text.shortcut-\(name)-cancelled", comment: "Label: The Shortcut <Name> was cancelled.")
+	}
+
+	static func shortcutError(name: String, message: String) -> String {
+		return String(localized: "label.text.shortcut-\(name)-returned-\(message)", comment: "Label: The shortcut <Name> returned an error: <Message>.")
+	}
+
 	static func copyrightLabel() -> String {
 		let year = String(Calendar.current.component(.year, from: Date()))
 		return String(localized: "label.text.copyright-\(year)", comment: "Label: Copyright © Vincode, Inc. 2020-<Current Year>")

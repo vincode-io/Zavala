@@ -196,6 +196,14 @@ All Rights Reserved.</string>
 					<key>UISceneStoryboardFile</key>
 					<string>Settings</string>
 				</dict>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Edit Shortcuts Menu Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).EditShortcutsMenuSceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>EditShortcutsMenu</string>
+				</dict>
 			</array>
 		</dict>
 	</dict>
