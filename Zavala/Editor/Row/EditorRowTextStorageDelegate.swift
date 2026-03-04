@@ -45,7 +45,7 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 				if key == .underlineStyle || key == .paragraphStyle {
 					newAttributes[key] = nil
 				}
-				if key == .backgroundColor && attributes[.codeInline] == nil {
+				if key == .backgroundColor {
 					newAttributes[key] = nil
 				}
 				
