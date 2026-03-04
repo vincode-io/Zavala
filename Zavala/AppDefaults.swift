@@ -405,16 +405,6 @@ final class AppDefaults {
 		}
 	}
 
-	var initialShortcutsMenuSetup: Bool {
-		get {
-			return Self.bool(for: Key.initialShortcutsMenuSetup)
-		}
-		set {
-			Self.setBool(for: Key.initialShortcutsMenuSetup, newValue)
-		}
-	}
-
-
 	var upgradedDefaultsToV2: Bool {
 		get {
 			return Self.bool(for: Key.upgradedDefaultsToV2)

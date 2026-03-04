@@ -31,22 +31,10 @@ enum ShortcutRunnerError: LocalizedError {
 @MainActor
 final class ShortcutRunner {
 
-	let defaultShortcutName = "Create an Outline with AI"
-	let defaultShortcutURL = URL(string: "https://zavala.vincode.io/assets/shortcuts/Create%20an%20Outline%20with%20AI.shortcut")!
-
 	private static let callbackScheme = "zavala"
 	private static let shortcutsScheme = "shortcuts"
 	private var currentShortcutName: String?
 	private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ShortcutRunner")
-
-	init() {
-		let initialized = AppDefaults.shared.initialShortcutsMenuSetup
-		let shortcutsMenu = AppDefaults.shared.shortcutsMenuEntries
-		if !initialized && shortcutsMenu.isEmpty {
-			AppDefaults.shared.shortcutsMenuEntries = [defaultShortcutName]
-			AppDefaults.shared.initialShortcutsMenuSetup = true
-		}
-	}
 
 	func runShortcut(named shortcutName: String) {
 		currentShortcutName = shortcutName
@@ -89,43 +77,9 @@ final class ShortcutRunner {
 		case "/shortcut-error":
 			let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
 			let errorMessage = components?.queryItems?.first(where: { $0.name == "errorMessage" })?.value ?? .unknownLabel
-			logger.error("Shortcut \"\(shortcutName)\" failed with error: \(errorMessage)")
-			if shortcutName == defaultShortcutName {
-				promptToDownloadDefaultShortcut()
-			} else {
-				appDelegate.presentError(ShortcutRunnerError.shortcutError(shortcutName, errorMessage), title: .shortcutErrorTitle)
-			}
+			appDelegate.presentError(ShortcutRunnerError.shortcutError(shortcutName, errorMessage), title: .shortcutErrorTitle)
 		default:
 			break
-		}
-	}
-
-	// MARK: Helpers
-
-	private func promptToDownloadDefaultShortcut() {
-		let title = String.downloadShortcutTitle
-		let message = String.downloadShortcutMessage
-
-		let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
-		let downloadAction = UIAlertAction(title: .downloadControlLabel, style: .default) { [weak self] _ in
-			self?.importDefaultShortcut()
-		}
-		alertController.addAction(downloadAction)
-
-		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel)
-		alertController.addAction(cancelAction)
-
-		alertController.preferredAction = downloadAction
-
-		appDelegate.mainCoordinator?.present(alertController, animated: true)
-	}
-
-	private func importDefaultShortcut() {
-		UIApplication.shared.open(defaultShortcutURL, options: [:]) { success in
-			if !success {
-				appDelegate.presentError(ShortcutRunnerError.unableToOpenShortcutsApp, title: .shortcutErrorTitle)
-			}
 		}
 	}
 
