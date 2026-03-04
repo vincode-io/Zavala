@@ -195,6 +195,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 	
+	var isLinkToggledOn: Bool {
+		return currentRowTextView?.isLinkToggledOn ?? false
+	}
+
 	var isBoldToggledOn: Bool {
 		return currentRowTextView?.isBoldToggledOn ?? false
 	}

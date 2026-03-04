@@ -1079,6 +1079,14 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = groupItem
 		case .link:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if self?.editorViewController?.isLinkToggledOn ?? false {
+					item.image = .link.withTintColor(.systemBlue)
+				} else {
+					item.image = .link
+				}
+				return !UIResponder.valid(action: .editLink)
+			}
 			item.image = .link
 			item.label = .linkControlLabel
 			item.toolTip = .linkControlLabel
