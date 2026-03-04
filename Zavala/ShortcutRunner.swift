@@ -8,6 +8,7 @@
 struct ShortcutRunner {
 
 	public let defaultShortcutName = "Create an Outline with AI"
+	public let defaultShortcutURL = URL(string: "https://zavala.vincode.io/assets/shortcuts/Create_an_Outline_with_AI.shortcut")
 
 	init () {
 		let initialized = AppDefaults.shared.initialShortcutsMenuSetup
