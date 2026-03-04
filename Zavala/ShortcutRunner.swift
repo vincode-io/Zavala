@@ -32,7 +32,7 @@ enum ShortcutRunnerError: LocalizedError {
 final class ShortcutRunner {
 
 	let defaultShortcutName = "Create an Outline with AI"
-	let defaultShortcutURL = URL(string: "https://zavala.vincode.io/assets/shortcuts/Create_an_Outline_with_AI.shortcut")!
+	let defaultShortcutURL = URL(string: "https://zavala.vincode.io/assets/shortcuts/Create%20an%20Outline%20with%20AI.shortcut")!
 
 	private static let callbackScheme = "zavala"
 	private static let shortcutsScheme = "shortcuts"
@@ -65,14 +65,9 @@ final class ShortcutRunner {
 
 		guard let url = URL(string: urlString) else { return }
 
-		UIApplication.shared.open(url, options: [:]) { [weak self] success in
-			guard let self else { return }
+		UIApplication.shared.open(url, options: [:]) { success in
 			if !success {
-				if shortcutName == self.defaultShortcutName {
-					self.promptToDownloadDefaultShortcut()
-				} else {
-					appDelegate.presentError(ShortcutRunnerError.unableToOpenShortcutsApp, title: .shortcutErrorTitle)
-				}
+				appDelegate.presentError(ShortcutRunnerError.unableToOpenShortcutsApp, title: .shortcutErrorTitle)
 			}
 		}
 	}
@@ -95,7 +90,11 @@ final class ShortcutRunner {
 			let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
 			let errorMessage = components?.queryItems?.first(where: { $0.name == "errorMessage" })?.value ?? .unknownLabel
 			logger.error("Shortcut \"\(shortcutName)\" failed with error: \(errorMessage)")
-			appDelegate.presentError(ShortcutRunnerError.shortcutError(shortcutName, errorMessage), title: .shortcutErrorTitle)
+			if shortcutName == defaultShortcutName {
+				promptToDownloadDefaultShortcut()
+			} else {
+				appDelegate.presentError(ShortcutRunnerError.shortcutError(shortcutName, errorMessage), title: .shortcutErrorTitle)
+			}
 		default:
 			break
 		}
@@ -123,14 +122,7 @@ final class ShortcutRunner {
 	}
 
 	private func importDefaultShortcut() {
-		guard let encodedName = defaultShortcutName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-			  let encodedURL = defaultShortcutURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-
-		let urlString = "\(Self.shortcutsScheme)://import-shortcut?name=\(encodedName)&url=\(encodedURL)"
-
-		guard let url = URL(string: urlString) else { return }
-
-		UIApplication.shared.open(url, options: [:]) { success in
+		UIApplication.shared.open(defaultShortcutURL, options: [:]) { success in
 			if !success {
 				appDelegate.presentError(ShortcutRunnerError.unableToOpenShortcutsApp, title: .shortcutErrorTitle)
 			}
