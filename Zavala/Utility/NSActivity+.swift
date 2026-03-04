@@ -16,6 +16,7 @@ extension NSUserActivity {
 		static let showAbout = "io.vincode.Zavala.showAbout"
 		static let showSettings = "io.vincode.Zavala.showSettings"
 		static let viewImage = "io.vincode.Zavala.viewImage"
+		static let editShortcutsMenu = "io.vincode.Zavala.editShortcutsMenu"
 
 		static let restoration = "io.vincode.Zavala.restoration"
 		static let selectingDocumentContainer = "io.vincode.Zavala.selectingDocumentContainer"

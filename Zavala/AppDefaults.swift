@@ -104,7 +104,7 @@ final class AppDefaults {
 	nonisolated(unsafe) static let shared = AppDefaults()
 	private init() {}
 	
-	nonisolated(unsafe) static let store: UserDefaults = {
+	nonisolated(unsafe) private static let store: UserDefaults = {
 		let appIdentifierPrefix = Bundle.main.object(forInfoDictionaryKey: "AppIdentifierPrefix") as! String
 		let suiteName = "\(appIdentifierPrefix)group.\(Bundle.main.bundleIdentifier!)"
 		return UserDefaults.init(suiteName: suiteName)!
@@ -136,6 +136,8 @@ final class AppDefaults {
 		static let outlineFonts = "outlineFonts"
 		static let documentHistory = "documentHistory"
 		static let confirmDeleteCompletedRows = "confirmDeleteCompletedRows"
+		static let shortcutsMenuEntries = "shortcutsMenu"
+		static let showShortcutsMenu = "showShortcutsMenu"
 		static let upgradedDefaultsToV2 = "upgradedDefaultsToV2"
 		static let upgradedDefaultsToV2dot3 = "upgradedDefaultsToV2dot3"
 		static let upgradedDefaultsToV3dot1 = "upgradedDefaultsToV3dot1"
@@ -393,7 +395,25 @@ final class AppDefaults {
 			Self.setBool(for: Key.confirmDeleteCompletedRows, newValue)
 		}
 	}
-	
+
+	var shortcutsMenuEntries: [String] {
+		get {
+			return NSUbiquitousKeyValueStore.default.object(forKey: Key.shortcutsMenuEntries) as? [String] ?? []
+		}
+		set {
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.shortcutsMenuEntries)
+		}
+	}
+
+	var showShortcutsMenu: Bool {
+		get {
+			return Self.bool(for: Key.showShortcutsMenu)
+		}
+		set {
+			Self.setBool(for: Key.showShortcutsMenu, newValue)
+		}
+	}
+
 	var upgradedDefaultsToV2: Bool {
 		get {
 			return Self.bool(for: Key.upgradedDefaultsToV2)

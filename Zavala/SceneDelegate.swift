@@ -112,6 +112,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
+		if let url = urlContexts.first?.url, url.host == "x-callback-url" {
+			appDelegate.shortcutRunner.handleCallbackURL(url)
+			return
+		}
+
 		if let url = urlContexts.first?.url, let entityID = EntityID(url: url) {
 			Task {
 				await mainSplitViewController.handleDocument(entityID, isNavigationBranch: true)

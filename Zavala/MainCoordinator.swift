@@ -82,6 +82,18 @@ extension MainCoordinator {
 		present(settingsViewController, animated: true)
 		#endif
 	}
+
+	func editShortcutsMenu() {
+		#if targetEnvironment(macCatalyst)
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.editShortcutsMenu)
+		let scene = UIApplication.shared.connectedScenes.first(where: { $0.delegate is EditShortcutsMenuSceneDelegate })
+		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: activity, options: nil, errorHandler: nil)
+		#else
+		let hostingController = UIHostingController(rootView: EditShortcutsMenuView())
+		hostingController.modalPresentationStyle = .formSheet
+		present(hostingController, animated: true)
+		#endif
+	}
 	
 	func showGetInfo() {
 		guard let outline = editorViewController?.outline else { return }

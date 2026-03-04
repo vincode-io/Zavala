@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsGeneralView: View {
 	
 	@State var colorPalette = AppDefaults.shared.userInterfaceColorPalette
+	@State var showShortcutsMenu = AppDefaults.shared.showShortcutsMenu
 	@State var enableMainWindowAsDefault = AppDefaults.shared.enableMainWindowAsDefault
 
 	var body: some View {
@@ -28,6 +29,16 @@ struct SettingsGeneralView: View {
 				.onChange(of: colorPalette) { old, new in
 					AppDefaults.shared.userInterfaceColorPalette = new
 				}
+			}
+
+			Toggle(isOn: $showShortcutsMenu) {
+				Text(String.showShortcutsMenuControlLabel)
+			}
+			.toggleStyle(.switch)
+			.controlSize(.small)
+			.onChange(of: showShortcutsMenu) { old, new in
+				AppDefaults.shared.showShortcutsMenu = new
+				UIMenuSystem.main.setNeedsRebuild()
 			}
 
 			#if targetEnvironment(macCatalyst)
