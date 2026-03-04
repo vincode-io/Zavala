@@ -10883,7 +10883,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This shortcut isn't installed. Would you like to download and install it?"
+            "value" : "This shortcut isn't installed. Would you like to download and install it? After downloading it you double click the file to install it."
           }
         }
       }
