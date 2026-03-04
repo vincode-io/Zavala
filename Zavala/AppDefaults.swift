@@ -137,7 +137,7 @@ final class AppDefaults {
 		static let documentHistory = "documentHistory"
 		static let confirmDeleteCompletedRows = "confirmDeleteCompletedRows"
 		static let shortcutsMenuEntries = "shortcutsMenu"
-		static let initialShortcutsMenuSetup = "initialShortcutsMenuSetup"
+		static let showShortcutsMenu = "showShortcutsMenu"
 		static let upgradedDefaultsToV2 = "upgradedDefaultsToV2"
 		static let upgradedDefaultsToV2dot3 = "upgradedDefaultsToV2dot3"
 		static let upgradedDefaultsToV3dot1 = "upgradedDefaultsToV3dot1"
@@ -402,6 +402,15 @@ final class AppDefaults {
 		}
 		set {
 			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.shortcutsMenuEntries)
+		}
+	}
+
+	var showShortcutsMenu: Bool {
+		get {
+			return Self.bool(for: Key.showShortcutsMenu)
+		}
+		set {
+			Self.setBool(for: Key.showShortcutsMenu, newValue)
 		}
 	}
 

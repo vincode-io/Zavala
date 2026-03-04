@@ -17,13 +17,13 @@ enum ShortcutRunnerError: LocalizedError {
 	var errorDescription: String? {
 		switch self {
 		case .shortcutNotFound(let name):
-			return String(localized: "The shortcut \"\(name)\" was not found.")
+			return String.shortcutNotFound(name: name)
 		case .shortcutCancelled(let name):
-			return String(localized: "The shortcut \"\(name)\" was cancelled.")
+			return String.shortcutCancelled(name: name)
 		case .shortcutError(let name, let message):
-			return String(localized: "The shortcut \"\(name)\" returned an error: \(message)")
+			return String.shortcutError(name: name, message: message)
 		case .unableToOpenShortcutsApp:
-			return String(localized: "Unable to open the Shortcuts app.")
+			return String.unableToOpenShortcutsAppLabel
 		}
 	}
 }
@@ -34,7 +34,6 @@ final class ShortcutRunner {
 	private static let callbackScheme = "zavala"
 	private static let shortcutsScheme = "shortcuts"
 	private var currentShortcutName: String?
-	private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "ShortcutRunner")
 
 	func runShortcut(named shortcutName: String) {
 		currentShortcutName = shortcutName
@@ -69,10 +68,7 @@ final class ShortcutRunner {
 		currentShortcutName = nil
 
 		switch path {
-		case "/shortcut-success":
-			logger.info("Shortcut \"\(shortcutName)\" completed successfully.")
 		case "/shortcut-cancel":
-			logger.info("Shortcut \"\(shortcutName)\" was cancelled.")
 			appDelegate.presentError(ShortcutRunnerError.shortcutCancelled(shortcutName), title: .shortcutErrorTitle)
 		case "/shortcut-error":
 			let components = URLComponents(url: url, resolvingAgainstBaseURL: false)

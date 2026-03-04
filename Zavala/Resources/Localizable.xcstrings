@@ -1578,8 +1578,21 @@
     },
     "button.text.download" : {
       "comment" : "Action: Download",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Download"
@@ -4726,6 +4739,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shortcuts"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcuts"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcuts"
+          }
+        }
+      }
+    },
+    "button.text.show-shortcuts-menu" : {
+      "comment" : "Label: Show Shortcuts Menu",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Shortcuts Menu"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Shortcuts Menu"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Shortcuts Menu"
           }
         }
       }
@@ -10866,28 +10914,6 @@
         }
       }
     },
-    "label.text.download-shortcut" : {
-      "comment" : "Label: Download Shortcut",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Download Shortcut"
-          }
-        }
-      }
-    },
-    "label.text.download-shortcut-message" : {
-      "comment" : "Alert Message: This shortcut isn't installed. Would you like to download and install it?",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This shortcut isn't installed. Would you like to download and install it? After downloading it you double click the file to install it."
-          }
-        }
-      }
-    },
     "label.text.edit-document-%@" : {
       "comment" : "Prompt:  Edit document “<Document Title>”",
       "localizations" : {
@@ -10927,6 +10953,18 @@
       "comment" : "Label: Edit Menu",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Menu"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Menu"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Edit Menu"
@@ -13893,10 +13931,91 @@
         }
       }
     },
+    "label.text.shortcut-%@-cancelled" : {
+      "comment" : "Label: The Shortcut <Name> was cancelled.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" was cancelled."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" was cancelled."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" was cancelled."
+          }
+        }
+      }
+    },
+    "label.text.shortcut-%@-not-found" : {
+      "comment" : "Label: Shortcut <Name> Not Found",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" was not found."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" was not found."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" was not found."
+          }
+        }
+      }
+    },
+    "label.text.shortcut-%@-returned-%@" : {
+      "comment" : "Label: The shortcut <Name> returned an error: <Message>.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" returned an error: %@"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" returned an error: %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The shortcut \"%@\" returned an error: %@"
+          }
+        }
+      }
+    },
     "label.text.shortcut-error" : {
       "comment" : "Label: Shortcut Error",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcut Error"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcut Error"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shortcut Error"
@@ -13908,6 +14027,18 @@
       "comment" : "Label: Shortcut Name",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcut Name"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcut Name"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shortcut Name"
@@ -14230,6 +14361,29 @@
         }
       }
     },
+    "label.text.unable-to-open-shortcuts-app" : {
+      "comment" : "Label: Unable to open Shortcuts app",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to open the Shortcuts app."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to open the Shortcuts app."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to open the Shortcuts app."
+          }
+        }
+      }
+    },
     "label.text.unable-to-parse-opml" : {
       "comment" : "Error text: The provided OPML input could not be parsed.",
       "localizations" : {
@@ -14339,6 +14493,18 @@
       "comment" : "Label: Unknown",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unknown"
@@ -14588,46 +14754,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "收起父级行"
-          }
-        }
-      }
-    },
-    "The shortcut \"%@\" returned an error: %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The shortcut \"%@\" returned an error: %@"
-          }
-        }
-      }
-    },
-    "The shortcut \"%@\" was cancelled." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The shortcut \"%@\" was cancelled."
-          }
-        }
-      }
-    },
-    "The shortcut \"%@\" was not found." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The shortcut \"%@\" was not found."
-          }
-        }
-      }
-    },
-    "Unable to open the Shortcuts app." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unable to open the Shortcuts app."
           }
         }
       }

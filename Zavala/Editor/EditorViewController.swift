@@ -2206,21 +2206,22 @@ private extension EditorViewController {
 		}
 		shareActions.append(shareAction)
 
+		if AppDefaults.shared.showShortcutsMenu {
+			var shortcutItems = [UIMenuElement]()
+			for (index, shortcutName) in AppDefaults.shared.shortcutsMenuEntries.enumerated() {
+				shortcutItems.append(UIAction(title: shortcutName) { _ in
+					appDelegate.runShortcut(index: index)
+				})
+			}
+			let shortcutListMenu = UIMenu(title: "", options: .displayInline, children: shortcutItems)
+			let editShortcutsMenuAction = UIAction(title: .editShortcutsMenuControlLabel) { _ in
+				appDelegate.mainCoordinator?.editShortcutsMenu()
+			}
+			let editShortcutsMenu = UIMenu(title: "", options: .displayInline, children: [editShortcutsMenuAction])
+			let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: .shortcuts, children: [shortcutListMenu, editShortcutsMenu])
+			shareActions.append(shortcutsMenu)
+		}
 
-		var shortcutItems = [UIMenuElement]()
-		for (index, shortcutName) in AppDefaults.shared.shortcutsMenuEntries.enumerated() {
-			shortcutItems.append(UIAction(title: shortcutName) { _ in
-				appDelegate.runShortcut(index: index)
-			})
-		}
-		let shortcutListMenu = UIMenu(title: "", options: .displayInline, children: shortcutItems)
-		let editShortcutsMenuAction = UIAction(title: .editShortcutsMenuControlLabel) { _ in
-			appDelegate.mainCoordinator?.editShortcutsMenu()
-		}
-		let editShortcutsMenu = UIMenu(title: "", options: .displayInline, children: [editShortcutsMenuAction])
-		let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: .shortcuts, children: [shortcutListMenu, editShortcutsMenu])
-		shareActions.append(shortcutsMenu)
-		
 		let printDocAction = UIAction(title: .printDocEllipsisControlLabel) { [weak self] _ in
 			self?.printDoc()
 		}

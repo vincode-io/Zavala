@@ -660,20 +660,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		builder.insertChild(sortDocumentsMenu, atStartOfMenu: .view)
 
 		// Shortcuts Menu
-		var shortcutItems = [UIAction]()
-		for (index, shortcutName) in AppDefaults.shared.shortcutsMenuEntries.enumerated() {
-			shortcutItems.append(UIAction(title: shortcutName) { [weak self] _ in
-				Task { @MainActor in
-					self?.runShortcut(index: index)
-				}
-			})
+		if AppDefaults.shared.showShortcutsMenu {
+			var shortcutItems = [UIAction]()
+			for (index, shortcutName) in AppDefaults.shared.shortcutsMenuEntries.enumerated() {
+				shortcutItems.append(UIAction(title: shortcutName) { [weak self] _ in
+					Task { @MainActor in
+						self?.runShortcut(index: index)
+					}
+				})
+			}
+			let shortcutsListMenu = UIMenu(title: "", options: .displayInline, children: shortcutItems)
+
+			let editShortcutsMenuMenu = UIMenu(title: "", options: .displayInline, children: [editShortcutsMenuCommand])
+
+			let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, children: [shortcutsListMenu, editShortcutsMenuMenu])
+			builder.insertSibling(shortcutsMenu, afterMenu: .view)
 		}
-		let shortcutsListMenu = UIMenu(title: "", options: .displayInline, children: shortcutItems)
-
-		let editShortcutsMenuMenu = UIMenu(title: "", options: .displayInline, children: [editShortcutsMenuCommand])
-
-		let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, children: [shortcutsListMenu, editShortcutsMenuMenu])
-		builder.insertSibling(shortcutsMenu, afterMenu: .view)
 
 		// Outline Menu
 		let mainOutlineMenu = UIMenu(title: "",

@@ -231,9 +231,6 @@ extension String {
 	static let documentNotFoundTitle = String(localized: "label.text.document-not-found", comment: "Label: Document Not Found")
 	static let documentNotFoundMessage = String(localized: "label.text.document-not-found-message", comment: "Alert Message: The requested document could not be found. It was most likely deleted and is no longer available.")
 	static let doneControlLabel = String(localized: "label.text.done", comment: "Label: Done")
-	static let downloadControlLabel = String(localized: "button.text.download", comment: "Action: Download")
-	static let downloadShortcutTitle = String(localized: "label.text.download-shortcut", comment: "Label: Download Shortcut")
-	static let downloadShortcutMessage = String(localized: "label.text.download-shortcut-message", comment: "Alert Message: This shortcut isn't installed. Would you like to download and install it?")
 	static let duplicateControlLabel = String(localized: "button.text.duplicate", comment: "Action: Duplicate")
 	static let duplicateRowControlLabel = String(localized: "button.text.duplicate-row", comment: "Action: Duplicate Row")
 	static let duplicateRowsControlLabel = String(localized: "button.text.duplicate-rows", comment: "Action: Duplicate Rows")
@@ -379,6 +376,7 @@ extension String {
 	static let settingsEllipsisControlLabel = String(localized: "label.text.settings-with-ellipsis", comment: "Label: Settings…")
 	static let shareControlLabel = String(localized: "button.text.share", comment: "Action: Share")
 	static let shareEllipsisControlLabel = String(localized: "button.text.share-with-ellipsis", comment: "Label: Share…")
+	static let showShortcutsMenuControlLabel = String(localized: "button.text.show-shortcuts-menu", comment: "Label: Show Shortcuts Menu")
 	static let shortcutNamePlaceholderLabel = String(localized: "label.text.shortcut-name", comment: "Label: Shortcut Name")
 	static let shortcutsControlLabel = String(localized: "button.text.shortcuts", comment: "Action: Shortcuts")
 	static let shortcutErrorTitle = String(localized: "label.text.shortcut-error", comment: "Label: Shortcut Error")
@@ -400,6 +398,7 @@ extension String {
 	static let typingControlLabel = String(localized: "label.text.typing", comment: "Label: Typing")
 	static let typewriterCenterControlLabel = String(localized: "label.text.typewriter", comment: "Label: Typewriter")
 
+	static let unableToOpenShortcutsAppLabel = String(localized: "label.text.unable-to-open-shortcuts-app", comment: "Label: Unable to open Shortcuts app")
 	static let uncompleteControlLabel = String(localized: "button.text.uncomplete", comment: "Action: Uncomplete")
 	static let undoControlLabel = String(localized: "button.text.undo", comment: "Action: Undo")
 	static let undoMenuControlLabel = String(localized: "label.text.undo-menu", comment: "Label: Undo Menu")
@@ -469,7 +468,19 @@ extension String {
 	static func noteLevelLabel(level: Int) -> String {
 		return String(localized: "label.text.note-level-\(level)", comment: "Label: Note Level <Note Level>")
 	}
-	
+
+	static func shortcutNotFound(name: String) -> String {
+		return String(localized: "label.text.shortcut-\(name)-not-found", comment: "Label: Shortcut <Name> Not Found")
+	}
+
+	static func shortcutCancelled(name: String) -> String {
+		return String(localized: "label.text.shortcut-\(name)-cancelled", comment: "Label: The Shortcut <Name> was cancelled.")
+	}
+
+	static func shortcutError(name: String, message: String) -> String {
+		return String(localized: "label.text.shortcut-\(name)-returned-\(message)", comment: "Label: The shortcut <Name> returned an error: <Message>.")
+	}
+
 	static func copyrightLabel() -> String {
 		let year = String(Calendar.current.component(.year, from: Date()))
 		return String(localized: "label.text.copyright-\(year)", comment: "Label: Copyright © Vincode, Inc. 2020-<Current Year>")
