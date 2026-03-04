@@ -60,6 +60,7 @@ extension Selector {
 	static let editorToggleBoldface = #selector(EditorViewController.editorToggleBoldface(_:))
 	static let editorToggleItalics = #selector(EditorViewController.editorToggleItalics(_:))
 	static let editorToggleCodeInline = #selector(EditorViewController.editorToggleCodeInline(_:))
+	static let editorToggleHighlight = #selector(EditorViewController.editorToggleHighlight(_:))
 }
 
 @MainActor
@@ -211,6 +212,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return currentRowTextView?.isCodeInlineToggledOn ?? false
 	}
 
+	var isHighlightToggledOn: Bool {
+		return currentRowTextView?.isHighlightToggledOn ?? false
+	}
+
 	var isSearching = false
 	var isFocusing: Bool {
 		guard let outline else { return false }
@@ -288,10 +293,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	private var formatMenuButton: ButtonGroup.Button!
 	private var formatMenuButtonGroup: ButtonGroup!
+	private var linkButton: ButtonGroup.Button!
 	private var boldButton: ButtonGroup.Button!
 	private var italicButton: ButtonGroup.Button!
 	private var codeInlineButton: ButtonGroup.Button!
-	private var linkButton: ButtonGroup.Button!
+	private var highlightButton: ButtonGroup.Button!
 
 	private var keyboardToolBar: UIToolbar!
 	private var leftToolbarButtonGroup: ButtonGroup!
@@ -1426,6 +1432,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		currentRowTextView?.toggleCodeInline(self)
 	}
 
+	@objc func editorToggleHighlight(_ sender: Any? = nil) {
+		rightToolbarButtonGroup.dismissPopOverMenu()
+		currentRowTextView?.toggleHighlight(self)
+	}
+
 	func share(sourceView: UIView? = nil) {
 		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
 		if let sourceView {
@@ -2140,6 +2151,8 @@ private extension EditorViewController {
 		italicButton = formatMenuButtonGroup.addButton(label: .italicControlLabel, image: italicImage, target: self, selector: .editorToggleItalics)
 		let codeInlineImage = UIImage.codeInline.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
 		codeInlineButton = formatMenuButtonGroup.addButton(label: .codeInlineControlLabel, image: codeInlineImage, target: self, selector: .editorToggleCodeInline)
+		let highlightImage = UIImage.highlight.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		highlightButton = formatMenuButtonGroup.addButton(label: .highlightControlLabel, image: highlightImage, target: self, selector: .editorToggleHighlight)
 
 		rightToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
 		insertImageButton = rightToolbarButtonGroup.addButton(label: .insertImageControlLabel, image: .insertImage, selector: .insertImage)
@@ -2170,6 +2183,7 @@ private extension EditorViewController {
 				formatMenuButtonGroup.remove(linkButton)
 				rightToolbarButtonGroup.insert(linkButton, at: 1)
 				rightToolbarButtonGroup.insert(codeInlineButton, at: 2)
+				rightToolbarButtonGroup.insert(highlightButton, at: 3)
 			}
 
 			navButtonGroup.containerWidth = size.width

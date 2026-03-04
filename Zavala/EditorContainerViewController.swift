@@ -293,6 +293,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.boldface,
 			.italic,
 			.codeInline,
+			.highlight,
 			.space,
 			.share,
 			.space,
@@ -311,6 +312,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.boldface,
 			.italic,
 			.codeInline,
+			.highlight,
 			.focus,
 			.filter,
 			.expandAllInOutline,
@@ -457,6 +459,22 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.toolTip = .codeInlineControlLabel
 			item.isBordered = true
 			item.action = .toggleCodeInline
+			toolbarItem = item
+		case .highlight:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if self?.editorViewController?.isHighlightToggledOn ?? false {
+					item.image = .highlight.withTintColor(.systemBlue)
+				} else {
+					item.image = .highlight
+				}
+				return !UIResponder.valid(action: .toggleHighlight)
+			}
+			item.image = .highlight
+			item.label = .highlightControlLabel
+			item.toolTip = .highlightControlLabel
+			item.isBordered = true
+			item.action = .toggleHighlight
 			toolbarItem = item
 		case .expandAllInOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

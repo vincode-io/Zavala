@@ -93,7 +93,29 @@ class EditorRowTextView: UITextView, EditorTextInput {
 		}
 		return false
 	}
-	
+
+	var isHighlightToggledOn: Bool {
+		if typingAttributes[.textHighlightStyle] as? NSAttributedString.TextHighlightStyle == .default {
+			return true
+		}
+		// Also check the text storage at the cursor, since UIKit doesn't propagate
+		// custom attributes into typingAttributes on click/tap.
+		if selectedRange.length == 0 {
+			if selectedRange.location < textStorage.length {
+				if textStorage.attribute(.textHighlightStyle, at: selectedRange.location, effectiveRange: nil) as? NSAttributedString.TextHighlightStyle == .default {
+					return true
+				}
+			}
+		} else {
+			for i in selectedRange.lowerBound..<selectedRange.upperBound {
+				if textStorage.attribute(.textHighlightStyle, at: i, effectiveRange: nil) as? NSAttributedString.TextHighlightStyle == .default {
+					return true
+				}
+			}
+		}
+		return false
+	}
+
 	var isLinkToggledOn: Bool {
 		if selectedRange.length == 0 {
 			if selectedRange.location > 0, textStorage.attribute(.link, at: selectedRange.location - 1, effectiveRange: nil) != nil {
@@ -245,13 +267,18 @@ class EditorRowTextView: UITextView, EditorTextInput {
 					self?.toggleCodeInline(nil)
 				}
 
+				let highlightAction = UIAction(title: .highlightControlLabel, image: .highlight, state: isHighlightToggledOn ? .on : .off) { [weak self] _ in
+					self?.toggleHighlight(nil)
+				}
+
 				var formatChildren = [UIMenuElement]()
 				formatChildren.append(linkAction)
 				for child in menu.children {
 					formatChildren.append(child)
 				}
 				formatChildren.append(codeInlineAction)
-				
+				formatChildren.append(highlightAction)
+
 				let customFormatMenu = menu.replacingChildren(formatChildren)
 				results.append(customFormatMenu)
 				continue
@@ -369,6 +396,25 @@ class EditorRowTextView: UITextView, EditorTextInput {
 				typingAttributes.removeValue(forKey: .codeInline)
 			} else {
 				typingAttributes[.codeInline] = true
+			}
+		}
+	}
+
+	@objc func toggleHighlight(_ sender: Any?) {
+		if selectedRange.length > 0 {
+			textStorage.beginEditing()
+			if textStorage.attribute(.textHighlightStyle, at: selectedRange.location, effectiveRange: nil) as? NSAttributedString.TextHighlightStyle == .default {
+				textStorage.removeAttribute(.textHighlightStyle, range: selectedRange)
+			} else {
+				textStorage.addAttribute(.textHighlightStyle, value: NSAttributedString.TextHighlightStyle.default, range: selectedRange)
+			}
+			textStorage.endEditing()
+			processTextChanges()
+		} else {
+			if typingAttributes[.textHighlightStyle] as? NSAttributedString.TextHighlightStyle == .default {
+				typingAttributes.removeValue(forKey: .textHighlightStyle)
+			} else {
+				typingAttributes[.textHighlightStyle] = NSAttributedString.TextHighlightStyle.default
 			}
 		}
 	}

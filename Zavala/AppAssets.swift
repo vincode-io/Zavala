@@ -76,6 +76,7 @@ extension UIImage {
 	static let hideKeyboard = UIImage(systemName: "keyboard.chevron.compact.down")!
 	static let hideNotesActive = UIImage(systemName: "doc.text.fill")!
 	static let hideNotesInactive = UIImage(systemName: "doc.text")!
+	static let highlight = UIImage(systemName: "highlighter")!
 
 	static let insertImage = UIImage(systemName: "photo")!
 
@@ -279,6 +280,7 @@ extension String {
 
 	static let helpControlLabel = String(localized: "label.text.help", comment: "Label: Help")
 	static let hideKeyboardControlLabel = String(localized: "button.text.hide-keyboard", comment: "Action: Hide Keyboard")
+	static let highlightControlLabel = String(localized: "button.text.highlight", comment: "Action: Highlight")
 	static let historyControlLabel = String(localized: "label.text.history", comment: "Label: History")
 	
 	static let imageControlLabel = String(localized: "label.text.image", comment: "Label: Image")

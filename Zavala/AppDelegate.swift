@@ -230,6 +230,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		return keyCommand
 	}()
 
+	let toggleHighlightCommand: UIKeyCommand = {
+		let attributedTitle = NSAttributedString(string: .highlightControlLabel, attributes: [.textHighlightStyle: NSAttributedString.TextHighlightStyle.default])
+		let keyCommand = UIKeyCommand(title: .highlightControlLabel, action: .toggleHighlight, input: "h", modifierFlags: [.command, .shift])
+		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
+		keyCommand.image = .highlight
+		return keyCommand
+	}()
+
 	let insertImageCommand = UIKeyCommand(title: .insertImageEllipsisControlLabel,
 										  image: .insertImage,
 										  action: .insertImage,
@@ -636,7 +644,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 
 		// Format
 		builder.remove(menu: .format)
-		let formatMenu = UIMenu(title: .formatControlLabel, children: [toggleBoldCommand, toggleItalicsCommand, toggleCodeInlineCommand])
+		let formatMenu = UIMenu(title: .formatControlLabel, children: [toggleBoldCommand, toggleItalicsCommand, toggleCodeInlineCommand, toggleHighlightCommand])
 		builder.insertSibling(formatMenu, afterMenu: .edit)
 
 		// View Menu
