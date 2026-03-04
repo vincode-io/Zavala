@@ -469,10 +469,6 @@ extension String {
 		return String(localized: "label.text.note-level-\(level)", comment: "Label: Note Level <Note Level>")
 	}
 
-	static func shortcutNotFound(name: String) -> String {
-		return String(localized: "label.text.shortcut-\(name)-not-found", comment: "Label: Shortcut <Name> Not Found")
-	}
-
 	static func shortcutCancelled(name: String) -> String {
 		return String(localized: "label.text.shortcut-\(name)-cancelled", comment: "Label: The Shortcut <Name> was cancelled.")
 	}

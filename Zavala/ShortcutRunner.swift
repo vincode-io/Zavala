@@ -9,15 +9,12 @@ import UIKit
 import OSLog
 
 enum ShortcutRunnerError: LocalizedError {
-	case shortcutNotFound(String)
 	case shortcutCancelled(String)
 	case shortcutError(String, String)
 	case unableToOpenShortcutsApp
 
 	var errorDescription: String? {
 		switch self {
-		case .shortcutNotFound(let name):
-			return String.shortcutNotFound(name: name)
 		case .shortcutCancelled(let name):
 			return String.shortcutCancelled(name: name)
 		case .shortcutError(let name, let message):
