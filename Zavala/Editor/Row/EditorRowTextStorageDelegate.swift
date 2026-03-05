@@ -56,12 +56,16 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 					}
 				}
 
-				// This is fun. First we detect if we are in a code inline run in two different ways. First is the code inline attribute key.
-				// The second is by checking the font trait. Since UIKit and RTF don't pass around custom attributed string keys, we use the
-				// monospace font as a marker as well.
+				// Detect if we are in a code inline run in three different ways:
+				// 1. The .codeInline attribute key with a Bool value (set by toggleCodeInline or markdown parsing)
+				// 2. The .font key with a monospace trait (surviving RTF serialization round-trip)
+				// 3. The .codeInline attribute present in the attributes when processing the .font key
 				//
 				// Then if it isn't a code inline stretch, we strip out any font formatting we don't like, unless it is an emoji or special character.
-				if key == .codeInline || key == .font, let oldFont = attributes[key] as? UIFont, oldFont.fontDescriptor.symbolicTraits.contains(.traitMonoSpace) {
+				let isCodeInline = attributes[.codeInline] != nil
+					|| (key == .font && (attributes[.font] as? UIFont)?.fontDescriptor.symbolicTraits.contains(.traitMonoSpace) == true)
+				
+				if (key == .codeInline || key == .font) && isCodeInline {
 					if let baseFont = baseAttributes[.font] as? UIFont {
 						let size = baseFont.pointSize - 2
 						var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
