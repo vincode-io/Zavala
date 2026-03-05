@@ -78,6 +78,7 @@ struct EditShortcutsMenuView: View {
 	private func save() {
 		AppDefaults.shared.shortcutsMenuEntries = entries
 		UIMenuSystem.main.setNeedsRebuild()
+		NotificationCenter.default.post(name: .ShortcutsMenuEntriesDidChange, object: self, userInfo: nil)
 	}
 
 }
