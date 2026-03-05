@@ -29,6 +29,13 @@
         "identifier" : "VinOutlineKitTests",
         "name" : "VinOutlineKitTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:VinMarkdown",
+        "identifier" : "VinMarkdownTests",
+        "name" : "VinMarkdownTests"
+      }
     }
   ],
   "version" : 1
