@@ -636,15 +636,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 			return newElements
 		}
 		
-		let linkMenu = UIMenu(title: "", options: .displayInline, children: [insertImageCommand, linkCommand])
-		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
+		let imageMenu = UIMenu(title: "", options: .displayInline, children: [insertImageCommand])
+		builder.insertSibling(imageMenu, afterMenu: .standardEdit)
 
 		builder.remove(menu: .spelling)
 		builder.remove(menu: .substitutions)
 
 		// Format
 		builder.remove(menu: .format)
-		let formatMenu = UIMenu(title: .formatControlLabel, children: [toggleBoldCommand, toggleItalicsCommand, toggleCodeInlineCommand, toggleHighlightCommand])
+		let formatMenu = UIMenu(title: .formatControlLabel, children: [linkCommand, toggleBoldCommand, toggleItalicsCommand, toggleCodeInlineCommand, toggleHighlightCommand])
 		builder.insertSibling(formatMenu, afterMenu: .edit)
 
 		// View Menu
