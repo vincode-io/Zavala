@@ -398,6 +398,7 @@ class EditorRowTextView: UITextView, EditorTextInput {
 				typingAttributes[.codeInline] = true
 			}
 		}
+		UIMenuSystem.main.setNeedsRebuild()
 	}
 
 	@objc func toggleHighlight(_ sender: Any?) {
@@ -417,6 +418,7 @@ class EditorRowTextView: UITextView, EditorTextInput {
 				typingAttributes[.textHighlightStyle] = NSAttributedString.TextHighlightStyle.default
 			}
 		}
+		UIMenuSystem.main.setNeedsRebuild()
 	}
 
 	@objc func insertNewline(_ sender: Any) {

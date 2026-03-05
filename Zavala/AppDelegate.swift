@@ -643,6 +643,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		builder.remove(menu: .substitutions)
 
 		// Format
+		linkCommand.state = mainCoordinator?.isLinkToggledOn ?? false ? .on : .off
+		toggleCodeInlineCommand.state = mainCoordinator?.isCodeInlineToggledOn ?? false ? .on : .off
+		toggleHighlightCommand.state = mainCoordinator?.isHighlightToggledOn ?? false ? .on : .off
+
 		builder.remove(menu: .format)
 		let formatMenu = UIMenu(title: .formatControlLabel, children: [linkCommand, toggleBoldCommand, toggleItalicsCommand, toggleCodeInlineCommand, toggleHighlightCommand])
 		builder.insertSibling(formatMenu, afterMenu: .edit)
