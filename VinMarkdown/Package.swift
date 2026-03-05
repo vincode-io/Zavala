@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "VinMarkdown",
-    platforms: [.macOS(.v13), .iOS(.v16)],
+    platforms: [.macOS(.v15), .iOS(.v18)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(

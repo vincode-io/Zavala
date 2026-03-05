@@ -29,6 +29,9 @@ private let emphasisDoubleEnd = "**"
 private let codeInlineStart = "`"
 private let codeInlineEnd = "`"
 
+private let highlightStart = "=="
+private let highlightEnd = "=="
+
 private let escapeCharacter: unichar = UInt16(("\\").utf16.first!)
 private let spaceCharacter: unichar = UInt16((" ").utf16.first!)
 private let tabCharacter: unichar = UInt16(("\t").utf16.first!)
@@ -55,6 +58,7 @@ struct AttributedStringMarkdownEmitter {
 		var inBoldRun = false
 		var inItalicRun = false
 		var inCodeRun = false
+		var inHighlightRun = false
 
 		var index = 0
 		while index < normalizedLength {
@@ -84,7 +88,8 @@ struct AttributedStringMarkdownEmitter {
 						nextAttributes: nextAttributes,
 						inBoldRun: &inBoldRun,
 						inItalicRun: &inItalicRun,
-						inCodeRun: &inCodeRun
+						inCodeRun: &inCodeRun,
+					inHighlightRun: &inHighlightRun
 					)
 					currentComponentRange.location = currentComponentRange.location + (component as NSString).length + visualLineBreakOffset
 					visualLineBreakOffset = (visualLineBreak as NSString).length
@@ -99,7 +104,8 @@ struct AttributedStringMarkdownEmitter {
 					nextAttributes: nextAttributes,
 					inBoldRun: &inBoldRun,
 					inItalicRun: &inItalicRun,
-					inCodeRun: &inCodeRun
+					inCodeRun: &inCodeRun,
+				inHighlightRun: &inHighlightRun
 				)
 			}
 
@@ -136,12 +142,14 @@ struct AttributedStringMarkdownEmitter {
 			}
 
 			let rangeHasCode = attributes[.codeInline] != nil
+			let rangeHasHighlight = attributes[.textHighlightStyle] as? NSAttributedString.TextHighlightStyle == .default
 
 			let text = (attributedString.string as NSString).substring(with: range)
 			let boldChar = rangeHasBold ? "B" : " "
 			let italicChar = rangeHasItalic ? "I" : " "
 			let codeChar = rangeHasCode ? "C" : " "
-			result += "[\(text)](\(boldChar)\(italicChar)\(codeChar))\(linkString)"
+			let highlightChar = rangeHasHighlight ? "H" : " "
+			result += "[\(text)](\(boldChar)\(italicChar)\(codeChar)\(highlightChar))\(linkString)"
 		}
 
 		result = result.replacingOccurrences(of: "\n", with: "\\n")
@@ -317,7 +325,8 @@ private func emitMarkdown(
 	nextAttributes: [NSAttributedString.Key: Any]?,
 	inBoldRun: inout Bool,
 	inItalicRun: inout Bool,
-	inCodeRun: inout Bool
+	inCodeRun: inout Bool,
+	inHighlightRun: inout Bool
 ) {
 	let trimmed = currentString.trimmingCharacters(in: .whitespaces)
 	if trimmed.isEmpty {
@@ -385,6 +394,9 @@ private func emitMarkdown(
 		let currentRangeHasCode = currentAttributes[.codeInline] != nil
 		let nextRangeHasCode = nextAttributes?[.codeInline] != nil
 
+		let currentRangeHasHighlight = currentAttributes[.textHighlightStyle] as? NSAttributedString.TextHighlightStyle == .default
+		let nextRangeHasHighlight = nextAttributes?[.textHighlightStyle] as? NSAttributedString.TextHighlightStyle == .default
+
 		var needsEscaping = true
 
 		if currentRangeHasBold {
@@ -408,6 +420,13 @@ private func emitMarkdown(
 			}
 		}
 
+		if currentRangeHasHighlight {
+			if !inHighlightRun {
+				prefixString += highlightStart
+				inHighlightRun = true
+			}
+		}
+
 		if currentRangeHasLink {
 			if let currentRangeURL {
 				prefixString += linkInlineStart
@@ -419,6 +438,12 @@ private func emitMarkdown(
 			}
 		}
 
+		if !nextRangeHasHighlight {
+			if inHighlightRun {
+				suffixString += highlightEnd
+				inHighlightRun = false
+			}
+		}
 		if !nextRangeHasCode {
 			if inCodeRun {
 				suffixString += codeInlineEnd

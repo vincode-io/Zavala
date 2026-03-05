@@ -54,12 +54,16 @@ private let newlineCharacter: unichar = UInt16(("\n").utf16.first!)
 private let codeInlineStart = "`"
 private let codeInlineEnd = "`"
 
+private let highlightStart = "=="
+private let highlightEnd = "=="
+
 private enum MarkdownSpanType {
 	case emphasisSingle
 	case emphasisDouble
 	case linkInline
 	case linkAutomatic
 	case codeInline
+	case highlight
 }
 
 struct InlineMarkdownParser {
@@ -94,6 +98,9 @@ struct InlineMarkdownParser {
 
 		// Process inline code (backticks) before emphasis so content inside code is not styled
 		updateAttributedString(result, beginMarker: codeInlineStart, dividerMarker: nil, endMarker: codeInlineEnd, spanType: .codeInline)
+
+		// Process highlight (==text==)
+		updateAttributedString(result, beginMarker: highlightStart, dividerMarker: nil, endMarker: highlightEnd, spanType: .highlight)
 
 		// Process double emphasis (** and __)
 		updateAttributedString(result, beginMarker: emphasisDoubleStart, dividerMarker: nil, endMarker: emphasisDoubleEnd, spanType: .emphasisDouble)
@@ -300,6 +307,12 @@ private func updateAttributedString(_ result: NSMutableAttributedString, beginMa
 					if beginIndex != endIndex {
 						replaceMarkers = true
 						replacementAttributes = [.codeInline: true]
+					}
+
+				case .highlight:
+					if beginIndex != endIndex {
+						replaceMarkers = true
+						replacementAttributes = [.textHighlightStyle: NSAttributedString.TextHighlightStyle.default]
 					}
 
 				case .linkInline:
