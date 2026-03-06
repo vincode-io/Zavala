@@ -334,6 +334,9 @@ class EditorRowTextView: UITextView, EditorTextInput {
 	}
 	
 	func updateLink(text: String, link: String?, range: NSRange) {
+		// Save the existing text so that we have something to undo to
+		saveText()
+
         var attrs = typingAttributes
         attrs.removeValue(forKey: .link)
         let attrText = NSMutableAttributedString(string: text, attributes: attrs)
@@ -355,8 +358,11 @@ class EditorRowTextView: UITextView, EditorTextInput {
         selectedRange = NSRange(location: range.location + text.count, length: 0)
         
         processTextChanges()
+
+		// Update the format menu
+		UIMenuSystem.main.setNeedsRebuild()
 	}
-	
+
 	func replaceCharacters(_ range: NSRange, withImage image: UIImage) {
 		let attachment = ImageTextAttachment()
 		attachment.image = image
@@ -382,6 +388,9 @@ class EditorRowTextView: UITextView, EditorTextInput {
     }
 
 	@objc func toggleCodeInline(_ sender: Any?) {
+		// Save the current string so that we have something to undo to
+		saveText()
+
 		if selectedRange.length > 0 {
 			textStorage.beginEditing()
 			if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
@@ -398,10 +407,15 @@ class EditorRowTextView: UITextView, EditorTextInput {
 				typingAttributes[.codeInline] = true
 			}
 		}
+
+		// Update the format menu
 		UIMenuSystem.main.setNeedsRebuild()
 	}
 
 	@objc func toggleHighlight(_ sender: Any?) {
+		// Save the current string so that we have something to undo to
+		saveText()
+
 		if selectedRange.length > 0 {
 			textStorage.beginEditing()
 			if textStorage.attribute(.textHighlightStyle, at: selectedRange.location, effectiveRange: nil) as? NSAttributedString.TextHighlightStyle == .default {
@@ -418,6 +432,8 @@ class EditorRowTextView: UITextView, EditorTextInput {
 				typingAttributes[.textHighlightStyle] = NSAttributedString.TextHighlightStyle.default
 			}
 		}
+
+		// Update the format menu
 		UIMenuSystem.main.setNeedsRebuild()
 	}
 

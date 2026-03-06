@@ -1065,6 +1065,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	func updateUI() {
+		UIMenuSystem.main.setNeedsRebuild()
+		
 		guard traitCollection.userInterfaceIdiom != .mac else {
 			delegate?.validateToolbar(self)
 			return
