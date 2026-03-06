@@ -2,7 +2,7 @@
 //  Created by Maurice Parker on 6/12/24.
 //
 
-import Foundation
+import UIKit
 import Markdown
 import VinUtility
 
@@ -13,12 +13,44 @@ public struct MarkdownParser: MarkupWalker {
 	
 	private var isList = false
 	private var parentRowStack = [Row]()
-	private var lastBuiltRow: Row?
+	private var lastRowBuilt: Row?
 	
 	public init() {
 		self.outline = Outline(account: nil, id: .document(0, UUID().uuidString))
 	}
-	
+
+	nonisolated mutating public func visitHeading(_ heading: Heading) {
+		let headingText = heading.plainText
+		let headingLevel = heading.level
+
+		MainActor.assumeIsolated {
+			isList = true
+
+			if headingLevel == 1 {
+				outline.title = headingText
+			} else {
+
+				let row = Row(outline: outline, topicMarkdown: headingText)
+				row.detectData()
+
+				if let parentRow = parentRowStack.last {
+					parentRow.appendRow(row)
+				} else {
+					outline.appendRow(row)
+				}
+
+				lastRowBuilt = row
+			}
+		}
+
+		descendInto(heading)
+
+		MainActor.assumeIsolated {
+			isList = false
+		}
+
+	}
+
 	nonisolated mutating public func visitText(_ text: Text) {
 		let formattedText = text.format()
 		
@@ -47,7 +79,7 @@ public struct MarkdownParser: MarkupWalker {
 		MainActor.assumeIsolated {
 			isList = true
 			
-			if let parentRow = lastBuiltRow {
+			if let parentRow = lastRowBuilt {
 				parentRowStack.append(parentRow)
 			}
 		}
@@ -66,7 +98,7 @@ public struct MarkdownParser: MarkupWalker {
 		MainActor.assumeIsolated {
 			isList = true
 			
-			if let parentRow = lastBuiltRow {
+			if let parentRow = lastRowBuilt {
 				parentRowStack.append(parentRow)
 			}
 		}
@@ -100,7 +132,7 @@ public struct MarkdownParser: MarkupWalker {
 		MainActor.assumeIsolated {
 			let row = Row(outline: outline, topicMarkdown: topic)
 			row.detectData()
-			lastBuiltRow = row
+			lastRowBuilt = row
 			
 			if let parentRow = parentRowStack.last {
 				parentRow.appendRow(row)

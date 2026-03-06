@@ -1,4 +1,3 @@
-```markdown
 # Qualities of a Great Car
 
 ## Section 1
@@ -54,4 +53,3 @@
   - Fuel-efficient or electric powertrain options
   - Recyclable components where possible
   - Compliance with environmental standards
-```

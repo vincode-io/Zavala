@@ -53,4 +53,12 @@ class VOKTestCase: ErrorHandler, OutlineCommandDelegate {
 		return opml
 	}
 	
+	func loadMarkdown(_ name: String) -> String {
+		guard let markdownLocation = Bundle.module.url(forResource: "Resources/\(name)", withExtension: "md"),
+			  let markdown = try? String(contentsOf: markdownLocation, encoding: .utf8) else {
+			fatalError()
+		}
+		return markdown
+	}
+
 }
