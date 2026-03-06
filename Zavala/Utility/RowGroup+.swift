@@ -70,7 +70,7 @@ extension RowGroup {
 		}
 
 		let document = Markdown.Document(parsing: text)
-		var walker = SimpleRowWalker()
+		var walker = MarkdownParser()
 		walker.visit(document)
 		
 		var rowGroups = [RowGroup]()

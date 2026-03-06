@@ -47,7 +47,7 @@ class VOKTestCase: ErrorHandler, OutlineCommandDelegate {
 	
 	func loadOPML(_ name: String) -> String {
 		guard let opmlLocation = Bundle.module.url(forResource: "Resources/\(name)", withExtension: "opml"),
-			  let opml = try? String(contentsOf: opmlLocation) else {
+			  let opml = try? String(contentsOf: opmlLocation, encoding: .utf8) else {
 			fatalError()
 		}
 		return opml

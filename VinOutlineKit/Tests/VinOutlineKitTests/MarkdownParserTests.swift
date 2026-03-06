@@ -7,11 +7,11 @@ import Testing
 import Markdown
 @testable import VinOutlineKit
 
-final class SimpleRowWalkerTests: VOKTestCase {
+final class MarkdownParserTests: VOKTestCase {
 	
 	@Test func singleTextRow() throws {
 		let document = Document(parsing: "This is just a sentence.")
-		var walker = SimpleRowWalker()
+		var walker = MarkdownParser()
 		walker.visit(document)
 		
 		#expect(walker.rows.count == 1)
@@ -20,7 +20,7 @@ final class SimpleRowWalkerTests: VOKTestCase {
 	
 	@Test func multipleTextRow() throws {
 		let document = Document(parsing: "This is just a sentence.\nSo is this.\nThe third sentence.")
-		var walker = SimpleRowWalker()
+		var walker = MarkdownParser()
 		walker.visit(document)
 		
 		#expect(walker.rows.count == 3)
@@ -28,7 +28,7 @@ final class SimpleRowWalkerTests: VOKTestCase {
 	
 	@Test func singleBulletRow() throws {
 		let document = Document(parsing: "*\tThis is *just* a sentence.")
-		var walker = SimpleRowWalker()
+		var walker = MarkdownParser()
 		walker.visit(document)
 		
 		#expect(walker.rows.count == 1)
@@ -50,7 +50,7 @@ final class SimpleRowWalkerTests: VOKTestCase {
 		2. Row 3.1.2
 """
 		let document = Document(parsing: outline)
-		var walker = SimpleRowWalker()
+		var walker = MarkdownParser()
 		walker.visit(document)
 
 		#expect(walker.rows.count == 3)
@@ -75,7 +75,7 @@ final class SimpleRowWalkerTests: VOKTestCase {
 		* Row 3.1.2
 """
 		let document = Document(parsing: outline)
-		var walker = SimpleRowWalker()
+		var walker = MarkdownParser()
 		walker.visit(document)
 
 		#expect(walker.rows.count == 3)

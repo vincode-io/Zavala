@@ -7,7 +7,7 @@ import Markdown
 import VinUtility
 
 @MainActor
-public struct SimpleRowWalker: MarkupWalker {
+public struct MarkdownParser: MarkupWalker {
 		
 	public var rows: [Row] {
 		MainActor.assumeIsolated {
