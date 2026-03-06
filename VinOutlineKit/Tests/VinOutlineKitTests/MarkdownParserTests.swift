@@ -11,28 +11,28 @@ final class MarkdownParserTests: VOKTestCase {
 	
 	@Test func singleTextRow() throws {
 		let document = Document(parsing: "This is just a sentence.")
-		var walker = MarkdownParser()
-		walker.visit(document)
+		var parser = MarkdownParser()
+		parser.visit(document)
 		
-		#expect(walker.rows.count == 1)
-		#expect(walker.rows[0].topicMarkdown(type: .markdown) == "This is just a sentence.")
+		#expect(parser.outline.rows.count == 1)
+		#expect(parser.outline.rows[0].topicMarkdown(type: .markdown) == "This is just a sentence.")
 	}
 	
 	@Test func multipleTextRow() throws {
 		let document = Document(parsing: "This is just a sentence.\nSo is this.\nThe third sentence.")
-		var walker = MarkdownParser()
-		walker.visit(document)
+		var parser = MarkdownParser()
+		parser.visit(document)
 		
-		#expect(walker.rows.count == 3)
+		#expect(parser.outline.rows.count == 3)
 	}
 	
 	@Test func singleBulletRow() throws {
 		let document = Document(parsing: "*\tThis is *just* a sentence.")
-		var walker = MarkdownParser()
-		walker.visit(document)
+		var parser = MarkdownParser()
+		parser.visit(document)
 		
-		#expect(walker.rows.count == 1)
-		#expect(walker.rows[0].topicMarkdown(type: .markdown) == "This is _just_ a sentence.")
+		#expect(parser.outline.rows.count == 1)
+		#expect(parser.outline.rows[0].topicMarkdown(type: .markdown) == "This is _just_ a sentence.")
 	}
 	
 	@Test func orderedList() throws {
@@ -50,14 +50,14 @@ final class MarkdownParserTests: VOKTestCase {
 		2. Row 3.1.2
 """
 		let document = Document(parsing: outline)
-		var walker = MarkdownParser()
-		walker.visit(document)
+		var parser = MarkdownParser()
+		parser.visit(document)
 
-		#expect(walker.rows.count == 3)
-		#expect(walker.rows[0].rows.count == 2)
-		#expect(walker.rows[1].rows.count == 3)
-		#expect(walker.rows[2].rows.count == 1)
-		#expect(walker.rows[2].rows[0].rows.count == 2)
+		#expect(parser.outline.rows.count == 3)
+		#expect(parser.outline.rows[0].rows.count == 2)
+		#expect(parser.outline.rows[1].rows.count == 3)
+		#expect(parser.outline.rows[2].rows.count == 1)
+		#expect(parser.outline.rows[2].rows[0].rows.count == 2)
 	}
 	
 	@Test func unorderedList() throws {
@@ -75,14 +75,14 @@ final class MarkdownParserTests: VOKTestCase {
 		* Row 3.1.2
 """
 		let document = Document(parsing: outline)
-		var walker = MarkdownParser()
-		walker.visit(document)
+		var parser = MarkdownParser()
+		parser.visit(document)
 
-		#expect(walker.rows.count == 3)
-		#expect(walker.rows[0].rows.count == 2)
-		#expect(walker.rows[1].rows.count == 3)
-		#expect(walker.rows[2].rows.count == 1)
-		#expect(walker.rows[2].rows[0].rows.count == 2)
+		#expect(parser.outline.rows.count == 3)
+		#expect(parser.outline.rows[0].rows.count == 2)
+		#expect(parser.outline.rows[1].rows.count == 3)
+		#expect(parser.outline.rows[2].rows.count == 1)
+		#expect(parser.outline.rows[2].rows[0].rows.count == 2)
 	}
 	
 }

@@ -9,13 +9,8 @@ import VinUtility
 @MainActor
 public struct MarkdownParser: MarkupWalker {
 		
-	public var rows: [Row] {
-		MainActor.assumeIsolated {
-			return outline?.rows ?? []
-		}
-	}
-
-	private var outline: Outline?
+	public private(set) var outline: Outline
+	
 	private var isList = false
 	private var parentRowStack = [Row]()
 	private var lastBuiltRow: Row?
@@ -28,7 +23,7 @@ public struct MarkdownParser: MarkupWalker {
 		let formattedText = text.format()
 		
 		MainActor.assumeIsolated {
-			guard !isList, let outline else { return }
+			guard !isList else { return }
 
 			let row = Row(outline: outline, topicMarkdown: formattedText)
 			row.detectData()
@@ -40,7 +35,7 @@ public struct MarkdownParser: MarkupWalker {
 		let formattedLink = link.format()
 		
 		MainActor.assumeIsolated {
-			guard !isList, let outline else { return }
+			guard !isList else { return }
 
 			let row = Row(outline: outline, topicMarkdown: formattedLink)
 			row.detectData()
@@ -103,8 +98,6 @@ public struct MarkdownParser: MarkupWalker {
 		}
 
 		MainActor.assumeIsolated {
-			guard let outline else { return }
-
 			let row = Row(outline: outline, topicMarkdown: topic)
 			row.detectData()
 			lastBuiltRow = row
