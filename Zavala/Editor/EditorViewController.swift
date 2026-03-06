@@ -345,7 +345,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var childRowIndent = AppDefaults.shared.createRows == .indentedWithChildren
 	private var rowIndentSize = AppDefaults.shared.rowIndentSize
 	private var rowSpacingSize = AppDefaults.shared.rowSpacingSize
-	
+	private var showShortcutsMenu = AppDefaults.shared.showShortcutsMenu
+
 	private lazy var findInteraction = UIFindInteraction(sessionDelegate: self)
 	
 	private lazy var transition = ImageTransition(delegate: self)
@@ -438,6 +439,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(didUndoChange(_:)), name: .NSUndoManagerDidUndoChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didRedoChange(_:)), name: .NSUndoManagerDidRedoChange, object: nil)
 
+		NotificationCenter.default.addObserver(self, selector: #selector(shortcutsMenuEntriesDidChange), name: .ShortcutsMenuEntriesDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -786,7 +788,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func outlineFontCacheDidRebuild(_ note: Notification) {
 		collectionView.reloadData()
 	}
-	
+
+	@objc func shortcutsMenuEntriesDidChange(_ note: Notification) {
+		updateUI()
+	}
+
 	@objc nonisolated func userDefaultsDidChange() {
 		Task { @MainActor in
 			childRowIndent = AppDefaults.shared.createRows == .indentedWithChildren
@@ -799,6 +805,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			if rowSpacingSize != AppDefaults.shared.rowSpacingSize {
 				rowSpacingSize = AppDefaults.shared.rowSpacingSize
 				collectionView.reloadData()
+			}
+
+			if showShortcutsMenu != AppDefaults.shared.showShortcutsMenu {
+				showShortcutsMenu = AppDefaults.shared.showShortcutsMenu
+				updateUI()
 			}
 
 			guard let layout = self.collectionView.collectionViewLayout as? EditorCollectionViewCompositionalLayout else { return }
@@ -1054,6 +1065,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	func updateUI() {
+		UIMenuSystem.main.setNeedsRebuild()
+		
 		guard traitCollection.userInterfaceIdiom != .mac else {
 			delegate?.validateToolbar(self)
 			return
@@ -2224,7 +2237,7 @@ private extension EditorViewController {
 		}
 		shareActions.append(shareAction)
 
-		if AppDefaults.shared.showShortcutsMenu {
+		if showShortcutsMenu {
 			var shortcutItems = [UIMenuElement]()
 			for (index, shortcutName) in AppDefaults.shared.shortcutsMenuEntries.enumerated() {
 				shortcutItems.append(UIAction(title: shortcutName) { _ in

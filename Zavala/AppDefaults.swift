@@ -99,6 +99,10 @@ enum DefaultsSize: Int, CustomStringConvertible, CaseIterable {
 	}
 }
 
+public extension Notification.Name {
+	static let ShortcutsMenuEntriesDidChange = Notification.Name(rawValue: "ShortcutsMenuEntriesDidChange")
+}
+
 final class AppDefaults {
 
 	nonisolated(unsafe) static let shared = AppDefaults()

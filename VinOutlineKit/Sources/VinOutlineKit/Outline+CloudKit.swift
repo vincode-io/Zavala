@@ -304,6 +304,8 @@ extension Outline: VCKModel {
 	}
     
     public func buildRecord() -> CKRecord? {
+		guard let account else { return nil }
+
         let record: CKRecord = {
             if let syncMetaData = cloudKitMetaData, let record = CKRecord(syncMetaData) {
                 return record
@@ -353,7 +355,7 @@ extension Outline: VCKModel {
         record[Outline.CloudKitRecord.Fields.rowOrder] = [String]()
 
         if let recordTagIDs = merge(client: tagIDs, ancestor: ancestorTagIDs, server: serverTagIDs) {
-            let recordTags = recordTagIDs.compactMap{ account!.findTag(tagID: $0) }
+            let recordTags = recordTagIDs.compactMap{ account.findTag(tagID: $0) }
             record[Outline.CloudKitRecord.Fields.tagNames] = recordTags.map { $0.name }
         }
 

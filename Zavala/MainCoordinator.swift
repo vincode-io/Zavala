@@ -67,6 +67,18 @@ extension MainCoordinator {
 		return editorViewController?.isEditingNote ?? false
 	}
 
+	var isLinkToggledOn: Bool {
+		return editorViewController?.isLinkToggledOn ?? false
+	}
+
+	var isCodeInlineToggledOn: Bool {
+		return editorViewController?.isCodeInlineToggledOn ?? false
+	}
+
+	var isHighlightToggledOn: Bool {
+		return editorViewController?.isHighlightToggledOn ?? false
+	}
+
 	func copyDocumentLink() {
 		UIPasteboard.general.url = selectedDocuments.first?.id.url
 	}
