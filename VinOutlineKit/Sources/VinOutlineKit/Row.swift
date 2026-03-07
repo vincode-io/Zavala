@@ -399,7 +399,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	}
 
 
-	public init(outline: Outline, topicMarkdown: String?, noteMarkdown: String? = nil) {
+	public init(outline: Outline, topicMarkdown: String? = nil, noteMarkdown: String? = nil) {
 		self.isComplete = false
 		self.id = UUID().uuidString
 		self.outline = outline

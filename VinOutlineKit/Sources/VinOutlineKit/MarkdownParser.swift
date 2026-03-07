@@ -56,30 +56,16 @@ public struct MarkdownParser: MarkupWalker {
 		lastHeadingLevel = headingLevel
 	}
 
-	nonisolated mutating public func visitText(_ text: Text) {
-		let formattedText = text.format()
-		
-		MainActor.assumeIsolated {
-			guard !isList else { return }
+	nonisolated mutating public func visitParagraph(_ paragraph: Paragraph) {
+		guard let formattedParagraph = paragraph.format().trimmed() else { return }
 
-			let row = Row(outline: outline, topicMarkdown: formattedText)
+		MainActor.assumeIsolated {
+			let row = Row(outline: outline, noteMarkdown: formattedParagraph)
 			row.detectData()
 			outline.appendRow(row)
 		}
 	}
-	
-	nonisolated mutating public func visitLink(_ link: Link) -> () {
-		let formattedLink = link.format()
-		
-		MainActor.assumeIsolated {
-			guard !isList else { return }
 
-			let row = Row(outline: outline, topicMarkdown: formattedLink)
-			row.detectData()
-			outline.appendRow(row)
-		}
-	}
-	
 	nonisolated mutating public func visitListItem(_ listItem: ListItem) {
 		MainActor.assumeIsolated {
 			isList = true
@@ -107,7 +93,7 @@ public struct MarkdownParser: MarkupWalker {
 
 						// Don't give the last topic line a newline
 						if j < lines.count - 1 {
-							note.append("\n")
+							topic.append("\n")
 						}
 					}
 
@@ -141,7 +127,7 @@ public struct MarkdownParser: MarkupWalker {
 		}
 
 		MainActor.assumeIsolated {
-			let row = Row(outline: outline, topicMarkdown: topic, noteMarkdown: note)
+			let row = Row(outline: outline, topicMarkdown: topic.isEmpty ? nil : topic, noteMarkdown: note.isEmpty ? nil : note)
 			row.detectData()
 
 			if let parentRow = parentRowStack.last {
