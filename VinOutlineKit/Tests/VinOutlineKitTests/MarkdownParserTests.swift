@@ -115,8 +115,9 @@ final class MarkdownParserTests: VOKTestCase {
 		#expect(parser.outline.rows.count == 3)
 
 		#expect(parser.outline.rows[0].topic?.string == "Section 1")
-		#expect(parser.outline.rows[0].rows[0].topic?.string == "Section 1.1")
-		#expect(parser.outline.rows[0].rows[0].rows[0].topic?.string == "Section 1.1.1")
+		#expect(parser.outline.rows[0].rows[0].topic?.string == "Performance")
+		#expect(parser.outline.rows[0].rows[0].rows[0].topic?.string == "Responsive acceleration")
+		#expect(parser.outline.rows[0].rows[1].topic?.string == "Section 1.1")
 
 		#expect(parser.outline.rows[1].topic?.string == "Section 2")
 		#expect(parser.outline.rows[2].topic?.string == "Section 3")

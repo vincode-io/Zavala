@@ -13,8 +13,8 @@ public struct MarkdownParser: MarkupWalker {
 	
 	private var isList = false
 	private var parentRowStack = [Row]()
-	private var lastRowBuilt: Row?
-	
+	private var lastHeadingLevel = 0
+
 	public init() {
 		self.outline = Outline(account: nil, id: .document(0, UUID().uuidString))
 	}
@@ -29,13 +29,17 @@ public struct MarkdownParser: MarkupWalker {
 		let headingLevel = heading.level
 
 		MainActor.assumeIsolated {
-			isList = true
-
 			if headingLevel == 1 {
 				outline.title = headingText
 			} else {
 				let row = Row(outline: outline, topicMarkdown: headingMarkdown)
 				row.detectData()
+
+				if headingLevel <= lastHeadingLevel {
+					for _ in 0...lastHeadingLevel - headingLevel {
+						parentRowStack.removeLast()
+					}
+				}
 
 				if let parentRow = parentRowStack.last {
 					parentRow.appendRow(row)
@@ -43,16 +47,11 @@ public struct MarkdownParser: MarkupWalker {
 					outline.appendRow(row)
 				}
 
-				lastRowBuilt = row
+				parentRowStack.append(row)
 			}
 		}
 
-		descendInto(heading)
-
-		MainActor.assumeIsolated {
-			isList = false
-		}
-
+		lastHeadingLevel = headingLevel
 	}
 
 	nonisolated mutating public func visitText(_ text: Text) {
@@ -82,38 +81,24 @@ public struct MarkdownParser: MarkupWalker {
 	nonisolated mutating public func visitUnorderedList(_ unorderedList: UnorderedList) {
 		MainActor.assumeIsolated {
 			isList = true
-			
-			if let parentRow = lastRowBuilt {
-				parentRowStack.append(parentRow)
-			}
 		}
 			
 		descendInto(unorderedList)
 			
 		MainActor.assumeIsolated {
 			isList = false
-			if !parentRowStack.isEmpty {
-				parentRowStack.removeLast()
-			}
 		}
 	}
 	
 	nonisolated mutating public func visitOrderedList(_ orderedList: OrderedList) {
 		MainActor.assumeIsolated {
 			isList = true
-			
-			if let parentRow = lastRowBuilt {
-				parentRowStack.append(parentRow)
-			}
 		}
 			
 		descendInto(orderedList)
 			
 		MainActor.assumeIsolated {
 			isList = false
-			if !parentRowStack.isEmpty {
-				parentRowStack.removeLast()
-			}
 		}
 	}
 	
@@ -136,16 +121,24 @@ public struct MarkdownParser: MarkupWalker {
 		MainActor.assumeIsolated {
 			let row = Row(outline: outline, topicMarkdown: topic)
 			row.detectData()
-			lastRowBuilt = row
-			
+
 			if let parentRow = parentRowStack.last {
 				parentRow.appendRow(row)
 			} else {
 				outline.appendRow(row)
 			}
+
+			print("***** Push listItem: \(topic)")
+			parentRowStack.append(row)
 		}
 		
 		descendInto(listItem)
+
+		MainActor.assumeIsolated {
+			print("***** Pop listItem: \(topic)")
+			_ = parentRowStack.removeLast()
+			isList = false
+		}
 	}
 	
 }
