@@ -231,14 +231,22 @@ public final class Account: Identifiable, Equatable {
 			throw AccountError.fileReadError
 		}
 
-		// Strip code block lines here
+		// Chat bots like to put markdown output in a code block. Strip the code block if this has happened.
+		var lines = markdownText.components(separatedBy: .newlines)
+		if lines.count >= 2 && lines.first!.hasPrefix("```") && lines.last!.hasPrefix("```") {
+			lines.removeFirst()
+			lines.removeLast()
+		}
+		let strippedText = lines.joined(separator: "\n")
 
-		let markdownDocument = Markdown.Document(parsing: markdownText)
+		// Parse the Markdown document into an Outline
+		let markdownDocument = Markdown.Document(parsing: strippedText)
 		var parser = MarkdownParser(account: self)
 		parser.visit(markdownDocument)
 
 		let outline = parser.outline
 
+		// Do all the normal housekeeping stuff that keeps things running around here.
 		let document = Document.outline(outline)
 		documents?.append(document)
 		accountDocumentsDidChange()
@@ -246,9 +254,7 @@ public final class Account: Identifiable, Equatable {
 		outline.zoneID = cloudKitManager?.outlineZone.zoneID
 
 		disambiguate(document: document)
-
 		outline.updateAllLinkRelationships()
-
 		fixAltLinks(excluding: outline)
 
 		await outline.forceSave()
@@ -342,9 +348,7 @@ public final class Account: Identifiable, Equatable {
 		outline.zoneID = cloudKitManager?.outlineZone.zoneID
 		
 		disambiguate(document: document)
-		
 		outline.updateAllLinkRelationships()
-		
 		fixAltLinks(excluding: outline)
 		
 		await outline.forceSave()
