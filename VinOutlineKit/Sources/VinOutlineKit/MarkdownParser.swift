@@ -78,30 +78,6 @@ public struct MarkdownParser: MarkupWalker {
 		}
 	}
 	
-	nonisolated mutating public func visitUnorderedList(_ unorderedList: UnorderedList) {
-		MainActor.assumeIsolated {
-			isList = true
-		}
-			
-		descendInto(unorderedList)
-			
-		MainActor.assumeIsolated {
-			isList = false
-		}
-	}
-	
-	nonisolated mutating public func visitOrderedList(_ orderedList: OrderedList) {
-		MainActor.assumeIsolated {
-			isList = true
-		}
-			
-		descendInto(orderedList)
-			
-		MainActor.assumeIsolated {
-			isList = false
-		}
-	}
-	
 	nonisolated mutating public func visitListItem(_ listItem: ListItem) {
 		MainActor.assumeIsolated {
 			isList = true
