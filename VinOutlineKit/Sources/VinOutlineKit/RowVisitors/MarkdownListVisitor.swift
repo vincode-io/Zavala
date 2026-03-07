@@ -44,8 +44,12 @@ final class MarkdownListVisitor {
 			markdown.append("\n\n")
 			let paragraphs = noteMarkdown.components(separatedBy: "\n\n")
 			for paragraph in paragraphs {
-				markdown.append(String(repeating: "\t", count: indentLevel))
-				markdown.append("  \(paragraph)\n\n")
+				let lines = paragraph.components(separatedBy: "\n")
+				for line in lines {
+					markdown.append(String(repeating: "\t", count: indentLevel))
+					markdown.append("  \(line)\n")
+				}
+				markdown.append("\n")
 			}
 		}
 		
