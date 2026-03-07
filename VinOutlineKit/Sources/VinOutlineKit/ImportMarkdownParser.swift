@@ -160,7 +160,9 @@ public struct ImportMarkdownParser: MarkupWalker {
 		descendInto(listItem)
 
 		MainActor.assumeIsolated {
-			_ = parentRowStack.removeLast()
+			if !parentRowStack.isEmpty {
+				parentRowStack.removeLast()
+			}
 			isList = false
 		}
 	}
