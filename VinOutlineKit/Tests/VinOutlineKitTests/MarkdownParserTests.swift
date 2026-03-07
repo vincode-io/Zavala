@@ -11,28 +11,28 @@ final class MarkdownParserTests: VOKTestCase {
 
 	@Test func singleTextRow() throws {
 		let document = Document(parsing: "This is just a sentence.")
-		var parser = MarkdownParser()
+		var parser = SimpleMarkdownParser()
 		parser.visit(document)
 
-		#expect(parser.outline.rows.count == 1)
-		#expect(parser.outline.rows[0].topicMarkdown(type: .markdown) == "This is just a sentence.")
+		#expect(parser.rows.count == 1)
+		#expect(parser.rows[0].topicMarkdown(type: .markdown) == "This is just a sentence.")
 	}
 
 	@Test func multipleTextRow() throws {
 		let document = Document(parsing: "This is just a sentence.\nSo is this.\nThe third sentence.")
-		var parser = MarkdownParser()
+		var parser = SimpleMarkdownParser()
 		parser.visit(document)
 
-		#expect(parser.outline.rows.count == 3)
+		#expect(parser.rows.count == 3)
 	}
 
 	@Test func singleBulletRow() throws {
 		let document = Document(parsing: "*\tThis is *just* a sentence.")
-		var parser = MarkdownParser()
+		var parser = SimpleMarkdownParser()
 		parser.visit(document)
 
-		#expect(parser.outline.rows.count == 1)
-		#expect(parser.outline.rows[0].topicMarkdown(type: .markdown) == "This is _just_ a sentence.")
+		#expect(parser.rows.count == 1)
+		#expect(parser.rows[0].topicMarkdown(type: .markdown) == "This is _just_ a sentence.")
 	}
 
 	@Test func orderedList() throws {
@@ -50,14 +50,14 @@ final class MarkdownParserTests: VOKTestCase {
 		2. Row 3.1.2
 """
 		let document = Document(parsing: markdown)
-		var parser = MarkdownParser()
+		var parser = SimpleMarkdownParser()
 		parser.visit(document)
 
-		#expect(parser.outline.rows.count == 3)
-		#expect(parser.outline.rows[0].rows.count == 2)
-		#expect(parser.outline.rows[1].rows.count == 3)
-		#expect(parser.outline.rows[2].rows.count == 1)
-		#expect(parser.outline.rows[2].rows[0].rows.count == 2)
+		#expect(parser.rows.count == 3)
+		#expect(parser.rows[0].rows.count == 2)
+		#expect(parser.rows[1].rows.count == 3)
+		#expect(parser.rows[2].rows.count == 1)
+		#expect(parser.rows[2].rows[0].rows.count == 2)
 	}
 
 	@Test func unorderedList() throws {
@@ -75,20 +75,22 @@ final class MarkdownParserTests: VOKTestCase {
 		* Row 3.1.2
 """
 		let document = Document(parsing: markdown)
-		var parser = MarkdownParser()
+		var parser = SimpleMarkdownParser()
 		parser.visit(document)
 
-		#expect(parser.outline.rows.count == 3)
-		#expect(parser.outline.rows[0].rows.count == 2)
-		#expect(parser.outline.rows[1].rows.count == 3)
-		#expect(parser.outline.rows[2].rows.count == 1)
-		#expect(parser.outline.rows[2].rows[0].rows.count == 2)
+		#expect(parser.rows.count == 3)
+		#expect(parser.rows[0].rows.count == 2)
+		#expect(parser.rows[1].rows.count == 3)
+		#expect(parser.rows[2].rows.count == 1)
+		#expect(parser.rows[2].rows[0].rows.count == 2)
 	}
 
 	@Test func fullOutlineBasic() throws {
+		let accountManager = buildAccountManager()
+
 		let markdown = loadMarkdown("MarkdownOutline1")
 		let document = Document(parsing: markdown)
-		var parser = MarkdownParser()
+		var parser = ImportMarkdownParser(account: accountManager.localAccount!, images: nil)
 		parser.visit(document)
 
 		#expect(parser.outline.title == "Qualities of a Great Car 1")
@@ -106,9 +108,11 @@ final class MarkdownParserTests: VOKTestCase {
 	}
 
 	@Test func fullOutlineNestedHeadings() throws {
+		let accountManager = buildAccountManager()
+
 		let markdown = loadMarkdown("MarkdownOutline2")
 		let document = Document(parsing: markdown)
-		var parser = MarkdownParser()
+		var parser = ImportMarkdownParser(account: accountManager.localAccount!, images: nil)
 		parser.visit(document)
 
 		#expect(parser.outline.title == "Qualities of a Great Car 2")

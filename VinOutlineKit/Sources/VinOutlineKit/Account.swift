@@ -241,7 +241,7 @@ public final class Account: Identifiable, Equatable {
 
 		// Parse the Markdown document into an Outline
 		let markdownDocument = Markdown.Document(parsing: strippedText)
-		var parser = MarkdownParser(account: self, images: images)
+		var parser = ImportMarkdownParser(account: self, images: images)
 		parser.visit(markdownDocument)
 
 		let outline = parser.outline

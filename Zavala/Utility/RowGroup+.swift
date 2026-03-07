@@ -70,11 +70,11 @@ extension RowGroup {
 		}
 
 		let document = Markdown.Document(parsing: text)
-		var parser = MarkdownParser()
+		var parser = SimpleMarkdownParser()
 		parser.visit(document)
 		
 		var rowGroups = [RowGroup]()
-		for row in parser.outline.rows {
+		for row in parser.rows {
 			rowGroups.append(RowGroup(row))
 		}
 		return rowGroups

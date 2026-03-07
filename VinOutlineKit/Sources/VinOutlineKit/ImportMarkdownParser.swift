@@ -7,7 +7,7 @@ import Markdown
 import VinUtility
 
 @MainActor
-public struct MarkdownParser: MarkupWalker {
+public struct ImportMarkdownParser: MarkupWalker {
 		
 	public private(set) var outline: Outline
 
@@ -16,10 +16,6 @@ public struct MarkdownParser: MarkupWalker {
 	private var isList = false
 	private var parentRowStack = [Row]()
 	private var lastHeadingLevel = 0
-
-	public init() {
-		self.outline = Outline(account: nil, id: .document(0, UUID().uuidString))
-	}
 
 	public init(account: Account, images: [String:  Data]?) {
 		self.outline = Outline(account: account, id: .document(0, UUID().uuidString))
