@@ -11,14 +11,13 @@ public struct SimpleMarkdownParser: MarkupWalker {
 
 	public var rows: [Row] {
 		MainActor.assumeIsolated {
-			return outline?.rows ?? []
+			return outline.rows
 		}
 	}
 
-	private var outline: Outline?
+	private var outline: Outline
 	private var isList = false
 	private var parentRowStack = [Row]()
-	private var lastBuiltRow: Row?
 
 	public init() {
 		self.outline = Outline(account: nil, id: .document(0, UUID().uuidString))
@@ -28,7 +27,7 @@ public struct SimpleMarkdownParser: MarkupWalker {
 		let formattedText = text.format()
 
 		MainActor.assumeIsolated {
-			guard !isList, let outline else { return }
+			guard !isList else { return }
 
 			let row = Row(outline: outline, topicMarkdown: formattedText)
 			row.detectData()
@@ -40,49 +39,11 @@ public struct SimpleMarkdownParser: MarkupWalker {
 		let formattedLink = link.format()
 
 		MainActor.assumeIsolated {
-			guard !isList, let outline else { return }
+			guard !isList else { return }
 
 			let row = Row(outline: outline, topicMarkdown: formattedLink)
 			row.detectData()
 			outline.appendRow(row)
-		}
-	}
-
-	nonisolated mutating public func visitUnorderedList(_ unorderedList: UnorderedList) {
-		MainActor.assumeIsolated {
-			isList = true
-
-			if let parentRow = lastBuiltRow {
-				parentRowStack.append(parentRow)
-			}
-		}
-
-		descendInto(unorderedList)
-
-		MainActor.assumeIsolated {
-			isList = false
-			if !parentRowStack.isEmpty {
-				parentRowStack.removeLast()
-			}
-		}
-	}
-
-	nonisolated mutating public func visitOrderedList(_ orderedList: OrderedList) {
-		MainActor.assumeIsolated {
-			isList = true
-
-			if let parentRow = lastBuiltRow {
-				parentRowStack.append(parentRow)
-			}
-		}
-
-		descendInto(orderedList)
-
-		MainActor.assumeIsolated {
-			isList = false
-			if !parentRowStack.isEmpty {
-				parentRowStack.removeLast()
-			}
 		}
 	}
 
@@ -103,20 +64,26 @@ public struct SimpleMarkdownParser: MarkupWalker {
 		}
 
 		MainActor.assumeIsolated {
-			guard let outline else { return }
-
 			let row = Row(outline: outline, topicMarkdown: topic)
 			row.detectData()
-			lastBuiltRow = row
 
 			if let parentRow = parentRowStack.last {
 				parentRow.appendRow(row)
 			} else {
 				outline.appendRow(row)
 			}
+
+			parentRowStack.append(row)
 		}
 
 		descendInto(listItem)
+
+		MainActor.assumeIsolated {
+			isList = false
+			if !parentRowStack.isEmpty {
+				parentRowStack.removeLast()
+			}
+		}
 	}
 
 }
