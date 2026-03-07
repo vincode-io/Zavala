@@ -128,14 +128,12 @@ public struct MarkdownParser: MarkupWalker {
 				outline.appendRow(row)
 			}
 
-			print("***** Push listItem: \(topic)")
 			parentRowStack.append(row)
 		}
 		
 		descendInto(listItem)
 
 		MainActor.assumeIsolated {
-			print("***** Pop listItem: \(topic)")
 			_ = parentRowStack.removeLast()
 			isList = false
 		}
