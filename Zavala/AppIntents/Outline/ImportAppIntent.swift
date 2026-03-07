@@ -57,10 +57,20 @@ struct ImportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
 				images[imageUUID] = intentImage.data
 			}
 		}
-		
-		guard let outline = try? await account.importOPML(inputFile.data, tags: nil, images: images).outline else {
-			await suspend()
-			throw ZavalaAppIntentError.unableToParseOPML
+
+		let outline: Outline
+		if importType == .markdown {
+			guard let importedOutline = try? await account.importMarkdown(inputFile.data, tags: nil, images: images).outline else {
+				await suspend()
+				throw ZavalaAppIntentError.unableToParseMarkdown
+			}
+			outline = importedOutline
+		} else {
+			guard let importedOutline = try? await account.importOPML(inputFile.data, tags: nil, images: images).outline else {
+				await suspend()
+				throw ZavalaAppIntentError.unableToParseOPML
+			}
+			outline = importedOutline
 		}
 
 		await suspend()

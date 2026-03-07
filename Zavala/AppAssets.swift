@@ -504,6 +504,8 @@ extension LocalizedStringResource {
 	
 	static let unavailableAccount = LocalizedStringResource("label.text.intent-error-account-not available", comment: "Error text: The specified Account isn't available to be used.")
 	
+	static let unableToParseMarkdown = LocalizedStringResource("label.text.unable-to-parse-markdown", comment: "Error text: The provided Markdown input could not be parsed.")
+
 	static let unableToParseOPML = LocalizedStringResource("label.text.unable-to-parse-opml", comment: "Error text: The provided OPML input could not be parsed.")
 
 	static let unexpectedError = LocalizedStringResource("label.text.intent-error-unexpected", comment: "An unexpected error occurred. Please try again.")

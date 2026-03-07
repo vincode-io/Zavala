@@ -7532,6 +7532,9 @@
         }
       }
     },
+    "intent.parameter.type-markdown" : {
+      "comment" : "Import type: Markdown"
+    },
     "intent.parameter.type-opml" : {
       "comment" : "Export type: OPML\nImport type: OPML",
       "localizations" : {
@@ -14537,6 +14540,9 @@
           }
         }
       }
+    },
+    "label.text.unable-to-parse-markdown" : {
+      "comment" : "Error text: The provided Markdown input could not be parsed."
     },
     "label.text.unable-to-parse-opml" : {
       "comment" : "Error text: The provided OPML input could not be parsed.",

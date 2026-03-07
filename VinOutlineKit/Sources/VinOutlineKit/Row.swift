@@ -458,67 +458,75 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		
 		var matchedImages = [Image]()
 		
-		func importMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
+		func importMarkdown(_ markdown: String, isInNotes: Bool) -> NSAttributedString? {
 			
-#if canImport(UIKit)
-			if let markdown {
-				let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
-				let baseFont = UIFont.preferredFont(forTextStyle: .body)
-				let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : baseFont])
-				
-				// Apply monospace font to code inline ranges so that the font trait survives
-				// RTF serialization. The restoreCodeInlineAttributes() method will detect the
-				// monospace trait and re-apply the .codeInline attribute on deserialization.
-				nonisolated(unsafe) let unsafeAttrString = attrString
-				attrString.enumerateAttribute(.codeInline, in: NSRange(location: 0, length: attrString.length), options: []) { value, range, _ in
-					guard value != nil else { return }
-					let size = baseFont.pointSize
-					var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
-					if let currentFont = unsafeAttrString.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont {
-						let traits = currentFont.fontDescriptor.symbolicTraits
-						if let descriptor = monoFont.fontDescriptor.withSymbolicTraits(traits) {
-							monoFont = UIFont(descriptor: descriptor, size: size)
-						}
-					}
-					unsafeAttrString.addAttribute(.font, value: monoFont, range: range)
-				}
-				
-				let strippedString = attrString.string
-				let matches = regEx.allMatches(in: strippedString)
-				
-				for match in matches {
-					guard let wholeRange = Range(match.range(at: 0), in: strippedString), let captureRange = Range(match.range(at: 1), in: strippedString) else {
-						continue
-					}
-					
-					let currentString = attrString.string
-					let wholeString = strippedString[wholeRange]
-					guard let wholeStringRange = currentString.range(of: wholeString) else {
-						continue
-					}
-					
-					let offset = currentString[currentString.startIndex..<wholeStringRange.lowerBound].utf16.count
-					attrString.replaceCharacters(in: NSRange(location: offset, length: wholeString.utf16.count), with: "")
-					
-					let imageUUID = String(strippedString[captureRange])
-					if let data = images?[imageUUID] {
-						let imageID = EntityID.image(entityID.accountID, entityID.documentUUID, entityID.rowUUID, imageUUID)
-						matchedImages.append(Image(outline: outline!, id: imageID, isInNotes: isInNotes, offset: offset, data: data))
+			#if canImport(UIKit)
+			let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
+			let baseFont = UIFont.preferredFont(forTextStyle: .body)
+			let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : baseFont])
+
+			// Apply monospace font to code inline ranges so that the font trait survives
+			// RTF serialization. The restoreCodeInlineAttributes() method will detect the
+			// monospace trait and re-apply the .codeInline attribute on deserialization.
+			nonisolated(unsafe) let unsafeAttrString = attrString
+			attrString.enumerateAttribute(.codeInline, in: NSRange(location: 0, length: attrString.length), options: []) { value, range, _ in
+				guard value != nil else { return }
+				let size = baseFont.pointSize
+				var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
+				if let currentFont = unsafeAttrString.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont {
+					let traits = currentFont.fontDescriptor.symbolicTraits
+					if let descriptor = monoFont.fontDescriptor.withSymbolicTraits(traits) {
+						monoFont = UIFont(descriptor: descriptor, size: size)
 					}
 				}
-				
-				resolveAltLinks(attrString: attrString)
-				
-				return attrString
+				unsafeAttrString.addAttribute(.font, value: monoFont, range: range)
 			}
-#endif
-			
-			return nil
+
+			let strippedString = attrString.string
+			let matches = regEx.allMatches(in: strippedString)
+
+			for match in matches {
+				guard let wholeRange = Range(match.range(at: 0), in: strippedString), let captureRange = Range(match.range(at: 1), in: strippedString) else {
+					continue
+				}
+
+				let currentString = attrString.string
+				let wholeString = strippedString[wholeRange]
+				guard let wholeStringRange = currentString.range(of: wholeString) else {
+					continue
+				}
+
+				let offset = currentString[currentString.startIndex..<wholeStringRange.lowerBound].utf16.count
+				attrString.replaceCharacters(in: NSRange(location: offset, length: wholeString.utf16.count), with: "")
+
+				let imageUUID = String(strippedString[captureRange])
+				if let data = images?[imageUUID] {
+					let imageID = EntityID.image(entityID.accountID, entityID.documentUUID, entityID.rowUUID, imageUUID)
+					matchedImages.append(Image(outline: outline!, id: imageID, isInNotes: isInNotes, offset: offset, data: data))
+				}
+			}
+
+			resolveAltLinks(attrString: attrString)
+
+			return attrString
+			#endif
 		}
-		
-		self.topic = importMarkdown(topicMarkdown, isInNotes: false)
-		self.note = importMarkdown(noteMarkdown, isInNotes: true)
-		
+
+		// We always have to process both the Topic and the Note to get the matched images right even if only
+		// topicMarkdown or noteMarkdown are passed in.
+
+		if let topicMarkdown {
+			self.topic = importMarkdown(topicMarkdown, isInNotes: false)
+		} else if let topicMarkdown = self.topicMarkdown(type: .markdown) {
+			self.topic = importMarkdown(topicMarkdown, isInNotes: false)
+		}
+
+		if let noteMarkdown {
+			self.note = importMarkdown(noteMarkdown, isInNotes: true)
+		} else if let noteMarkdown = self.noteMarkdown(type: .markdown) {
+			self.note = importMarkdown(noteMarkdown, isInNotes: true)
+		}
+
 		detectData()
 		
 		outline?.updateImages(rowID: id, images: matchedImages)

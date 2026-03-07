@@ -10,7 +10,9 @@ import VinUtility
 public struct MarkdownParser: MarkupWalker {
 		
 	public private(set) var outline: Outline
-	
+
+	private var images: [String:  Data]?
+
 	private var isList = false
 	private var parentRowStack = [Row]()
 	private var lastHeadingLevel = 0
@@ -19,8 +21,9 @@ public struct MarkdownParser: MarkupWalker {
 		self.outline = Outline(account: nil, id: .document(0, UUID().uuidString))
 	}
 
-	public init(account: Account) {
+	public init(account: Account, images: [String:  Data]?) {
 		self.outline = Outline(account: account, id: .document(0, UUID().uuidString))
+		self.images = images
 	}
 
 	nonisolated mutating public func visitHeading(_ heading: Heading) {
@@ -34,8 +37,8 @@ public struct MarkdownParser: MarkupWalker {
 					outline.title = headingText
 				}
 			} else {
-				let row = Row(outline: outline, topicMarkdown: headingMarkdown)
-				row.detectData()
+				let row = Row(outline: outline)
+				row.importRow(topicMarkdown: headingMarkdown, noteMarkdown: nil, images: images)
 
 				if headingLevel <= lastHeadingLevel {
 					for _ in 0...lastHeadingLevel - headingLevel {
@@ -66,35 +69,20 @@ public struct MarkdownParser: MarkupWalker {
 
 			// Unattached paragraphs are assumed to belong to the previous Row
 			if let previousRow = parentRowStack.last?.rows.last ?? parentRowStack.last ?? outline.rows.last {
-				let newNote = NSMutableAttributedString()
+				var newNote = String()
 
-				if let note = previousRow.note {
+				if let note = previousRow.noteMarkdown(type: .markdown) {
 					newNote.append(note)
-					newNote.append(NSAttributedString(string: "\n\n"))
-					newNote.append(NSMutableAttributedString(markdownRepresentation: formattedParagraph, attributes: [.font: UIFont.preferredFont(forTextStyle: .body)]))
-					previousRow.note = newNote
+					newNote.append("\n\n")
+					newNote.append(formattedParagraph)
 				} else {
-					newNote.append(NSMutableAttributedString(markdownRepresentation: formattedParagraph, attributes: [.font: UIFont.preferredFont(forTextStyle: .body)]))
+					newNote.append(formattedParagraph)
 				}
 
-				// Apply monospace font to code inline ranges so that the font trait survives RTF serialization.
-				newNote.enumerateAttribute(.codeInline, in: NSRange(location: 0, length: newNote.length), options: []) { value, range, _ in
-					guard value != nil else { return }
-					let size = UIFont.preferredFont(forTextStyle: .body).pointSize
-					var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
-					if let currentFont = newNote.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont {
-						let traits = currentFont.fontDescriptor.symbolicTraits
-						if let descriptor = monoFont.fontDescriptor.withSymbolicTraits(traits) {
-							monoFont = UIFont(descriptor: descriptor, size: size)
-						}
-					}
-					newNote.addAttribute(.font, value: monoFont, range: range)
-				}
-
-				previousRow.note = newNote
+				previousRow.importRow(topicMarkdown: nil, noteMarkdown: newNote, images: images)
 			} else {
-				let row = Row(outline: outline, noteMarkdown: formattedParagraph)
-				row.detectData()
+				let row = Row(outline: outline)
+				row.importRow(topicMarkdown: nil, noteMarkdown: formattedParagraph, images: images)
 				outline.appendRow(row)
 			}
 		}
@@ -161,8 +149,8 @@ public struct MarkdownParser: MarkupWalker {
 		}
 
 		MainActor.assumeIsolated {
-			let row = Row(outline: outline, topicMarkdown: topic.isEmpty ? nil : topic, noteMarkdown: note.isEmpty ? nil : note)
-			row.detectData()
+			let row = Row(outline: outline)
+			row.importRow(topicMarkdown: topic.isEmpty ? nil : topic, noteMarkdown: note.isEmpty ? nil : note, images: images)
 
 			if let parentRow = parentRowStack.last {
 				parentRow.appendRow(row)
