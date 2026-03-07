@@ -39,7 +39,9 @@ public struct MarkdownParser: MarkupWalker {
 
 				if headingLevel <= lastHeadingLevel {
 					for _ in 0...lastHeadingLevel - headingLevel {
-						parentRowStack.removeLast()
+						if !parentRowStack.isEmpty {
+							parentRowStack.removeLast()
+						}
 					}
 				}
 
