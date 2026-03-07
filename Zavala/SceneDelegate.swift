@@ -129,7 +129,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			mainSplitViewController.importMarkdowns(urls: markdownURLs)
 		}
 
-		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == UTType.opml.preferredFilenameExtension }).map({ $0.url })
+		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == "opml" || $0.url.pathExtension == "xml" }).map({ $0.url })
 		if !opmlURLs.isEmpty {
 			mainSplitViewController.importOPMLs(urls: opmlURLs)
 		}

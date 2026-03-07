@@ -74,7 +74,7 @@ class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 			}
 		}
 
-		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == UTType.opml.preferredFilenameExtension }).map({ $0.url })
+		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == "opml" || $0.url.pathExtension == "xml" }).map({ $0.url })
 		for url in opmlURLs {
 			Task { @MainActor in
 				if let document = try? await account.importOPML(url, tags: nil) {
