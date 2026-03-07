@@ -126,4 +126,24 @@ final class MarkdownParserTests: VOKTestCase {
 		#expect(parser.outline.rows[1].topic?.string == "Section 2")
 		#expect(parser.outline.rows[2].topic?.string == "Section 3")
 	}
+
+	@Test func fullOutlineMixedFormatting() throws {
+		let accountManager = buildAccountManager()
+
+		let markdown = loadMarkdown("MarkdownOutline3")
+		let document = Document(parsing: markdown)
+		var parser = ImportMarkdownParser(account: accountManager.localAccount!, images: nil)
+		parser.visit(document)
+
+		#expect(parser.outline.title == "1.2 Release")
+		#expect(parser.outline.rows.count == 2)
+
+		#expect(parser.outline.rows[0].topic == nil)
+		let note = try #require(parser.outline.rows[0].note)
+		#expect(note.string.starts(with: "The latest release of Zavala is out."))
+
+		#expect(parser.outline.rows[1].topic?.string == "Export & Print Options")
+		#expect(parser.outline.rows[1].note == nil)
+	}
+
 }
