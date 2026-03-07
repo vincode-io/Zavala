@@ -62,8 +62,19 @@ class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		guard let account = appDelegate.accountManager.activeAccounts.first else { return }
 
+		let markdownURLs = urlContexts.filter({ $0.url.pathExtension == UTType.markdown.preferredFilenameExtension }).map({ $0.url })
+		for url in markdownURLs {
+			Task { @MainActor in
+				if let document = try? await account.importMarkdown(url, tags: nil) {
+					DocumentIndexer.updateIndex(forDocument: document)
+					let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+					activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, document: document).userInfo]
+					UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+				}
+			}
+		}
+
 		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == UTType.opml.preferredFilenameExtension }).map({ $0.url })
-		
 		for url in opmlURLs {
 			Task { @MainActor in
 				if let document = try? await account.importOPML(url, tags: nil) {

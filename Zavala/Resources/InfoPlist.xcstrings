@@ -47,13 +47,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Copyright © 2020-2025 Maurice C. Parker\nAll Rights Reserved."
+            "value" : "Copyright © 2020-2026 Maurice C. Parker\nAll Rights Reserved."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "版权所有 © 2020-2025 Maurice C. Parker\n保留所有权利。"
+            "value" : "版权所有 © 2020-2026 Maurice C. Parker\n保留所有权利。"
           }
         }
       }

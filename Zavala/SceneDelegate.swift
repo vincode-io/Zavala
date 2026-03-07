@@ -124,9 +124,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 		
+		let markdownURLs = urlContexts.filter({ $0.url.pathExtension == UTType.markdown.preferredFilenameExtension }).map({ $0.url })
+		if !markdownURLs.isEmpty {
+			mainSplitViewController.importMarkdowns(urls: markdownURLs)
+		}
+
 		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == UTType.opml.preferredFilenameExtension }).map({ $0.url })
-		mainSplitViewController.importOPMLs(urls: opmlURLs)
-		
+		if !opmlURLs.isEmpty {
+			mainSplitViewController.importOPMLs(urls: opmlURLs)
+		}
+
 		#if targetEnvironment(macCatalyst)
 		Task { @MainActor in
 			try? await Task.sleep(for: .seconds(1))

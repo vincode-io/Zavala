@@ -285,6 +285,13 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		documentsViewController?.editCurrentDocument()
 	}
 	
+	func importMarkdowns(urls: [URL]) {
+		Task {
+			await selectDefaultDocumentContainerIfNecessary()
+			documentsViewController?.importMarkdowns(urls: urls)
+		}
+	}
+
 	func importOPMLs(urls: [URL]) {
 		Task {
 			await selectDefaultDocumentContainerIfNecessary()
