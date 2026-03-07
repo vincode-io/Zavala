@@ -74,7 +74,6 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	private var expandedItems = Set<CollectionsItem>()
 	
 	private var addButton: UIButton!
-	private var importButton: UIButton!
 
 	private var settingsBarButtonItem: UIBarButtonItem!
     private var selectBarButtonItem: UIBarButtonItem!
@@ -132,7 +131,6 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 				navigationItem.rightBarButtonItem = selectBarButtonItem
 			} else {
 				let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-				importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: .importOPML)
 				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .newOutline, selector: .createOutline)
 				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
