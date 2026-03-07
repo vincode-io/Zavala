@@ -25,7 +25,7 @@ public struct MarkdownParser: MarkupWalker {
 
 	nonisolated mutating public func visitHeading(_ heading: Heading) {
 		let headingText = heading.plainText
-		let headingMarkdown = heading.format().replacingOccurrences(of: "^#+\\s*", with: "", options: .regularExpression)
+		let headingMarkdown = String(heading.format().trimmingCharacters(in: .newlines).trimmingPrefix(/#+\s*/))
 		let headingLevel = heading.level
 
 		MainActor.assumeIsolated {

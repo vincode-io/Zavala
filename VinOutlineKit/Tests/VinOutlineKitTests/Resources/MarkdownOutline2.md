@@ -1,4 +1,4 @@
-# Qualities of a Great Car 1
+# Qualities of a Great Car 2
 
 ## Section 1
 
@@ -8,11 +8,15 @@
   - Reliable braking system
   - Efficient fuel consumption or range for electric vehicles
 
+### Section 1.1
+
 - Safety
   - Advanced driver-assistance systems
   - Strong crash-test ratings
   - Effective airbag placement
   - Stability and traction control
+
+### Section 1.1.1
 
 - Comfort
   - Ergonomic seating with quality materials
