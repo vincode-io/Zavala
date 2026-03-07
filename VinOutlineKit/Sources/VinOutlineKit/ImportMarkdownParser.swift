@@ -166,5 +166,34 @@ public struct ImportMarkdownParser: MarkupWalker {
 			isList = false
 		}
 	}
-	
+
+	nonisolated mutating public func visitCodeBlock(_ codeBlock: CodeBlock) {
+		var lines = codeBlock.format().split(separator: "\n")
+		lines.removeFirst()
+		lines.removeLast()
+
+		var note = "`"
+
+		for (i, line) in lines.enumerated() {
+			if i > 0 {
+				note.append("\n")
+			}
+			note.append(String(line))
+		}
+
+		note.append("`")
+
+		MainActor.assumeIsolated {
+			let row = Row(outline: outline)
+			row.importRow(topicMarkdown: nil, noteMarkdown: note, images: nil)
+
+			if let parentRow = parentRowStack.last {
+				parentRow.appendRow(row)
+			} else {
+				outline.appendRow(row)
+			}
+		}
+
+	}
+
 }
