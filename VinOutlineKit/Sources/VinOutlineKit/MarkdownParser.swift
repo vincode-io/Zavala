@@ -30,7 +30,9 @@ public struct MarkdownParser: MarkupWalker {
 
 		MainActor.assumeIsolated {
 			if headingLevel == 1 {
-				outline.title = headingText
+				if outline.title == nil {
+					outline.title = headingText
+				}
 			} else {
 				let row = Row(outline: outline, topicMarkdown: headingMarkdown)
 				row.detectData()
