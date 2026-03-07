@@ -63,7 +63,7 @@ public struct MarkdownParser: MarkupWalker {
 			guard !isList else { return }
 
 			// Unattached paragraphs are assumed to belong to the previous Row
-			if let previousRow = outline.rows.last {
+			if let previousRow = parentRowStack.last?.rows.last ?? parentRowStack.last ?? outline.rows.last {
 				if let note = previousRow.note {
 					let newNote = NSMutableAttributedString(attributedString: note)
 					newNote.append(NSAttributedString(string: "\n\n"))
