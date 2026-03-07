@@ -62,9 +62,21 @@ public struct MarkdownParser: MarkupWalker {
 		MainActor.assumeIsolated {
 			guard !isList else { return }
 
-			let row = Row(outline: outline, noteMarkdown: formattedParagraph)
-			row.detectData()
-			outline.appendRow(row)
+			// Unattached paragraphs are assumed to belong to the previous Row
+			if let previousRow = outline.rows.last {
+				if let note = previousRow.note {
+					let newNote = NSMutableAttributedString(attributedString: note)
+					newNote.append(NSAttributedString(string: "\n\n"))
+					newNote.append(NSMutableAttributedString(markdownRepresentation: formattedParagraph, attributes: [.font: UIFont.preferredFont(forTextStyle: .body)]))
+					previousRow.note = newNote
+				} else {
+					previousRow.note = NSMutableAttributedString(markdownRepresentation: formattedParagraph, attributes: [.font: UIFont.preferredFont(forTextStyle: .body)])
+				}
+			} else {
+				let row = Row(outline: outline, noteMarkdown: formattedParagraph)
+				row.detectData()
+				outline.appendRow(row)
+			}
 		}
 	}
 
