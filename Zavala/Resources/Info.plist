@@ -30,6 +30,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>md</string>
+				<string>markdown</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>Markdown</string>
@@ -39,6 +40,7 @@
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
 			<array>
+				<string>public.markdown</string>
 				<string>net.daringfireball.markdown</string>
 			</array>
 		</dict>
@@ -235,26 +237,6 @@ All Rights Reserved.</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UTImportedTypeDeclarations</key>
-	<array>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.utf8-plain-text</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>Markdown</string>
-			<key>UTTypeIconFiles</key>
-			<array/>
-			<key>UTTypeIdentifier</key>
-			<string>net.daringfireball.markdown</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>md</string>
-				</array>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 </dict>
 </plist>

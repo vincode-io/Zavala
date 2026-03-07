@@ -120,7 +120,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		guard let account = appDelegate.accountManager.activeAccounts.first else { return }
 
-		let markdownURLs = urlContexts.filter({ $0.url.pathExtension == UTType.markdown.preferredFilenameExtension }).map({ $0.url })
+		let markdownURLs = urlContexts.filter({ $0.url.pathExtension == "md" || $0.url.pathExtension == "markdown" }).map({ $0.url })
 		for url in markdownURLs {
 			Task { @MainActor in
 				if let document = try? await account.importMarkdown(url, tags: nil) {

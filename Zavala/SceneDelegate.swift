@@ -124,7 +124,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 		
-		let markdownURLs = urlContexts.filter({ $0.url.pathExtension == UTType.markdown.preferredFilenameExtension }).map({ $0.url })
+		let markdownURLs = urlContexts.filter({ $0.url.pathExtension == "md" || $0.url.pathExtension == "markdown" }).map({ $0.url })
 		if !markdownURLs.isEmpty {
 			mainSplitViewController.importMarkdowns(urls: markdownURLs)
 		}
