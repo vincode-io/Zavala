@@ -86,7 +86,7 @@ final class MarkdownParserTests: VOKTestCase {
 	}
 
 	@Test func fullOutline() throws {
-		let markdown = loadMarkdown("MarkdownOutline")
+		let markdown = loadMarkdown("MarkdownOutline1")
 		let document = Document(parsing: markdown)
 		var parser = MarkdownParser()
 		parser.visit(document)
@@ -96,7 +96,9 @@ final class MarkdownParserTests: VOKTestCase {
 
 		#expect(parser.outline.rows[0].topic?.string == "Section 1")
 		#expect(parser.outline.rows[0].rows.count == 3)
+		#expect(parser.outline.rows[0].rows[0].topic?.string == "Performance")
 		#expect(parser.outline.rows[0].rows[0].rows.count == 4)
+		#expect(parser.outline.rows[0].rows[0].rows[0].topic?.string == "Responsive acceleration")
 
 		#expect(parser.outline.rows[1].topic?.string == "Section 2")
 
