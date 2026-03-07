@@ -7533,7 +7533,39 @@
       }
     },
     "intent.parameter.type-markdown" : {
-      "comment" : "Import type: Markdown"
+      "comment" : "Import type: Markdown",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markdown"
+          }
+        }
+      }
     },
     "intent.parameter.type-opml" : {
       "comment" : "Export type: OPML\nImport type: OPML",
@@ -14542,7 +14574,39 @@
       }
     },
     "label.text.unable-to-parse-markdown" : {
-      "comment" : "Error text: The provided Markdown input could not be parsed."
+      "comment" : "Error text: The provided Markdown input could not be parsed.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The provided Markdown input could not be parsed."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The provided Markdown input could not be parsed."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The provided Markdown input could not be parsed."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die bereitgestellte Markdown-Eingabe konnte nicht verarbeitet werden."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法解析提供的 Markdown 输入。"
+          }
+        }
+      }
     },
     "label.text.unable-to-parse-opml" : {
       "comment" : "Error text: The provided OPML input could not be parsed.",
