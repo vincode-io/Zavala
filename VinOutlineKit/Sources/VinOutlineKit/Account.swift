@@ -246,6 +246,10 @@ public final class Account: Identifiable, Equatable {
 
 		let outline = parser.outline
 
+		for tag in tags ?? [Tag]() {
+			outline.createTag(tag)
+		}
+
 		// Do all the normal housekeeping stuff that keeps things running around here.
 		let document = Document.outline(outline)
 		documents?.append(document)
