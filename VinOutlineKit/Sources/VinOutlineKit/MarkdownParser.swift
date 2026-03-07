@@ -66,14 +66,32 @@ public struct MarkdownParser: MarkupWalker {
 
 			// Unattached paragraphs are assumed to belong to the previous Row
 			if let previousRow = parentRowStack.last?.rows.last ?? parentRowStack.last ?? outline.rows.last {
+				let newNote = NSMutableAttributedString()
+
 				if let note = previousRow.note {
-					let newNote = NSMutableAttributedString(attributedString: note)
+					newNote.append(note)
 					newNote.append(NSAttributedString(string: "\n\n"))
 					newNote.append(NSMutableAttributedString(markdownRepresentation: formattedParagraph, attributes: [.font: UIFont.preferredFont(forTextStyle: .body)]))
 					previousRow.note = newNote
 				} else {
-					previousRow.note = NSMutableAttributedString(markdownRepresentation: formattedParagraph, attributes: [.font: UIFont.preferredFont(forTextStyle: .body)])
+					newNote.append(NSMutableAttributedString(markdownRepresentation: formattedParagraph, attributes: [.font: UIFont.preferredFont(forTextStyle: .body)]))
 				}
+
+				// Apply monospace font to code inline ranges so that the font trait survives RTF serialization.
+				newNote.enumerateAttribute(.codeInline, in: NSRange(location: 0, length: newNote.length), options: []) { value, range, _ in
+					guard value != nil else { return }
+					let size = UIFont.preferredFont(forTextStyle: .body).pointSize
+					var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
+					if let currentFont = newNote.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont {
+						let traits = currentFont.fontDescriptor.symbolicTraits
+						if let descriptor = monoFont.fontDescriptor.withSymbolicTraits(traits) {
+							monoFont = UIFont(descriptor: descriptor, size: size)
+						}
+					}
+					newNote.addAttribute(.font, value: monoFont, range: range)
+				}
+
+				previousRow.note = newNote
 			} else {
 				let row = Row(outline: outline, noteMarkdown: formattedParagraph)
 				row.detectData()
