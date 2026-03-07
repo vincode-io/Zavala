@@ -538,6 +538,41 @@
         }
       }
     },
+    "label.text.unable-to-process-markdown" : {
+      "comment" : "Label: Unable to process the Markdown data.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Markdown-Daten konnten nicht verarbeitet werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to process the Markdown data."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to process the Markdown data."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to process the Markdown data."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法处理 Markdown 数据。"
+          }
+        }
+      }
+    },
     "label.text.unable-to-process-opml" : {
       "comment" : "Label: Unable to process the OPML data.",
       "localizations" : {

@@ -19,6 +19,10 @@ public struct MarkdownParser: MarkupWalker {
 		self.outline = Outline(account: nil, id: .document(0, UUID().uuidString))
 	}
 
+	public init(account: Account) {
+		self.outline = Outline(account: account, id: .document(0, UUID().uuidString))
+	}
+
 	nonisolated mutating public func visitHeading(_ heading: Heading) {
 		let headingText = heading.plainText
 		let headingLevel = heading.level

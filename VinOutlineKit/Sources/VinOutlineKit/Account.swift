@@ -11,6 +11,7 @@ import UIKit
 import Foundation
 #endif
 import CloudKit
+import Markdown
 import OrderedCollections
 import VinXML
 import VinCloudKit
@@ -25,6 +26,7 @@ public extension Notification.Name {
 public enum AccountError: LocalizedError {
 	case securityScopeError
 	case fileReadError
+	case markdownParserError
 	case opmlParserError
 	case renameTagNameExistsError
 	
@@ -32,6 +34,8 @@ public enum AccountError: LocalizedError {
 		switch self {
 		case .fileReadError:
 			return .accountErrorImportRead
+		case .markdownParserError:
+			return .accountErrorMarkdownParse
 		case .opmlParserError:
 			return .accountErrorOPMLParse
 		case .renameTagNameExistsError:
@@ -223,8 +227,35 @@ public final class Account: Identifiable, Equatable {
 
 	@discardableResult
 	public func importMarkdown(_ markdownData: Data, tags: [Tag]?, images: [String:  Data]? = nil) async throws -> Document {
-		// TODO: Finish this!!!
-		return .dummy
+		guard let markdownText = String(data: markdownData, encoding: .utf8 ) else {
+			throw AccountError.fileReadError
+		}
+
+		// Strip code block lines here
+
+		let markdownDocument = Markdown.Document(parsing: markdownText)
+		var parser = MarkdownParser(account: self)
+		parser.visit(markdownDocument)
+
+		let outline = parser.outline
+
+		let document = Document.outline(outline)
+		documents?.append(document)
+		accountDocumentsDidChange()
+
+		outline.zoneID = cloudKitManager?.outlineZone.zoneID
+
+		disambiguate(document: document)
+
+		outline.updateAllLinkRelationships()
+
+		fixAltLinks(excluding: outline)
+
+		await outline.forceSave()
+		saveToCloudKit(document)
+		await outline.unload()
+
+		return document
 	}
 
 	@discardableResult

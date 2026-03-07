@@ -24,6 +24,8 @@ extension String {
 
 	static let accountErrorImportRead = String(localized: "label.text.unable-to-read-import-file",
                                                bundle: .module, comment: "Label: Unable to read the import file.")
+	static let accountErrorMarkdownParse = String(localized: "label.text.unable-to-process-markdown",
+											  bundle: .module, comment: "Label: Unable to process the Markdown data.")
 	static let accountErrorOPMLParse = String(localized: "label.text.unable-to-process-opml",
                                               bundle: .module, comment: "Label: Unable to process the OPML data.")
 	static let accountErrorRenameTagExists = String(localized: "label.text.tag-already-exists",
