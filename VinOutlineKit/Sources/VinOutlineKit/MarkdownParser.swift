@@ -25,6 +25,7 @@ public struct MarkdownParser: MarkupWalker {
 
 	nonisolated mutating public func visitHeading(_ heading: Heading) {
 		let headingText = heading.plainText
+		let headingMarkdown = heading.format().replacingOccurrences(of: "^#+\\s*", with: "", options: .regularExpression)
 		let headingLevel = heading.level
 
 		MainActor.assumeIsolated {
@@ -33,8 +34,7 @@ public struct MarkdownParser: MarkupWalker {
 			if headingLevel == 1 {
 				outline.title = headingText
 			} else {
-
-				let row = Row(outline: outline, topicMarkdown: headingText)
+				let row = Row(outline: outline, topicMarkdown: headingMarkdown)
 				row.detectData()
 
 				if let parentRow = parentRowStack.last {
