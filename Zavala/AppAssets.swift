@@ -285,6 +285,8 @@ extension String {
 	
 	static let imageControlLabel = String(localized: "label.text.image", comment: "Label: Image")
 	static let importFailedTitle = String(localized: "label.text.import-failed", comment: "Error Message Title: Import Failed")
+	static let importControlLabel = String(localized: "button.text.import", comment: "Action: Import")
+	static let importMarkdownEllipsisControlLabel = String(localized: "button.text.import-markdown-with-ellipsis", comment: "Action: Import Markdown…")
 	static let importOPMLControlLabel = String(localized: "button.text.import-opml", comment: "Action: Import OPML")
 	static let importOPMLEllipsisControlLabel = String(localized: "button.text.import-opml-with-ellipsis", comment: "Action: Import OPML…")
 	static let indigoControlLabel = String(localized: "button.text.set-font-indigo", comment: "Set Font Color Action: Indigo")

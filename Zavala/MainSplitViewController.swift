@@ -348,7 +348,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			documentsViewController?.createOutline(animated: false)
 		}
 	}
-	
+
+	@objc func importMarkdown(_ sender: Any?) {
+		Task {
+			await selectDefaultDocumentContainerIfNecessary()
+			documentsViewController?.importMarkdown()
+		}
+	}
+
 	@objc func importOPML(_ sender: Any?) {
 		Task {
 			await selectDefaultDocumentContainerIfNecessary()

@@ -79,6 +79,9 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var moreMenuButton: ButtonGroup.Button!
 	private var addButton: ButtonGroup.Button!
 
+	private lazy var markdownDocumentPickerDelegate = MarkdownDocumentPickerDelegate(viewController: self)
+	private lazy var opmlDocumentPickerDelegate = OPMLDocumentPickerDelegate(viewController: self)
+
 	private var loadDocumentsChannel = AsyncChannel<Void>()
 	
 	private var lastClick: TimeInterval = Date().timeIntervalSince1970
@@ -302,7 +305,30 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 								 ownerURL: defaults.ownerURL)
 		return document
 	}
-	
+
+	func importMarkdowns(urls: [URL]) {
+		guard let documentContainers,
+			  let account = documentContainers.uniqueAccount else { return }
+
+		for url in urls {
+			Task { @MainActor in
+				do {
+					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
+					let document = try await account.importMarkdown(url, tags: tags)
+
+					try await Task.sleep(for: .seconds(0.5))
+
+					await loadDocuments(animated: true)
+					openDocument(document, animated: true)
+
+					DocumentIndexer.updateIndex(forDocument: document)
+				} catch {
+					self.presentError(title: .importFailedTitle, message: error.localizedDescription)
+				}
+			}
+		}
+	}
+
 	func importOPMLs(urls: [URL]) {
 		guard let documentContainers,
 			  let account = documentContainers.uniqueAccount else { return }
@@ -397,9 +423,17 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		createOutline(animated: true)
 	}
 
+	@objc func importMarkdown() {
+		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.markdown])
+		docPicker.delegate = markdownDocumentPickerDelegate
+		docPicker.modalPresentationStyle = .formSheet
+		docPicker.allowsMultipleSelection = true
+		self.present(docPicker, animated: true)
+	}
+
 	@objc func importOPML() {
 		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.opml, .xml])
-		docPicker.delegate = self
+		docPicker.delegate = opmlDocumentPickerDelegate
 		docPicker.modalPresentationStyle = .formSheet
 		docPicker.allowsMultipleSelection = true
 		self.present(docPicker, animated: true)
@@ -423,16 +457,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 								animated: true)
 	}
 
-}
-
-// MARK: UIDocumentPickerDelegate
-
-extension DocumentsViewController: UIDocumentPickerDelegate {
-	
-	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-		importOPMLs(urls: urls)
-	}
-	
 }
 
 // MARK: UICloudSharingControllerDelegate
@@ -1076,3 +1100,36 @@ private extension DocumentsViewController {
 	}
 	
 }
+
+// MARK: MarkdownDocumentPickerDelegate
+
+private final class MarkdownDocumentPickerDelegate: NSObject, UIDocumentPickerDelegate {
+
+	weak var viewController: DocumentsViewController?
+
+	init(viewController: DocumentsViewController? = nil) {
+		self.viewController = viewController
+	}
+
+	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+		viewController?.importMarkdowns(urls: urls)
+	}
+
+}
+
+// MARK: OPMLDocumentPickerDelegate
+
+private final class OPMLDocumentPickerDelegate: NSObject, UIDocumentPickerDelegate {
+
+	weak var viewController: DocumentsViewController?
+
+	init(viewController: DocumentsViewController? = nil) {
+		self.viewController = viewController
+	}
+
+	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+		viewController?.importOPMLs(urls: urls)
+	}
+
+}
+

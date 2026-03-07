@@ -7,7 +7,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_SWIFT_UI_ACTOR
 @protocol AppKitPluginDelegate <NSObject>
-- (void)importFile:(nonnull NSURL *)url;
+- (void)importMarkdownFile:(nonnull NSURL *)url;
+- (void)importOPMLFile:(nonnull NSURL *)url;
 @end
 
 NS_SWIFT_UI_ACTOR
@@ -15,6 +16,7 @@ NS_SWIFT_UI_ACTOR
 - (void)setDelegate:(nullable id<AppKitPluginDelegate>)delegate;
 - (void)start;
 - (void)stop;
+- (void)importMarkdown;
 - (void)importOPML;
 - (void)configureOpenQuickly:(NSObject  * _Nullable)window;
 - (void)configureAbout:(NSObject  * _Nullable)window;

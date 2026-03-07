@@ -182,7 +182,26 @@ public final class Account: Identifiable, Equatable {
 		zoneChangeTokens?[key] = changeToken
 		accountMetadataDidChange()
 	}
-	
+
+	public func importMarkdown(_ url: URL, tags: [Tag]?) async throws -> Document {
+		guard url.startAccessingSecurityScopedResource() else { throw AccountError.securityScopeError }
+		defer {
+			url.stopAccessingSecurityScopedResource()
+		}
+
+		var fileData: Data?
+		var fileError: NSError? = nil
+		NSFileCoordinator().coordinate(readingItemAt: url, error: &fileError) { (url) in
+			fileData = try? Data(contentsOf: url)
+		}
+
+		guard fileError == nil else { throw fileError! }
+		guard let opmlData = fileData else { throw AccountError.fileReadError }
+
+		return try await importMarkdown(opmlData, tags: tags)
+	}
+
+
 	public func importOPML(_ url: URL, tags: [Tag]?) async throws -> Document {
 		guard url.startAccessingSecurityScopedResource() else { throw AccountError.securityScopeError }
 		defer {
@@ -199,6 +218,13 @@ public final class Account: Identifiable, Equatable {
 		guard let opmlData = fileData else { throw AccountError.fileReadError }
 		
 		return try await importOPML(opmlData, tags: tags)
+	}
+
+
+	@discardableResult
+	public func importMarkdown(_ markdownData: Data, tags: [Tag]?, images: [String:  Data]? = nil) async throws -> Document {
+		// TODO: Finish this!!!
+		return .dummy
 	}
 
 	@discardableResult

@@ -16,6 +16,7 @@ import VinOutlineKit
 extension Selector {
 	static let showSettings = #selector(FileActionResponder.showSettings(_:))
 	static let sync = #selector(FileActionResponder.sync(_:))
+	static let importMarkdown = #selector(FileActionResponder.importMarkdown(_:))
 	static let importOPML = #selector(FileActionResponder.importOPML(_:))
 	static let createOutline = #selector(FileActionResponder.createOutline(_:))
 	static let newWindow = #selector(AppDelegate.newWindow(_:))
@@ -34,6 +35,7 @@ extension Selector {
 @objc public protocol FileActionResponder {
 	@objc func showSettings(_ sender: Any?)
 	@objc func sync(_ sender: Any?)
+	@objc func importMarkdown(_ sender: Any?)
 	@objc func importOPML(_ sender: Any?)
 	@objc func createOutline(_ sender: Any?)
 	@objc func showOpenQuickly(_ sender: Any?)
@@ -72,8 +74,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												  input: "e",
 												  modifierFlags: [.control, .command])
 	
+	let importMarkdownCommand = UICommand(title: .importMarkdownEllipsisControlLabel, action: .importMarkdown)
+
 	let importOPMLCommand = UIKeyCommand(title: .importOPMLEllipsisControlLabel,
-										 image: .importDocument,
 										 action: .importOPML,
 										 input: "i",
 										 modifierFlags: [.shift, .command])
@@ -521,6 +524,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		}
 	}
 
+	@objc func importMarkdown(_ sender: Any?) {
+		#if targetEnvironment(macCatalyst)
+		appKitPlugin?.importMarkdown()
+		#endif
+	}
+
 	@objc func importOPML(_ sender: Any?) {
 		#if targetEnvironment(macCatalyst)
 		appKitPlugin?.importOPML()
@@ -607,8 +616,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand])
 		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
 
-		let exportMenu = UIMenu(title: .exportControlLabel, image: .export, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
-		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, shareCommand, manageSharingCommand, exportMenu])
+		let sharingMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, manageSharingCommand])
+		builder.insertChild(sharingMenu, atEndOfMenu: .file)
+
+		let importMenu = UIMenu(title: .importControlLabel, image: .importDocument, children: [importMarkdownCommand, importOPMLCommand])
+		let exportMenu = UIMenu(title: .exportControlLabel, image: .export, children: [exportPDFDocsCommand,
+																					   exportPDFListsCommand,
+																					   exportMarkdownDocsCommand,
+																					   exportMarkdownListsCommand,
+																					   exportOPMLsCommand])
+		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importMenu, exportMenu])
 		builder.insertChild(importExportMenu, atEndOfMenu: .file)
 
 		let printMenu = UIMenu(title: "", options: .displayInline, children: [printDocsCommand, printListsCommand])
@@ -733,8 +750,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 // MARK: AppKitPluginDelegate
 
 extension AppDelegate: AppKitPluginDelegate {
-	
-	func importFile(_ url: URL) {
+
+	func importMarkdownFile(_ url: URL) {
+		let accountID = AppDefaults.shared.lastSelectedAccountID
+		guard let account = accountManager.findAccount(accountID: accountID) ?? accountManager.activeAccounts.first else { return }
+
+		Task {
+			guard let document = try? await account.importMarkdown(url, tags: nil) else { return }
+
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: accountManager, document: document).userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
+	}
+
+	func importOPMLFile(_ url: URL) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		guard let account = accountManager.findAccount(accountID: accountID) ?? accountManager.activeAccounts.first else { return }
 		

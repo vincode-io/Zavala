@@ -28,6 +28,25 @@ import UniformTypeIdentifiers
 		movementMonitor?.invalidate()
 	}
 	
+	func importMarkdown() {
+		let panel = NSOpenPanel()
+		panel.canDownloadUbiquitousContents = true
+		panel.canResolveUbiquitousConflicts = true
+		panel.canChooseFiles = true
+		panel.allowsMultipleSelection = false
+		panel.canChooseDirectories = false
+		panel.resolvesAliases = true
+		if let markdownType = UTType(filenameExtension: "md") {
+			panel.allowedContentTypes = [markdownType]
+		}
+		panel.allowsOtherFileTypes = false
+
+		let modalResult = panel.runModal()
+		if modalResult == NSApplication.ModalResponse.OK, let url = panel.url {
+			delegate?.importMarkdownFile(url)
+		}
+	}
+
 	func importOPML() {
 		let panel = NSOpenPanel()
 		panel.canDownloadUbiquitousContents = true
@@ -43,7 +62,7 @@ import UniformTypeIdentifiers
 		
 		let modalResult = panel.runModal()
 		if modalResult == NSApplication.ModalResponse.OK, let url = panel.url {
-			delegate?.importFile(url)
+			delegate?.importOPMLFile(url)
 		}
 	}
 
