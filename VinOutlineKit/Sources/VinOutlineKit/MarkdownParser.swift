@@ -60,6 +60,8 @@ public struct MarkdownParser: MarkupWalker {
 		guard let formattedParagraph = paragraph.format().trimmed() else { return }
 
 		MainActor.assumeIsolated {
+			guard !isList else { return }
+
 			let row = Row(outline: outline, noteMarkdown: formattedParagraph)
 			row.detectData()
 			outline.appendRow(row)
