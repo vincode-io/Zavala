@@ -788,7 +788,11 @@ private extension DocumentsViewController {
 	
 	func buildEllipsisMenu() -> UIMenu {
 
-		let importOPMLAction = UIAction(title: .importOPMLControlLabel, image: .importDocument) { [weak self] _ in
+		let importMarkdownAction = UIAction(title: .importMarkdownEllipsisControlLabel, image: .importDocument) { [weak self] _ in
+			self?.importMarkdown()
+		}
+
+		let importOPMLAction = UIAction(title: .importOPMLEllipsisControlLabel) { [weak self] _ in
 			self?.importOPML()
 		}
 
@@ -832,7 +836,7 @@ private extension DocumentsViewController {
 		let sortByMenu = UIMenu(title: "", options: .displayInline, children: [sortByTitle, sortByCreated, sortByUpdated])
 		let sortOrderMenu = UIMenu(title: "", options: .displayInline, children: [sortAscending, sortDescending])
 		
-		let importMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLAction])
+		let importMenu = UIMenu(title: "", options: .displayInline, children: [importMarkdownAction, importOPMLAction])
 		let sortMenu = UIMenu(title: "", options: .displayInline, children: [UIMenu(title: .sortDocumentsControlLabel, image: .sort, children: [sortByMenu, sortOrderMenu])])
 
 		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [importMenu, sortMenu])
