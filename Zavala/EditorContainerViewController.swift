@@ -335,7 +335,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.label = .deleteOutlineControlLabel
 			item.toolTip = .deleteOutlineControlLabel
 			item.isBordered = true
-			item.action = #selector(deleteOutline(_:))
+			item.action = .deleteOutline
 			item.target = self
 			toolbarItem = item
 		case .sync:

@@ -310,7 +310,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			return appDelegate.accountManager.isSyncAvailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
-		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
+		case .share, .showGetInfo, .deleteOutline, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isOutlineFunctionsUnavailable
 		case .goBackwardOne:
 			return !goBackwardStack.isEmpty
@@ -408,6 +408,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 
 	@objc func showGetInfo(_ sender: Any?) {
 		showGetInfo()
+	}
+
+	@objc func deleteOutline(_ sender: Any?) {
+		documentsViewController?.deleteSelectedDocuments()
 	}
 
 	@objc func share(_ sender: Any?) {

@@ -11,6 +11,7 @@ import VinOutlineKit
 
 extension Selector {
 	static let showGetInfo = #selector(MainCoordinatorResponder.showGetInfo(_:))
+	static let deleteOutline = #selector(MainCoordinatorResponder.deleteOutline(_:))
 	static let share = #selector(MainCoordinatorResponder.share(_:))
 	static let manageSharing = #selector(MainCoordinatorResponder.manageSharing(_:))
 	static let exportPDFDocs = #selector(MainCoordinatorResponder.exportPDFDocs(_:))
@@ -26,6 +27,7 @@ extension Selector {
 @MainActor
 @objc public protocol MainCoordinatorResponder {
 	@objc func showGetInfo(_ sender: Any?)
+	@objc func deleteOutline(_ sender: Any?)
 	@objc func share(_ sender: Any?)
 	@objc func manageSharing(_ sender: Any?)
 	@objc func exportPDFDocs(_ sender: Any?)

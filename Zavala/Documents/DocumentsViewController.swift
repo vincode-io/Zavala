@@ -188,8 +188,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
-		case .delete:
-			return !UIResponder.isFirstResponderTextField && !selectedDocuments.isEmpty
 		case .selectAll:
 			return !UIResponder.isFirstResponderTextField
 		default:
@@ -258,7 +256,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	func editCurrentDocument(isNew: Bool = false, selectRow: EntityID? = nil) {
 		delegate?.editCurrentDocument(self, isNew: isNew, selectRow: selectRow)
 	}
-	
+
 	func sortByTitle() {
 		changeSortField(.title)
 	}
@@ -366,7 +364,11 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		controller.delegate = self
 		self.present(controller, animated: true)
 	}
-	
+
+	func deleteSelectedDocuments() {
+		deleteDocuments(selectedDocuments)
+	}
+
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
@@ -430,10 +432,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		self.present(docPicker, animated: true)
 	}
 
-	override func delete(_ sender: Any?) {
-		deleteDocuments(selectedDocuments)
-	}
-	
 	override func selectAll(_ sender: Any?) {
 		guard let documentContainers else { return }
 

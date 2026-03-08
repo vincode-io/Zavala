@@ -51,7 +51,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 									action: .showSettings,
 									input: ",",
 									modifierFlags: [.command])
-		
+
+	let deleteOutlineCommand = UICommand(title: .deleteOutlineControlLabel, image: .delete, action: .deleteOutline)
+
 	let syncCommand = UIKeyCommand(title: .syncControlLabel,
 								   image: .sync,
 								   action: .sync,
@@ -613,8 +615,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atEndOfMenu: .file)
 
-		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand])
-		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
+		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand, deleteOutlineCommand])
+		builder.insertChild(outlineFileMenu, atEndOfMenu: .file)
 
 		let sharingMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, manageSharingCommand])
 		builder.insertChild(sharingMenu, atEndOfMenu: .file)
