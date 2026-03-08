@@ -18,7 +18,7 @@ public struct ImportMarkdownParser: MarkupWalker {
 	private var lastHeadingLevel = 0
 
 	public init(account: Account, images: [String:  Data]?) {
-		self.outline = Outline(account: account, id: .document(0, UUID().uuidString))
+		self.outline = Outline(account: account, id: .document(account.id.accountID, UUID().uuidString))
 		self.images = images
 	}
 
