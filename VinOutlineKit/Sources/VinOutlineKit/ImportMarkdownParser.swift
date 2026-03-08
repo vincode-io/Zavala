@@ -71,7 +71,7 @@ public struct ImportMarkdownParser: MarkupWalker {
 			if let previousRow, headingRowIDs.contains(previousRow.id) || paragraphRowIDs.contains(previousRow.id) {
 				var newNote = String()
 
-				if let note = previousRow.noteMarkdown(type: .markdown) {
+				if let note = previousRow.noteMarkdown(type: .markdown), !note.isEmpty {
 					newNote.append(note)
 					newNote.append("\n\n")
 					newNote.append(formattedParagraph)
