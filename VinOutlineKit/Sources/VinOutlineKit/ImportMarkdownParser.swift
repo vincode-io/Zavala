@@ -58,7 +58,7 @@ public struct ImportMarkdownParser: MarkupWalker {
 	}
 
 	nonisolated mutating public func visitParagraph(_ paragraph: Paragraph) {
-		guard let formattedParagraph = paragraph.format().trimmed() else { return }
+		guard let formattedParagraph = paragraph.format().trimmed()?.replacingOccurrences(of: "\n", with: " ") else { return }
 
 		MainActor.assumeIsolated {
 			guard !isList else { return }
@@ -85,68 +85,21 @@ public struct ImportMarkdownParser: MarkupWalker {
 	}
 
 	nonisolated mutating public func visitListItem(_ listItem: ListItem) {
+		let lines = listItem.format().split(separator: "\n")
+		
+		var topic = String()
+		for (i, line) in lines.enumerated() {
+			if i > 0 {
+				topic.append(" ")
+			}
+			topic.append(String(line).trimmed() ?? "")
+		}
+
 		MainActor.assumeIsolated {
 			isList = true
-		}
 
-		var topic = String()
-		var note = String()
-
-		// Split up and format the Row strings
-		for i in 0..<listItem.childCount {
-
-			if let paragraph = listItem.child(at: i) as? Paragraph {
-
-				// The first paragraph is the Topic. Everything else is Notes. Split
-				// the lines and trim them so that they don't have a bunch of extraneous
-				// leading whitespace.
-				if i == 0 {
-
-					let lines = paragraph.format().split(separator: "\n")
-
-					for j in 0..<lines.count {
-						let topicLine = String(lines[j]).trimmed()
-
-						topic.append(topicLine ?? "")
-
-						// Don't give the last topic line a newline
-						if j < lines.count - 1 {
-							topic.append("\n")
-						}
-					}
-
-				} else {
-
-					// After the first note paragraph, start separating them with newlines
-					if i > 1 {
-						note.append("\n\n")
-					}
-
-					let lines = paragraph.format().split(separator: "\n")
-
-					for j in 0..<lines.count {
-						let noteLine = String(lines[j]).trimmed()
-
-						// It looks like the first line in a notes paragraph is
-						// blank.
-						if noteLine == nil && j == 0 { continue }
-
-						note.append(noteLine ?? "")
-
-						// Don't give the last note line a newline
-						if j < lines.count - 1 {
-							note.append("\n")
-						}
-					}
-				}
-
-			}
-
-		}
-
-		MainActor.assumeIsolated {
 			let row = Row(outline: outline)
-			row.importRow(topicMarkdown: topic.isEmpty ? nil : topic, noteMarkdown: note.isEmpty ? nil : note, images: images)
+			row.importRow(topicMarkdown: topic, noteMarkdown: nil, images: images)
 
 			if let parentRow = parentRowStack.last {
 				parentRow.appendRow(row)
