@@ -85,8 +85,10 @@ public struct ImportMarkdownParser: MarkupWalker {
 	}
 
 	nonisolated mutating public func visitListItem(_ listItem: ListItem) {
-		let lines = listItem.format().split(separator: "\n")
-		
+		guard listItem.childCount > 0, let lines = listItem.child(at: 0)?.format().split(separator: "\n") else {
+			return
+		}
+
 		var topic = String()
 		for (i, line) in lines.enumerated() {
 			if i > 0 {
