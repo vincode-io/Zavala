@@ -146,7 +146,6 @@ public struct ImportMarkdownParser: MarkupWalker {
 				outline.appendRow(row)
 			}
 		}
-
 	}
 
 }
