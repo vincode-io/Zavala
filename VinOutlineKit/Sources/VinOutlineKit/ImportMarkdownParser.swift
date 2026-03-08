@@ -16,6 +16,8 @@ public struct ImportMarkdownParser: MarkupWalker {
 	private var isList = false
 	private var parentRowStack = [Row]()
 	private var lastHeadingLevel = 0
+	private var headingRowIDs = Set<String>()
+	private var paragraphRowIDs = Set<String>()
 
 	public init(account: Account, images: [String:  Data]?) {
 		self.outline = Outline(account: account, id: .document(account.id.accountID, UUID().uuidString))
@@ -51,6 +53,7 @@ public struct ImportMarkdownParser: MarkupWalker {
 				}
 
 				parentRowStack.append(row)
+				headingRowIDs.insert(row.id)
 			}
 		}
 
@@ -63,8 +66,9 @@ public struct ImportMarkdownParser: MarkupWalker {
 		MainActor.assumeIsolated {
 			guard !isList else { return }
 
-			// Unattached paragraphs are assumed to belong to the previous Row
-			if let previousRow = parentRowStack.last?.rows.last ?? parentRowStack.last ?? outline.rows.last {
+			// Unattached paragraphs are assumed to belong to the previous Heading Row
+			let previousRow = parentRowStack.last?.rows.last ?? parentRowStack.last ?? outline.rows.last
+			if let previousRow, headingRowIDs.contains(previousRow.id) || paragraphRowIDs.contains(previousRow.id) {
 				var newNote = String()
 
 				if let note = previousRow.noteMarkdown(type: .markdown) {
@@ -79,7 +83,13 @@ public struct ImportMarkdownParser: MarkupWalker {
 			} else {
 				let row = Row(outline: outline)
 				row.importRow(topicMarkdown: nil, noteMarkdown: formattedParagraph, images: images)
-				outline.appendRow(row)
+				paragraphRowIDs.insert(row.id)
+
+				if let parentRow = parentRowStack.last {
+					parentRow.appendRow(row)
+				} else {
+					outline.appendRow(row)
+				}
 			}
 		}
 	}
