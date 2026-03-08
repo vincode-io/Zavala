@@ -1172,25 +1172,18 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		requestCloudKitUpdate(for: id)
 	}
 	
-	public func update(numberingStyle: NumberingStyle,
-					   checkSpellingWhileTyping: Bool,
-					   correctSpellingAutomatically: Bool,
-					   automaticallyCreateLinks: Bool,
-					   automaticallyChangeLinkTitles: Bool,
-					   ownerName: String?,
-					   ownerEmail: String?,
-					   ownerURL: String?) {
-		
-		self.numberingStyle = numberingStyle
-		self.checkSpellingWhileTyping = checkSpellingWhileTyping
-		self.correctSpellingAutomatically = correctSpellingAutomatically
-		
-		self.automaticallyCreateLinks = automaticallyCreateLinks
-		self.automaticallyChangeLinkTitles = automaticallyChangeLinkTitles
-		self.ownerName = ownerName
-		self.ownerEmail = ownerEmail
-		self.ownerURL = ownerURL
-		
+	public func update(defaults: Outline.Defaults) {
+
+		self.ownerName = defaults.ownerName
+		self.ownerEmail = defaults.ownerEmail
+		self.ownerURL = defaults.ownerURL
+
+		self.numberingStyle = defaults.numberingStyle
+		self.checkSpellingWhileTyping = defaults.checkSpellingWhileTyping
+		self.correctSpellingAutomatically = defaults.correctSpellingAutomatically
+		self.automaticallyCreateLinks = defaults.automaticallyCreateLinks
+		self.automaticallyChangeLinkTitles = defaults.automaticallyChangeLinkTitles
+
 		updated = Date()
 		requestCloudKitUpdate(for: id)
 	}

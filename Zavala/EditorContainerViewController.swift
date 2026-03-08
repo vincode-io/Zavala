@@ -93,17 +93,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		
 		guard let account = appDelegate.accountManager.findAccount(accountID: accountID) ?? appDelegate.accountManager.activeAccounts.first else { return nil }
 		let document = account.createOutline(title: title)
-		
-		let defaults = AppDefaults.shared
-		document.outline?.update(numberingStyle: defaults.numberingStyle,
-								 checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
-								 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
-								 automaticallyCreateLinks: defaults.automaticallyCreateLinks,
-								 automaticallyChangeLinkTitles: defaults.automaticallyChangeLinkTitles,
-								 ownerName: defaults.ownerName,
-								 ownerEmail: defaults.ownerEmail,
-								 ownerURL: defaults.ownerURL)
-		
+		document.outline?.update(defaults: AppDefaults.shared.outlineDefaults)
+
 		return document
 	}
 

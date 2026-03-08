@@ -204,14 +204,15 @@ class GetInfoViewModel: ObservableObject {
 	}
 	
 	func update() {
-		outline.update(numberingStyle: numberingStyle,
-					   checkSpellingWhileTyping: checkSpellingWhileTyping,
-					   correctSpellingAutomatically: correctSpellingAutomatically,
-					   automaticallyCreateLinks: automaticallyCreateLinks,
-					   automaticallyChangeLinkTitles: automaticallyChangeLinkTitles,
-					   ownerName: ownerName,
-					   ownerEmail: ownerEmail,
-					   ownerURL: ownerURL)
+		let outlineDefaults = Outline.Defaults(ownerName: ownerName,
+											   ownerEmail: ownerEmail,
+											   ownerURL: ownerURL,
+											   numberingStyle: numberingStyle,
+											   automaticallyCreateLinks: automaticallyCreateLinks,
+											   automaticallyChangeLinkTitles: automaticallyChangeLinkTitles,
+											   checkSpellingWhileTyping: checkSpellingWhileTyping,
+											   correctSpellingAutomatically: correctSpellingAutomatically)
+		outline.update(defaults: outlineDefaults)
 	}
 	
 }

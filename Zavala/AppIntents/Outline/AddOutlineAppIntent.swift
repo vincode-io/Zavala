@@ -61,15 +61,7 @@ struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
 			throw ZavalaAppIntentError.unexpectedError
 		}
 
-		let defaults = AppDefaults.shared
-		await outline.update(numberingStyle: defaults.numberingStyle,
-							 checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
-							 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
-							 automaticallyCreateLinks: defaults.automaticallyCreateLinks,
-							 automaticallyChangeLinkTitles: defaults.automaticallyChangeLinkTitles,
-							 ownerName: defaults.ownerName,
-							 ownerEmail: defaults.ownerEmail,
-							 ownerURL: defaults.ownerURL)
+		await outline.update(defaults: AppDefaults.shared.outlineDefaults)
 
 		await suspend()
 		return await .result(value: OutlineAppEntity(outline: outline))
