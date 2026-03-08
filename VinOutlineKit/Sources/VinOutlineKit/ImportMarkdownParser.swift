@@ -92,7 +92,9 @@ public struct ImportMarkdownParser: MarkupWalker {
 			if i > 0 {
 				topic.append(" ")
 			}
-			topic.append(String(line).trimmed() ?? "")
+			if let strippedLine = String(line).trimmed() {
+				topic.append(String(strippedLine.trimmingPrefix(/([-*+]|\d+\.)\s+/)))
+			}
 		}
 
 		MainActor.assumeIsolated {
