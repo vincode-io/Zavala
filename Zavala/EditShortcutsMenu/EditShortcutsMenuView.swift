@@ -31,6 +31,7 @@ struct EditShortcutsMenuView: View {
 							}
 					}
 					.onDelete(perform: deleteEntries)
+					.onMove(perform: moveEntries)
 				}
 				Divider()
 				HStack {
@@ -67,6 +68,11 @@ struct EditShortcutsMenuView: View {
 		guard !trimmed.isEmpty else { return }
 		entries.append(trimmed)
 		newEntryName = ""
+		save()
+	}
+
+	private func moveEntries(from source: IndexSet, to destination: Int) {
+		entries.move(fromOffsets: source, toOffset: destination)
 		save()
 	}
 
