@@ -756,7 +756,7 @@ extension AppDelegate: AppKitPluginDelegate {
 		guard let account = accountManager.findAccount(accountID: accountID) ?? accountManager.activeAccounts.first else { return }
 
 		Task {
-			guard let document = try? await account.importMarkdown(url, tags: nil) else { return }
+			guard let document = try? await account.importMarkdown(url, defaults: AppDefaults.shared.outlineDefaults, tags: nil) else { return }
 
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: accountManager, document: document).userInfo]

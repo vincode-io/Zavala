@@ -29,7 +29,7 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 			provider.loadDataRepresentation(forTypeIdentifier: UTType.markdown.identifier) { (markdownData, error) in
 				guard let markdownData else { return }
 				Task { @MainActor in
-					if let document = try? await account.importMarkdown(markdownData, tags: tags) {
+					if let document = try? await account.importMarkdown(markdownData, defaults: AppDefaults.shared.outlineDefaults, tags: tags) {
 						DocumentIndexer.updateIndex(forDocument: document)
 					}
 				}

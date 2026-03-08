@@ -472,6 +472,17 @@ final class AppDefaults {
 		}
 	}
 
+	var outlineDefaults: Outline.Defaults {
+		return Outline.Defaults(ownerName: ownerName,
+								ownerEmail: ownerEmail,
+								ownerURL: ownerURL,
+								numberingStyle: numberingStyle,
+								automaticallyCreateLinks: automaticallyCreateLinks,
+								automaticallyChangeLinkTitles: automaticallyChangeLinkTitles,
+								checkSpellingWhileTyping: checkSpellingWhileTyping,
+								correctSpellingAutomatically: correctSpellingAutomatically)
+	}
+
 	static func registerDefaults() {
 		var defaults: [String: Any] = [Key.enableLocalAccount: true]
 		

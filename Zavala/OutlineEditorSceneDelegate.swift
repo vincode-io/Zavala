@@ -123,7 +123,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		let markdownURLs = urlContexts.filter({ $0.url.pathExtension == "md" || $0.url.pathExtension == "markdown" }).map({ $0.url })
 		for url in markdownURLs {
 			Task { @MainActor in
-				if let document = try? await account.importMarkdown(url, tags: nil) {
+				if let document = try? await account.importMarkdown(url, defaults: AppDefaults.shared.outlineDefaults, tags: nil) {
 					DocumentIndexer.updateIndex(forDocument: document)
 					let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 					activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, document: document).userInfo]

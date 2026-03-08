@@ -314,7 +314,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			Task { @MainActor in
 				do {
 					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
-					let document = try await account.importMarkdown(url, tags: tags)
+					let document = try await account.importMarkdown(url, defaults: AppDefaults.shared.outlineDefaults, tags: tags)
 
 					try await Task.sleep(for: .seconds(0.5))
 

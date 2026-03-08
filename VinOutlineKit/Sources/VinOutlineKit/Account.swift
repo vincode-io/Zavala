@@ -187,7 +187,7 @@ public final class Account: Identifiable, Equatable {
 		accountMetadataDidChange()
 	}
 
-	public func importMarkdown(_ url: URL, tags: [Tag]?) async throws -> Document {
+	public func importMarkdown(_ url: URL, defaults: Outline.Defaults, tags: [Tag]?) async throws -> Document {
 		guard url.startAccessingSecurityScopedResource() else { throw AccountError.securityScopeError }
 		defer {
 			url.stopAccessingSecurityScopedResource()
@@ -202,7 +202,7 @@ public final class Account: Identifiable, Equatable {
 		guard fileError == nil else { throw fileError! }
 		guard let opmlData = fileData else { throw AccountError.fileReadError }
 
-		return try await importMarkdown(opmlData, tags: tags)
+		return try await importMarkdown(opmlData, defaults: defaults, tags: tags)
 	}
 
 
@@ -226,7 +226,7 @@ public final class Account: Identifiable, Equatable {
 
 
 	@discardableResult
-	public func importMarkdown(_ markdownData: Data, tags: [Tag]?, images: [String:  Data]? = nil) async throws -> Document {
+	public func importMarkdown(_ markdownData: Data, defaults: Outline.Defaults, tags: [Tag]?, images: [String:  Data]? = nil) async throws -> Document {
 		guard let markdownText = String(data: markdownData, encoding: .utf8 ) else {
 			throw AccountError.fileReadError
 		}
@@ -245,6 +245,15 @@ public final class Account: Identifiable, Equatable {
 		parser.visit(markdownDocument)
 
 		let outline = parser.outline
+
+		outline.ownerName = defaults.ownerName
+		outline.ownerEmail = defaults.ownerEmail
+		outline.ownerURL = defaults.ownerURL
+		outline.numberingStyle = defaults.numberingStyle
+		outline.automaticallyCreateLinks = defaults.automaticallyCreateLinks
+		outline.automaticallyChangeLinkTitles = defaults.automaticallyChangeLinkTitles
+		outline.checkSpellingWhileTyping = defaults.checkSpellingWhileTyping
+		outline.correctSpellingAutomatically = defaults.correctSpellingAutomatically
 
 		for tag in tags ?? [Tag]() {
 			outline.createTag(tag)

@@ -81,7 +81,36 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 		
 	}
-	
+
+	public struct Defaults {
+		public let ownerName: String?
+		public let ownerEmail: String?
+		public let ownerURL: String?
+		public let numberingStyle: NumberingStyle
+		public let automaticallyCreateLinks: Bool
+		public let automaticallyChangeLinkTitles: Bool
+		public let checkSpellingWhileTyping: Bool
+		public let correctSpellingAutomatically: Bool
+
+		public init(ownerName: String?,
+					ownerEmail: String?,
+					ownerURL: String?,
+					numberingStyle: NumberingStyle,
+					automaticallyCreateLinks: Bool,
+					automaticallyChangeLinkTitles: Bool,
+					checkSpellingWhileTyping: Bool,
+					correctSpellingAutomatically: Bool) {
+			self.ownerName = ownerName
+			self.ownerEmail = ownerEmail
+			self.ownerURL = ownerURL
+			self.numberingStyle = numberingStyle
+			self.automaticallyCreateLinks = automaticallyCreateLinks
+			self.automaticallyChangeLinkTitles = automaticallyChangeLinkTitles
+			self.checkSpellingWhileTyping = checkSpellingWhileTyping
+			self.correctSpellingAutomatically = correctSpellingAutomatically
+		}
+	}
+
 	public struct UserInfoKeys {
 		public static let replacableLinkTitle = "replacableLinkTitle"
 		public static let searchText = "searchText"

@@ -60,7 +60,7 @@ struct ImportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
 
 		let outline: Outline
 		if importType == .markdown {
-			guard let importedOutline = try? await account.importMarkdown(inputFile.data, tags: nil, images: images).outline else {
+			guard let importedOutline = try? await account.importMarkdown(inputFile.data, defaults: AppDefaults.shared.outlineDefaults, tags: nil, images: images).outline else {
 				await suspend()
 				throw ZavalaAppIntentError.unableToParseMarkdown
 			}
