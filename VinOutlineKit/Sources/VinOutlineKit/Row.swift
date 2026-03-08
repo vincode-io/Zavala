@@ -793,7 +793,71 @@ private extension Row {
 			let fixedURL = urlPart.replacingOccurrences(of: "\\_", with: "_")
 			return "\(linkText)(\(fixedURL))"
 		}
-		return fixedMarkdown
+
+		return wrapMarkdownLines(fixedMarkdown)
+	}
+	
+	func wrapMarkdownLines(_ markdown: String, maxLength: Int = 79) -> String {
+		let existingLines = markdown.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+		var wrappedLines = [String]()
+		
+		for line in existingLines {
+			if line.count <= maxLength {
+				wrappedLines.append(line)
+				continue
+			}
+			
+			let tokens = tokenizeMarkdownLine(line)
+			var currentLine = ""
+			
+			for token in tokens {
+				if currentLine.isEmpty {
+					currentLine = token
+				} else if currentLine.count + 1 + token.count <= maxLength {
+					currentLine += " " + token
+				} else {
+					wrappedLines.append(currentLine)
+					currentLine = token
+				}
+			}
+			
+			if !currentLine.isEmpty {
+				wrappedLines.append(currentLine)
+			}
+		}
+		
+		return wrappedLines.joined(separator: "\n")
+	}
+	
+	/// Splits a markdown line into tokens that should not be broken
+	/// apart. Markdown links and images are kept as single tokens.
+	func tokenizeMarkdownLine(_ line: String) -> [String] {
+		var tokens = [String]()
+		var remaining = line[line.startIndex...]
+		
+		// Pattern matches ![alt](url) and [text](url)
+		let linkPattern = /!?\[[^\]]*\]\([^)]*\)/
+		
+		while let match = remaining.firstMatch(of: linkPattern) {
+			// Add any text before the match as individual word tokens
+			let before = remaining[remaining.startIndex..<match.range.lowerBound]
+			if !before.isEmpty {
+				let words = before.split(separator: " ", omittingEmptySubsequences: true).map(String.init)
+				tokens.append(contentsOf: words)
+			}
+			
+			// Add the entire link/image as a single token
+			tokens.append(String(match.output))
+			remaining = remaining[match.range.upperBound...]
+		}
+		
+		// Add any remaining text after the last match
+		if !remaining.isEmpty {
+			let words = remaining.split(separator: " ", omittingEmptySubsequences: true).map(String.init)
+			tokens.append(contentsOf: words)
+		}
+		
+		return tokens
 	}
 	
 	func convertMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
