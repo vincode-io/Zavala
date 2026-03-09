@@ -1168,7 +1168,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.isLocked = isLocked
 		updated = Date()
 		documentIsLockedDidChange()
+
+		beginCloudKitBatchRequest()
 		requestCloudKitUpdate(for: id)
+		let allRowEntityIDs = rowIndex.values.map { $0.entityID }
+		requestCloudKitUpdates(for: allRowEntityIDs)
+		endCloudKitBatchRequest()
 	}
 
 	public func update(title: String?) {
