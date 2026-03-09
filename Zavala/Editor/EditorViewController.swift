@@ -1050,6 +1050,115 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 
+	func buildMoreMenu() -> UIMenu {
+		var outlineActions = [UIMenuElement]()
+
+		let getInfoAction = UIAction(title: .getInfoControlLabel, image: .getInfo) { [weak self] _ in
+			self?.showOutlineGetInfo()
+		}
+		outlineActions.append(getInfoAction)
+
+		if outline?.isLocked == true {
+			if let outlineID = outline?.id, LockSessionManager.shared.isUnlocked(outlineID) {
+				let removeLockAction = UIAction(title: .removeLockControlLabel, image: .lockOpen) { _ in
+					UIApplication.shared.sendAction(.removeLock, to: nil, from: nil, for: nil)
+				}
+				outlineActions.append(removeLockAction)
+
+				let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
+					UIApplication.shared.sendAction(.lockNow, to: nil, from: nil, for: nil)
+				}
+				outlineActions.append(lockNowAction)
+			}
+		} else if outline?.iCollaborating != true {
+			let addLockAction = UIAction(title: .addLockControlLabel, image: .lock) { _ in
+				UIApplication.shared.sendAction(.addLock, to: nil, from: nil, for: nil)
+			}
+			outlineActions.append(addLockAction)
+		}
+
+		let findAction = UIAction(title: .findEllipsisControlLabel, image: .find) { [weak self] _ in
+			self?.showFindInteraction()
+		}
+		outlineActions.append(findAction)
+
+		let expandAllInOutlineAction = UIAction(title: .expandAllInOutlineControlLabel, image: .expandAll) { [weak self] _ in
+			self?.expandAllInOutline(self)
+		}
+		outlineActions.append(expandAllInOutlineAction)
+
+		let collapseAllInOutlineAction = UIAction(title: .collapseAllInOutlineControlLabel, image: .collapseAll) { [weak self] _ in
+			self?.collapseAllInOutline(self)
+		}
+		outlineActions.append(collapseAllInOutlineAction)
+
+		var shareActions = [UIMenuElement]()
+
+		let shareAction = UIAction(title: .shareEllipsisControlLabel, image: .share) { [weak self] _ in
+			self?.share(sourceView: self?.moreMenuButton)
+		}
+		shareActions.append(shareAction)
+
+		if showShortcutsMenu {
+			var shortcutItems = [UIMenuElement]()
+			for (index, shortcutName) in AppDefaults.shared.shortcutsMenuEntries.enumerated() {
+				shortcutItems.append(UIAction(title: shortcutName) { _ in
+					appDelegate.runShortcut(index: index)
+				})
+			}
+			let shortcutListMenu = UIMenu(title: "", options: .displayInline, children: shortcutItems)
+			let editShortcutsMenuAction = UIAction(title: .editShortcutsMenuControlLabel) { _ in
+				appDelegate.mainCoordinator?.editShortcutsMenu()
+			}
+			let editShortcutsMenu = UIMenu(title: "", options: .displayInline, children: [editShortcutsMenuAction])
+			let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: .shortcuts, children: [shortcutListMenu, editShortcutsMenu])
+			shareActions.append(shortcutsMenu)
+		}
+
+		let printDocAction = UIAction(title: .printDocEllipsisControlLabel) { [weak self] _ in
+			self?.printDoc()
+		}
+		let printListAction = UIAction(title: .printListControlEllipsisLabel) { [weak self] _ in
+			self?.printList()
+		}
+		shareActions.append(UIMenu(title: .printControlLabel, image: .print, children: [printDocAction, printListAction]))
+
+		let exportPDFDoc = UIAction(title: .exportPDFDocEllipsisControlLabel) { [weak self] _ in
+			guard let self, let outline = self.outline else { return }
+			self.delegate?.exportPDFDoc(self, outline: outline)
+		}
+		let exportPDFList = UIAction(title: .exportPDFListEllipsisControlLabel) { [weak self] _ in
+			guard let self, let outline = self.outline else { return }
+			self.delegate?.exportPDFList(self, outline: outline)
+		}
+		let exportMarkdownDoc = UIAction(title: .exportMarkdownDocEllipsisControlLabel) { [weak self] _ in
+			guard let self, let outline = self.outline else { return }
+			self.delegate?.exportMarkdownDoc(self, outline: outline)
+		}
+		let exportMarkdownList = UIAction(title: .exportMarkdownListEllipsisControlLabel) { [weak self] _ in
+			guard let self, let outline = self.outline else { return }
+			self.delegate?.exportMarkdownList(self, outline: outline)
+		}
+		let exportOPML = UIAction(title: .exportOPMLEllipsisControlLabel) { [weak self] _ in
+			guard let self, let outline = self.outline else { return }
+			self.delegate?.exportOPML(self, outline: outline)
+		}
+		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
+		shareActions.append(UIMenu(title: .exportControlLabel, image: .export, children: exportActions))
+
+		let deleteCompletedRowsAction = UIAction(title: .deleteCompletedRowsControlLabel,
+												 image: .delete,
+												 attributes: .destructive) { [weak self] _ in
+			self?.deleteCompletedRows(nil)
+		}
+
+		let outlineMenu = UIMenu(title: "", options: .displayInline, children: outlineActions)
+		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)
+		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
+
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [outlineMenu, shareMenu, changeMenu])
+	}
+
 	func showLockedView(outline: Outline) {
 		dismissLockedView()
 
@@ -1148,7 +1257,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 		
 		navigationItem.largeTitleDisplayMode = .never
-		moreMenuButton.menu = buildEllipsisMenu()
+		moreMenuButton.menu = buildMoreMenu()
 		
 		if !(outline?.isFocusOutUnavailable() ?? true) {
 			focusButton.accessibilityLabel = .focusOutControlLabel
@@ -2281,124 +2390,7 @@ private extension EditorViewController {
 		}
 
 	}
-	
-}
 
-extension EditorViewController {
-	
-	func buildEllipsisMenu() -> UIMenu {
-		var outlineActions = [UIMenuElement]()
-
-		let getInfoAction = UIAction(title: .getInfoControlLabel, image: .getInfo) { [weak self] _ in
-			self?.showOutlineGetInfo()
-		}
-		outlineActions.append(getInfoAction)
-
-		if outline?.isLocked == true {
-			if let outlineID = outline?.id, LockSessionManager.shared.isUnlocked(outlineID) {
-				let removeLockAction = UIAction(title: .removeLockControlLabel, image: .lockOpen) { _ in
-					UIApplication.shared.sendAction(.removeLock, to: nil, from: nil, for: nil)
-				}
-				outlineActions.append(removeLockAction)
-
-				let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
-					UIApplication.shared.sendAction(.lockNow, to: nil, from: nil, for: nil)
-				}
-				outlineActions.append(lockNowAction)
-			}
-		} else if outline?.iCollaborating != true {
-			let addLockAction = UIAction(title: .addLockControlLabel, image: .lock) { _ in
-				UIApplication.shared.sendAction(.addLock, to: nil, from: nil, for: nil)
-			}
-			outlineActions.append(addLockAction)
-		}
-
-		let findAction = UIAction(title: .findEllipsisControlLabel, image: .find) { [weak self] _ in
-			self?.showFindInteraction()
-		}
-		outlineActions.append(findAction)
-
-		let expandAllInOutlineAction = UIAction(title: .expandAllInOutlineControlLabel, image: .expandAll) { [weak self] _ in
-			self?.expandAllInOutline(self)
-		}
-		outlineActions.append(expandAllInOutlineAction)
-		
-		let collapseAllInOutlineAction = UIAction(title: .collapseAllInOutlineControlLabel, image: .collapseAll) { [weak self] _ in
-			self?.collapseAllInOutline(self)
-		}
-		outlineActions.append(collapseAllInOutlineAction)
-		
-		var shareActions = [UIMenuElement]()
-
-		let shareAction = UIAction(title: .shareEllipsisControlLabel, image: .share) { [weak self] _ in
-			self?.share(sourceView: self?.moreMenuButton)
-		}
-		shareActions.append(shareAction)
-
-		if showShortcutsMenu {
-			var shortcutItems = [UIMenuElement]()
-			for (index, shortcutName) in AppDefaults.shared.shortcutsMenuEntries.enumerated() {
-				shortcutItems.append(UIAction(title: shortcutName) { _ in
-					appDelegate.runShortcut(index: index)
-				})
-			}
-			let shortcutListMenu = UIMenu(title: "", options: .displayInline, children: shortcutItems)
-			let editShortcutsMenuAction = UIAction(title: .editShortcutsMenuControlLabel) { _ in
-				appDelegate.mainCoordinator?.editShortcutsMenu()
-			}
-			let editShortcutsMenu = UIMenu(title: "", options: .displayInline, children: [editShortcutsMenuAction])
-			let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: .shortcuts, children: [shortcutListMenu, editShortcutsMenu])
-			shareActions.append(shortcutsMenu)
-		}
-
-		let printDocAction = UIAction(title: .printDocEllipsisControlLabel) { [weak self] _ in
-			self?.printDoc()
-		}
-		let printListAction = UIAction(title: .printListControlEllipsisLabel) { [weak self] _ in
-			self?.printList()
-		}
-		shareActions.append(UIMenu(title: .printControlLabel, image: .print, children: [printDocAction, printListAction]))
-
-		let exportPDFDoc = UIAction(title: .exportPDFDocEllipsisControlLabel) { [weak self] _ in
-			guard let self, let outline = self.outline else { return }
-			self.delegate?.exportPDFDoc(self, outline: outline)
-		}
-		let exportPDFList = UIAction(title: .exportPDFListEllipsisControlLabel) { [weak self] _ in
-			guard let self, let outline = self.outline else { return }
-			self.delegate?.exportPDFList(self, outline: outline)
-		}
-		let exportMarkdownDoc = UIAction(title: .exportMarkdownDocEllipsisControlLabel) { [weak self] _ in
-			guard let self, let outline = self.outline else { return }
-			self.delegate?.exportMarkdownDoc(self, outline: outline)
-		}
-		let exportMarkdownList = UIAction(title: .exportMarkdownListEllipsisControlLabel) { [weak self] _ in
-			guard let self, let outline = self.outline else { return }
-			self.delegate?.exportMarkdownList(self, outline: outline)
-		}
-		let exportOPML = UIAction(title: .exportOPMLEllipsisControlLabel) { [weak self] _ in
-			guard let self, let outline = self.outline else { return }
-			self.delegate?.exportOPML(self, outline: outline)
-		}
-		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
-		shareActions.append(UIMenu(title: .exportControlLabel, image: .export, children: exportActions))
-
-		let deleteCompletedRowsAction = UIAction(title: .deleteCompletedRowsControlLabel,
-												 image: .delete,
-												 attributes: .destructive) { [weak self] _ in
-			self?.deleteCompletedRows(nil)
-		}
-
-		let outlineMenu = UIMenu(title: "", options: .displayInline, children: outlineActions)
-		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)
-		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
-		
-		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [outlineMenu, shareMenu, changeMenu])
-	}
-	
-}
-
-private extension EditorViewController {
-	
 	func buildFilterMenu() -> UIMenu {
 		let turnFilterOnAction = UIAction() { [weak self] _ in
 		   self?.toggleFilterOn(self)

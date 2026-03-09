@@ -602,7 +602,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
 				guard let self else { return true }
-				if let menu = self.editorViewController?.buildEllipsisMenu() {
+				if let menu = self.editorViewController?.buildMoreMenu() {
 					item.itemMenu = menu
 				}
 				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
