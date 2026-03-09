@@ -1342,7 +1342,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				if let menu = self.editorViewController?.buildMoreMenu() {
 					item.itemMenu = menu
 				}
-				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
+				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true || self.editorViewController?.isShowingLockedView ?? true
 			}
 			item.image = .ellipsis
 			item.label = .moreControlLabel

@@ -561,12 +561,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return !(outline?.isFocusOutUnavailable() ?? true)
 		case .toggleFocus:
 			if isFocusing {
-				return true
+				return !isShowingLockedView
 			} else {
-				return currentRows?.count == 1
+				return currentRows?.count == 1 && !isShowingLockedView
 			}
 		case .toggleFilterOn:
-			return outline != nil
+			return outline != nil && !isShowingLockedView
 		case .toggleCompletedFilter, .toggleNotesFilter:
 			return isFilterOn
 		case .expandAllInOutline:
