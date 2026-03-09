@@ -627,6 +627,8 @@
 				5109BC51293445EB0022E90B /* DocumentsActivityItemsConfiguration.swift */,
 				5109BC4F292579A30022E90B /* CopyDocumentLinkActivity.swift */,
 				51B5E5A72F57933F0033090F /* ShortcutRunner.swift */,
+				516CBBF52F5E5F3F0088B572 /* LockKeyManager.swift */,
+				516CBBF72F5E5F590088B572 /* LockSessionManager.swift */,
 				51E14F282560727C00320EDB /* Collections */,
 				51E14F292560728B00320EDB /* Documents */,
 				51E14F2A2560729900320EDB /* Editor */,
@@ -640,8 +642,6 @@
 				514BB9D5255B595300C8DBDF /* Utility */,
 				51B4B4822C333F9B005DCCEB /* AppIntents */,
 				515F163B255C536600FD98B8 /* Resources */,
-				516CBBF52F5E5F3F0088B572 /* LockKeyManager.swift */,
-				516CBBF72F5E5F590088B572 /* LockSessionManager.swift */,
 			);
 			path = Zavala;
 			sourceTree = "<group>";
