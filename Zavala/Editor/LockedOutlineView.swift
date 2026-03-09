@@ -43,9 +43,9 @@ struct LockedOutlineView: View {
 			Spacer()
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.onAppear {
-			authenticate()
-		}
+//		.onAppear {
+//			authenticate()
+//		}
 	}
 
 	private func authenticate() {
