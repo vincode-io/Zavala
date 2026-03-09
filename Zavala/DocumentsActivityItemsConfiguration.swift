@@ -61,7 +61,7 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 				return nil
 			}
 			
-			if document.isCloudKit, let container = appDelegate.accountManager.cloudKitAccount?.cloudKitContainer {
+			if document.isCloudKit, document.outline?.isLocked != true, let container = appDelegate.accountManager.cloudKitAccount?.cloudKitContainer {
 				let sharingOptions = CKAllowedSharingOptions(allowedParticipantPermissionOptions: .readWrite, allowedParticipantAccessOptions: .any)
 
 				if let shareRecord = document.shareRecord {

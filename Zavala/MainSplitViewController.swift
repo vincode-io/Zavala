@@ -309,11 +309,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		case .sync:
 			return appDelegate.accountManager.isSyncAvailable
 		case .manageSharing:
-			return !isManageSharingUnavailable
+			return !isManageSharingUnavailable && editorViewController?.outline?.isLocked != true
 		case .share, .showGetInfo, .deleteOutline, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isOutlineFunctionsUnavailable
 		case .addLock:
-			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true
+			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true && editorViewController?.outline?.iCollaborating != true
 		case .removeLock:
 			if let outline = editorViewController?.outline {
 				return outline.isLocked == true && LockSessionManager.shared.isUnlocked(outline.id)

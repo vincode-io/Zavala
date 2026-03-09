@@ -633,18 +633,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atEndOfMenu: .file)
 
+		let outline = mainCoordinator?.editorViewController?.outline
+		let isLocked = outline?.isLocked == true
+		let isCollaborating = outline?.iCollaborating == true
+
 		var lockMenuChildren = [UIMenuElement]()
-		if let outline = mainCoordinator?.editorViewController?.outline, outline.isLocked == true {
+		if isLocked {
 			lockMenuChildren.append(removeLockCommand)
 			lockMenuChildren.append(lockNowCommand)
-		} else {
+		} else if !isCollaborating {
 			lockMenuChildren.append(addLockCommand)
 		}
-		let lockMenu = UIMenu(title: "", options: .displayInline, children: lockMenuChildren)
-		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand, deleteOutlineCommand, lockMenu])
+
+		var outlineFileMenuChildren = [UIMenuElement]()
+		outlineFileMenuChildren.append(showGetInfoCommand)
+		outlineFileMenuChildren.append(deleteOutlineCommand)
+		if !lockMenuChildren.isEmpty {
+			let lockMenu = UIMenu(title: "", options: .displayInline, children: lockMenuChildren)
+			outlineFileMenuChildren.append(lockMenu)
+		}
+		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: outlineFileMenuChildren)
 		builder.insertChild(outlineFileMenu, atEndOfMenu: .file)
 
-		let sharingMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, manageSharingCommand])
+		var sharingMenuChildren: [UIMenuElement] = [shareCommand]
+		if !isLocked {
+			sharingMenuChildren.append(manageSharingCommand)
+		}
+		let sharingMenu = UIMenu(title: "", options: .displayInline, children: sharingMenuChildren)
 		builder.insertChild(sharingMenu, atEndOfMenu: .file)
 
 		let importMenu = UIMenu(title: .importControlLabel, image: .importDocument, children: [importMarkdownCommand, importOPMLCommand])
