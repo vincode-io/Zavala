@@ -9,15 +9,19 @@ header:
 
 
 
-Here are some examples of Shortcuts you can build with Zavala. You can customize them to your particular needs and use them as a learning resource.
+Here are some examples of Shortcuts you can build with Zavala. You can
+customize them to your particular needs and use them as a learning resource.
 
 ## [Global Search and Replace](https://www.icloud.com/shortcuts/3b356cf4dc464cd9a154f1ffa1cab867)
 
-This Shortcut will scan all the Outlines in Zavala for the word “Paris” and replace it with “London”. You can customize it to limit it to only the Outlines you want to change and modify the search and replace commands.
+This Shortcut will scan all the Outlines in Zavala for the word “Paris” and
+replace it with “London”. You can customize it to limit it to only the Outlines
+you want to change and modify the search and replace commands.
 
 ## [Saved Search](https://www.icloud.com/shortcuts/adf9687c12a74380b2497ac3e38159e7)
 
-This one searches all the Outlines for any that contain the word “Blog” and then tags found Outlines with the “Blog” tag.
+This one searches all the Outlines for any that contain the word “Blog” and
+then tags found Outlines with the “Blog” tag.
 
 ## [Make Most Played Outline](https://www.icloud.com/shortcuts/524f34a693964c8d820fbc5b0f98f678)
 
@@ -25,40 +29,62 @@ This is a demo of how to create an Outline and populate it with Rows.
 
 ## [Append to Personal Tasks](https://www.icloud.com/shortcuts/a2a5ea9d7c9042eab0d1788ccfc68953)
 
-We get input, typically from another Shortcut, and append it to an Outline called “Personal Tasks”.
+We get input, typically from another Shortcut, and append it to an Outline
+called “Personal Tasks”.
 
 ## [Add Link to Personal Tasks](https://www.icloud.com/shortcuts/87f264909c164b9995169c48ae280550)
 
-This Shortcut only works on iOS because some Safari features are currently missing on macOS.
+This Shortcut only works on iOS because some Safari features are currently
+missing on macOS.
 
-We add an item to the Share Sheet on iOS that is the name of this Shortcut. If an application shares a URL, we will take it and append it to the end of an Outline called “Personal Tasks”. This is an easy way to track things that you want to read later along with other tasks you may be working on.
+We add an item to the Share Sheet on iOS that is the name of this Shortcut. If
+an application shares a URL, we will take it and append it to the end of an
+Outline called “Personal Tasks”. This is an easy way to track things that you
+want to read later along with other tasks you may be working on.
 
 ## [Move Completed Rows to Done](https://www.icloud.com/shortcuts/0c71eb789f594ee69f11944c7f7de150)
 
-This Shortcut assumes that you have an outline named “TODO”, with completed rows, and one row with the topic “Done” at the top level. 
+This Shortcut assumes that you have an outline named “TODO”, with completed
+rows, and one row with the topic “Done” at the top level.
 
 ## [Archive Account](https://www.icloud.com/shortcuts/766aa14fdc324bb680b2734acdcd3485)
 
-You can use this shortcut to create a Zavala archive. This is a zip file with OPML exports and any associated images from the selected Account. You can use this archive to backup your Account or use it to migrate to another outline application.
+You can use this shortcut to create a Zavala archive. This is a zip file with
+OPML exports and any associated images from the selected Account. You can use
+this archive to backup your Account or use it to migrate to another outline
+application.
 
-To restore the archive to an account, you will want to delete all the outlines in that account and then use the Restore Account Shortcut load the archive.
+To restore the archive to an account, you will want to delete all the outlines
+in that account and then use the Restore Account Shortcut load the archive.
 
 ## [Restore Account](https://www.icloud.com/shortcuts/2540483cb2124f31b5f52c635049cf8f)
 
-You can use this Shortcut to restore a Zavala archive to an Account. You will probably want to delete all the Outlines in the Account prior to executing this Shortcut or you will end up with duplicates.
+You can use this Shortcut to restore a Zavala archive to an Account. You will
+probably want to delete all the Outlines in the Account prior to executing this
+Shortcut or you will end up with duplicates.
 
 ## [Export to Reminders](https://www.icloud.com/shortcuts/f2865613b0ee47da8a2cf0cb27cdb945)
 
-This shortcut will take the currently selected Outline and export it to Reminders as a Reminder List with Tasks taken from the Outline’s rows.
+This shortcut will take the currently selected Outline and export it to
+Reminders as a Reminder List with Tasks taken from the Outline’s rows.
 
 ## [Migraine Log](https://www.icloud.com/shortcuts/60a2681372eb43919810721878a14753)
 
-This example is useful for logging information using a template Row as a starting point. In this case, we are logging migraine headaches and associated symptoms. See the comments in the Shortcut for more information.
+This example is useful for logging information using a template Row as a
+starting point. In this case, we are logging migraine headaches and associated
+symptoms. See the comments in the Shortcut for more information.
 
 ## [No Tag Outline Search](https://www.icloud.com/shortcuts/c3c00f5f032748f7b224cfc50b97a53d)
 
-If you want to make sure that every one of your Outlines has a Tag this is the Shortcut for you. It scans for Outlines with missing Tags and gives them a “No Tag” Tag. You can then add Tags to the found Outlines and delete the “No Tag” Tag when done.
+If you want to make sure that every one of your Outlines has a Tag this is the
+Shortcut for you. It scans for Outlines with missing Tags and gives them a “No
+Tag” Tag. You can then add Tags to the found Outlines and delete the “No Tag”
+Tag when done.
 
 ## [Use ChatGPT to Create an Outline](https://www.icloud.com/shortcuts/b05a939b9fb74e7fb20925b204a51d22)
 
-Sometimes just getting started is the hardest part. Here we use ChatGPT to create an outline of features that an outliner application should have. You can customize this Shortcut by changing the first sentence in the ChatGPT box to what ever interests you. Now you have an outline you can edit and customize in Zavala to get you started.
+Sometimes just getting started is the hardest part. Here we use ChatGPT to
+create an outline of features that an outliner application should have. You can
+customize this Shortcut by changing the first sentence in the ChatGPT box to
+what ever interests you. Now you have an outline you can edit and customize in
+Zavala to get you started.

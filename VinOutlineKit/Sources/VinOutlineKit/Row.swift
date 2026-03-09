@@ -794,7 +794,11 @@ private extension Row {
 			return "\(linkText)(\(fixedURL))"
 		}
 
-		return wrapMarkdownLines(fixedMarkdown)
+		if type == .markdown {
+			return wrapMarkdownLines(fixedMarkdown)
+		} else {
+			return fixedMarkdown
+		}
 	}
 	
 	func wrapMarkdownLines(_ markdown: String, maxLength: Int = 79) -> String {

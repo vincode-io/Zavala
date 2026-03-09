@@ -9,7 +9,10 @@ header:
 
 
 
-This guide uses screenshots from the Mac version of Zavala. The Mac, iPhone, and iPad versions of Zavala are all developed at the same time and are mostly equivalent in functionality. All features look almost identical between platforms and I will try to call it out when they are different.
+This guide uses screenshots from the Mac version of Zavala. The Mac, iPhone,
+and iPad versions of Zavala are all developed at the same time and are mostly
+equivalent in functionality. All features look almost identical between
+platforms and I will try to call it out when they are different.
 
 * Getting Started
 	* [Outliners Defined](Outliners_Defined.md)
@@ -37,3 +40,4 @@ This guide uses screenshots from the Mac version of Zavala. The Mac, iPhone, and
 * Shortcuts
 	* [Programming Guide](Programming_Guide.md)
 	* [Shortcut Examples](Shortcut_Examples.md)
+	* [Shortcuts Menu](Shortcuts_Menu.md)
