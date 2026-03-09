@@ -907,7 +907,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.moveLeft,
 			.moveRight,
-			.space,
+			.flexibleSpace,
 			.insertImage,
 			.link,
 			.boldface,
@@ -915,8 +915,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.codeInline,
 			.highlight,
 			.flexibleSpace,
-			.share,
-			.space,
+			.more,
 			.focus,
 			.filter,
 		]
@@ -940,6 +939,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.highlight,
 			.focus,
 			.filter,
+			.more,
 			.moveLeft,
 			.moveRight,
 			.moveUp,
@@ -1331,6 +1331,22 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.image = .filterInactive
 			item.label = .filterControlLabel
 			item.toolTip = .filterControlLabel
+			item.isBordered = true
+			item.target = self
+			item.showsIndicator = false
+			toolbarItem = item
+		case .more:
+			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] item in
+				guard let self else { return true }
+				if let menu = self.editorViewController?.buildEllipsisMenu() {
+					item.itemMenu = menu
+				}
+				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			}
+			item.image = .ellipsis
+			item.label = .moreControlLabel
+			item.toolTip = .moreControlLabel
 			item.isBordered = true
 			item.target = self
 			item.showsIndicator = false

@@ -418,6 +418,7 @@ extension NSToolbarItem.Identifier {
 	static let printList = NSToolbarItem.Identifier("io.vincode.Zavala.printList")
 	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
 	static let getInfo = NSToolbarItem.Identifier("io.vincode.Zavala.getInfo")
+	static let more = NSToolbarItem.Identifier("io.vincode.Zavala.more")
 }
 
 #endif

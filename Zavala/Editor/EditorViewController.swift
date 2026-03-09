@@ -2282,6 +2282,10 @@ private extension EditorViewController {
 
 	}
 	
+}
+
+extension EditorViewController {
+	
 	func buildEllipsisMenu() -> UIMenu {
 		var outlineActions = [UIMenuElement]()
 
@@ -2390,6 +2394,10 @@ private extension EditorViewController {
 		
 		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [outlineMenu, shareMenu, changeMenu])
 	}
+	
+}
+
+private extension EditorViewController {
 	
 	func buildFilterMenu() -> UIMenu {
 		let turnFilterOnAction = UIAction() { [weak self] _ in
