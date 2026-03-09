@@ -8,7 +8,8 @@ header:
 ---
 
 
-* ![](/assets/images/help/AB6E83C4-E86A-4066-B292-41D838968F6F.png)
+
+![](/assets/images/help/6AFE9D94-0F7B-4063-BA36-3F058BA5D3FE.png)
 
 ## General
 
