@@ -148,7 +148,12 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 					attrText.append(NSAttributedString(attachment: shareAttachment))
 				}
 				if isLocked {
-					let lockAttachment = NSTextAttachment(image: .lockOutline)
+					let lockImage: UIImage = if let outlineID = document.outline?.id, LockSessionManager.shared.isUnlocked(outlineID) {
+						.lockOpen
+					} else {
+						.lockOutline
+					}
+					let lockAttachment = NSTextAttachment(image: lockImage)
 					attrText.append(NSAttributedString(attachment: lockAttachment))
 				}
 				contentConfiguration.attributedText = attrText
@@ -178,6 +183,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentUpdatedDidChange(_:)), name: .DocumentUpdatedDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(lockSessionDidChange(_:)), name: .LockSessionDidClose, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(lockSessionDidChange(_:)), name: .LockSessionDidOpen, object: nil)
 		
 		scheduleReconfigureAll()
 		
@@ -392,6 +399,10 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		Task {
 			await reload(document: document)
 		}
+	}
+
+	@objc func lockSessionDidChange(_ note: Notification) {
+		reconfigureAll()
 	}
 
 	@objc func documentTitleDidChange(_ note: Notification) {

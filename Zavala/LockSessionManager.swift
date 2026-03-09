@@ -12,6 +12,7 @@ import VinOutlineKit
 
 extension Notification.Name {
 	static let LockSessionDidClose = Notification.Name("LockSessionDidClose")
+	static let LockSessionDidOpen = Notification.Name("LockSessionDidOpen")
 }
 
 @MainActor
@@ -58,6 +59,7 @@ final class LockSessionManager {
 
 	func markUnlocked(_ outlineID: EntityID) {
 		unlockedOutlineIDs.insert(outlineID)
+		NotificationCenter.default.post(name: .LockSessionDidOpen, object: outlineID)
 	}
 
 	func lockNow() {
