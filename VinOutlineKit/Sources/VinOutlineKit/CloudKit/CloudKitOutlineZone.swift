@@ -35,8 +35,9 @@ final class CloudKitOutlineZone: VCKZone {
 	let database: CKDatabase?
 	let delegate: VCKZoneDelegate?
 
-	private let currentZoneVersionNumber = 2
+	private let currentZoneVersionNumber = 3
 	private let zoneVersionRecordName = "io.vincode.Zavala.zoneVersion"
+	private let upgradedCloudkitZoneToV3 = "io.vincode.Zavala.upgradedCloudkitZoneToV3"
 
 	private struct VersionRecord {
 		static let recordType = "ZoneVersion"
@@ -74,8 +75,14 @@ final class CloudKitOutlineZone: VCKZone {
 		return result.0.first! as! CKShare
 	}
 	
-	func validateZoneVersion() async throws {
+	func upgradeAndValidateZoneVersion() async throws {
 		guard zoneID == Self.defaultZoneID else {
+			return
+		}
+
+		guard UserDefaults.standard.bool(forKey: upgradedCloudkitZoneToV3) else {
+			try await saveZoneVersionRecord()
+			UserDefaults.standard.set(true, forKey: upgradedCloudkitZoneToV3)
 			return
 		}
 
@@ -104,6 +111,12 @@ final class CloudKitOutlineZone: VCKZone {
 private extension CloudKitOutlineZone {
 
 	func saveZoneVersionRecord() async throws {
+		if let existingRecord = try await fetch(externalID: zoneVersionRecordName) {
+			existingRecord[VersionRecord.Fields.versionNumber] = currentZoneVersionNumber
+			try await save(existingRecord)
+			return
+		}
+		
 		let recordID = CKRecord.ID(recordName: zoneVersionRecordName, zoneID: zoneID)
 		let newVersionRecord = CKRecord(recordType: VersionRecord.recordType, recordID: recordID)
 		newVersionRecord[VersionRecord.Fields.versionNumber] = currentZoneVersionNumber
