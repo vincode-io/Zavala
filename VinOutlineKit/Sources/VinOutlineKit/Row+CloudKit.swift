@@ -68,13 +68,19 @@ extension Row: VCKModel {
 			isComplete = serverIsComplete
 		}
 
-		let serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
+		var serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
+		var serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
+
+		if outline?.isLocked == true, let encryptionService = outline?.encryptionService {
+			serverTopicData = try? encryptionService.decrypt(serverTopicData)
+			serverNoteData = try? encryptionService.decrypt(serverNoteData)
+		}
+
 		if serverTopicData != topicData {
 			updated = true
 			topicData = serverTopicData
 		}
 
-		let serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
 		if serverNoteData != noteData {
 			updated = true
 			noteData = serverNoteData
@@ -144,14 +150,22 @@ extension Row: VCKModel {
 		let serverTopicString = serverTopicData?.toAttributedString()
 
 		let recordTopicString = merge(client: topicString, ancestor: ancestorTopicString, server: serverTopicString)
-		record[Row.CloudKitRecord.Fields.topicData] = recordTopicString?.toData()
+		var recordTopicData = recordTopicString?.toData()
 
 		let noteString = noteData?.toAttributedString()
 		let ancestorNoteString = ancestorNoteData?.toAttributedString()
 		let serverNoteString = serverNoteData?.toAttributedString()
 
 		let recordNoteString = merge(client: noteString, ancestor: ancestorNoteString, server: serverNoteString)
-		record[Row.CloudKitRecord.Fields.noteData] = recordNoteString?.toData()
+		var recordNoteData = recordNoteString?.toData()
+
+		if outline?.isLocked == true, let encryptionService = outline?.encryptionService {
+			recordTopicData = try? encryptionService.encrypt(recordTopicData)
+			recordNoteData = try? encryptionService.encrypt(recordNoteData)
+		}
+
+		record[Row.CloudKitRecord.Fields.topicData] = recordTopicData
+		record[Row.CloudKitRecord.Fields.noteData] = recordNoteData
 
 		return record
 	}

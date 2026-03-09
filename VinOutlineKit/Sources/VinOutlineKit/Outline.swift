@@ -386,7 +386,29 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			}
 		}
 	}
-	
+
+	var ancestorIsLocked: Bool?
+	var serverIsLocked: Bool?
+	public var isLocked: Bool? {
+		willSet {
+			if isCloudKit && ancestorIsLocked == nil {
+				ancestorIsLocked = isLocked
+			}
+		}
+		didSet {
+			if isLocked != oldValue {
+				documentMetaDataDidChange()
+			}
+		}
+	}
+
+	/// Provides an encryption service for a locked outline. Set by the app layer at launch.
+	/// Called during `load()` so that encrypted row data can always be decrypted for persistence and sync.
+	public static var encryptionServiceProvider: ((_ outlineID: EntityID) -> OutlineEncryptionService?)?
+
+	/// Transient encryption service, set during load for locked outlines, cleared on unload. Never persisted.
+	public var encryptionService: OutlineEncryptionService?
+
 	public var cloudKitZoneName: String? {
 		didSet {
 			documentMetaDataDidChange()
@@ -726,6 +748,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.documentBacklinks = coder.documentBacklinks
 		self.ancestorHasAltLinks = coder.ancestorHasAltLinks
 		self.hasAltLinks = coder.hasAltLinks
+		self.ancestorIsLocked = coder.ancestorIsLocked
+		self.isLocked = coder.isLocked
 		self.cloudKitZoneName = coder.cloudKitZoneName
 		self.cloudKitZoneOwner = coder.cloudKitZoneOwner
 		self.cloudKitShareRecordName = coder.cloudKitShareRecordName
@@ -2577,6 +2601,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		guard rowsFile == nil, beingUsedCount == 1 else { return }
 
+		if isLocked == true && encryptionService == nil {
+			encryptionService = Self.encryptionServiceProvider?(id)
+		}
+
 		rowsFile = RowsFile(outline: self)
 		rowsFile?.load()
 
@@ -2606,6 +2634,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		imagesFile?.suspend()
 		imagesFile = nil
 		images = nil
+
+		encryptionService = nil
 	}
 		
 	public func suspend() {
@@ -2882,6 +2912,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 							documentBacklinks: documentBacklinks,
 							ancestorHasAltLinks: ancestorHasAltLinks,
 							hasAltLinks: hasAltLinks,
+							ancestorIsLocked: ancestorIsLocked,
+							isLocked: isLocked,
 							cloudKitZoneName: cloudKitZoneName,
 							cloudKitZoneOwner: cloudKitZoneOwner,
 							cloudKitShareRecordName: cloudKitShareRecordName,

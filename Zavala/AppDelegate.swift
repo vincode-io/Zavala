@@ -371,6 +371,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 										  input: "i",
 										  modifierFlags: [.control, .command])
 
+	let lockOutlineCommand = UICommand(title: .lockOutlineControlLabel, image: .lockOutline, action: .lockOutline)
+	let removeLockCommand = UICommand(title: .removeLockControlLabel, image: .lockOpen, action: .removeLock)
+	let lockNowCommand = UIKeyCommand(title: .lockNowControlLabel,
+									  image: .lockNow,
+									  action: .lockNow,
+									  input: "l",
+									  modifierFlags: [.control, .command])
+
 	var mainCoordinator: MainCoordinator? {
 		return UIApplication.shared.foregroundActiveScene?.keyWindow?.rootViewController as? MainCoordinator
 	}
@@ -409,6 +417,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		AppDefaults.registerDefaults()
+
+		let _ = LockSessionManager.shared
+
+		Outline.encryptionServiceProvider = { outlineID in
+			guard let key = try? LockKeyManager.retrieveKey(for: outlineID) else { return nil }
+			return OutlineEncryptionService(key: key)
+		}
 
 		NotificationCenter.default.addObserver(self, selector: #selector(checkForUserDefaultsChanges), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
@@ -615,7 +630,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atEndOfMenu: .file)
 
-		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand, deleteOutlineCommand])
+		let lockMenu = UIMenu(title: "", options: .displayInline, children: [lockOutlineCommand, removeLockCommand, lockNowCommand])
+		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand, lockMenu, deleteOutlineCommand])
 		builder.insertChild(outlineFileMenu, atEndOfMenu: .file)
 
 		let sharingMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, manageSharingCommand])

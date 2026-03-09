@@ -22,6 +22,9 @@ extension Selector {
 	static let printDocs = #selector(MainCoordinatorResponder.printDocs(_:))
 	static let printLists = #selector(MainCoordinatorResponder.printLists(_:))
 	static let copyDocumentLink = #selector(MainCoordinatorResponder.copyDocumentLink(_:))
+	static let lockOutline = #selector(MainCoordinatorResponder.lockOutline(_:))
+	static let removeLock = #selector(MainCoordinatorResponder.removeLock(_:))
+	static let lockNow = #selector(MainCoordinatorResponder.lockNow(_:))
 }
 
 @MainActor
@@ -38,6 +41,9 @@ extension Selector {
 	@objc func printDocs(_ sender: Any?)
 	@objc func printLists(_ sender: Any?)
 	@objc func copyDocumentLink(_ sender: Any?)
+	@objc func lockOutline(_ sender: Any?)
+	@objc func removeLock(_ sender: Any?)
+	@objc func lockNow(_ sender: Any?)
 }
 
 @MainActor
@@ -306,7 +312,53 @@ extension MainCoordinator {
 	func checkPointOutline() {
 		editorViewController?.checkPointOutline()
 	}
-	
+
+	func lockOutline() {
+		guard let outline = editorViewController?.outline else { return }
+		guard outline.isLocked != true else { return }
+
+		Task {
+			do {
+				try await LockSessionManager.shared.authenticate(
+					reason: String(localized: "Lock \(outline.title ?? "Outline")", comment: "Auth prompt: Lock outline")
+				)
+
+				let key = try LockKeyManager.createKey(for: outline.id)
+				outline.encryptionService = OutlineEncryptionService(key: key)
+				outline.isLocked = true
+
+				LockSessionManager.shared.markUnlocked(outline.id)
+
+				await outline.forceSave()
+			} catch {
+				presentError(title: .errorAlertTitle, message: error.localizedDescription)
+			}
+		}
+	}
+
+	func removeLock() {
+		guard let outline = editorViewController?.outline else { return }
+		guard outline.isLocked == true else { return }
+		guard LockSessionManager.shared.isUnlocked(outline.id) else { return }
+
+		Task {
+			do {
+				try await LockSessionManager.shared.authenticate(
+					reason: String(localized: "Remove lock from \(outline.title ?? "Outline")", comment: "Auth prompt: Remove lock")
+				)
+
+				outline.isLocked = false
+				outline.encryptionService = nil
+
+				try LockKeyManager.deleteKey(for: outline.id)
+
+				await outline.forceSave()
+			} catch {
+				presentError(title: .errorAlertTitle, message: error.localizedDescription)
+			}
+		}
+	}
+
 }
 
 // MARK: Helpers

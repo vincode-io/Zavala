@@ -172,6 +172,18 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		showGetInfo()
 	}
 
+	@objc func lockOutline(_ sender: Any?) {
+		lockOutline()
+	}
+
+	@objc func removeLock(_ sender: Any?) {
+		removeLock()
+	}
+
+	@objc func lockNow(_ sender: Any?) {
+		LockSessionManager.shared.lockNow()
+	}
+
 	@objc func copyDocumentLink(_ sender: Any?) {
 		copyDocumentLink()
 	}
@@ -201,6 +213,15 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 			return !isManageSharingUnavailable
 		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isOutlineFunctionsUnavailable
+		case .lockOutline:
+			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true
+		case .removeLock:
+			if let outline = editorViewController?.outline {
+				return outline.isLocked == true && LockSessionManager.shared.isUnlocked(outline.id)
+			}
+			return false
+		case .lockNow:
+			return !LockSessionManager.shared.unlockedOutlineIDs.isEmpty
 		case .copyDocumentLink:
 			return selectedDocuments.count == 1
 		default:

@@ -81,6 +81,9 @@ extension UIImage {
 	static let insertImage = UIImage(systemName: "photo")!
 
 	static let link = UIImage(systemName: "link")!
+	static let lockOutline = UIImage(systemName: "lock")!
+	static let lockNow = UIImage(systemName: "lock.fill")!
+	static let lockOpen = UIImage(systemName: "lock.open")!
 
 	static let moveDown = UIImage(systemName: "arrow.down.to.line.compact")!
 	static let moveLeft = UIImage(systemName: "arrow.left.to.line.compact")!
@@ -302,6 +305,9 @@ extension String {
 	static let linkControlLabel = String(localized: "label.text.link", comment: "Label: Link")
 	static let linkEllipsisControlLabel = String(localized: "label.text.link-with-ellipsis", comment: "Label: Link…")
 	static let lightControlLabel = String(localized: "button.text.light", comment: "Set App Appearance Action: Light")
+	static let lockNowControlLabel = String(localized: "button.text.lock-now", comment: "Action: Lock Now")
+	static let lockOutlineControlLabel = String(localized: "button.text.lock-outline", comment: "Action: Lock Outline")
+	static let lockedOutlineLabel = String(localized: "label.text.locked-outline", comment: "Label: This outline is locked. Authenticate to view.")
 
 	static let manageSharingEllipsisControlLabel = String(localized: "label.text.manage-sharing-with-ellipsis", comment: "Label: Manage Sharing…")
 	static let maxWidthControlLabel = String(localized: "label.text.max-width", comment: "Label: Max Width")
@@ -361,6 +367,7 @@ extension String {
 	
 	static let referenceLabel = String(localized: "label.text.reference", comment: "Label: Reference: ")
 	static let referencesLabel = String(localized: "label.text.references", comment: "Label: References: ")
+	static let removeLockControlLabel = String(localized: "button.text.remove-lock", comment: "Action: Remove Lock")
 	static let removeTagControlLabel = String(localized: "button.text.remove-tag", comment: "Action: Remove Tag")
 	static let renameControlLabel = String(localized: "button.text.rename", comment: "Action: Rename")
 	static let replaceControlLabel = String(localized: "button.text.replace", comment: "Action: Replace")
@@ -404,6 +411,7 @@ extension String {
 
 	static let unableToOpenShortcutsAppLabel = String(localized: "label.text.unable-to-open-shortcuts-app", comment: "Label: Unable to open Shortcuts app")
 	static let uncompleteControlLabel = String(localized: "button.text.uncomplete", comment: "Action: Uncomplete")
+	static let unlockOutlineControlLabel = String(localized: "button.text.unlock-outline", comment: "Action: Unlock Outline")
 	static let undoControlLabel = String(localized: "button.text.undo", comment: "Action: Undo")
 	static let undoMenuControlLabel = String(localized: "label.text.undo-menu", comment: "Label: Undo Menu")
 	static let unknownLabel = String(localized: "label.text.unknown", comment: "Label: Unknown")

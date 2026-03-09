@@ -140,10 +140,17 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			let title = (document.title?.isEmpty ?? true) ? .noTitleLabel : document.title!
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
-			if document.isCollaborating {
+			let isLocked = document.outline?.isLocked == true
+			if document.isCollaborating || isLocked {
 				let attrText = NSMutableAttributedString(string: "\(title) ")
-				let shareAttachement = NSTextAttachment(image: .collaborating)
-				attrText.append(NSAttributedString(attachment: shareAttachement))
+				if document.isCollaborating {
+					let shareAttachment = NSTextAttachment(image: .collaborating)
+					attrText.append(NSAttributedString(attachment: shareAttachment))
+				}
+				if isLocked {
+					let lockAttachment = NSTextAttachment(image: .lockOutline)
+					attrText.append(NSAttributedString(attachment: lockAttachment))
+				}
 				contentConfiguration.attributedText = attrText
 			} else {
 				contentConfiguration.text = title

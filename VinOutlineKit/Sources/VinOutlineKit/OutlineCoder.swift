@@ -49,6 +49,8 @@ struct OutlineCoder: Codable {
 	public let documentBacklinks: [EntityID]?
 	public let ancestorHasAltLinks: Bool?
 	public let hasAltLinks: Bool?
+	public let ancestorIsLocked: Bool?
+	public let isLocked: Bool?
 	public let cloudKitZoneName: String?
 	public let cloudKitZoneOwner: String?
 	public let cloudKitShareRecordName: String?
@@ -98,6 +100,8 @@ struct OutlineCoder: Codable {
 		case documentBacklinks
 		case ancestorHasAltLinks
 		case hasAltLinks
+		case ancestorIsLocked
+		case isLocked
 		case cloudKitZoneName
 		case cloudKitZoneOwner
 		case cloudKitShareRecordName

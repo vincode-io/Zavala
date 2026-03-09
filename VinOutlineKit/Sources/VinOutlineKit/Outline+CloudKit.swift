@@ -32,6 +32,7 @@ extension Outline: VCKModel {
 			static let documentBacklinks = "documentBacklinks"
 			static let hasAltLinks = "hasAltLinks"
 			static let disambiguator = "disambiguator"
+			static let isLocked = "isLocked"
 		}
 	}
     
@@ -257,6 +258,9 @@ extension Outline: VCKModel {
         let serverHasAltLinks = record[Outline.CloudKitRecord.Fields.hasAltLinks] as? Bool
         hasAltLinks = merge(client: hasAltLinks, ancestor: ancestorHasAltLinks, server: serverHasAltLinks)
 
+        let serverIsLockedValue = record[Outline.CloudKitRecord.Fields.isLocked] as? Bool
+        isLocked = merge(client: isLocked, ancestor: ancestorIsLocked, server: serverIsLockedValue)
+
 		// Read legacy rowOrder for migration from old CloudKit format
 		if let legacyRowOrder = record[Outline.CloudKitRecord.Fields.rowOrder] as? [String], !legacyRowOrder.isEmpty {
 			migrationTopLevelRowOrder = legacyRowOrder
@@ -299,6 +303,8 @@ extension Outline: VCKModel {
         serverDocumentBacklinks = errorDocumentBacklinks.compactMap { EntityID(description: $0) }
         
         hasAltLinks = record[Outline.CloudKitRecord.Fields.hasAltLinks] as? Bool
+
+        serverIsLocked = record[Outline.CloudKitRecord.Fields.isLocked] as? Bool
 
 		isCloudKitMerging = true
 	}
@@ -370,6 +376,9 @@ extension Outline: VCKModel {
         let recordHasAltLinks = merge(client: hasAltLinks, ancestor: ancestorHasAltLinks, server: serverHasAltLinks)
         record[Outline.CloudKitRecord.Fields.hasAltLinks] = recordHasAltLinks
 
+        let recordIsLocked = merge(client: isLocked, ancestor: ancestorIsLocked, server: serverIsLocked)
+        record[Outline.CloudKitRecord.Fields.isLocked] = recordIsLocked
+
         return record
     }
     
@@ -423,6 +432,9 @@ extension Outline: VCKModel {
 
         ancestorHasAltLinks = nil
         serverHasAltLinks = nil
+
+        ancestorIsLocked = nil
+        serverIsLocked = nil
     }
     
 }

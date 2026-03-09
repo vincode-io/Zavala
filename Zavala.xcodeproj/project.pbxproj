@@ -58,6 +58,9 @@
 		5167702D261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167702C261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift */; };
 		516B938D2B48C3D80063EC94 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 516B938C2B48C3D80063EC94 /* Localizable.xcstrings */; };
 		516B938F2B48CE3C0063EC94 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 516B938E2B48CE3C0063EC94 /* InfoPlist.xcstrings */; };
+		516CBBF62F5E5F3F0088B572 /* LockKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516CBBF52F5E5F3F0088B572 /* LockKeyManager.swift */; };
+		516CBBF82F5E5F590088B572 /* LockSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516CBBF72F5E5F590088B572 /* LockSessionManager.swift */; };
+		516CBBFA2F5E61E40088B572 /* LockedOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516CBBF92F5E61E40088B572 /* LockedOutlineView.swift */; };
 		516D223C2B4F0BE200440901 /* RequestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D223B2B4F0BE200440901 /* RequestReview.swift */; };
 		516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */; };
 		516F5373260829060038BAF8 /* OutlineFontDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5372260829060038BAF8 /* OutlineFontDefaults.swift */; };
@@ -276,6 +279,9 @@
 		5167702C261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowDropInteractionDelegate.swift; sourceTree = "<group>"; };
 		516B938C2B48C3D80063EC94 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		516B938E2B48CE3C0063EC94 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		516CBBF52F5E5F3F0088B572 /* LockKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockKeyManager.swift; sourceTree = "<group>"; };
+		516CBBF72F5E5F590088B572 /* LockSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSessionManager.swift; sourceTree = "<group>"; };
+		516CBBF92F5E61E40088B572 /* LockedOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockedOutlineView.swift; sourceTree = "<group>"; };
 		516D223B2B4F0BE200440901 /* RequestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestReview.swift; sourceTree = "<group>"; };
 		516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedSearchTextField.swift; sourceTree = "<group>"; };
 		516F5372260829060038BAF8 /* OutlineFontDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontDefaults.swift; sourceTree = "<group>"; };
@@ -634,6 +640,8 @@
 				514BB9D5255B595300C8DBDF /* Utility */,
 				51B4B4822C333F9B005DCCEB /* AppIntents */,
 				515F163B255C536600FD98B8 /* Resources */,
+				516CBBF52F5E5F3F0088B572 /* LockKeyManager.swift */,
+				516CBBF72F5E5F590088B572 /* LockSessionManager.swift */,
 			);
 			path = Zavala;
 			sourceTree = "<group>";
@@ -827,6 +835,7 @@
 				51C03097257E02FF00609262 /* Row */,
 				514F220B25C4CC42004E02CD /* Tag */,
 				51C030A0257E06EC00609262 /* Title */,
+				516CBBF92F5E61E40088B572 /* LockedOutlineView.swift */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -1120,6 +1129,7 @@
 				51A6A3112C39E8B3002AFEC1 /* RemoveOutlineTagAppIntent.swift in Sources */,
 				51A6A3122C39E8B3002AFEC1 /* OutlineDetailAppEnum.swift in Sources */,
 				51A6A3132C39E8B3002AFEC1 /* GetImagesForOutlineAppIntent.swift in Sources */,
+				516CBBFA2F5E61E40088B572 /* LockedOutlineView.swift in Sources */,
 				51A6A3142C39E8B3002AFEC1 /* RowDetailAppEnum.swift in Sources */,
 				51A6A3152C39E8B3002AFEC1 /* AddRowsAppIntent.swift in Sources */,
 				51A6A3162C39E8B3002AFEC1 /* EntityID+AppEntity.swift in Sources */,
@@ -1221,6 +1231,8 @@
 				517A9E1F2602AD6B00EF346A /* EditorContainerViewController.swift in Sources */,
 				511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */,
 				517A9E2B2603E0BF00EF346A /* NSActivity+.swift in Sources */,
+				516CBBF82F5E5F590088B572 /* LockSessionManager.swift in Sources */,
+				516CBBF62F5E5F3F0088B572 /* LockKeyManager.swift in Sources */,
 				518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */,
 				5177B7B42733D0AA006EB1E3 /* EditorTextInput.swift in Sources */,
 				5147D0C525CCD6AA004673C3 /* CollectionsViewController+Drop.swift in Sources */,

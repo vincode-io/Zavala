@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 import MobileCoreServices
 import PhotosUI
 import AsyncAlgorithms
@@ -351,6 +352,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	private lazy var transition = ImageTransition(delegate: self)
 	private var imageBlocker: UIView?
+	private var lockedHostingController: UIHostingController<LockedOutlineView>?
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -443,6 +445,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(lockSessionDidClose(_:)), name: .LockSessionDidClose, object: nil)
 		
 		Task {
 			for await title in updateTitleChannel.debounce(for: .seconds(1)) {
@@ -949,6 +952,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		messageLabel?.removeFromSuperview()
 		messageLabel = nil
+		dismissLockedView()
+		collectionView.isHidden = false
 
 		checkPointOutline()
 
@@ -979,10 +984,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return
 		}
 
+		if outline.isLocked == true && !LockSessionManager.shared.isUnlocked(outline.id) {
+			outline.incrementBeingViewedCount()
+			guard isViewLoaded else { return }
+			showLockedView(outline: outline)
+			return
+		}
+
 		outline.load()
 		outline.incrementBeingViewedCount()
 		outline.prepareForViewing()
-			
+
 		guard isViewLoaded else { return }
 
 		updateNavigationMenus()
@@ -1030,6 +1042,71 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				await self.updateSpotlightIndex(with: outline)
 			}
 		}
+	}
+
+	func showLockedView(outline: Outline) {
+		dismissLockedView()
+
+		collectionView.isHidden = true
+
+		let lockedView = LockedOutlineView(outline: outline) { [weak self] in
+			self?.dismissLockedViewAndOpen(outline)
+		}
+		let hostingController = UIHostingController(rootView: lockedView)
+		hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+		hostingController.view.backgroundColor = .systemBackground
+
+		addChild(hostingController)
+		view.addSubview(hostingController.view)
+
+		NSLayoutConstraint.activate([
+			hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+			hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+			hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+		])
+
+		hostingController.didMove(toParent: self)
+		lockedHostingController = hostingController
+	}
+
+	private func dismissLockedView() {
+		lockedHostingController?.willMove(toParent: nil)
+		lockedHostingController?.view.removeFromSuperview()
+		lockedHostingController?.removeFromParent()
+		lockedHostingController = nil
+	}
+
+	private func dismissLockedViewAndOpen(_ outline: Outline) {
+		dismissLockedView()
+		collectionView.isHidden = false
+
+		outline.load()
+		outline.prepareForViewing()
+
+		updateNavigationMenus()
+		collectionView.reloadData()
+		updateUI()
+	}
+
+	// MARK: - Lock Session
+
+	@objc private func lockSessionDidClose(_ notification: Notification) {
+		guard let affectedIDs = notification.object as? Set<EntityID>,
+			  let outline,
+			  affectedIDs.contains(outline.id) else { return }
+
+		checkPointOutline()
+
+		let oldOutline = outline
+		Task.detached {
+			await oldOutline.unload()
+		}
+		undoManager?.removeAllActions()
+
+		guard isViewLoaded else { return }
+		collectionView.reloadData()
+		showLockedView(outline: outline)
 	}
 
 	func selectAllRows() {
@@ -2214,6 +2291,25 @@ private extension EditorViewController {
 			self?.showOutlineGetInfo()
 		}
 		outlineActions.append(getInfoAction)
+
+		if outline?.isLocked == true {
+			if let outlineID = outline?.id, LockSessionManager.shared.isUnlocked(outlineID) {
+				let removeLockAction = UIAction(title: .removeLockControlLabel, image: .lockOpen) { _ in
+					UIApplication.shared.sendAction(.removeLock, to: nil, from: nil, for: nil)
+				}
+				outlineActions.append(removeLockAction)
+
+				let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
+					LockSessionManager.shared.lockNow()
+				}
+				outlineActions.append(lockNowAction)
+			}
+		} else {
+			let lockOutlineAction = UIAction(title: .lockOutlineControlLabel, image: .lockOutline) { _ in
+				UIApplication.shared.sendAction(.lockOutline, to: nil, from: nil, for: nil)
+			}
+			outlineActions.append(lockOutlineAction)
+		}
 
 		let findAction = UIAction(title: .findEllipsisControlLabel, image: .find) { [weak self] _ in
 			self?.showFindInteraction()

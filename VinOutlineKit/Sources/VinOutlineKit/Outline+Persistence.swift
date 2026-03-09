@@ -8,11 +8,23 @@ import OrderedCollections
 public extension Outline {
 
 	func loadRowFileData(_ data: Data) {
+		var rowData = data
+		if isLocked == true, let encryptionService {
+			do {
+				if let decryptedData = try encryptionService.decrypt(data) {
+					rowData = decryptedData
+				}
+			} catch {
+				logger.error("Rows decryption failed: \(error.localizedDescription, privacy: .public)")
+				return
+			}
+		}
+
 		let decoder = PropertyListDecoder()
 
 		let outlineRows: OutlineRows
 		do {
-			outlineRows = try decoder.decode(OutlineRows.self, from: data)
+			outlineRows = try decoder.decode(OutlineRows.self, from: rowData)
 		} catch {
 			logger.error("Rows read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return
@@ -58,6 +70,17 @@ public extension Outline {
 		} catch {
 			logger.error("Rows save serialization failed: \(error.localizedDescription, privacy: .public)")
 			return nil
+		}
+
+		if isLocked == true, let encryptionService {
+			do {
+				if let encryptedData = try encryptionService.encrypt(rowsData) {
+					rowsData = encryptedData
+				}
+			} catch {
+				logger.error("Rows encryption failed: \(error.localizedDescription, privacy: .public)")
+				return nil
+			}
 		}
 
 		return rowsData
