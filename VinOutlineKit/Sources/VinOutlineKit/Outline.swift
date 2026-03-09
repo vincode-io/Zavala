@@ -775,8 +775,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		guard isBeingViewed, account != nil else { return }
 		
 		var changes = rebuildShadowTable()
-		let reloads = Set(shadowTable!.compactMap { $0.shadowTableIndex })
-		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+
+		if let shadowTable {
+			let reloads = Set(shadowTable.compactMap { $0.shadowTableIndex })
+			changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+		}
 		
 		outlineElementsDidChange(changes)
 	}
