@@ -434,6 +434,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange), name: .DocumentTitleDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(lockStateDidChange), name: .DocumentIsLockedDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(lockStateDidChange), name: .LockSessionDidClose, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(lockStateDidChange), name: .LockSessionDidOpen, object: nil)
 
 		#if targetEnvironment(macCatalyst)
 		guard let pluginPath = (Bundle.main.builtInPlugInsPath as NSString?)?.appendingPathComponent("AppKitPlugin.bundle"),
@@ -630,7 +633,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atEndOfMenu: .file)
 
-		let lockMenu = UIMenu(title: "", options: .displayInline, children: [addLockCommand, removeLockCommand, lockNowCommand])
+		var lockMenuChildren = [UIMenuElement]()
+		if let outline = mainCoordinator?.editorViewController?.outline, outline.isLocked == true {
+			lockMenuChildren.append(removeLockCommand)
+			lockMenuChildren.append(lockNowCommand)
+		} else {
+			lockMenuChildren.append(addLockCommand)
+		}
+		let lockMenu = UIMenu(title: "", options: .displayInline, children: lockMenuChildren)
 		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand, deleteOutlineCommand, lockMenu])
 		builder.insertChild(outlineFileMenu, atEndOfMenu: .file)
 
@@ -889,6 +899,10 @@ private extension AppDelegate {
 	@objc func documentTitleDidChange() {
 		UIMenuSystem.main.setNeedsRebuild()
 		updateApplicationShortcutItems()
+	}
+
+	@objc func lockStateDidChange() {
+		UIMenuSystem.main.setNeedsRebuild()
 	}
 
 	func cleanUpHistory() {
