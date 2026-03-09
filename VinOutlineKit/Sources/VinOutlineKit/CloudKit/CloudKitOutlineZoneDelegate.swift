@@ -118,7 +118,7 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 		let shareUpdatesToSend = shareUpdates
 		
 		for update in updatesToSend.values {
-			await account?.apply(update)
+			try await account?.apply(update)
 		}
 		
 		// Even though we handle the delete share records here, they don't usually work. That's

@@ -29,6 +29,7 @@ public enum AccountError: LocalizedError {
 	case markdownParserError
 	case opmlParserError
 	case renameTagNameExistsError
+	case encryptionServiceUnavailable
 	
 	public var errorDescription: String? {
 		switch self {
@@ -42,6 +43,8 @@ public enum AccountError: LocalizedError {
 			return .accountErrorRenameTagExists
 		case .securityScopeError:
 			return .accountErrorScopedResource
+		case .encryptionServiceUnavailable:
+			return "Encryption service unavailable for locked outline."
 		}
 	}
 }
@@ -403,7 +406,7 @@ public final class Account: Identifiable, Equatable {
 		return document
 	}
 	
-	func apply(_ update: CloudKitOutlineUpdate) async {
+	func apply(_ update: CloudKitOutlineUpdate) async throws {
 		guard !update.isDelete else {
 			guard let document = findDocument(documentUUID: update.documentID.documentUUID) else { return }
 			deleteDocument(document, updateCloudKit: false)
@@ -413,6 +416,12 @@ public final class Account: Identifiable, Equatable {
 		if let document = findDocument(documentUUID: update.documentID.documentUUID) {
 			let outline = document.outline!
 			outline.load()
+
+			if outline.isLocked == true && outline.encryptionService == nil {
+				await outline.unload()
+				throw AccountError.encryptionServiceUnavailable
+			}
+
 			outline.apply(update)
 			await outline.forceSave()
 			await outline.unload()
@@ -421,6 +430,12 @@ public final class Account: Identifiable, Equatable {
 			outline.zoneID = update.zoneID
 
 			outline.apply(update)
+
+			if outline.isLocked == true && outline.encryptionService == nil {
+				await outline.unload()
+				throw AccountError.encryptionServiceUnavailable
+			}
+
 			await outline.forceSave()
 			await outline.unload()
 			

@@ -48,7 +48,7 @@ final class LockKeyManager {
 			kSecAttrAccount as String: outlineID.description,
 			kSecValueData as String: keyData,
 			kSecAttrSynchronizable as String: true,
-			kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlocked
+			kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
 		]
 
 		let status = SecItemAdd(query as CFDictionary, nil)
