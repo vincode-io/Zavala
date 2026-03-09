@@ -151,7 +151,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 					let lockImage: UIImage = if let outlineID = document.outline?.id, LockSessionManager.shared.isUnlocked(outlineID) {
 						.lockOpen
 					} else {
-						.lockOutline
+						.lock
 					}
 					let lockAttachment = NSTextAttachment(image: lockImage)
 					attrText.append(NSAttributedString(attachment: lockAttachment))

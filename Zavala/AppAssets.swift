@@ -81,7 +81,7 @@ extension UIImage {
 	static let insertImage = UIImage(systemName: "photo")!
 
 	static let link = UIImage(systemName: "link")!
-	static let lockOutline = UIImage(systemName: "lock")!
+	static let lock = UIImage(systemName: "lock")!
 	static let lockNow = UIImage(systemName: "lock.fill")!
 	static let lockOpen = UIImage(systemName: "lock.open")!
 

@@ -2303,7 +2303,7 @@ private extension EditorViewController {
 				outlineActions.append(lockNowAction)
 			}
 		} else {
-			let addLockAction = UIAction(title: .addLockControlLabel, image: .lockOutline) { _ in
+			let addLockAction = UIAction(title: .addLockControlLabel, image: .lock) { _ in
 				UIApplication.shared.sendAction(.addLock, to: nil, from: nil, for: nil)
 			}
 			outlineActions.append(addLockAction)

@@ -371,7 +371,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 										  input: "i",
 										  modifierFlags: [.control, .command])
 
-	let addLockCommand = UICommand(title: .addLockControlLabel, image: .lockOutline, action: .addLock)
+	let addLockCommand = UICommand(title: .addLockControlLabel, image: .lock, action: .addLock)
 	let removeLockCommand = UICommand(title: .removeLockControlLabel, image: .lockOpen, action: .removeLock)
 	let lockNowCommand = UIKeyCommand(title: .lockNowControlLabel,
 									  image: .lockNow,
