@@ -9,26 +9,26 @@ header:
 
 
 * ![](/assets/images/help/AB6E83C4-E86A-4066-B292-41D838968F6F.png)
-* General
-	* Color Palette
 
-	  You can use this override the default system light mode or dark mode setting.
+## General
 
+These settings apply to the whole application.
 
-	* Show Shortcuts Menu
+### Color Palette
 
-	  Turn on the [Shortcuts Menu](Shortcuts_Menu.md) with the Setting. It will help
-	  you to quickly launch any Shortcuts you have installed.
+You can use this override the default system light mode or dark mode setting.
 
+### Show Shortcuts Menu
 
-	* Use Main Window as Default
+Turn on the [Shortcuts Menu](Shortcuts_Menu.md) with the Setting. It will help
+you to quickly launch any Shortcuts you have installed.
 
-	  This is a Mac only setting. When there are no windows open and Zavala gets
-	  activated the [Open Quickly](Open_Quickly.md) window will open. If you don’t
-	  like this behavior, you can select “Use Main Window as Default” to open the
-	  [Main Window](Main_Window.md) instead.
+### Use Main Window as Default
 
-
+This is a Mac only setting. When there are no windows open and Zavala gets
+activated the [Open Quickly](Open_Quickly.md) window will open. If you don’t
+like this behavior, you can select “Use Main Window as Default” to open the
+[Main Window](Main_Window.md) instead.
 
 ## Accounts
 
