@@ -797,11 +797,11 @@ private extension DocumentsViewController {
 				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 			}
 
-			moreMenuButton.menu = buildEllipsisMenu()
+			moreMenuButton.menu = buildMoreMenu()
 		}
 	}
 	
-	func buildEllipsisMenu() -> UIMenu {
+	func buildMoreMenu() -> UIMenu {
 
 		let importMarkdownAction = UIAction(title: .importMarkdownEllipsisControlLabel, image: .importDocument) { [weak self] _ in
 			self?.importMarkdown()
