@@ -312,7 +312,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			return !isManageSharingUnavailable
 		case .share, .showGetInfo, .deleteOutline, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isOutlineFunctionsUnavailable
-		case .lockOutline:
+		case .addLock:
 			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true
 		case .removeLock:
 			if let outline = editorViewController?.outline {
@@ -419,8 +419,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		showGetInfo()
 	}
 
-	@objc func lockOutline(_ sender: Any?) {
-		lockOutline()
+	@objc func addLock(_ sender: Any?) {
+		addLock()
 	}
 
 	@objc func removeLock(_ sender: Any?) {

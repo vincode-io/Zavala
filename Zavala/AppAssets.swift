@@ -306,7 +306,7 @@ extension String {
 	static let linkEllipsisControlLabel = String(localized: "label.text.link-with-ellipsis", comment: "Label: Link…")
 	static let lightControlLabel = String(localized: "button.text.light", comment: "Set App Appearance Action: Light")
 	static let lockNowControlLabel = String(localized: "button.text.lock-now", comment: "Action: Lock Now")
-	static let lockOutlineControlLabel = String(localized: "button.text.lock-outline", comment: "Action: Lock Outline")
+	static let addLockControlLabel = String(localized: "button.text.add-lock", comment: "Action: Add Lock")
 	static let lockedOutlineLabel = String(localized: "label.text.locked-outline", comment: "Label: This outline is locked. Authenticate to view.")
 
 	static let manageSharingEllipsisControlLabel = String(localized: "label.text.manage-sharing-with-ellipsis", comment: "Label: Manage Sharing…")

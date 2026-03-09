@@ -3483,37 +3483,37 @@
         }
       }
     },
-    "button.text.lock-outline" : {
-      "comment" : "Action: Lock Outline",
+    "button.text.add-lock" : {
+      "comment" : "Action: Add Lock",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gliederung sperren"
+            "value" : "Sperre hinzufügen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lock Outline"
+            "value" : "Add Lock"
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lock Outline"
+            "value" : "Add Lock"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lock Outline"
+            "value" : "Add Lock"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "锁定大纲"
+            "value" : "添加锁定"
           }
         }
       }

@@ -172,8 +172,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		showGetInfo()
 	}
 
-	@objc func lockOutline(_ sender: Any?) {
-		lockOutline()
+	@objc func addLock(_ sender: Any?) {
+		addLock()
 	}
 
 	@objc func removeLock(_ sender: Any?) {
@@ -213,7 +213,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 			return !isManageSharingUnavailable
 		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isOutlineFunctionsUnavailable
-		case .lockOutline:
+		case .addLock:
 			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true
 		case .removeLock:
 			if let outline = editorViewController?.outline {

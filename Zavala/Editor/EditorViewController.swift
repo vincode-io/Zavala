@@ -2303,10 +2303,10 @@ private extension EditorViewController {
 				outlineActions.append(lockNowAction)
 			}
 		} else {
-			let lockOutlineAction = UIAction(title: .lockOutlineControlLabel, image: .lockOutline) { _ in
-				UIApplication.shared.sendAction(.lockOutline, to: nil, from: nil, for: nil)
+			let addLockAction = UIAction(title: .addLockControlLabel, image: .lockOutline) { _ in
+				UIApplication.shared.sendAction(.addLock, to: nil, from: nil, for: nil)
 			}
-			outlineActions.append(lockOutlineAction)
+			outlineActions.append(addLockAction)
 		}
 
 		let findAction = UIAction(title: .findEllipsisControlLabel, image: .find) { [weak self] _ in

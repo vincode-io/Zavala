@@ -22,7 +22,7 @@ extension Selector {
 	static let printDocs = #selector(MainCoordinatorResponder.printDocs(_:))
 	static let printLists = #selector(MainCoordinatorResponder.printLists(_:))
 	static let copyDocumentLink = #selector(MainCoordinatorResponder.copyDocumentLink(_:))
-	static let lockOutline = #selector(MainCoordinatorResponder.lockOutline(_:))
+	static let addLock = #selector(MainCoordinatorResponder.addLock(_:))
 	static let removeLock = #selector(MainCoordinatorResponder.removeLock(_:))
 	static let lockNow = #selector(MainCoordinatorResponder.lockNow(_:))
 }
@@ -41,7 +41,7 @@ extension Selector {
 	@objc func printDocs(_ sender: Any?)
 	@objc func printLists(_ sender: Any?)
 	@objc func copyDocumentLink(_ sender: Any?)
-	@objc func lockOutline(_ sender: Any?)
+	@objc func addLock(_ sender: Any?)
 	@objc func removeLock(_ sender: Any?)
 	@objc func lockNow(_ sender: Any?)
 }
@@ -313,7 +313,7 @@ extension MainCoordinator {
 		editorViewController?.checkPointOutline()
 	}
 
-	func lockOutline() {
+	func addLock() {
 		guard let outline = editorViewController?.outline else { return }
 		guard outline.isLocked != true else { return }
 

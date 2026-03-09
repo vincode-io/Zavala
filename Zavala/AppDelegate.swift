@@ -371,7 +371,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 										  input: "i",
 										  modifierFlags: [.control, .command])
 
-	let lockOutlineCommand = UICommand(title: .lockOutlineControlLabel, image: .lockOutline, action: .lockOutline)
+	let addLockCommand = UICommand(title: .addLockControlLabel, image: .lockOutline, action: .addLock)
 	let removeLockCommand = UICommand(title: .removeLockControlLabel, image: .lockOpen, action: .removeLock)
 	let lockNowCommand = UIKeyCommand(title: .lockNowControlLabel,
 									  image: .lockNow,
@@ -630,7 +630,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atEndOfMenu: .file)
 
-		let lockMenu = UIMenu(title: "", options: .displayInline, children: [lockOutlineCommand, removeLockCommand, lockNowCommand])
+		let lockMenu = UIMenu(title: "", options: .displayInline, children: [addLockCommand, removeLockCommand, lockNowCommand])
 		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand, deleteOutlineCommand, lockMenu])
 		builder.insertChild(outlineFileMenu, atEndOfMenu: .file)
 
