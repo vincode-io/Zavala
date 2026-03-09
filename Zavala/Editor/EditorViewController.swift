@@ -217,6 +217,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return currentRowTextView?.isHighlightToggledOn ?? false
 	}
 
+	var isShowingLockedView = false
 	var isSearching = false
 	var isFocusing: Bool {
 		guard let outline else { return false }
@@ -1073,6 +1074,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		hostingController.didMove(toParent: self)
 		lockedHostingController = hostingController
+
+		isShowingLockedView = true
 	}
 
 	private func dismissLockedView() {
@@ -1080,6 +1083,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		lockedHostingController?.view.removeFromSuperview()
 		lockedHostingController?.removeFromParent()
 		lockedHostingController = nil
+		isShowingLockedView = false
 	}
 
 	private func dismissLockedViewAndOpen(_ outline: Outline) {
@@ -1112,6 +1116,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard isViewLoaded else { return }
 		collectionView.reloadData()
 		showLockedView(outline: outline)
+		updateUI()
 	}
 
 	func selectAllRows() {
@@ -1181,7 +1186,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		filterButton.menu = buildFilterMenu()
 		
-		if outline == nil {
+		if outline == nil || isShowingLockedView {
 			filterButton.isEnabled = false
 			moreMenuButton.isEnabled = false
 		} else {
