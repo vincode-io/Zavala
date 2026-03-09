@@ -104,6 +104,13 @@ extension Outline: VCKModel {
 			apply(record)
 		}
 
+		// Ensure the encryption service is available before processing rows.
+		// The outline record (applied above) may have just set isLocked, and
+		// load() may have run before isLocked was known.
+		if isLocked == true && encryptionService == nil {
+			encryptionService = Self.encryptionServiceProvider?(id)
+		}
+
 		for saveRecord in update.saveRowRecords {
 			guard let entityID = EntityID(description: saveRecord.recordID.recordName) else { continue }
 
