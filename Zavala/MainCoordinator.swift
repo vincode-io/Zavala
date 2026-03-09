@@ -325,7 +325,7 @@ extension MainCoordinator {
 
 				let key = try LockKeyManager.createKey(for: outline.id)
 				outline.encryptionService = OutlineEncryptionService(key: key)
-				outline.isLocked = true
+				outline.update(isLocked: true)
 
 				LockSessionManager.shared.markUnlocked(outline.id)
 
@@ -347,7 +347,7 @@ extension MainCoordinator {
 					reason: String(localized: "Remove lock from \(outline.title ?? "Outline")", comment: "Auth prompt: Remove lock")
 				)
 
-				outline.isLocked = false
+				outline.update(isLocked: false)
 				outline.encryptionService = nil
 
 				try LockKeyManager.deleteKey(for: outline.id)

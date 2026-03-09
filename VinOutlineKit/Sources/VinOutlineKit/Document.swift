@@ -11,6 +11,7 @@ import CloudKit
 
 public extension Notification.Name {
 	static let DocumentDidChangeBySync = Notification.Name(rawValue: "DocumentDidChangeBySync")
+	static let DocumentIsLockedDidChange = Notification.Name(rawValue: "DocumentIsLockedDidChange")
 	static let DocumentTitleDidChange = Notification.Name(rawValue: "DocumentTitleDidChange")
 	static let DocumentUpdatedDidChange = Notification.Name(rawValue: "DocumentUpdatedDidChange")
 	static let DocumentMetaDataDidChange = Notification.Name(rawValue: "DocumentMetaDataDidChange")

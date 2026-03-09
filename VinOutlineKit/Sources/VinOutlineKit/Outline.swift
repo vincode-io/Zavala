@@ -389,15 +389,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	var ancestorIsLocked: Bool?
 	var serverIsLocked: Bool?
-	public var isLocked: Bool? {
+	public internal(set) var isLocked: Bool? {
 		willSet {
 			if isCloudKit && ancestorIsLocked == nil {
 				ancestorIsLocked = isLocked
-			}
-		}
-		didSet {
-			if isLocked != oldValue {
-				documentMetaDataDidChange()
 			}
 		}
 	}
@@ -1168,7 +1163,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		return opml
 	}
-	
+
+	public func update(isLocked: Bool) {
+		self.isLocked = isLocked
+		updated = Date()
+		documentTitleDidChange()
+		requestCloudKitUpdate(for: id)
+	}
+
 	public func update(title: String?) {
 		self.title = title
 		updated = Date()
@@ -2922,7 +2924,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 							cloudKitShareRecordName: cloudKitShareRecordName,
 							cloudKitShareRecordData: cloudKitShareRecordData)
 	}
-	
+
+	func documentIsLockedDidChange() {
+		NotificationCenter.default.post(name: .DocumentIsLockedDidChange, object: Document.outline(self), userInfo: nil)
+	}
+
 	func documentTitleDidChange() {
 		NotificationCenter.default.post(name: .DocumentTitleDidChange, object: Document.outline(self), userInfo: nil)
 	}

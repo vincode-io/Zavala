@@ -174,6 +174,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineTagsDidChange(_:)), name: .OutlineTagsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentIsLockedDidChange(_:)), name: .DocumentIsLockedDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentUpdatedDidChange(_:)), name: .DocumentUpdatedDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
@@ -385,7 +386,14 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	@objc func outlineTagsDidChange(_ note: Notification) {
 		debounceLoadDocuments()
 	}
-	
+
+	@objc func documentIsLockedDidChange(_ note: Notification) {
+		guard let document = note.object as? Document else { return }
+		Task {
+			await reload(document: document)
+		}
+	}
+
 	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		Task {
