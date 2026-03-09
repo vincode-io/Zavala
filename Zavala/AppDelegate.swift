@@ -631,7 +631,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		builder.insertChild(syncMenu, atEndOfMenu: .file)
 
 		let lockMenu = UIMenu(title: "", options: .displayInline, children: [lockOutlineCommand, removeLockCommand, lockNowCommand])
-		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand, lockMenu, deleteOutlineCommand])
+		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand, deleteOutlineCommand, lockMenu])
 		builder.insertChild(outlineFileMenu, atEndOfMenu: .file)
 
 		let sharingMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, manageSharingCommand])
