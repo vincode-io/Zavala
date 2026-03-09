@@ -984,18 +984,16 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return
 		}
 
-		if outline.isLocked == true && !LockSessionManager.shared.isUnlocked(outline.id) {
-			outline.incrementBeingViewedCount()
-			guard isViewLoaded else { return }
-			showLockedView(outline: outline)
-			return
-		}
-
 		outline.load()
 		outline.incrementBeingViewedCount()
 		outline.prepareForViewing()
 
 		guard isViewLoaded else { return }
+
+		if outline.isLocked == true && !LockSessionManager.shared.isUnlocked(outline.id) {
+			showLockedView(outline: outline)
+			return
+		}
 
 		updateNavigationMenus()
 		collectionView.reloadData()
