@@ -2298,7 +2298,7 @@ private extension EditorViewController {
 				outlineActions.append(removeLockAction)
 
 				let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
-					LockSessionManager.shared.lockNow()
+					UIApplication.shared.sendAction(.lockNow, to: nil, from: nil, for: nil)
 				}
 				outlineActions.append(lockNowAction)
 			}

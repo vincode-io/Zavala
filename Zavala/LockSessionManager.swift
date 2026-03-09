@@ -62,6 +62,13 @@ final class LockSessionManager {
 		NotificationCenter.default.post(name: .LockSessionDidOpen, object: outlineID)
 	}
 
+	func lock(_ outlineIDs: Set<EntityID>) {
+		let affectedIDs = unlockedOutlineIDs.intersection(outlineIDs)
+		guard !affectedIDs.isEmpty else { return }
+		unlockedOutlineIDs.subtract(affectedIDs)
+		NotificationCenter.default.post(name: .LockSessionDidClose, object: affectedIDs)
+	}
+
 	func lockNow() {
 		let affectedIDs = unlockedOutlineIDs
 		unlockedOutlineIDs.removeAll()

@@ -359,6 +359,14 @@ extension MainCoordinator {
 		}
 	}
 
+	func lockNow() {
+		let outlineIDs = selectedOutlines
+			.filter { $0.isLocked == true && LockSessionManager.shared.isUnlocked($0.id) }
+			.map { $0.id }
+		guard !outlineIDs.isEmpty else { return }
+		LockSessionManager.shared.lock(Set(outlineIDs))
+	}
+
 }
 
 // MARK: Helpers

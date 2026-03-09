@@ -320,7 +320,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			}
 			return false
 		case .lockNow:
-			return !LockSessionManager.shared.unlockedOutlineIDs.isEmpty
+			return selectedOutlines.contains { $0.isLocked == true && LockSessionManager.shared.isUnlocked($0.id) }
 		case .goBackwardOne:
 			return !goBackwardStack.isEmpty
 		case .goForwardOne:
@@ -428,7 +428,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 	}
 
 	@objc func lockNow(_ sender: Any?) {
-		LockSessionManager.shared.lockNow()
+		lockNow()
 	}
 
 	@objc func deleteOutline(_ sender: Any?) {
