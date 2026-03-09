@@ -910,6 +910,35 @@ private extension DocumentsViewController {
 
 			let outlines = documents.compactMap { $0.outline }
 
+			var lockMenuItems = [UIMenuElement]()
+			if documents.count == 1, let outline = outlines.first {
+				if outline.isLocked == true {
+					if LockSessionManager.shared.isUnlocked(outline.id) {
+						let removeLockAction = UIAction(title: .removeLockControlLabel, image: .lockOpen) { _ in
+							UIApplication.shared.sendAction(.removeLock, to: nil, from: nil, for: nil)
+						}
+						lockMenuItems.append(removeLockAction)
+						let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
+							UIApplication.shared.sendAction(.lockNow, to: nil, from: nil, for: nil)
+						}
+						lockMenuItems.append(lockNowAction)
+					}
+				} else if !outline.iCollaborating {
+					let addLockAction = UIAction(title: .addLockControlLabel, image: .lock) { _ in
+						UIApplication.shared.sendAction(.addLock, to: nil, from: nil, for: nil)
+					}
+					lockMenuItems.append(addLockAction)
+				}
+			} else if outlines.contains(where: { $0.isLocked == true && LockSessionManager.shared.isUnlocked($0.id) }) {
+				let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
+					UIApplication.shared.sendAction(.lockNow, to: nil, from: nil, for: nil)
+				}
+				lockMenuItems.append(lockNowAction)
+			}
+			if !lockMenuItems.isEmpty {
+				menuItems.append(UIMenu(title: "", options: .displayInline, children: lockMenuItems))
+			}
+
 			var shareMenuItems = [UIMenuElement]()
 
 			if let cell = self.collectionView.cellForItem(at: allRowIDs.first!.indexPath) {
