@@ -427,6 +427,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.reloadData()
 
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineFontCacheDidRebuild(_:)), name: .OutlineFontCacheDidRebuild, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentIsLockedDidChange(_:)), name: .DocumentIsLockedDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillBegin(_:)), name: .OutlineSearchWillBegin, object: nil)
@@ -829,6 +830,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 	
+	@objc func documentIsLockedDidChange(_ note: Notification) {
+		if let document = note.object as? VinOutlineKit.Document, document.outline == outline {
+			updateUI()
+		}
+	}
+
 	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let document = note.object as? VinOutlineKit.Document,
 			  let updatedOutline = document.outline,

@@ -1167,7 +1167,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public func update(isLocked: Bool) {
 		self.isLocked = isLocked
 		updated = Date()
-		documentTitleDidChange()
+		documentIsLockedDidChange()
 		requestCloudKitUpdate(for: id)
 	}
 
