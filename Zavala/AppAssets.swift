@@ -116,7 +116,32 @@ extension UIImage {
 
 	static let settings = UIImage(systemName: "gear")!
 	static let share = UIImage(systemName: "square.and.arrow.up")!
-	static let shortcuts = UIImage(named: "Shortcuts")!.withTintColor(.label)
+	static let shortcutsDark: UIImage = {
+		let tintedImage = UIImage(named: "Shortcuts")!.withTintColor(.white)
+		#if targetEnvironment(macCatalyst)
+		let size: CGSize = .init(width: 12, height: 12)
+		UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+		tintedImage.draw(in: CGRect(origin: CGPoint.zero, size: size))
+		let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+		UIGraphicsEndImageContext()
+		return resizedImage
+		#else
+		return tintedImage
+		#endif
+	}()
+	static let shortcutsLight: UIImage = {
+		let tintedImage = UIImage(named: "Shortcuts")!.withTintColor(.black)
+		#if targetEnvironment(macCatalyst)
+		let size: CGSize = .init(width: 12, height: 12)
+		UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+		tintedImage.draw(in: CGRect(origin: CGPoint.zero, size: size))
+		let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+		UIGraphicsEndImageContext()
+		return resizedImage
+		#else
+		return tintedImage
+		#endif
+	}()
 	static let sort = UIImage(systemName: "arrow.up.arrow.down")!
 	static let sync = UIImage(systemName: "arrow.clockwise")!
 

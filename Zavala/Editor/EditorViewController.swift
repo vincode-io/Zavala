@@ -1111,7 +1111,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				appDelegate.mainCoordinator?.editShortcutsMenu()
 			}
 			let editShortcutsMenu = UIMenu(title: "", options: .displayInline, children: [editShortcutsMenuAction])
-			let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: .shortcuts, children: [shortcutListMenu, editShortcutsMenu])
+
+			let shortcutsImage: UIImage = if traitCollection.userInterfaceStyle == .dark {
+				.shortcutsDark
+			} else {
+				.shortcutsLight
+			}
+
+			let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: shortcutsImage, children: [shortcutListMenu, editShortcutsMenu])
 			shareActions.append(shortcutsMenu)
 		}
 
