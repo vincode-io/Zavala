@@ -940,16 +940,10 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.highlight,
 			.focus,
 			.filter,
-			.expandAllInOutline,
-			.collapseAllInOutline,
 			.moveLeft,
 			.moveRight,
 			.moveUp,
 			.moveDown,
-			.printDoc,
-			.printList,
-			.share,
-			.getInfo,
 			.space,
 			.flexibleSpace
 		]
@@ -1225,28 +1219,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.isBordered = true
 			item.action = .toggleHighlight
 			toolbarItem = item
-		case .expandAllInOutline:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { _ in
-				return !UIResponder.valid(action: .expandAllInOutline)
-			}
-			item.image = .expandAll
-			item.label = .expandControlLabel
-			item.toolTip = .expandAllInOutlineControlLabel
-			item.isBordered = true
-			item.action = .expandAllInOutline
-			toolbarItem = item
-		case .collapseAllInOutline:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { _ in
-				return !UIResponder.valid(action: .collapseAllInOutline)
-			}
-			item.image = .collapseAll
-			item.label = .collapseControlLabel
-			item.toolTip = .collapseAllInOutlineControlLabel
-			item.isBordered = true
-			item.action = .collapseAllInOutline
-			toolbarItem = item
 		case .moveLeft:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
@@ -1362,48 +1334,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.isBordered = true
 			item.target = self
 			item.showsIndicator = false
-			toolbarItem = item
-		case .printDoc:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { _ in
-				return !UIResponder.valid(action: .printDocs)
-			}
-			item.image = .print
-			item.label = .printDocControlLabel
-			item.toolTip = .printDocControlLabel
-			item.isBordered = true
-			item.action = .printDocs
-			item.target = self
-			toolbarItem = item
-		case .printList:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { _ in
-				return !UIResponder.valid(action: .printLists)
-			}
-			item.image = .printList
-			item.label = .printListControlLabel
-			item.toolTip = .printListControlLabel
-			item.isBordered = true
-			item.action = .printLists
-			item.target = self
-			toolbarItem = item
-		case .share:
-			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
-			item.label = .shareControlLabel
-			item.toolTip = .shareControlLabel
-			item.activityItemsConfiguration = DocumentsActivityItemsConfiguration(delegate: self)
-			toolbarItem = item
-		case .getInfo:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { _ in
-				return !UIResponder.valid(action: .showGetInfo)
-			}
-			item.image = .getInfo
-			item.label = .getInfoControlLabel
-			item.toolTip = .getInfoControlLabel
-			item.isBordered = true
-			item.action = .showGetInfo
-			item.target = self
 			toolbarItem = item
 		case .toggleSidebar:
 			toolbarItem = NSToolbarItem(itemIdentifier: itemIdentifier)
