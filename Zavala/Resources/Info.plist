@@ -111,6 +111,8 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2020-2026 Maurice C. Parker
 All Rights Reserved.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Zavala uses Face ID to unlock locked outlines.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Zavala wants to use your photos so that you can insert them into outlines.</string>
 	<key>NSUserActivityTypes</key>
