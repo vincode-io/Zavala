@@ -997,14 +997,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		guard isViewLoaded else { return }
 
-		outline.load()
-		outline.incrementBeingViewedCount()
-		outline.prepareForViewing()
-
 		if outline.isLocked == true && !LockSessionManager.shared.isUnlocked(outline.id) {
 			showLockedView(outline: outline)
 			return
 		}
+
+		outline.load()
+		outline.incrementBeingViewedCount()
+		outline.prepareForViewing()
 
 		updateNavigationMenus()
 		collectionView.reloadData()
@@ -1212,6 +1212,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		dismissLockedView()
 		collectionView.isHidden = false
 
+		outline.load()
+		outline.incrementBeingViewedCount()
+		outline.prepareForViewing()
+
 		updateNavigationMenus()
 		collectionView.reloadData()
 		updateUI()
@@ -1225,6 +1229,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			  affectedIDs.contains(outline.id) else { return }
 
 		checkPointOutline()
+		outline.decrementBeingViewedCount()
 		showLockedView(outline: outline)
 		updateUI()
 	}
