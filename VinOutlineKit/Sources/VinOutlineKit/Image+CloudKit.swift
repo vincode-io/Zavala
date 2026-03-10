@@ -52,7 +52,10 @@ extension Image: VCKModel {
 		var serverData: Data? = nil
 		if let ckAsset = record[Image.CloudKitRecord.Fields.asset] as? CKAsset,
 		   let fileURL = ckAsset.fileURL,
-		   let fileData = try? Data(contentsOf: fileURL) {
+		   var fileData = try? Data(contentsOf: fileURL) {
+			if outline?.isLocked == true, let encryptionService = outline?.encryptionService {
+				fileData = (try? encryptionService.decrypt(fileData)) ?? fileData
+			}
 			serverData = merge(client: data, ancestor: ancestorData, server: fileData)!
 		}
 		if serverData != data {
@@ -74,7 +77,10 @@ extension Image: VCKModel {
 		
 		if let ckAsset = record[Image.CloudKitRecord.Fields.asset] as? CKAsset,
 		   let fileURL = ckAsset.fileURL,
-		   let fileData = try? Data(contentsOf: fileURL) {
+		   var fileData = try? Data(contentsOf: fileURL) {
+			if outline?.isLocked == true, let encryptionService = outline?.encryptionService {
+				fileData = (try? encryptionService.decrypt(fileData)) ?? fileData
+			}
 			serverData = merge(client: data, ancestor: ancestorData, server: fileData)
 		} else {
 			serverData = nil
@@ -108,7 +114,10 @@ extension Image: VCKModel {
 		let recordOffset = merge(client: offset, ancestor: ancestorOffset, server: serverOffset)
 		record[Image.CloudKitRecord.Fields.offset] = recordOffset
 
-		let recordData = merge(client: data, ancestor: ancestorData, server: serverData)!
+		var recordData = merge(client: data, ancestor: ancestorData, server: serverData)!
+		if outline?.isLocked == true, let encryptionService = outline?.encryptionService {
+			recordData = (try? encryptionService.encrypt(recordData)) ?? recordData
+		}
 		let imageURL = FileManager.default.temporaryDirectory.appendingPathComponent(id.imageUUID).appendingPathExtension("png")
 		do {
 			try recordData.write(to: imageURL)

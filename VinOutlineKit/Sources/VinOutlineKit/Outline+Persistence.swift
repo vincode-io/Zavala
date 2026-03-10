@@ -87,10 +87,22 @@ public extension Outline {
 	}
 
 	func loadImageFileData(_ data: Data) {
+		var imageData = data
+		if isLocked == true, let encryptionService {
+			do {
+				if let decryptedData = try encryptionService.decrypt(data) {
+					imageData = decryptedData
+				}
+			} catch {
+				logger.error("Images decryption failed: \(error.localizedDescription, privacy: .public)")
+				return
+			}
+		}
+
 		let decoder = PropertyListDecoder()
 		let outlineImageCoders: [String: [ImageCoder]]
 		do {
-			outlineImageCoders = try decoder.decode([String: [ImageCoder]].self, from: data)
+			outlineImageCoders = try decoder.decode([String: [ImageCoder]].self, from: imageData)
 		} catch {
 			logger.error("Images read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return
@@ -125,6 +137,17 @@ public extension Outline {
 		} catch {
 			logger.error("Images save serialization failed: \(error.localizedDescription, privacy: .public)")
 			return nil
+		}
+
+		if isLocked == true, let encryptionService {
+			do {
+				if let encryptedData = try encryptionService.encrypt(imagesData) {
+					imagesData = encryptedData
+				}
+			} catch {
+				logger.error("Images encryption failed: \(error.localizedDescription, privacy: .public)")
+				return nil
+			}
 		}
 
 		return imagesData

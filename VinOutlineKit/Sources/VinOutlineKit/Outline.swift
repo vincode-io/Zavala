@@ -1173,6 +1173,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		requestCloudKitUpdate(for: id)
 		let allRowEntityIDs = rowIndex.values.map { $0.entityID }
 		requestCloudKitUpdates(for: allRowEntityIDs)
+		if let images {
+			let allImageEntityIDs = images.values.flatMap { $0 }.map { $0.id }
+			requestCloudKitUpdates(for: allImageEntityIDs)
+		}
 		endCloudKitBatchRequest()
 	}
 
