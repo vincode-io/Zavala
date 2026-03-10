@@ -315,6 +315,10 @@ extension MainCoordinator {
 
 	func addLock() {
 		guard let outline = editorViewController?.outline else { return }
+		addLock(outline: outline)
+	}
+
+	func addLock(outline: Outline) {
 		guard outline.isLocked != true else { return }
 
 		Task {
@@ -338,6 +342,10 @@ extension MainCoordinator {
 
 	func removeLock() {
 		guard let outline = editorViewController?.outline else { return }
+		removeLock(outline: outline)
+	}
+
+	func removeLock(outline: Outline) {
 		guard outline.isLocked == true else { return }
 		guard LockSessionManager.shared.isUnlocked(outline.id) else { return }
 
@@ -360,7 +368,11 @@ extension MainCoordinator {
 	}
 
 	func lockNow() {
-		let outlineIDs = selectedOutlines
+		lockNow(outlines: selectedOutlines)
+	}
+
+	func lockNow(outlines: [Outline]) {
+		let outlineIDs = outlines
 			.filter { $0.isLocked == true && LockSessionManager.shared.isUnlocked($0.id) }
 			.map { $0.id }
 		guard !outlineIDs.isEmpty else { return }

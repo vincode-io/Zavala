@@ -526,7 +526,7 @@ extension MainSplitViewController: CollectionsDelegate {
 // MARK: DocumentsDelegate
 
 extension MainSplitViewController: DocumentsDelegate {
-	
+
 	func openDocuments(_: DocumentsViewController,
 					   documentContainers: [DocumentContainer],
 					   documents: [Document],
@@ -598,7 +598,19 @@ extension MainSplitViewController: DocumentsDelegate {
 	func showGetInfo(_: DocumentsViewController, outline: Outline) {
 		showGetInfo(outline: outline)
 	}
-	
+
+	func addLock(_: DocumentsViewController, outline: Outline) {
+		addLock(outline: outline)
+	}
+
+	func removeLock(_: DocumentsViewController, outline: Outline) {
+		removeLock(outline: outline)
+	}
+
+	func lockNow(_: DocumentsViewController, outlines: [Outline]) {
+		lockNow(outlines: outlines)
+	}
+
 	func exportPDFDocs(_: DocumentsViewController, outlines: [Outline]) {
 		exportPDFDocsForOutlines(outlines)
 	}

@@ -18,6 +18,9 @@ protocol DocumentsDelegate: UINavigationControllerDelegate  {
 	func openDocuments(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNavigationBranch: Bool, animated: Bool)
 	func editCurrentDocument(_: DocumentsViewController, isNew: Bool, selectRow: EntityID?)
 	func showGetInfo(_: DocumentsViewController, outline: Outline)
+	func addLock(_: DocumentsViewController, outline: Outline)
+	func removeLock(_: DocumentsViewController, outline: Outline)
+	func lockNow(_: DocumentsViewController, outlines: [Outline])
 	func exportPDFDocs(_: DocumentsViewController, outlines: [Outline])
 	func exportPDFLists(_: DocumentsViewController, outlines: [Outline])
 	func exportMarkdownDocs(_: DocumentsViewController, outlines: [Outline])
@@ -914,26 +917,14 @@ private extension DocumentsViewController {
 			if documents.count == 1, let outline = outlines.first {
 				if outline.isLocked == true {
 					if LockSessionManager.shared.isUnlocked(outline.id) {
-						let removeLockAction = UIAction(title: .removeLockControlLabel, image: .lockOpen) { _ in
-							UIApplication.shared.sendAction(.removeLock, to: nil, from: nil, for: nil)
-						}
-						lockMenuItems.append(removeLockAction)
-						let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
-							UIApplication.shared.sendAction(.lockNow, to: nil, from: nil, for: nil)
-						}
-						lockMenuItems.append(lockNowAction)
+						lockMenuItems.append(removeLockAction(outline: outline))
+						lockMenuItems.append(lockNowAction(outlines: outlines))
 					}
 				} else if !outline.iCollaborating {
-					let addLockAction = UIAction(title: .addLockControlLabel, image: .lock) { _ in
-						UIApplication.shared.sendAction(.addLock, to: nil, from: nil, for: nil)
-					}
-					lockMenuItems.append(addLockAction)
+					lockMenuItems.append(addLockAction(outline: outline))
 				}
 			} else if outlines.contains(where: { $0.isLocked == true && LockSessionManager.shared.isUnlocked($0.id) }) {
-				let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
-					UIApplication.shared.sendAction(.lockNow, to: nil, from: nil, for: nil)
-				}
-				lockMenuItems.append(lockNowAction)
+				lockMenuItems.append(lockNowAction(outlines: outlines))
 			}
 			if !lockMenuItems.isEmpty {
 				menuItems.append(UIMenu(title: "", options: .displayInline, children: lockMenuItems))
@@ -977,15 +968,14 @@ private extension DocumentsViewController {
 	}
 
 	func showGetInfoAction(document: Document) -> UIAction {
-		let action = UIAction(title: .getInfoControlLabel, image: .getInfo) { [weak self] action in
-			guard let self, let outline = document.outline else { return }
+		return UIAction(title: .getInfoControlLabel, image: .getInfo) { action in
+			guard let outline = document.outline else { return }
 			self.delegate?.showGetInfo(self, outline: outline)
 		}
-		return action
 	}
 	
 	func duplicateAction(documents: [Document]) -> UIAction {
-		let action = UIAction(title: .duplicateControlLabel, image: .duplicate) { action in
+		return UIAction(title: .duplicateControlLabel, image: .duplicate) { action in
             for document in documents {
 				Task {
 					document.load()
@@ -1001,16 +991,32 @@ private extension DocumentsViewController {
 				}
             }
 		}
-		return action
 	}
-	
+
+	func addLockAction(outline: Outline) -> UIAction {
+		return UIAction(title: .addLockControlLabel, image: .lock) { _ in
+			self.delegate?.addLock(self, outline: outline)
+		}
+	}
+
+	func removeLockAction(outline: Outline) -> UIAction {
+		return UIAction(title: .removeLockControlLabel, image: .lockOpen) { _ in
+			self.delegate?.removeLock(self, outline: outline)
+		}
+	}
+
+	func lockNowAction(outlines: [Outline]) -> UIAction {
+		return UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
+			self.delegate?.lockNow(self, outlines: outlines)
+		}
+	}
+
 	func shareAction(documents: [Document], sourceView: UIView) -> UIAction {
-		let action = UIAction(title: .shareEllipsisControlLabel, image: .share) { action in
+		return UIAction(title: .shareEllipsisControlLabel, image: .share) { action in
 			let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(selectedDocuments: documents))
 			controller.popoverPresentationController?.sourceView = sourceView
 			self.present(controller, animated: true)
 		}
-		return action
 	}
 	
 	func manageSharingAction(document: Document, sourceView: UIView) -> UIAction? {
@@ -1018,86 +1024,68 @@ private extension DocumentsViewController {
 			return nil
 		}
 
-		let action = UIAction(title: .manageSharingEllipsisControlLabel, image: .collaborating) { [weak self] action in
+		return UIAction(title: .manageSharingEllipsisControlLabel, image: .collaborating) { [weak self] action in
 			guard let self else { return }
 			let controller = UICloudSharingController(share: shareRecord, container: container)
 			controller.popoverPresentationController?.sourceView = sourceView
 			controller.delegate = self
 			self.present(controller, animated: true)
 		}
-		return action
 	}
 
 	func exportPDFDocsOutlineAction(outlines: [Outline]) -> UIAction {
-		let action = UIAction(title: .exportPDFDocEllipsisControlLabel) { [weak self] action in
-			guard let self else { return }
+		return UIAction(title: .exportPDFDocEllipsisControlLabel) { action in
 			self.delegate?.exportPDFDocs(self, outlines: outlines)
 		}
-		return action
 	}
 	
 	func exportPDFListsOutlineAction(outlines: [Outline]) -> UIAction {
-        let action = UIAction(title: .exportPDFListEllipsisControlLabel) { [weak self] action in
-			guard let self else { return }
+        return UIAction(title: .exportPDFListEllipsisControlLabel) { action in
 			self.delegate?.exportPDFLists(self, outlines: outlines)
 		}
-		return action
 	}
 	
 	func exportMarkdownDocsOutlineAction(outlines: [Outline]) -> UIAction {
-        let action = UIAction(title: .exportMarkdownDocEllipsisControlLabel) { [weak self] action in
-			guard let self else { return }
+        return UIAction(title: .exportMarkdownDocEllipsisControlLabel) { action in
 			self.delegate?.exportMarkdownDocs(self, outlines: outlines)
 		}
-		return action
 	}
 	
 	func exportMarkdownListsOutlineAction(outlines: [Outline]) -> UIAction {
-        let action = UIAction(title: .exportMarkdownListEllipsisControlLabel) { [weak self] action in
-			guard let self else { return }
+        return UIAction(title: .exportMarkdownListEllipsisControlLabel) { action in
 			self.delegate?.exportMarkdownLists(self, outlines: outlines)
 		}
-		return action
 	}
 	
 	func exportOPMLsAction(outlines: [Outline]) -> UIAction {
-        let action = UIAction(title: .exportOPMLEllipsisControlLabel) { [weak self] action in
-			guard let self else { return }
+        return UIAction(title: .exportOPMLEllipsisControlLabel) { action in
 			self.delegate?.exportOPMLs(self, outlines: outlines)
 		}
-		return action
 	}
 	
 	func printDocsAction(outlines: [Outline]) -> UIAction {
-		let action = UIAction(title: .printDocEllipsisControlLabel) { [weak self] action in
-			guard let self else { return }
+		return UIAction(title: .printDocEllipsisControlLabel) {  action in
 			self.delegate?.printDocs(self, outlines: outlines)
 		}
-		return action
 	}
 	
 	func printListsAction(outlines: [Outline]) -> UIAction {
-		let action = UIAction(title: .printListControlEllipsisLabel) { [weak self] action in
-			guard let self else { return }
+		return UIAction(title: .printListControlEllipsisLabel) { action in
 			self.delegate?.printLists(self, outlines: outlines)
 		}
-		return action
 	}
 	
 	func deleteContextualAction(indexPath: IndexPath) -> UIContextualAction {
-		return UIContextualAction(style: .destructive, title: .deleteControlLabel) { [weak self] _, _, completion in
-			guard let self else { return }
+		return UIContextualAction(style: .destructive, title: .deleteControlLabel) { _, _, completion in
 			let document = self.documents[indexPath.row]
 			self.deleteDocuments([document], completion: completion)
 		}
 	}
 	
 	func deleteDocumentsAction(documents: [Document]) -> UIAction {
-		let action = UIAction(title: .deleteControlLabel, image: .delete, attributes: .destructive) { [weak self] action in
-			self?.deleteDocuments(documents)
+		return UIAction(title: .deleteControlLabel, image: .delete, attributes: .destructive) { action in
+			self.deleteDocuments(documents)
 		}
-		
-		return action
 	}
 	
 	func deleteDocuments(_ documents: [Document], completion: ((Bool) -> Void)? = nil) {
