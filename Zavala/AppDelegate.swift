@@ -229,7 +229,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	let toggleCodeInlineCommand: UIKeyCommand = {
 		let monoFont = UIFont.monospacedSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .body).pointSize, weight: .regular)
 		let attributedTitle = NSAttributedString(string: .codeInlineControlLabel, attributes: [.font: monoFont])
-		let keyCommand = UIKeyCommand(title: .codeInlineControlLabel, action: .toggleCodeInline, input: "c", modifierFlags: [.command, .shift])
+		let keyCommand = UIKeyCommand(title: .codeInlineControlLabel, action: .toggleCodeInline, input: "c", modifierFlags: [.command, .alternate, .control])
 		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
 		keyCommand.image = .codeInline
 		return keyCommand
@@ -237,7 +237,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 
 	let toggleHighlightCommand: UIKeyCommand = {
 		let attributedTitle = NSAttributedString(string: .highlightControlLabel, attributes: [.textHighlightStyle: NSAttributedString.TextHighlightStyle.default])
-		let keyCommand = UIKeyCommand(title: .highlightControlLabel, action: .toggleHighlight, input: "h", modifierFlags: [.command, .shift])
+		let keyCommand = UIKeyCommand(title: .highlightControlLabel, action: .toggleHighlight, input: "h", modifierFlags: [.command, .alternate, .control])
 		keyCommand.setValue(attributedTitle, forKey: "attributedTitle")
 		keyCommand.image = .highlight
 		return keyCommand
