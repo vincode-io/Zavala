@@ -644,7 +644,7 @@ extension MainSplitViewController: DocumentsDelegate {
 // MARK: EditorDelegate
 
 extension MainSplitViewController: EditorDelegate {
-	
+
 	var editorViewControllerGoBackwardStack: [Pin] {
 		return goBackwardStack
 	}
@@ -672,7 +672,19 @@ extension MainSplitViewController: EditorDelegate {
 	func showGetInfo(_: EditorViewController, outline: Outline) {
 		showGetInfo(outline: outline)
 	}
-	
+
+	func addLock(_: EditorViewController, outline: Outline) {
+		addLock(outline: outline)
+	}
+
+	func removeLock(_: EditorViewController, outline: Outline) {
+		removeLock(outline: outline)
+	}
+
+	func lockNow(_: EditorViewController, outline: Outline) {
+		lockNow(outlines: [outline])
+	}
+
 	func exportPDFDoc(_: EditorViewController, outline: Outline) {
 		exportPDFDocsForOutlines([outline])
 	}

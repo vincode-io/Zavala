@@ -249,15 +249,49 @@ extension EditorContainerViewController: EditorDelegate {
 		sceneDelegate?.validateToolbar()
 	}
 	
-	// These aren't used when running in the EditorContainerViewController
-	func showGetInfo(_: EditorViewController, outline: Outline) { }
-	func exportPDFDoc(_: EditorViewController, outline: Outline) {}
-	func exportPDFList(_: EditorViewController, outline: Outline) {}
-	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {}
-	func exportMarkdownList(_: EditorViewController, outline: Outline) {}
-	func exportOPML(_: EditorViewController, outline: Outline) {}
-	func printDoc(_: EditorViewController, outline: Outline) { }
-	func printList(_: EditorViewController, outline: Outline) { }
+	func showGetInfo(_: EditorViewController, outline: Outline) {
+		showGetInfo(outline: outline)
+	}
+
+	func addLock(_: EditorViewController, outline: Outline) {
+		addLock(outline: outline)
+	}
+
+	func removeLock(_: EditorViewController, outline: Outline) {
+		removeLock(outline: outline)
+	}
+
+	func lockNow(_: EditorViewController, outline: Outline) {
+		lockNow(outlines: [outline])
+	}
+
+	func exportPDFDoc(_: EditorViewController, outline: Outline) {
+		exportPDFDocsForOutlines([outline])
+	}
+
+	func exportPDFList(_: EditorViewController, outline: Outline) {
+		exportPDFListsForOutlines([outline])
+	}
+
+	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {
+		exportMarkdownDocsForOutlines([outline])
+	}
+
+	func exportMarkdownList(_: EditorViewController, outline: Outline) {
+		exportMarkdownListsForOutlines([outline])
+	}
+
+	func exportOPML(_: EditorViewController, outline: Outline) {
+		exportOPMLsForOutlines([outline])
+	}
+
+	func printDoc(_: EditorViewController, outline: Outline) {
+		printDocsForOutlines([outline])
+	}
+
+	func printList(_: EditorViewController, outline: Outline) {
+		printListsForOutlines([outline])
+	}
 
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate) {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.viewImage)

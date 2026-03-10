@@ -73,6 +73,9 @@ protocol EditorDelegate: AnyObject {
 	func createNewOutline(_ : EditorViewController, title: String) -> Outline?
 	func validateToolbar(_ : EditorViewController)
 	func showGetInfo(_: EditorViewController, outline: Outline)
+	func addLock(_: EditorViewController, outline: Outline)
+	func removeLock(_: EditorViewController, outline: Outline)
+	func lockNow(_: EditorViewController, outline: Outline)
 	func exportPDFDoc(_: EditorViewController, outline: Outline)
 	func exportPDFList(_: EditorViewController, outline: Outline)
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline)
@@ -1061,18 +1064,21 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		if outline?.isLocked == true {
 			if let outlineID = outline?.id, LockSessionManager.shared.isUnlocked(outlineID) {
 				let removeLockAction = UIAction(title: .removeLockControlLabel, image: .lockOpen) { _ in
-					UIApplication.shared.sendAction(.removeLock, to: nil, from: nil, for: nil)
+					guard let outline = self.outline else { return }
+					self.delegate?.removeLock(self, outline: outline)
 				}
 				outlineActions.append(removeLockAction)
 
 				let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
-					UIApplication.shared.sendAction(.lockNow, to: nil, from: nil, for: nil)
+					guard let outline = self.outline else { return }
+					self.delegate?.lockNow(self, outline: outline)
 				}
 				outlineActions.append(lockNowAction)
 			}
 		} else if outline?.iCollaborating != true {
 			let addLockAction = UIAction(title: .addLockControlLabel, image: .lock) { _ in
-				UIApplication.shared.sendAction(.addLock, to: nil, from: nil, for: nil)
+				guard let outline = self.outline else { return }
+				self.delegate?.addLock(self, outline: outline)
 			}
 			outlineActions.append(addLockAction)
 		}
