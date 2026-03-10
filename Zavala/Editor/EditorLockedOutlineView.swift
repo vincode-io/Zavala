@@ -12,38 +12,52 @@ struct EditorLockedOutlineView: View {
 
 	@State private var isAuthenticating = false
 	@State private var errorMessage: String?
+	@State private var groupHeight: CGFloat = 0
 
 	var body: some View {
-		VStack(spacing: 20) {
-			Spacer()
+		GeometryReader { geometry in
+			let totalHeight = geometry.size.height
 
-			Text(outline.title ?? .noTitleLabel)
-				.font(.largeTitle)
-				.fontWeight(.semibold)
-				.foregroundStyle(.secondary)
+			VStack(spacing: 0) {
+				// Lock group centered vertically
+				VStack(spacing: 20) {
+					Image(systemName: "lock.fill")
+						.font(.system(size: 48))
+						.foregroundStyle(.secondary)
 
-			Image(systemName: "lock.fill")
-				.font(.system(size: 48))
-				.foregroundStyle(.secondary)
+					Text(String.lockedOutlineLabel)
+						.foregroundStyle(.secondary)
 
-			Text(String.lockedOutlineLabel)
-				.foregroundStyle(.secondary)
+					if let errorMessage {
+						Text(errorMessage)
+							.font(.caption)
+							.foregroundStyle(.red)
+					}
 
-			if let errorMessage {
-				Text(errorMessage)
-					.font(.caption)
-					.foregroundStyle(.red)
+					Button(String.unlockOutlineControlLabel) {
+						authenticate()
+					}
+					.buttonStyle(.bordered)
+					.disabled(isAuthenticating)
+				}
+				.background(GeometryReader { groupProxy in
+					Color.clear.preference(key: GroupHeightKey.self, value: groupProxy.size.height)
+				})
 			}
-
-			Button(String.unlockOutlineControlLabel) {
-				authenticate()
+			.frame(maxWidth: .infinity, maxHeight: .infinity)
+			.overlay(alignment: .top) {
+				// Title centered between top of view and top of lock group
+				Text(outline.title ?? .noTitleLabel)
+					.font(.largeTitle)
+					.fontWeight(.semibold)
+					.foregroundStyle(.secondary)
+					.frame(maxWidth: .infinity)
+					.offset(y: max(0, (totalHeight - groupHeight) / 4))
 			}
-			.buttonStyle(.bordered)
-			.disabled(isAuthenticating)
-
-			Spacer()
+			.onPreferenceChange(GroupHeightKey.self) { height in
+				groupHeight = height
+			}
 		}
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
 	}
 
 	private func authenticate() {
@@ -60,4 +74,11 @@ struct EditorLockedOutlineView: View {
 		}
 	}
 
+}
+
+private struct GroupHeightKey: PreferenceKey {
+	static let defaultValue: CGFloat = 0
+	static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+		value = nextValue()
+	}
 }
