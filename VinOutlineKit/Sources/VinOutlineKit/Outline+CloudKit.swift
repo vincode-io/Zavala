@@ -96,7 +96,7 @@ extension Outline: VCKModel {
 		cloudKitRequestsIDs = Set<EntityID>()
 	}
 
-	func apply(_ update: CloudKitOutlineUpdate) {
+	func apply(_ update: CloudKitOutlineUpdate) async {
 		var updatedRowIDs = Set<String>()
 		var needsHierarchyRebuild = false
 
@@ -107,8 +107,22 @@ extension Outline: VCKModel {
 		// Ensure the encryption service is available before processing rows.
 		// The outline record (applied above) may have just set isLocked, and
 		// load() may have run before isLocked was known.
+		// Retry up to 5 times with a 2-second delay to give iCloud Keychain
+		// a chance to sync the encryption key from another device.
 		if isLocked == true && encryptionService == nil {
-			encryptionService = Self.encryptionServiceProvider?(id)
+			for attempt in 1...5 {
+				encryptionService = Self.encryptionServiceProvider?(id)
+				if encryptionService != nil {
+					break
+				}
+				if attempt < 5 {
+					logger.info("Encryption service not available (attempt \(attempt) of 5), retrying in 2 seconds...")
+					try? await Task.sleep(for: .seconds(2))
+				}
+			}
+			if encryptionService == nil {
+				logger.error("Encryption service unavailable after 5 attempts for outline: \(self.id.description)")
+			}
 		}
 
 		for saveRecord in update.saveRowRecords {

@@ -414,14 +414,14 @@ public final class Account: Identifiable, Equatable {
 			let outline = document.outline!
 			outline.load()
 
-			outline.apply(update)
+			await outline.apply(update)
 			await outline.forceSave()
 			await outline.unload()
 		} else {
 			let outline = Outline(account: self, id: update.documentID)
 			outline.zoneID = update.zoneID
 
-			outline.apply(update)
+			await outline.apply(update)
 
 			await outline.forceSave()
 			await outline.unload()
