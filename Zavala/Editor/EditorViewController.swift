@@ -356,7 +356,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	private lazy var transition = ImageTransition(delegate: self)
 	private var imageBlocker: UIView?
-	private var lockedHostingController: UIHostingController<LockedOutlineView>?
+	private var lockedHostingController: UIHostingController<EditorLockedOutlineView>?
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -1177,7 +1177,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		collectionView.isHidden = true
 
-		let lockedView = LockedOutlineView(outline: outline) { [weak self] in
+		let lockedView = EditorLockedOutlineView(outline: outline) { [weak self] in
 			self?.dismissLockedViewAndOpen(outline)
 		}
 		let hostingController = UIHostingController(rootView: lockedView)

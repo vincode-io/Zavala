@@ -1,14 +1,11 @@
 //
-//  LockedOutlineView.swift
-//  Zavala
-//
 //  Created by Maurice Parker on 3/8/26.
 //
 
 import SwiftUI
 import VinOutlineKit
 
-struct LockedOutlineView: View {
+struct EditorLockedOutlineView: View {
 
 	let outline: Outline
 	let onAuthenticated: () -> Void
