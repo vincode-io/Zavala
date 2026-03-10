@@ -20,12 +20,16 @@ struct LockedOutlineView: View {
 		VStack(spacing: 20) {
 			Spacer()
 
+			Text(outline.title ?? .noTitleLabel)
+				.font(.largeTitle)
+				.fontWeight(.semibold)
+				.foregroundStyle(.secondary)
+
 			Image(systemName: "lock.fill")
 				.font(.system(size: 48))
 				.foregroundStyle(.secondary)
 
 			Text(String.lockedOutlineLabel)
-				.font(.headline)
 				.foregroundStyle(.secondary)
 
 			if let errorMessage {
@@ -43,9 +47,6 @@ struct LockedOutlineView: View {
 			Spacer()
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-//		.onAppear {
-//			authenticate()
-//		}
 	}
 
 	private func authenticate() {

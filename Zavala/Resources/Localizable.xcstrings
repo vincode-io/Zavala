@@ -141,6 +141,41 @@
         }
       }
     },
+    "button.text.add-lock" : {
+      "comment" : "Action: Add Lock",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sperre hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Lock"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Lock"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Lock"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加锁定"
+          }
+        }
+      }
+    },
     "button.text.add-note" : {
       "comment" : "Outline Action: Add Note",
       "localizations" : {
@@ -3479,41 +3514,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "立即锁定"
-          }
-        }
-      }
-    },
-    "button.text.add-lock" : {
-      "comment" : "Action: Add Lock",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sperre hinzufügen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Lock"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Lock"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Lock"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "添加锁定"
           }
         }
       }
@@ -12249,34 +12249,34 @@
     "label.text.locked-outline" : {
       "comment" : "Label: This outline is locked. Authenticate to view.",
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Gliederung ist gesperrt"
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This Outline Is Locked"
+            "value" : "This outline is locked."
           }
         },
         "en-AU" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This Outline Is Locked"
+            "value" : "This outline is locked."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Gliederung ist gesperrt."
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This Outline Is Locked"
+            "value" : "This outline is locked."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此大纲已锁定"
+            "value" : "此大纲已锁定。"
           }
         }
       }
