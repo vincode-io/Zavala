@@ -429,12 +429,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		self.ancestorParentID = coder.ancestorParentID
 	}
 	
-	public func topicMarkdown(type: UTType, useAltLinks: Bool = false, useSidecar: Bool = false) -> String? {
-		return convertAttrString(topic, isInNotes: false, type: type, useAltLinks: useAltLinks, useSidecar: useSidecar)
+	public func topicMarkdown(type: UTType, format: Bool = false, useAltLinks: Bool = false, useSidecar: Bool = false) -> String? {
+		return convertAttrString(topic, isInNotes: false, type: type, format: format, useAltLinks: useAltLinks, useSidecar: useSidecar)
 	}
 	
-	public func noteMarkdown(type: UTType, useAltLinks: Bool = false, useSidecar: Bool = false) -> String? {
-		return convertAttrString(note, isInNotes: true, type: type, useAltLinks: useAltLinks, useSidecar: useSidecar)
+	public func noteMarkdown(type: UTType, format:Bool = false, useAltLinks: Bool = false, useSidecar: Bool = false) -> String? {
+		return convertAttrString(note, isInNotes: true, type: type, format: format, useAltLinks: useAltLinks, useSidecar: useSidecar)
 	}
 	
 	public func duplicate(newOutline: Outline) -> Row {
@@ -744,7 +744,7 @@ private extension Row {
 		return (mutableAttrString, images)
 	}
 	
-	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, type: UTType, useAltLinks: Bool, useSidecar: Bool) -> String? {
+	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, type: UTType, format: Bool, useAltLinks: Bool, useSidecar: Bool) -> String? {
 		guard let attrString else { return nil	}
 
 		let result = NSMutableAttributedString(attributedString: attrString)
@@ -794,7 +794,7 @@ private extension Row {
 			return "\(linkText)(\(fixedURL))"
 		}
 
-		if type == .markdown {
+		if format {
 			return wrapMarkdownLines(fixedMarkdown)
 		} else {
 			return fixedMarkdown

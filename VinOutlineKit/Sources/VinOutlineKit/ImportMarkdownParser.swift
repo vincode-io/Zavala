@@ -61,7 +61,17 @@ public struct ImportMarkdownParser: MarkupWalker {
 	}
 
 	nonisolated mutating public func visitParagraph(_ paragraph: Paragraph) {
-		guard let formattedParagraph = paragraph.format().trimmed()?.replacingOccurrences(of: "\n", with: " ") else { return }
+		let lines = paragraph.format().split(separator: "\n")
+
+		var formattedParagraph = String()
+		for (i, line) in lines.enumerated() {
+			if i > 0 {
+				formattedParagraph.append(" ")
+			}
+			if let strippedLine = String(line).trimmed() {
+				formattedParagraph.append(String(strippedLine))
+			}
+		}
 
 		MainActor.assumeIsolated {
 			guard !isList else { return }

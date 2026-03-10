@@ -33,8 +33,8 @@ final class MarkdownDocVisitor {
 			indentLevel = indentLevel - 1
 		}
 
-		if let topicMarkdown = visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar), !topicMarkdown.isEmpty {
-			if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
+		if let topicMarkdown = visited.topicMarkdown(type: .markdown, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !topicMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(type: .markdown, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
 				markdown.append("\n\n")
 				markdown.append(String(repeating: "#", count: indentLevel + 2))
 				markdown.append(" \(topicMarkdown)")
@@ -55,7 +55,7 @@ final class MarkdownDocVisitor {
 				previousRowWasParagraph = false
 			}
 		} else {
-			if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(type: .markdown, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
 				markdown.append("\n\n\(noteMarkdown)")
 				previousRowWasParagraph = true
 			} else {

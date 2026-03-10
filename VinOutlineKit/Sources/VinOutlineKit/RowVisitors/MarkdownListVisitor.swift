@@ -28,19 +28,19 @@ final class MarkdownListVisitor {
 		
 		if numberingStyle == .none {
 			if visited.isComplete ?? false {
-				markdown.append("* ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")~~")
+				markdown.append("* ~~\(visited.topicMarkdown(type: .markdown, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")~~")
 			} else {
-				markdown.append("* \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")")
+				markdown.append("* \(visited.topicMarkdown(type: .markdown, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")")
 			}
 		} else {
 			if visited.isComplete ?? false {
-				markdown.append("\(visited.simpleNumbering) ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")~~")
+				markdown.append("\(visited.simpleNumbering) ~~\(visited.topicMarkdown(type: .markdown, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")~~")
 			} else {
-				markdown.append("\(visited.simpleNumbering) \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")")
+				markdown.append("\(visited.simpleNumbering) \(visited.topicMarkdown(type: .markdown, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar) ?? "")")
 			}
 		}
 		
-		if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
+		if let noteMarkdown = visited.noteMarkdown(type: .markdown, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
 			markdown.append("\n\n")
 			let paragraphs = noteMarkdown.components(separatedBy: "\n\n")
 			for paragraph in paragraphs {
