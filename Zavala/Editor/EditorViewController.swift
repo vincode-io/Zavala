@@ -997,12 +997,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		guard isViewLoaded else { return }
 
+		outline.load()
+
 		if outline.isLocked == true && !LockSessionManager.shared.isUnlocked(outline.id) {
 			showLockedView(outline: outline)
 			return
 		}
 
-		outline.load()
 		outline.incrementBeingViewedCount()
 		outline.prepareForViewing()
 
@@ -1212,7 +1213,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		dismissLockedView()
 		collectionView.isHidden = false
 
-		outline.load()
 		outline.incrementBeingViewedCount()
 		outline.prepareForViewing()
 
