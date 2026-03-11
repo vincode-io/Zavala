@@ -12,7 +12,7 @@ import VinOutlineKit
 import VinUtility
 
 class EditorContainerViewController: UIViewController, MainCoordinator, MainCoordinatorResponder {
-		
+
 	var currentDocumentContainer: DocumentContainer? = nil
 
 	var selectedDocuments: [Document] {
@@ -100,6 +100,28 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 
 	// MARK: Actions
 	
+	func duplicateOutlines(_ sender: Any?) {
+		guard let outline = editorViewController?.outline else { return }
+		let document = Document.outline(outline)
+
+		Task {
+			document.load()
+
+			guard let documentAccount = document.account else { return }
+
+			let newDocument = document.duplicate(account: documentAccount)
+			documentAccount.createDocument(newDocument)
+
+			await newDocument.forceSave()
+			await newDocument.unload()
+			await document.unload()
+
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, document: document).userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
+	}
+
 	@objc func deleteOutline(_ sender: Any?) {
 		guard let outline = editorViewController?.outline else { return }
 		let document = Document.outline(outline)
@@ -222,6 +244,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 			return false
 		case .lockNow:
 			return selectedOutlines.contains { $0.isLocked == true && LockSessionManager.shared.isUnlocked($0.id) }
+		case .duplicateOutlines:
+			return selectedDocuments.count == 1
 		case .copyDocumentLink:
 			return selectedDocuments.count == 1
 		default:

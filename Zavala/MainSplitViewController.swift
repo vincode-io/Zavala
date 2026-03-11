@@ -34,7 +34,7 @@ enum MainControllerIdentifier {
 }
 
 class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoordinatorResponder, FileActionResponder {
-	
+
 	struct UserInfoKeys {
 		static let goBackwardStack = "goBackwardStack"
 		static let goForwardStack = "goForwardStack"
@@ -429,6 +429,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 
 	@objc func lockNow(_ sender: Any?) {
 		lockNow()
+	}
+
+	func duplicateOutlines(_ sender: Any?) {
+		documentsViewController?.duplipcateSelectedDocuments()
 	}
 
 	@objc func deleteOutline(_ sender: Any?) {

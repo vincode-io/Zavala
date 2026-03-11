@@ -371,6 +371,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 										  input: "i",
 										  modifierFlags: [.control, .command])
 
+	let duplicateOutlineCommand = UICommand(title: .duplicateOutlineControlLabel, image: .duplicate, action: .duplicateOutlines)
+
 	let addLockCommand = UICommand(title: .addLockControlLabel, image: .lock, action: .addLock)
 	let removeLockCommand = UICommand(title: .removeLockControlLabel, image: .lockOpen, action: .removeLock)
 	let lockNowCommand = UIKeyCommand(title: .lockNowControlLabel,
@@ -637,25 +639,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let isLocked = outline?.isLocked == true
 		let isCollaborating = outline?.iCollaborating == true
 
-		var lockMenuChildren = [UIMenuElement]()
-		if isLocked {
-			lockMenuChildren.append(removeLockCommand)
-			if let outline, LockSessionManager.shared.isUnlocked(outline.id) {
-				lockMenuChildren.append(lockNowCommand)
-			}
-		} else if !isCollaborating {
-			lockMenuChildren.append(addLockCommand)
-		}
-
 		var outlineFileMenuChildren = [UIMenuElement]()
 		outlineFileMenuChildren.append(showGetInfoCommand)
-		outlineFileMenuChildren.append(deleteOutlineCommand)
-		if !lockMenuChildren.isEmpty {
-			let lockMenu = UIMenu(title: "", options: .displayInline, children: lockMenuChildren)
-			outlineFileMenuChildren.append(lockMenu)
+		outlineFileMenuChildren.append(duplicateOutlineCommand)
+
+		if isLocked {
+			outlineFileMenuChildren.append(removeLockCommand)
+			if let outline, LockSessionManager.shared.isUnlocked(outline.id) {
+				outlineFileMenuChildren.append(lockNowCommand)
+			}
+		} else if !isCollaborating {
+			outlineFileMenuChildren.append(addLockCommand)
 		}
+
 		let outlineFileMenu = UIMenu(title: "", options: .displayInline, children: outlineFileMenuChildren)
 		builder.insertChild(outlineFileMenu, atEndOfMenu: .file)
+
+		let deleteOutlineMenu = UIMenu(title: "", options: .displayInline, children: [deleteOutlineCommand])
+		builder.insertChild(deleteOutlineMenu, atEndOfMenu: .file)
 
 		var sharingMenuChildren: [UIMenuElement] = [shareCommand]
 		if !isLocked {

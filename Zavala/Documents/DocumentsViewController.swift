@@ -383,8 +383,12 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		self.present(controller, animated: true)
 	}
 
+	func duplipcateSelectedDocuments() {
+		duplicate(documents: selectedDocuments)
+	}
+	
 	func deleteSelectedDocuments() {
-		deleteDocuments(selectedDocuments)
+		delete(documents: selectedDocuments)
 	}
 
 	// MARK: Notifications
@@ -913,21 +917,17 @@ private extension DocumentsViewController {
 
 			let outlines = documents.compactMap { $0.outline }
 
-			var lockMenuItems = [UIMenuElement]()
 			if documents.count == 1, let outline = outlines.first {
 				if outline.isLocked == true {
-					lockMenuItems.append(removeLockAction(outline: outline))
+					menuItems.append(removeLockAction(outline: outline))
 					if LockSessionManager.shared.isUnlocked(outline.id) {
-						lockMenuItems.append(lockNowAction(outlines: outlines))
+						menuItems.append(lockNowAction(outlines: outlines))
 					}
 				} else if !outline.iCollaborating {
-					lockMenuItems.append(addLockAction(outline: outline))
+					menuItems.append(addLockAction(outline: outline))
 				}
 			} else if outlines.contains(where: { $0.isLocked == true && LockSessionManager.shared.isUnlocked($0.id) }) {
-				lockMenuItems.append(lockNowAction(outlines: outlines))
-			}
-			if !lockMenuItems.isEmpty {
-				menuItems.append(UIMenu(title: "", options: .displayInline, children: lockMenuItems))
+				menuItems.append(lockNowAction(outlines: outlines))
 			}
 
 			var shareMenuItems = [UIMenuElement]()
@@ -976,20 +976,7 @@ private extension DocumentsViewController {
 	
 	func duplicateAction(documents: [Document]) -> UIAction {
 		return UIAction(title: .duplicateControlLabel, image: .duplicate) { action in
-            for document in documents {
-				Task {
-					document.load()
-					
-					guard let documentAccount = document.account else { return }
-					
-					let newDocument = document.duplicate(account: documentAccount)
-					documentAccount.createDocument(newDocument)
-					
-					await newDocument.forceSave()
-					await newDocument.unload()
-					await document.unload()
-				}
-            }
+			self.duplicate(documents: documents)
 		}
 	}
 
@@ -1078,17 +1065,34 @@ private extension DocumentsViewController {
 	func deleteContextualAction(indexPath: IndexPath) -> UIContextualAction {
 		return UIContextualAction(style: .destructive, title: .deleteControlLabel) { _, _, completion in
 			let document = self.documents[indexPath.row]
-			self.deleteDocuments([document], completion: completion)
+			self.delete(documents: [document], completion: completion)
 		}
 	}
 	
 	func deleteDocumentsAction(documents: [Document]) -> UIAction {
 		return UIAction(title: .deleteControlLabel, image: .delete, attributes: .destructive) { action in
-			self.deleteDocuments(documents)
+			self.delete(documents: documents)
 		}
 	}
-	
-	func deleteDocuments(_ documents: [Document], completion: ((Bool) -> Void)? = nil) {
+
+	func duplicate(documents: [Document]) {
+		for document in documents {
+			Task {
+				document.load()
+
+				guard let documentAccount = document.account else { return }
+
+				let newDocument = document.duplicate(account: documentAccount)
+				documentAccount.createDocument(newDocument)
+
+				await newDocument.forceSave()
+				await newDocument.unload()
+				await document.unload()
+			}
+		}
+	}
+
+	func delete(documents: [Document], completion: ((Bool) -> Void)? = nil) {
 		func delete() {
 			let deselect = selectedDocuments.filter({ documents.contains($0) }).isEmpty
 			if deselect, let documentContainers = self.documentContainers {

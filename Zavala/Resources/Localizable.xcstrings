@@ -1681,6 +1681,41 @@
         }
       }
     },
+    "button.text.duplicate-outline" : {
+      "comment" : "Action: Duplicate Outline",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gliederung duplizieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicate Outline"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicate Outline"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicate Outline"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制大纲"
+          }
+        }
+      }
+    },
     "button.text.duplicate-row" : {
       "comment" : "Action: Duplicate Row",
       "localizations" : {
@@ -12249,6 +12284,12 @@
     "label.text.locked-outline" : {
       "comment" : "Label: This outline is locked. Authenticate to view.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Gliederung ist gesperrt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12259,12 +12300,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "This outline is locked."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Gliederung ist gesperrt."
           }
         },
         "en-GB" : {

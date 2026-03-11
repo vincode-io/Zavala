@@ -189,6 +189,7 @@ extension String {
 	static let acknowledgementsControlLabel = String(localized: "label.text.acknowledgements", comment: "Label: Acknowledgements")
 	static let actualSizeControlLabel = String(localized: "button.text.actual-size", comment: "View Action: Actual Size")
 	static let addControlLabel = String(localized: "button.text.add", comment: "Outline Action: Add")
+	static let addLockControlLabel = String(localized: "button.text.add-lock", comment: "Action: Add Lock")
 	static let addNoteControlLabel = String(localized: "button.text.add-note", comment: "Outline Action: Add Note")
 	static let addNoteLevelControlLabel = String(localized: "button.text.add-note-level", comment: "Action: Add Note Level")
 	static let addNumberingLevelControlLabel = String(localized: "button.text.add-numbering-level", comment: "Action: Add Numbering Level")
@@ -261,6 +262,7 @@ extension String {
 	static let documentNotFoundMessage = String(localized: "label.text.document-not-found-message", comment: "Alert Message: The requested document could not be found. It was most likely deleted and is no longer available.")
 	static let doneControlLabel = String(localized: "label.text.done", comment: "Label: Done")
 	static let duplicateControlLabel = String(localized: "button.text.duplicate", comment: "Action: Duplicate")
+	static let duplicateOutlineControlLabel = String(localized: "button.text.duplicate-outline", comment: "Action: Duplicate Outline")
 	static let duplicateRowControlLabel = String(localized: "button.text.duplicate-row", comment: "Action: Duplicate Row")
 	static let duplicateRowsControlLabel = String(localized: "button.text.duplicate-rows", comment: "Action: Duplicate Rows")
 
@@ -330,9 +332,8 @@ extension String {
 	static let linkControlLabel = String(localized: "label.text.link", comment: "Label: Link")
 	static let linkEllipsisControlLabel = String(localized: "label.text.link-with-ellipsis", comment: "Label: Link…")
 	static let lightControlLabel = String(localized: "button.text.light", comment: "Set App Appearance Action: Light")
-	static let lockNowControlLabel = String(localized: "button.text.lock-now", comment: "Action: Lock Now")
-	static let addLockControlLabel = String(localized: "button.text.add-lock", comment: "Action: Add Lock")
 	static let lockedOutlineLabel = String(localized: "label.text.locked-outline", comment: "Label: This outline is locked. Authenticate to view.")
+	static let lockNowControlLabel = String(localized: "button.text.lock-now", comment: "Action: Lock Now")
 
 	static let manageSharingEllipsisControlLabel = String(localized: "label.text.manage-sharing-with-ellipsis", comment: "Label: Manage Sharing…")
 	static let maxWidthControlLabel = String(localized: "label.text.max-width", comment: "Label: Max Width")
