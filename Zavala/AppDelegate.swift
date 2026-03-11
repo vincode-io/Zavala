@@ -640,7 +640,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		var lockMenuChildren = [UIMenuElement]()
 		if isLocked {
 			lockMenuChildren.append(removeLockCommand)
-			lockMenuChildren.append(lockNowCommand)
+			if let outline, LockSessionManager.shared.isUnlocked(outline.id) {
+				lockMenuChildren.append(lockNowCommand)
+			}
 		} else if !isCollaborating {
 			lockMenuChildren.append(addLockCommand)
 		}

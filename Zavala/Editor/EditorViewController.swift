@@ -835,7 +835,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func documentIsLockedDidChange(_ note: Notification) {
-		if let document = note.object as? VinOutlineKit.Document, document.outline == outline {
+		if let noteOutline = (note.object as? Document)?.outline, noteOutline == self.outline {
+			if isShowingLockedView {
+				dismissLockedView()
+			}
 			updateUI()
 		}
 	}
@@ -964,7 +967,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		messageLabel?.removeFromSuperview()
 		messageLabel = nil
 		dismissLockedView()
-		collectionView.isHidden = false
 
 		checkPointOutline()
 
@@ -998,30 +1000,25 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard isViewLoaded else { return }
 
 		outline.load()
-
-		if outline.isLocked == true && !LockSessionManager.shared.isUnlocked(outline.id) {
-			showLockedView(outline: outline)
-			return
-		}
-
 		outline.incrementBeingViewedCount()
 		outline.prepareForViewing()
 
 		updateNavigationMenus()
 		collectionView.reloadData()
-		
-		// If we don't have this delay, when switching between documents in the documents view, while searching,
-		// causes the find interaction to glitch out. This is especially true on macOS. We could have a shorter
-		// duration on iOS, but I don't see the need to complicate the code.
-		if let searchText {
+		updateUI()
+
+		if outline.isLocked == true && !LockSessionManager.shared.isUnlocked(outline.id) {
+			showLockedView(outline: outline)
+		} else if let searchText {
 			Task { @MainActor in
+				// If we don't have this delay, when switching between documents in the documents view, while searching,
+				// causes the find interaction to glitch out. This is especially true on macOS. We could have a shorter
+				// duration on iOS, but I don't see the need to complicate the code.
 				try? await Task.sleep(for: .seconds(0.5))
 				self.showFindInteraction(text: searchText)
 			}
 			return
 		}
-
-		updateUI()
 	}
 	
 	func edit(isNew: Bool = false, selectRow: EntityID? = nil) {
@@ -1062,23 +1059,20 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 		outlineActions.append(getInfoAction)
 
-		if outline?.isLocked == true {
-			if let outlineID = outline?.id, LockSessionManager.shared.isUnlocked(outlineID) {
-				let removeLockAction = UIAction(title: .removeLockControlLabel, image: .lockOpen) { _ in
-					guard let outline = self.outline else { return }
-					self.delegate?.removeLock(self, outline: outline)
-				}
-				outlineActions.append(removeLockAction)
+		if let outline, outline.isLocked == true {
+			let removeLockAction = UIAction(title: .removeLockControlLabel, image: .lockOpen) { _ in
+				self.delegate?.removeLock(self, outline: outline)
+			}
+			outlineActions.append(removeLockAction)
 
+			if LockSessionManager.shared.isUnlocked(outline.id) {
 				let lockNowAction = UIAction(title: .lockNowControlLabel, image: .lockNow) { _ in
-					guard let outline = self.outline else { return }
 					self.delegate?.lockNow(self, outline: outline)
 				}
 				outlineActions.append(lockNowAction)
 			}
-		} else if outline?.iCollaborating != true {
+		} else if let outline, outline.iCollaborating != true {
 			let addLockAction = UIAction(title: .addLockControlLabel, image: .lock) { _ in
-				guard let outline = self.outline else { return }
 				self.delegate?.addLock(self, outline: outline)
 			}
 			outlineActions.append(addLockAction)
@@ -1179,7 +1173,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.isHidden = true
 
 		let lockedView = EditorLockedOutlineView(outline: outline) { [weak self] in
-			self?.dismissLockedViewAndOpen(outline)
+			self?.dismissLockedView()
 		}
 		let hostingController = UIHostingController(rootView: lockedView)
 		hostingController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -1206,19 +1200,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		lockedHostingController?.view.removeFromSuperview()
 		lockedHostingController?.removeFromParent()
 		lockedHostingController = nil
+
 		isShowingLockedView = false
-	}
-
-	private func dismissLockedViewAndOpen(_ outline: Outline) {
-		dismissLockedView()
 		collectionView.isHidden = false
-
-		outline.incrementBeingViewedCount()
-		outline.prepareForViewing()
-
-		updateNavigationMenus()
-		collectionView.reloadData()
-		updateUI()
 	}
 
 	// MARK: - Lock Session

@@ -316,7 +316,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true && editorViewController?.outline?.iCollaborating != true
 		case .removeLock:
 			if let outline = editorViewController?.outline {
-				return outline.isLocked == true && LockSessionManager.shared.isUnlocked(outline.id)
+				return outline.isLocked == true
 			}
 			return false
 		case .lockNow:

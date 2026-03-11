@@ -916,8 +916,8 @@ private extension DocumentsViewController {
 			var lockMenuItems = [UIMenuElement]()
 			if documents.count == 1, let outline = outlines.first {
 				if outline.isLocked == true {
+					lockMenuItems.append(removeLockAction(outline: outline))
 					if LockSessionManager.shared.isUnlocked(outline.id) {
-						lockMenuItems.append(removeLockAction(outline: outline))
 						lockMenuItems.append(lockNowAction(outlines: outlines))
 					}
 				} else if !outline.iCollaborating {

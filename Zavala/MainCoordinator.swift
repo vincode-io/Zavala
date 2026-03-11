@@ -350,7 +350,6 @@ extension MainCoordinator {
 
 	func removeLock(outline: Outline) {
 		guard outline.isLocked == true else { return }
-		guard LockSessionManager.shared.isUnlocked(outline.id) else { return }
 
 		Task {
 			do {
