@@ -1229,7 +1229,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			  affectedIDs.contains(outline.id) else { return }
 
 		checkPointOutline()
-		outline.decrementBeingViewedCount()
 		showLockedView(outline: outline)
 		updateUI()
 	}
