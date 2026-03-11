@@ -327,6 +327,8 @@ extension MainCoordinator {
 					reason: String(localized: "Lock \(outline.title ?? "Outline")", comment: "Auth prompt: Lock outline")
 				)
 
+				outline.load()
+
 				let key = try LockKeyManager.createKey(for: outline.id)
 				outline.encryptionService = OutlineEncryptionService(key: key)
 				outline.update(isLocked: true)
@@ -334,6 +336,7 @@ extension MainCoordinator {
 				LockSessionManager.shared.markUnlocked(outline.id)
 
 				await outline.forceSave()
+				await outline.unload()
 			} catch {
 				presentError(title: .errorAlertTitle, message: error.localizedDescription)
 			}
@@ -355,12 +358,15 @@ extension MainCoordinator {
 					reason: String(localized: "Remove lock from \(outline.title ?? "Outline")", comment: "Auth prompt: Remove lock")
 				)
 
+				outline.load()
+
 				outline.update(isLocked: false)
 				outline.encryptionService = nil
 
 				try LockKeyManager.deleteKey(for: outline.id)
 
 				await outline.forceSave()
+				await outline.unload()
 			} catch {
 				presentError(title: .errorAlertTitle, message: error.localizedDescription)
 			}
