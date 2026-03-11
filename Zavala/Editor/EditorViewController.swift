@@ -1174,7 +1174,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		let lockedView = EditorLockedOutlineView(outline: outline) { [weak self] in
 			self?.dismissLockedView()
+			self?.updateUI()
 		}
+		
 		let hostingController = UIHostingController(rootView: lockedView)
 		hostingController.view.translatesAutoresizingMaskIntoConstraints = false
 		hostingController.view.backgroundColor = .systemBackground
