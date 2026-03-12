@@ -26,7 +26,10 @@ public extension Outline {
 		do {
 			outlineRows = try decoder.decode(OutlineRows.self, from: rowData)
 		} catch {
-			logger.error("Rows read deserialization failed: \(error.localizedDescription, privacy: .public)")
+			// If a lock was removed, the encryption service could be nil because the key got deleted before
+			// the remove lock sync happened. That makes it impossible to decrypt the data on disk, so we get
+			// here. It doesn't matter though because on an unlock, we sync all the rows in the outline anyway.
+			logger.info("Rows read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return
 		}
 
@@ -104,7 +107,7 @@ public extension Outline {
 		do {
 			outlineImageCoders = try decoder.decode([String: [ImageCoder]].self, from: imageData)
 		} catch {
-			logger.error("Images read deserialization failed: \(error.localizedDescription, privacy: .public)")
+			logger.info("Images read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return
 		}
 
