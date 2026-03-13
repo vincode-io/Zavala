@@ -14,6 +14,7 @@ import CoreSpotlight
 class DocumentIndexer {
 	
 	init() {
+		NotificationCenter.default.addObserver(self, selector: #selector(documentDidDelete(_:)), name: .DocumentDidDelete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentDidChangeBySync(_:)), name: .DocumentDidChangeBySync, object: nil)
 	}
 	
@@ -28,6 +29,11 @@ class DocumentIndexer {
 
 private extension DocumentIndexer {
 	
+	@objc func documentDidDelete(_ note: Notification) {
+		guard let document = note.object as? Document else { return }
+		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
+	}
+
 	@objc func documentDidChangeBySync(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		Self.updateIndex(forDocument: document)

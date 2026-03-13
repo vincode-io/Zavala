@@ -34,7 +34,6 @@ class ActivityManager {
 	}
 	
 	init() {
-		NotificationCenter.default.addObserver(self, selector: #selector(documentDidDelete(_:)), name: .DocumentDidDelete, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 	}
     
@@ -71,11 +70,6 @@ class ActivityManager {
 
 private extension ActivityManager {
 
-	@objc func documentDidDelete(_ note: Notification) {
-		guard let document = note.object as? Document else { return }
-		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
-	}
-	
 	func makeSelectDocumentContainerActivity(_ documentContainers: [DocumentContainer]) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer)
 		
