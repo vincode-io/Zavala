@@ -99,9 +99,10 @@ extension Outline: VCKModel {
 	func apply(_ update: CloudKitOutlineUpdate) async {
 		var updatedRowIDs = Set<String>()
 		var needsHierarchyRebuild = false
+		var indexableValueDidChange = false
 
 		if let record = update.saveOutlineRecord {
-			apply(record)
+			indexableValueDidChange = apply(record)
 		}
 
 		// Ensure the encryption service is available before processing rows.
@@ -191,7 +192,7 @@ extension Outline: VCKModel {
 			rebuildRowsHierarchy()
 		}
 
-		if !updatedRowIDs.isEmpty || !update.deleteRowRecordIDs.isEmpty  {
+		if indexableValueDidChange || !updatedRowIDs.isEmpty || !update.deleteRowRecordIDs.isEmpty  {
 			rowsFile?.markAsDirty()
 			documentDidChangeBySync()
 		}
@@ -229,9 +230,9 @@ extension Outline: VCKModel {
 		}
 	}
 	
-	public func apply(_ record: CKRecord) {
-		guard let account else { return }
-		
+	public func apply(_ record: CKRecord) -> Bool {
+		guard let account else { return false }
+
 		if let shareReference = record.share {
 			cloudKitShareRecordName = shareReference.recordID.recordName
 		} else {
@@ -241,7 +242,7 @@ extension Outline: VCKModel {
 		if let metaData = cloudKitMetaData,
 		   let recordChangeTag = CKRecord(metaData)?.recordChangeTag,
 		   record.recordChangeTag == recordChangeTag {
-			return
+			return false
 		}
 
 		cloudKitMetaData = record.metadata
@@ -279,8 +280,14 @@ extension Outline: VCKModel {
         let serverHasAltLinks = record[Outline.CloudKitRecord.Fields.hasAltLinks] as? Bool
         hasAltLinks = merge(client: hasAltLinks, ancestor: ancestorHasAltLinks, server: serverHasAltLinks)
 
+		var indexableValueDidChange = false
+
         let serverIsLockedValue = record[Outline.CloudKitRecord.Fields.isLocked] as? Bool
-        isLocked = merge(client: isLocked, ancestor: ancestorIsLocked, server: serverIsLockedValue)
+        let isLockedMerge = merge(client: isLocked, ancestor: ancestorIsLocked, server: serverIsLockedValue)
+		if isLocked != isLockedMerge {
+			indexableValueDidChange = true
+			isLocked = isLockedMerge
+		}
 
 		// Read legacy rowOrder for migration from old CloudKit format
 		if let legacyRowOrder = record[Outline.CloudKitRecord.Fields.rowOrder] as? [String], !legacyRowOrder.isEmpty {
@@ -289,7 +296,7 @@ extension Outline: VCKModel {
 
         clearSyncData()
         
-		return
+		return indexableValueDidChange
 	}
 	
     public func apply(_ error: CKError) {
