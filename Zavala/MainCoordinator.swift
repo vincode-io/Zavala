@@ -336,6 +336,7 @@ extension MainCoordinator {
 				outline.update(isLocked: true)
 
 				LockSessionManager.shared.markUnlocked(outline.id)
+				DocumentIndexer.removeIndex(for: .outline(outline))
 
 				await outline.forceSave()
 				await outline.unload()
@@ -365,6 +366,7 @@ extension MainCoordinator {
 				outline.encryptionService = nil
 
 				try LockKeyManager.deleteKey(for: outline.id)
+				DocumentIndexer.updateIndex(for: .outline(outline))
 
 				await outline.forceSave()
 				await outline.unload()

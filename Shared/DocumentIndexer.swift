@@ -22,6 +22,10 @@ class DocumentIndexer {
 		let documentIndexAttributes = DocumentIndexAttributes(document: document)
 		CSSearchableIndex.default().indexSearchableItems([documentIndexAttributes.searchableItem])
 	}
+
+	static func removeIndex(for document: Document) {
+		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
+	}
 	
 }
 
@@ -31,7 +35,7 @@ private extension DocumentIndexer {
 	
 	@objc func documentDidDelete(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
-		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
+		Self.removeIndex(for: document)
 	}
 
 	@objc func documentDidChangeBySync(_ note: Notification) {
