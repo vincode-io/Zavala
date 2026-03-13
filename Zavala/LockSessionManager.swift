@@ -96,7 +96,7 @@ final class LockSessionManager {
 	/// The encryption service is set eagerly during `Outline.load()` via the `encryptionServiceProvider`,
 	/// so it doesn't need to be configured here.
 	func unlockOutline(_ outline: Outline) async throws {
-		try await authenticate(reason: String(localized: "Unlock \(outline.title ?? "Outline")", comment: "Auth prompt: Unlock outline"))
+		try await authenticate(reason: .unlockOutlineAuthPrompt(title: outline.title ?? .outlineControlLabel))
 		markUnlocked(outline.id)
 	}
 

@@ -20,15 +20,15 @@ enum LockError: LocalizedError {
 	var errorDescription: String? {
 		switch self {
 		case .keychainWriteFailed(let status):
-			return "Keychain write failed: \(status)"
+			return String.keychainWriteFailedError(status: status)
 		case .keychainReadFailed(let status):
-			return "Keychain read failed: \(status)"
+			return String.keychainReadFailedError(status: status)
 		case .keychainDeleteFailed(let status):
-			return "Keychain delete failed: \(status)"
+			return String.keychainDeleteFailedError(status: status)
 		case .authenticationFailed:
-			return String(localized: "Authentication failed.", comment: "Error: Authentication failed")
+			return .authenticationFailedError
 		case .noKeyFound:
-			return String(localized: "No encryption key found for this outline.", comment: "Error: No encryption key found")
+			return .noKeyFoundError
 		}
 	}
 }

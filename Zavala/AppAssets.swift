@@ -158,20 +158,6 @@ extension UIImage {
 
 extension String {
 	
-	private static let dateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateStyle = .medium
-		dateFormatter.timeStyle = .none
-		return dateFormatter
-	}()
-	
-	private static let timeFormatter: DateFormatter = {
-		let timeFormatter = DateFormatter()
-		timeFormatter.dateStyle = .none
-		timeFormatter.timeStyle = .short
-		return timeFormatter
-	}()
-	
 	// MARK: URL's
 	
 	static let contributersURL = "https://github.com/vincode-io/Zavala/graphs/contributors"
@@ -271,6 +257,7 @@ extension String {
 	static let emailControlLabel = String(localized: "label.text.email", comment: "Label: Email")
 	static let enableCloudKitControlLabel = String(localized: "button.text.enable-icloud", comment: "Label: Enable iCloud")
 	static let enableOnMyDevice = String(localized: "button.text.enable-on-my-device", comment: "Label: Enable On My <Device>")
+	static let authenticationFailedError = String(localized: "label.text.authentication-failed", comment: "Error: Authentication failed.")
 	static let errorAlertTitle = String(localized: "label.text.error", comment: "Label: Error")
 	static let exportControlLabel = String(localized: "button.text.export", comment: "Action: Export")
 	static let exportMarkdownDocEllipsisControlLabel = String(localized: "button.text.export-markdown-doc-with-ellipsis", comment: "Action: Export Markdown Doc…")
@@ -334,6 +321,8 @@ extension String {
 	static let lightControlLabel = String(localized: "button.text.light", comment: "Set App Appearance Action: Light")
 	static let lockedOutlineLabel = String(localized: "label.text.locked-outline", comment: "Label: This outline is locked. Authenticate to view.")
 	static let lockNowControlLabel = String(localized: "button.text.lock-now", comment: "Action: Lock Now")
+
+	static let noKeyFoundError = String(localized: "label.text.no-key-found", comment: "Error: No encryption key found for this outline.")
 
 	static let manageSharingEllipsisControlLabel = String(localized: "label.text.manage-sharing-with-ellipsis", comment: "Label: Manage Sharing…")
 	static let maxWidthControlLabel = String(localized: "label.text.max-width", comment: "Label: Max Width")
@@ -459,14 +448,14 @@ extension String {
 	// MARK: Localizable Functions
 	
 	static func createdOnLabel(date: Date) -> String {
-		let dateString = dateFormatter.string(from: date)
-		let timeString = timeFormatter.string(from: date)
+		let dateString = date.formatted(date: .abbreviated, time: .omitted)
+		let timeString = date.formatted(date: .omitted, time: .shortened)
 		return String(localized: "label.text.created-on-\(dateString)-at-\(timeString)", comment: "Label: Created on <Date> at <Time>")
 	}
 	
 	static func updatedOnLabel(date: Date) -> String {
-		let dateString = dateFormatter.string(from: date)
-		let timeString = timeFormatter.string(from: date)
+		let dateString = date.formatted(date: .abbreviated, time: .omitted)
+		let timeString = date.formatted(date: .omitted, time: .shortened)
 		return String(localized: "label.text.updated-on-\(dateString)-at-\(timeString)", comment: "Label: Updated on <Date> at <Time>")
 	}
 	
@@ -513,6 +502,30 @@ extension String {
 
 	static func shortcutError(name: String, message: String) -> String {
 		return String(localized: "label.text.shortcut-\(name)-returned-\(message)", comment: "Label: The shortcut <Name> returned an error: <Message>.")
+	}
+
+	static func keychainWriteFailedError(status: OSStatus) -> String {
+		return String(localized: "label.text.keychain-write-failed-\(status)", comment: "Error: Keychain write failed: <Status>")
+	}
+
+	static func keychainReadFailedError(status: OSStatus) -> String {
+		return String(localized: "label.text.keychain-read-failed-\(status)", comment: "Error: Keychain read failed: <Status>")
+	}
+
+	static func keychainDeleteFailedError(status: OSStatus) -> String {
+		return String(localized: "label.text.keychain-delete-failed-\(status)", comment: "Error: Keychain delete failed: <Status>")
+	}
+
+	static func lockOutlineAuthPrompt(title: String) -> String {
+		return String(localized: "label.text.lock-outline-auth-prompt-\(title)", comment: "Auth prompt: Lock <Outline Title>")
+	}
+
+	static func unlockOutlineAuthPrompt(title: String) -> String {
+		return String(localized: "label.text.unlock-outline-auth-prompt-\(title)", comment: "Auth prompt: Unlock <Outline Title>")
+	}
+
+	static func removeLockAuthPrompt(title: String) -> String {
+		return String(localized: "label.text.remove-lock-auth-prompt-\(title)", comment: "Auth prompt: Remove lock from <Outline Title>")
 	}
 
 	static func copyrightLabel() -> String {

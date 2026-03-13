@@ -326,7 +326,7 @@ extension MainCoordinator {
 		Task {
 			do {
 				try await LockSessionManager.shared.authenticate(
-					reason: String(localized: "Lock \(outline.title ?? "Outline")", comment: "Auth prompt: Lock outline")
+					reason: .lockOutlineAuthPrompt(title: outline.title ?? .outlineControlLabel)
 				)
 
 				outline.load()
@@ -356,7 +356,7 @@ extension MainCoordinator {
 		Task {
 			do {
 				try await LockSessionManager.shared.authenticate(
-					reason: String(localized: "Remove lock from \(outline.title ?? "Outline")", comment: "Auth prompt: Remove lock")
+					reason: .removeLockAuthPrompt(title: outline.title ?? .outlineControlLabel)
 				)
 
 				outline.load()

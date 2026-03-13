@@ -36,41 +36,6 @@
         }
       }
     },
-    "Authentication failed." : {
-      "comment" : "Error: Authentication failed",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Authentifizierung fehlgeschlagen."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Authentication failed."
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Authentication failed."
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Authentication failed."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "认证失败。"
-          }
-        }
-      }
-    },
     "button.text.actual-size" : {
       "comment" : "View Action: Actual Size",
       "localizations" : {
@@ -10376,6 +10341,41 @@
         }
       }
     },
+    "label.text.authentication-failed" : {
+      "comment" : "Error: Authentication failed.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentifizierung fehlgeschlagen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentication failed."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentication failed."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentication failed."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "认证失败。"
+          }
+        }
+      }
+    },
     "label.text.backlinks" : {
       "comment" : "Label: Backlinks",
       "localizations" : {
@@ -12176,6 +12176,111 @@
         }
       }
     },
+    "label.text.keychain-delete-failed-%d" : {
+      "comment" : "Error: Keychain delete failed: <Status>",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüsselbund-Löschung fehlgeschlagen: %lld"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain delete failed: %lld"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain delete failed: %lld"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain delete failed: %lld"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "钥匙串删除失败：%lld"
+          }
+        }
+      }
+    },
+    "label.text.keychain-read-failed-%d" : {
+      "comment" : "Error: Keychain read failed: <Status>",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüsselbund-Lesung fehlgeschlagen: %lld"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain read failed: %lld"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain read failed: %lld"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain read failed: %lld"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "钥匙串读取失败：%lld"
+          }
+        }
+      }
+    },
+    "label.text.keychain-write-failed-%d" : {
+      "comment" : "Error: Keychain write failed: <Status>",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüsselbund-Schreibung fehlgeschlagen: %lld"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain write failed: %lld"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain write failed: %lld"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keychain write failed: %lld"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "钥匙串写入失败：%lld"
+          }
+        }
+      }
+    },
     "label.text.level" : {
       "comment" : "Level",
       "localizations" : {
@@ -12277,6 +12382,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "链接…"
+          }
+        }
+      }
+    },
+    "label.text.lock-outline-auth-prompt-%@" : {
+      "comment" : "Auth prompt: Lock <Outline Title>",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ sperren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock %@"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "锁定%@"
           }
         }
       }
@@ -12592,6 +12732,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "新建主窗口"
+          }
+        }
+      }
+    },
+    "label.text.no-key-found" : {
+      "comment" : "Error: No encryption key found for this outline.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Verschlüsselungsschlüssel für diese Gliederung gefunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No encryption key found for this outline."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No encryption key found for this outline."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No encryption key found for this outline."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到此大纲的加密密钥。"
           }
         }
       }
@@ -13764,6 +13939,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "您确定要移除 iCloud 账户吗？该账户中的所有文档都将从该电脑上移除。"
+          }
+        }
+      }
+    },
+    "label.text.remove-lock-auth-prompt-%@" : {
+      "comment" : "Auth prompt: Remove lock from <Outline Title>",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sperre von %@ entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove lock from %@"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove lock from %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove lock from %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除%@的锁定"
           }
         }
       }
@@ -14993,6 +15203,41 @@
         }
       }
     },
+    "label.text.unlock-outline-auth-prompt-%@" : {
+      "comment" : "Auth prompt: Unlock <Outline Title>",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ entsperren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock %@"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解锁%@"
+          }
+        }
+      }
+    },
     "label.text.updated" : {
       "comment" : "Label: Updated\nUpdated",
       "localizations" : {
@@ -15204,76 +15449,6 @@
         }
       }
     },
-    "Lock %@" : {
-      "comment" : "Auth prompt: Lock outline",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ sperren"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lock %@"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lock %@"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lock %@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "锁定%@"
-          }
-        }
-      }
-    },
-    "No encryption key found for this outline." : {
-      "comment" : "Error: No encryption key found",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kein Verschlüsselungsschlüssel für diese Gliederung gefunden."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No encryption key found for this outline."
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No encryption key found for this outline."
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No encryption key found for this outline."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未找到此大纲的加密密钥。"
-          }
-        }
-      }
-    },
     "outline.action.collapse-parent-row" : {
       "comment" : "Outline Action: Collapse Parent Row",
       "localizations" : {
@@ -15305,76 +15480,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "收起父级行"
-          }
-        }
-      }
-    },
-    "Remove lock from %@" : {
-      "comment" : "Auth prompt: Remove lock",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sperre von %@ entfernen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove lock from %@"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove lock from %@"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove lock from %@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "移除%@的锁定"
-          }
-        }
-      }
-    },
-    "Unlock %@" : {
-      "comment" : "Auth prompt: Unlock outline",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ entsperren"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlock %@"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlock %@"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlock %@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "解锁%@"
           }
         }
       }
