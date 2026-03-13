@@ -66,7 +66,7 @@ class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 		for url in markdownURLs {
 			Task { @MainActor in
 				if let document = try? await account.importMarkdown(url, defaults: AppDefaults.shared.outlineDefaults, tags: nil) {
-					DocumentIndexer.updateIndex(forDocument: document)
+					DocumentIndexer.updateIndex(for: document)
 					let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 					activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, document: document).userInfo]
 					UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
@@ -78,7 +78,7 @@ class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 		for url in opmlURLs {
 			Task { @MainActor in
 				if let document = try? await account.importOPML(url, tags: nil) {
-					DocumentIndexer.updateIndex(forDocument: document)
+					DocumentIndexer.updateIndex(for: document)
 					let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 					activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, document: document).userInfo]
 					UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)

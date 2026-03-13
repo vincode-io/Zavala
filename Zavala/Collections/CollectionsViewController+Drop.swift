@@ -69,7 +69,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 					guard let markdownData else { return }
 					Task { @MainActor in
 						if let document = try? await account.importMarkdown(markdownData, defaults: AppDefaults.shared.outlineDefaults, tags: tags) {
-							DocumentIndexer.updateIndex(forDocument: document)
+							DocumentIndexer.updateIndex(for: document)
 						}
 					}
 				}
@@ -78,7 +78,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 					guard let opmlData else { return }
 					Task { @MainActor in
 						if let document = try? await account.importOPML(opmlData, tags: tags) {
-							DocumentIndexer.updateIndex(forDocument: document)
+							DocumentIndexer.updateIndex(for: document)
 						}
 					}
 				}

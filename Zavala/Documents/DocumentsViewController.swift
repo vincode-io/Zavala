@@ -328,7 +328,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 					await loadDocuments(animated: true)
 					openDocument(document, animated: true)
 
-					DocumentIndexer.updateIndex(forDocument: document)
+					DocumentIndexer.updateIndex(for: document)
 				} catch {
 					self.presentError(title: .importFailedTitle, message: error.localizedDescription)
 				}
@@ -351,7 +351,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 					await loadDocuments(animated: true)
 					openDocument(document, animated: true)
 					
-					DocumentIndexer.updateIndex(forDocument: document)
+					DocumentIndexer.updateIndex(for: document)
 				} catch {
 					self.presentError(title: .importFailedTitle, message: error.localizedDescription)
 				}

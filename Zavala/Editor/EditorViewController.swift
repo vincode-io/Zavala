@@ -3752,7 +3752,7 @@ private extension EditorViewController {
 
 	func updateSpotlightIndex(with outline: Outline) {
 		outline.load()
-		DocumentIndexer.updateIndex(forDocument: .outline(outline))
+		DocumentIndexer.updateIndex(for: .outline(outline))
 		Task {
 			await outline.unload()
 		}

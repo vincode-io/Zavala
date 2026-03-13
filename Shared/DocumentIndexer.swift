@@ -18,7 +18,7 @@ class DocumentIndexer {
 		NotificationCenter.default.addObserver(self, selector: #selector(documentDidChangeBySync(_:)), name: .DocumentDidChangeBySync, object: nil)
 	}
 	
-	static func updateIndex(forDocument document: Document) {
+	static func updateIndex(for document: Document) {
 		let documentIndexAttributes = DocumentIndexAttributes(document: document)
 		CSSearchableIndex.default().indexSearchableItems([documentIndexAttributes.searchableItem])
 	}
@@ -36,7 +36,7 @@ private extension DocumentIndexer {
 
 	@objc func documentDidChangeBySync(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
-		Self.updateIndex(forDocument: document)
+		Self.updateIndex(for: document)
 	}
 	
 }
