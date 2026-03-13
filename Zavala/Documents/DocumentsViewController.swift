@@ -923,7 +923,7 @@ private extension DocumentsViewController {
 					if LockSessionManager.shared.isUnlocked(outline.id) {
 						menuItems.append(lockNowAction(outlines: outlines))
 					}
-				} else if !outline.iCollaborating {
+				} else if !outline.isCollaborating {
 					menuItems.append(addLockAction(outline: outline))
 				}
 			} else if outlines.contains(where: { $0.isLocked == true && LockSessionManager.shared.isUnlocked($0.id) }) {

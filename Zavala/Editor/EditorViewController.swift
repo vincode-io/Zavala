@@ -1071,7 +1071,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				}
 				outlineActions.append(lockNowAction)
 			}
-		} else if let outline, outline.iCollaborating != true {
+		} else if let outline, outline.isCollaborating != true {
 			let addLockAction = UIAction(title: .addLockControlLabel, image: .lock) { _ in
 				self.delegate?.addLock(self, outline: outline)
 			}

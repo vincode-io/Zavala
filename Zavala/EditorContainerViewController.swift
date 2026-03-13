@@ -236,7 +236,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isOutlineFunctionsUnavailable
 		case .addLock:
-			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true && editorViewController?.outline?.iCollaborating != true
+			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true && editorViewController?.outline?.isCollaborating != true
 		case .removeLock:
 			if let outline = editorViewController?.outline {
 				return outline.isLocked == true && LockSessionManager.shared.isUnlocked(outline.id)

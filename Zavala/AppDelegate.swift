@@ -637,7 +637,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 
 		let outline = mainCoordinator?.editorViewController?.outline
 		let isLocked = outline?.isLocked == true
-		let isCollaborating = outline?.iCollaborating == true
+		let isCollaborating = outline?.isCollaborating == true
 
 		var outlineFileMenuChildren = [UIMenuElement]()
 		outlineFileMenuChildren.append(showGetInfoCommand)

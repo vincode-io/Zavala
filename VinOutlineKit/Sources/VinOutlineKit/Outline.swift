@@ -468,7 +468,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return (title == nil || title?.isEmpty ?? true) && rows.isEmpty
 	}
 	
-	public var iCollaborating: Bool {
+	public var isCollaborating: Bool {
 		return cloudKitShareRecord != nil
 	}
 	

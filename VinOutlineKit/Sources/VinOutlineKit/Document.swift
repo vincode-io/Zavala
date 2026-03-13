@@ -127,11 +127,20 @@ public enum Document: Equatable, Hashable {
 			return true
 		}
 	}
-	
+
+	public var isLocked: Bool {
+		switch self {
+		case .outline(let outline):
+			return outline.isLocked ?? false
+		case .dummy:
+			return false
+		}
+	}
+
 	public var isCollaborating: Bool {
 		switch self {
 		case .outline(let outline):
-			return outline.iCollaborating
+			return outline.isCollaborating
 		case .dummy:
 			return false
 		}
