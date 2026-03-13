@@ -450,6 +450,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(lockSessionDidOpen(_:)), name: .LockSessionDidOpen, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(lockSessionDidClose(_:)), name: .LockSessionDidClose, object: nil)
 		
 		Task {
@@ -1172,10 +1173,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		collectionView.isHidden = true
 
-		let lockedView = EditorLockedOutlineView(outline: outline) { [weak self] in
-			self?.dismissLockedView()
-			self?.updateUI()
-		}
+		let lockedView = EditorLockedOutlineView(outline: outline)
 		
 		let hostingController = UIHostingController(rootView: lockedView)
 		hostingController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -1208,6 +1206,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	// MARK: - Lock Session
+
+	@objc private func lockSessionDidOpen(_ notification: Notification) {
+		dismissLockedView()
+		updateUI()
+	}
 
 	@objc private func lockSessionDidClose(_ notification: Notification) {
 		guard let affectedIDs = notification.object as? Set<EntityID>,

@@ -8,7 +8,6 @@ import VinOutlineKit
 struct EditorLockedOutlineView: View {
 
 	let outline: Outline
-	let onAuthenticated: () -> Void
 
 	@State private var isAuthenticating = false
 	@State private var errorMessage: String?
@@ -66,7 +65,6 @@ struct EditorLockedOutlineView: View {
 		Task { @MainActor in
 			do {
 				try await LockSessionManager.shared.unlockOutline(outline)
-				onAuthenticated()
 			} catch {
 				errorMessage = error.localizedDescription
 			}
