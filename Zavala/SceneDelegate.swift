@@ -89,6 +89,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
 	func sceneWillResignActive(_ scene: UIScene) {
 		mainSplitViewController.checkPointOutline()
+		mainSplitViewController.showLockedContentScreen()
+	}
+
+	func sceneDidBecomeActive(_ scene: UIScene) {
+		mainSplitViewController.removeLockedContentScreen()
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {

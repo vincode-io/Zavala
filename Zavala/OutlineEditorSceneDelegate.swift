@@ -87,6 +87,11 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	func sceneWillResignActive(_ scene: UIScene) {
 		editorContainerViewController.checkPointOutline()
+		editorContainerViewController.showLockedContentScreen()
+	}
+
+	func sceneDidBecomeActive(_ scene: UIScene) {
+		editorContainerViewController.removeLockedContentScreen()
 	}
 	
 	func stateRestorationActivity(for scene: UIScene) -> NSUserActivity? {
@@ -206,6 +211,5 @@ private extension OutlineEditorSceneDelegate {
 			}
 		}
 	}
-	
 
 }

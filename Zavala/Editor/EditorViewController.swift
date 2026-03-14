@@ -357,6 +357,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private lazy var transition = ImageTransition(delegate: self)
 	private var imageBlocker: UIView?
 	private var lockedHostingController: UIHostingController<EditorLockedOutlineView>?
+	private var lockedContentScreen: UIView?
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -1204,6 +1205,40 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		isShowingLockedView = false
 		collectionView.isHidden = false
+	}
+
+	// MARK: - Locked Content Screen
+
+	func showLockedContentScreen() {
+		guard lockedContentScreen == nil,
+			  let outline,
+			  outline.isLocked == true,
+			  LockSessionManager.shared.isUnlocked(outline.id) else { return }
+
+		let overlay = UIView(frame: view.bounds)
+		overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+		overlay.backgroundColor = .systemBackground
+
+		let lockImage = UIImageView(image: UIImage(systemName: "lock.fill"))
+		lockImage.tintColor = .secondaryLabel
+		lockImage.contentMode = .scaleAspectFit
+		lockImage.translatesAutoresizingMaskIntoConstraints = false
+		overlay.addSubview(lockImage)
+
+		NSLayoutConstraint.activate([
+			lockImage.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
+			lockImage.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
+			lockImage.widthAnchor.constraint(equalToConstant: 48),
+			lockImage.heightAnchor.constraint(equalToConstant: 48),
+		])
+
+		view.addSubview(overlay)
+		lockedContentScreen = overlay
+	}
+
+	func removeLockedContentScreen() {
+		lockedContentScreen?.removeFromSuperview()
+		lockedContentScreen = nil
 	}
 
 	// MARK: - Lock Session

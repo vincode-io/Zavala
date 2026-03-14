@@ -315,6 +315,14 @@ extension MainCoordinator {
 		editorViewController?.checkPointOutline()
 	}
 
+	func showLockedContentScreen() {
+		editorViewController?.showLockedContentScreen()
+	}
+
+	func removeLockedContentScreen() {
+		editorViewController?.removeLockedContentScreen()
+	}
+
 	func addLock() {
 		guard let outline = editorViewController?.outline else { return }
 		addLock(outline: outline)
