@@ -1006,7 +1006,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		updateNavigationMenus()
 		collectionView.reloadData()
-		updateUI()
 
 		if outline.isLocked == true && !LockSessionManager.shared.isUnlocked(outline.id) {
 			showLockedView(outline: outline)
@@ -1020,8 +1019,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			}
 			return
 		}
+
+		updateUI()
 	}
-	
+
 	func edit(isNew: Bool = false, selectRow: EntityID? = nil) {
 		guard !isNew else {
 			moveCursorToTitleOnNew()
