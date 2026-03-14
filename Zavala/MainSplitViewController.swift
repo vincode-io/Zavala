@@ -1354,7 +1354,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 
 				item.itemMenu = UIMenu(title: "", children: [turnFilterOnMenu, filterOptionsMenu])
 				
-				return !UIResponder.valid(action: .toggleFilterOn)
+				return isOutlineFunctionsUnavailable
 			}
 			item.image = .filterInactive
 			item.label = .filterControlLabel
@@ -1370,7 +1370,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				if let menu = self.editorViewController?.buildMoreMenu() {
 					item.itemMenu = menu
 				}
-				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true || self.editorViewController?.isShowingLockedView ?? true
+				return isOutlineFunctionsUnavailable
 			}
 			item.image = .ellipsis
 			item.label = .moreControlLabel

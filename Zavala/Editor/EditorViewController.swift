@@ -129,7 +129,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	weak var delegate: EditorDelegate?
 	
 	var isOutlineFunctionsUnavailable: Bool {
-		return outline == nil
+		return outline == nil || isShowingLockedView
 	}
 	
 	var isFilterOn: Bool {

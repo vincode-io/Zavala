@@ -647,7 +647,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 
 				item.itemMenu = UIMenu(title: "", children: [turnFilterOnMenu, filterOptionsMenu])
 				
-				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
+				return isOutlineFunctionsUnavailable
 			}
 			item.image = .filterInactive
 			item.label = .filterControlLabel
@@ -663,7 +663,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				if let menu = self.editorViewController?.buildMoreMenu() {
 					item.itemMenu = menu
 				}
-				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
+				return isOutlineFunctionsUnavailable
 			}
 			item.image = .ellipsis
 			item.label = .moreControlLabel
