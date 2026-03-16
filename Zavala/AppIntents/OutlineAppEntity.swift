@@ -43,6 +43,9 @@ struct OutlineAppEntity: AppEntity {
     @Property(title: LocalizedStringResource("label.text.url", comment: "URL"))
     var url: URL?
 
+	@Property(title: LocalizedStringResource("label.text.account-type", comment: "Account Type"))
+	var accountType: AccountTypeAppEnum?
+
     var displayRepresentation: DisplayRepresentation {
 		DisplayRepresentation(stringLiteral: title ?? .noTitleLabel)
     }
@@ -62,6 +65,12 @@ struct OutlineAppEntity: AppEntity {
 		self.created = outline.created
 		self.updated = outline.updated
 		self.url = outline.id.url
+		
+		if outline.account?.type == .cloudKit {
+			self.accountType = .iCloud
+		} else {
+			self.accountType = .onMyDevice
+		}
 	}
 	
 }
