@@ -19,6 +19,9 @@ struct RowAppEntity: AppEntity {
 	@Property(title: LocalizedStringResource("label.text.entity-id", comment: "Entity ID"))
 	var entityID: EntityID
 
+	@Property(title: LocalizedStringResource("label.text.outline", comment: "Outline"))
+	var outline: OutlineAppEntity?
+
     @Property(title: LocalizedStringResource("label.text.topic", comment: "topic"))
     var topic: String?
 
@@ -48,6 +51,10 @@ struct RowAppEntity: AppEntity {
 	init(row: Row) {
 		self.id = row.entityID
 		self.entityID = self.id
+		let documentEntityID = EntityID.document(row.entityID.accountID, row.entityID.documentUUID)
+		if let outline = appDelegate.accountManager.findDocument(documentEntityID)?.outline {
+			self.outline = OutlineAppEntity(outline: outline)
+		}
 		self.topic = row.topicMarkdown(type: .markdown)
 		self.note = row.noteMarkdown(type: .markdown)
 		self.complete = row.isComplete

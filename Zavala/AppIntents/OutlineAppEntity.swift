@@ -9,7 +9,7 @@ import Foundation
 import AppIntents
 import VinOutlineKit
 
-struct OutlineAppEntity: AppEntity {
+struct OutlineAppEntity: AppEntity, Equatable {
 	static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.outline", comment: "Outline"))
 	static let defaultQuery = FindOutlinesEntityQuery()
 	
@@ -52,6 +52,10 @@ struct OutlineAppEntity: AppEntity {
 
     init() {
     }
+
+	static func == (lhs: OutlineAppEntity, rhs: OutlineAppEntity) -> Bool {
+		lhs.id == rhs.id
+	}
 
 	@MainActor
 	init(outline: Outline) {
