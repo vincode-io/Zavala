@@ -77,7 +77,7 @@ public enum Document: Equatable, Hashable {
 	public var formattedPlainText: String {
 		switch self {
 		case .outline(let outline):
-			return outline.markdownList()
+			return outline.markdownList(format: false)
 		case .dummy:
 			return ""
 		}

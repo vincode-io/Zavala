@@ -199,7 +199,7 @@ extension MainCoordinator {
 		var imageDirectoryURLs = [URL]()
 		
 		for outline in outlines {
-			if let data = outline.markdownList(useSidecar: true).data(using: .utf8) {
+			if let data = outline.markdownList(format: true, useSidecar: true).data(using: .utf8) {
 				exports.append((data: data, filename: outline.filename(type: .markdown)))
 				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
 			}

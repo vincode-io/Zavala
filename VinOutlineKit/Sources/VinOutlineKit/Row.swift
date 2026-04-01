@@ -604,7 +604,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	}
 	
 	public func markdownList(numberingStyle: Outline.NumberingStyle) -> String {
-		let visitor = MarkdownListVisitor(useAltLinks: false, useSidecar: false, numberingStyle: numberingStyle)
+		let visitor = MarkdownListVisitor(format: false, useAltLinks: false, useSidecar: false, numberingStyle: numberingStyle)
 		visit(visitor: visitor.visitor)
 		return visitor.markdown
 	}

@@ -65,7 +65,7 @@ struct ExportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
 				exportFile = IntentFile(data: markdownData, filename: outline.filename(type: .markdown), type: .markdown)
 			}
 		case .markdownList:
-			if let markdownData = outline.markdownList(useAltLinks: useAltLinks).data(using: .utf8) {
+			if let markdownData = outline.markdownList(format: true, useAltLinks: useAltLinks).data(using: .utf8) {
 				exportFile = IntentFile(data: markdownData, filename: outline.filename(type: .markdown), type: .markdown)
 			}
 		case .pdfDoc:
