@@ -69,14 +69,20 @@ Relative File Links, which will point linked Outline URL’s to a relative file
 name. This can be useful if you are exporting multiple, linked Outlines so that
 they can be edited in another editor.
 
+### Find Outline
+
+Find one or more Outlines using a specified criteria. Results can also be
+sorted. This is often the first step in a Zavala Shortcut.
+
 ### Get Images for Outline
 
 Gets all the Images embedded in the specified Outline.
 
-### Get Outlines
+### Get Outlines - Deprecated
 
 Gets one or more Outlines using the specified criteria. This is often the first
-step in a Zavala Shortcut.
+step in a Zavala Shortcut. This Shortcut has been deprecated and will be
+removed in a future release.
 
 ### Import
 
@@ -107,9 +113,14 @@ Copy Rows in or between Outlines.
 
 Update Row properties.
 
-### Get Rows
+### Find Row
 
-Get one or more Rows using criterial.
+Finds one or more Rows using criteria. The results can also be sorted.
+
+### Get Rows - Deprecated
+
+Get one or more Rows using criterial. This Shortcut has been deprecated and
+will be removed in a future release.
 
 ### Move Rows
 

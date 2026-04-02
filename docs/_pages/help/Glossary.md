@@ -42,6 +42,11 @@ collection in the Collections View.
 The right-most column of the Main Window. The editor shows the currently
 selected Outline and allows you to edit its content and properties.
 
+## Locking
+
+Encrypts an Outline and prevents access to the Outline until a biometric key or
+password is provided.
+
 ## Main Window
 
 This is the first window you see when you start Zavala for the first time. It

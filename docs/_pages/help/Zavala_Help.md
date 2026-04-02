@@ -35,6 +35,7 @@ platforms and I will try to call it out when they are different.
 	* [Exporting Outlines](Exporting_Outlines.md)
 	* [Task Management](Task_Management.md)
 	* [Reusing an Outline](Reusing_an_Outline.md)
+	* [Locking an Outline](Locking_an_Outline.md)
 	* [iCloud Sync](iCloud_Sync.md)
 	* [Collaborating on an Outline](Collaborating_on_an_Outline.md)
 * Shortcuts
