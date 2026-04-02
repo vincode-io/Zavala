@@ -8,6 +8,8 @@ header:
 ---
 
 * Use on a Mac, iPhone, and/or iPad for free and forever.
+* Import or export OPML or Markdown documents.
+* Lock and encrypt Outlines for security and privacy.
 * Sync Outlines using iCloud with full offline editing.
 * Share Outlines using iCloud so that you can collaborate on an Outline with one or more other Zavala users in realtime.
 * Embed images in your Outline text fields.
