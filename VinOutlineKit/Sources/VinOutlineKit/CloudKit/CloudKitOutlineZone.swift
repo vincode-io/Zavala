@@ -111,7 +111,7 @@ final class CloudKitOutlineZone: VCKZone {
 private extension CloudKitOutlineZone {
 
 	func saveZoneVersionRecord() async throws {
-		if let existingRecord = try await fetch(externalID: zoneVersionRecordName) {
+		if let existingRecord = try? await fetch(externalID: zoneVersionRecordName) {
 			existingRecord[VersionRecord.Fields.versionNumber] = currentZoneVersionNumber
 			try await save(existingRecord)
 			return
