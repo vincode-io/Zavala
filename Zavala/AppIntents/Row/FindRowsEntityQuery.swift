@@ -69,6 +69,9 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 			GreaterThanComparator { RowComparator.levelGreaterThan($0) }
 			GreaterThanOrEqualToComparator { RowComparator.levelGreaterThanOrEqual($0) }
 		}
+		Property(\RowAppEntity.$outline) {
+			EqualToComparator { RowComparator.outlineEquals($0) }
+		}
 		Property(\RowAppEntity.$url) {
 			EqualToComparator { RowComparator.urlEquals($0) }
 		}
@@ -95,6 +98,22 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 			if let entity = await MainActor.run(body: { findRowByURL(url, comparators: comparators, mode: mode) }) {
 				entities.append(entity)
 			}
+		} else if let outlineEntityID = comparators.outlineEntityIDValue {
+			// Use findDocument for direct lookup instead of scanning every outline
+			await MainActor.run {
+				guard let outline = appDelegate.accountManager.findDocument(outlineEntityID)?.outline,
+					  outline.isLocked != true else { return }
+				outline.load()
+				let otherComparators = comparators.filter { !$0.isOutlineEntityIDComparator }
+				if otherComparators.isEmpty {
+					collectAllRows(from: outline.rows, into: &entities)
+				} else {
+					collectMatchingRows(from: outline.rows, comparators: otherComparators, mode: mode, into: &entities)
+				}
+			}
+			if let outline = await MainActor.run(body: { appDelegate.accountManager.findDocument(outlineEntityID)?.outline }) {
+				await outline.unload()
+			}
 		} else {
 			let documents = await MainActor.run {
 				appDelegate.accountManager.documents
@@ -102,8 +121,9 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 
 			for document in documents {
 				await MainActor.run {
-					guard let outline = document.outline, outline.isLocked != true else { return }
+					guard let outline = document.outline else { return }
 					outline.load()
+					guard outline.isLocked != true else { return }
 					collectMatchingRows(from: outline.rows, comparators: comparators, mode: mode, into: &entities)
 				}
 				if let outline = await document.outline {
@@ -176,6 +196,14 @@ private extension FindRowsEntityQuery {
 	}
 
 	@MainActor
+	func collectAllRows(from rows: [Row], into result: inout [RowAppEntity]) {
+		for row in rows {
+			result.append(RowAppEntity(row: row))
+			collectAllRows(from: row.rows, into: &result)
+		}
+	}
+
+	@MainActor
 	func collectMatchingRows(from rows: [Row], comparators: [RowComparator], mode: ComparatorMode, into result: inout [RowAppEntity]) {
 		for row in rows {
 			let entity = RowAppEntity(row: row)
@@ -199,6 +227,15 @@ private extension FindRowsEntityQuery {
 // MARK: - RowComparator
 
 private extension [RowComparator] {
+
+	var outlineEntityIDValue: EntityID? {
+		for comparator in self {
+			if case .outlineEquals(let outline) = comparator {
+				return outline?.id
+			}
+		}
+		return nil
+	}
 
 	var urlValue: URL? {
 		for comparator in self {
@@ -227,7 +264,13 @@ enum RowComparator: Sendable {
 	case levelLessThanOrEqual(Int?)
 	case levelGreaterThan(Int?)
 	case levelGreaterThanOrEqual(Int?)
+	case outlineEquals(OutlineAppEntity?)
 	case urlEquals(URL?)
+
+	var isOutlineEntityIDComparator: Bool {
+		if case .outlineEquals = self { return true }
+		return false
+	}
 
 	var isURLComparator: Bool {
 		if case .urlEquals = self { return true }
@@ -270,6 +313,8 @@ enum RowComparator: Sendable {
 		case .levelGreaterThanOrEqual(let value):
 			guard let level = entity.level, let value else { return false }
 			return level >= value
+		case .outlineEquals(let value):
+			return entity.outline?.id == value?.id
 		case .urlEquals(let value):
 			return entity.url == value
 		}

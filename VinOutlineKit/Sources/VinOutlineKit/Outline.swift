@@ -1068,12 +1068,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return md
 	}
 	
-	public func markdownList(useAltLinks: Bool = false, useSidecar: Bool = false) -> String {
+	public func markdownList(format: Bool, useAltLinks: Bool = false, useSidecar: Bool = false) -> String {
 		load()
 		
 		var md = "# \(title ?? "")\n\n"
 		rows.forEach {
-			let visitor = MarkdownListVisitor(useAltLinks: useAltLinks, useSidecar: useSidecar, numberingStyle: numberingStyle ?? .none)
+			let visitor = MarkdownListVisitor(format: format, useAltLinks: useAltLinks, useSidecar: useSidecar, numberingStyle: numberingStyle ?? .none)
 			$0.visit(visitor: visitor.visitor)
 			md.append(visitor.markdown)
 			md.append("\n")

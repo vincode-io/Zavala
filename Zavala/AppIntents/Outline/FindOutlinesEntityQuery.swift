@@ -77,6 +77,10 @@ struct FindOutlinesEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 		Property(\OutlineAppEntity.$tags) {
 			ContainsComparator { OutlineComparator.tagsContain($0) }
 		}
+		Property(\OutlineAppEntity.$accountType) {
+			EqualToComparator { OutlineComparator.accountTypeEquals($0) }
+			NotEqualToComparator { OutlineComparator.accountTypeNotEquals($0) }
+		}
 		Property(\OutlineAppEntity.$url) {
 			EqualToComparator { OutlineComparator.urlEquals($0) }
 		}
@@ -166,6 +170,8 @@ enum OutlineComparator: Sendable {
 	case updatedBefore(Date)
 	case updatedAfter(Date)
 	case tagsContain(String)
+	case accountTypeEquals(AccountTypeAppEnum?)
+	case accountTypeNotEquals(AccountTypeAppEnum?)
 	case urlEquals(URL?)
 
 	@MainActor
@@ -209,6 +215,18 @@ enum OutlineComparator: Sendable {
 			return updated > date
 		case .tagsContain(let value):
 			return outline.tags.contains { $0.name.localizedStandardContains(value) }
+		case .accountTypeEquals(let value):
+			if outline.account?.type == .cloudKit {
+				return value == .iCloud
+			} else {
+				return value == .onMyDevice
+			}
+		case .accountTypeNotEquals(let value):
+			if outline.account?.type == .cloudKit {
+				return value != .iCloud
+			} else {
+				return value != .onMyDevice
+			}
 		case .urlEquals(let value):
 			return outline.id.url == value
 		}

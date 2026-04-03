@@ -9,7 +9,7 @@ import Foundation
 import AppIntents
 import VinOutlineKit
 
-struct OutlineAppEntity: AppEntity {
+struct OutlineAppEntity: AppEntity, Equatable {
 	static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.outline", comment: "Outline"))
 	static let defaultQuery = FindOutlinesEntityQuery()
 	
@@ -43,12 +43,19 @@ struct OutlineAppEntity: AppEntity {
     @Property(title: LocalizedStringResource("label.text.url", comment: "URL"))
     var url: URL?
 
+	@Property(title: LocalizedStringResource("label.text.account-type", comment: "Account Type"))
+	var accountType: AccountTypeAppEnum?
+
     var displayRepresentation: DisplayRepresentation {
 		DisplayRepresentation(stringLiteral: title ?? .noTitleLabel)
     }
 
     init() {
     }
+
+	static func == (lhs: OutlineAppEntity, rhs: OutlineAppEntity) -> Bool {
+		lhs.id == rhs.id
+	}
 
 	@MainActor
 	init(outline: Outline) {
@@ -62,6 +69,12 @@ struct OutlineAppEntity: AppEntity {
 		self.created = outline.created
 		self.updated = outline.updated
 		self.url = outline.id.url
+		
+		if outline.account?.type == .cloudKit {
+			self.accountType = .iCloud
+		} else {
+			self.accountType = .onMyDevice
+		}
 	}
 	
 }

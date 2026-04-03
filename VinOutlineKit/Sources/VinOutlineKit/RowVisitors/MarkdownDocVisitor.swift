@@ -47,7 +47,7 @@ final class MarkdownDocVisitor {
 					markdown.append("\n")
 				}
 
-				let listVisitor = MarkdownListVisitor(useAltLinks: useAltLinks, useSidecar: useSidecar, numberingStyle: .none)
+				let listVisitor = MarkdownListVisitor(format: true, useAltLinks: useAltLinks, useSidecar: useSidecar, numberingStyle: .none)
 				markdown.append("\n")
 				visited.visit(visitor: listVisitor.visitor)
 				markdown.append(listVisitor.markdown)

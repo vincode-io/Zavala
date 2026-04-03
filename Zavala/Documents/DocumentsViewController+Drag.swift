@@ -19,7 +19,7 @@ extension DocumentsViewController: UICollectionViewDragDelegate {
 
 		switch document {
 		case .outline(let outline):
-			let markdownListData = outline.markdownList().data(using: .utf8)
+			let markdownListData = outline.markdownList(format: false).data(using: .utf8)
 			itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
 				completion(markdownListData, nil)
 				return nil
