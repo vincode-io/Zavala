@@ -1204,7 +1204,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		lockedHostingController = nil
 
 		isShowingLockedView = false
-		collectionView.isHidden = false
+		collectionView?.isHidden = false
 	}
 
 	// MARK: - Locked Content Screen
