@@ -63,7 +63,6 @@ struct RowAppEntity: AppEntity {
 		self.complete = row.isComplete
 		self.expanded = row.isExpanded
 		self.level = row.trueLevel
-		self.rowOrder = row.parent?.rows.firstIndex(of: row)
 		self.url = row.entityID.url
 	}
 
