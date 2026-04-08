@@ -37,6 +37,9 @@ struct RowAppEntity: AppEntity {
     @Property(title: LocalizedStringResource("label.text.level", comment: "Level"))
     var level: Int?
 
+	@Property(title: LocalizedStringResource("label.text.row-order", comment: "Row Order"))
+	var rowOrder: Int?
+
 	@Property(title: LocalizedStringResource("label.text.url", comment: "URL"))
 	var url: URL?
 
@@ -60,6 +63,7 @@ struct RowAppEntity: AppEntity {
 		self.complete = row.isComplete
 		self.expanded = row.isExpanded
 		self.level = row.trueLevel
+		self.rowOrder = row.parent?.rows.firstIndex(of: row)
 		self.url = row.entityID.url
 	}
 

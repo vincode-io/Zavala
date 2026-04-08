@@ -78,6 +78,7 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 	}
 
 	nonisolated(unsafe) static var sortingOptions = SortingOptions {
+		SortableBy(\RowAppEntity.$rowOrder)
 		SortableBy(\RowAppEntity.$topic)
 		SortableBy(\RowAppEntity.$complete)
 		SortableBy(\RowAppEntity.$level)
@@ -132,24 +133,36 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 			}
 		}
 
+		// Assign row order based on the collection order (outline order, top to bottom)
+		for (index, _) in entities.enumerated() {
+			entities[index].rowOrder = index
+		}
+
 		if let primarySort = sortedBy.first {
-			entities.sort { lhs, rhs in
-				let ascending = primarySort.order == .ascending
-				switch primarySort.by {
-				case \RowAppEntity.$topic:
-					let result = (lhs.topic ?? "").localizedCaseInsensitiveCompare(rhs.topic ?? "")
-					return ascending ? result == .orderedAscending : result == .orderedDescending
-				case \RowAppEntity.$complete:
-					let lhsVal = lhs.complete ?? false
-					let rhsVal = rhs.complete ?? false
-					if lhsVal == rhsVal { return false }
-					return ascending ? !lhsVal : lhsVal
-				case \RowAppEntity.$level:
-					let lhsLevel = lhs.level ?? 0
-					let rhsLevel = rhs.level ?? 0
-					return ascending ? lhsLevel < rhsLevel : lhsLevel > rhsLevel
-				default:
-					return false
+			switch primarySort.by {
+			case \RowAppEntity.$rowOrder:
+				if primarySort.order == .descending {
+					entities.reverse()
+				}
+			default:
+				entities.sort { lhs, rhs in
+					let ascending = primarySort.order == .ascending
+					switch primarySort.by {
+					case \RowAppEntity.$topic:
+						let result = (lhs.topic ?? "").localizedCaseInsensitiveCompare(rhs.topic ?? "")
+						return ascending ? result == .orderedAscending : result == .orderedDescending
+					case \RowAppEntity.$complete:
+						let lhsVal = lhs.complete ?? false
+						let rhsVal = rhs.complete ?? false
+						if lhsVal == rhsVal { return false }
+						return ascending ? !lhsVal : lhsVal
+					case \RowAppEntity.$level:
+						let lhsLevel = lhs.level ?? 0
+						let rhsLevel = rhs.level ?? 0
+						return ascending ? lhsLevel < rhsLevel : lhsLevel > rhsLevel
+					default:
+						return false
+					}
 				}
 			}
 		} else {

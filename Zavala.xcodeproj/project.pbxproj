@@ -657,12 +657,12 @@
 				51A6A2CF2C39E63B002AFEC1 /* AddOutlineTagAppIntent.swift */,
 				51A6A2D22C39E63B002AFEC1 /* EditOutlineAppIntent.swift */,
 				51A6A2D52C39E63B002AFEC1 /* ExportAppIntent.swift */,
+				51B49BAD2F6618B100FDFE62 /* FindOutlinesEntityQuery.swift */,
 				51A6A2DC2C39E63B002AFEC1 /* ImportAppIntent.swift */,
 				51A6A2D92C39E63B002AFEC1 /* GetImagesForOutlineAppIntent.swift */,
 				51A6A2DA2C39E63B002AFEC1 /* GetOutlinesAppIntent.swift */,
 				51A6A2E12C39E63B002AFEC1 /* RemoveOutlineAppIntent.swift */,
 				51A6A2E22C39E63B002AFEC1 /* RemoveOutlineTagAppIntent.swift */,
-				51B49BAD2F6618B100FDFE62 /* FindOutlinesEntityQuery.swift */,
 			);
 			path = Outline;
 			sourceTree = "<group>";
@@ -673,10 +673,10 @@
 				51A6A2D02C39E63B002AFEC1 /* AddRowsAppIntent.swift */,
 				51A6A2D12C39E63B002AFEC1 /* CopyRowsAppIntent.swift */,
 				51A6A2D32C39E63B002AFEC1 /* EditRowsAppIntent.swift */,
+				51B49BAF2F66EE3600FDFE62 /* FindRowsEntityQuery.swift */,
 				51A6A2DB2C39E63B002AFEC1 /* GetRowsAppIntent.swift */,
 				51A6A2DE2C39E63B002AFEC1 /* MoveRowsAppIntent.swift */,
 				51A6A2E32C39E63B002AFEC1 /* RemoveRowsAppIntent.swift */,
-				51B49BAF2F66EE3600FDFE62 /* FindRowsEntityQuery.swift */,
 			);
 			path = Row;
 			sourceTree = "<group>";
