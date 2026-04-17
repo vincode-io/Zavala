@@ -19,15 +19,15 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 
 		var results = [RowAppEntity]()
 
-		let (entities, outlines) = await MainActor.run { () -> ([RowAppEntity], Set<Outline>) in
+		let (entities, outlines) = await MainActor.run { () -> ([RowAppEntity], [Outline]) in
 			var entities = [RowAppEntity]()
-			var outlines = Set<Outline>()
+			var outlines = [Outline]()
 
 			for entityID in entityIDs {
 				guard let outline = appDelegate.accountManager.findDocument(entityID)?.outline,
 					  outline.isLocked != true else { continue }
 				outline.load()
-				outlines.insert(outline)
+				outlines.append(outline)
 				guard let row = outline.findRow(id: entityID.rowUUID) else { continue }
 				entities.append(RowAppEntity(row: row))
 			}
