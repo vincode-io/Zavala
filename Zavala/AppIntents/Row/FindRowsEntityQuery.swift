@@ -18,18 +18,27 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 		await resume()
 
 		var results = [RowAppEntity]()
-		for entityID in entityIDs {
-			let entity = await MainActor.run(body: { () -> RowAppEntity? in
+
+		let (entities, outlines) = await MainActor.run { () -> ([RowAppEntity], Set<Outline>) in
+			var entities = [RowAppEntity]()
+			var outlines = Set<Outline>()
+
+			for entityID in entityIDs {
 				guard let outline = appDelegate.accountManager.findDocument(entityID)?.outline,
-					  outline.isLocked != true else { return nil }
+					  outline.isLocked != true else { continue }
 				outline.load()
-				defer { Task { await outline.unload() } }
-				guard let row = outline.findRow(id: entityID.rowUUID) else { return nil }
-				return RowAppEntity(row: row)
-			})
-			if let entity {
-				results.append(entity)
+				outlines.insert(outline)
+				guard let row = outline.findRow(id: entityID.rowUUID) else { continue }
+				entities.append(RowAppEntity(row: row))
 			}
+
+			return (entities, outlines)
+		}
+
+		results = entities
+
+		for outline in outlines {
+			await outline.unload()
 		}
 
 		await suspend()
