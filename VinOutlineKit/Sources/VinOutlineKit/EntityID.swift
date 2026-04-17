@@ -8,7 +8,7 @@
 import Foundation
 import CoreTransferable
 
-public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable, Sendable, Transferable {
+public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable, Sendable {
 	case account(Int)
 	case document(Int, String) // Account, Document
 	case row(Int, String, String) // Account, Document, Row
@@ -414,12 +414,6 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable, Sen
 			try container.encode("tagDocuments", forKey: .type)
 			try container.encode(accountID, forKey: .accountID)
 			try container.encode(tagID, forKey: .tagID)
-		}
-	}
-
-	public static var transferRepresentation: some TransferRepresentation {
-		ProxyRepresentation { (entity: EntityID) in
-			entity.description
 		}
 	}
 
