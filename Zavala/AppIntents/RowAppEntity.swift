@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import CoreTransferable
 import AppIntents
 import VinOutlineKit
 
-struct RowAppEntity: AppEntity {
+struct RowAppEntity: AppEntity, Transferable {
     static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.row", comment: "Row"))
 	static let defaultQuery = FindRowsEntityQuery()
 
@@ -45,6 +46,12 @@ struct RowAppEntity: AppEntity {
 
 	var displayRepresentation: DisplayRepresentation {
 		DisplayRepresentation(stringLiteral: topic ?? "")
+	}
+
+	static var transferRepresentation: some TransferRepresentation {
+		ProxyRepresentation { entity in
+			entity.id.description
+		}
 	}
 
 	init() {

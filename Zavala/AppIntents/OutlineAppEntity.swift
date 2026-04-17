@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import CoreTransferable
 import AppIntents
 import VinOutlineKit
 
-struct OutlineAppEntity: AppEntity, Equatable {
+struct OutlineAppEntity: AppEntity, Equatable, Transferable {
 	static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.outline", comment: "Outline"))
 	static let defaultQuery = FindOutlinesEntityQuery()
 	
@@ -49,6 +50,12 @@ struct OutlineAppEntity: AppEntity, Equatable {
     var displayRepresentation: DisplayRepresentation {
 		DisplayRepresentation(stringLiteral: title ?? .noTitleLabel)
     }
+
+	static var transferRepresentation: some TransferRepresentation {
+		ProxyRepresentation { entity in
+			entity.id.description
+		}
+	}
 
     init() {
     }
