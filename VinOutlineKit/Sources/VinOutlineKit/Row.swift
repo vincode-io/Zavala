@@ -947,6 +947,8 @@ private extension Row {
 		
 		mutable.enumerateAttribute(.font, in: NSRange(location: 0, length: mutable.length), options: []) { value, range, _ in
 			guard let font = value as? UIFont else { return }
+			let monoFont = UIFont.monospacedSystemFont(ofSize: UIFont.systemFontSize, weight: .regular)
+			guard font.fontName == monoFont.fontName else { return }
 			if font.fontDescriptor.symbolicTraits.contains(.traitMonoSpace) {
 				mutable.addAttribute(.codeInline, value: true, range: range)
 			}
