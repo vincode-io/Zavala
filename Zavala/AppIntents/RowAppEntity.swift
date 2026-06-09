@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreTransferable
 import AppIntents
 import VinOutlineKit
 
@@ -36,6 +37,9 @@ struct RowAppEntity: AppEntity {
 
     @Property(title: LocalizedStringResource("label.text.level", comment: "Level"))
     var level: Int?
+
+	@Property(title: LocalizedStringResource("label.text.row-order", comment: "Row Order"))
+	var rowOrder: Int?
 
 	@Property(title: LocalizedStringResource("label.text.url", comment: "URL"))
 	var url: URL?

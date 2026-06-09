@@ -14364,6 +14364,41 @@
         }
       }
     },
+    "label.text.row-order" : {
+      "comment" : "Row Order",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeilenreihenfolge"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Row Order"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Row Order"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Row Order"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "行顺序"
+          }
+        }
+      }
+    },
     "label.text.row-spacing" : {
       "comment" : "Label: Row Spacing",
       "localizations" : {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreTransferable
 import AppIntents
 import VinOutlineKit
 

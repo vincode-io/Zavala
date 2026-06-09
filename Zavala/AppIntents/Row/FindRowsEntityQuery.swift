@@ -18,18 +18,27 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 		await resume()
 
 		var results = [RowAppEntity]()
-		for entityID in entityIDs {
-			let entity = await MainActor.run(body: { () -> RowAppEntity? in
+
+		let (entities, outlines) = await MainActor.run { () -> ([RowAppEntity], [Outline]) in
+			var entities = [RowAppEntity]()
+			var outlines = [Outline]()
+
+			for entityID in entityIDs {
 				guard let outline = appDelegate.accountManager.findDocument(entityID)?.outline,
-					  outline.isLocked != true else { return nil }
+					  outline.isLocked != true else { continue }
 				outline.load()
-				defer { Task { await outline.unload() } }
-				guard let row = outline.findRow(id: entityID.rowUUID) else { return nil }
-				return RowAppEntity(row: row)
-			})
-			if let entity {
-				results.append(entity)
+				outlines.append(outline)
+				guard let row = outline.findRow(id: entityID.rowUUID) else { continue }
+				entities.append(RowAppEntity(row: row))
 			}
+
+			return (entities, outlines)
+		}
+
+		results = entities
+
+		for outline in outlines {
+			await outline.unload()
 		}
 
 		await suspend()
@@ -78,6 +87,7 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 	}
 
 	nonisolated(unsafe) static var sortingOptions = SortingOptions {
+		SortableBy(\RowAppEntity.$rowOrder)
 		SortableBy(\RowAppEntity.$topic)
 		SortableBy(\RowAppEntity.$complete)
 		SortableBy(\RowAppEntity.$level)
@@ -132,24 +142,36 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 			}
 		}
 
+		// Assign row order based on the collection order (outline order, top to bottom)
+		for (index, _) in entities.enumerated() {
+			entities[index].rowOrder = index
+		}
+
 		if let primarySort = sortedBy.first {
-			entities.sort { lhs, rhs in
-				let ascending = primarySort.order == .ascending
-				switch primarySort.by {
-				case \RowAppEntity.$topic:
-					let result = (lhs.topic ?? "").localizedCaseInsensitiveCompare(rhs.topic ?? "")
-					return ascending ? result == .orderedAscending : result == .orderedDescending
-				case \RowAppEntity.$complete:
-					let lhsVal = lhs.complete ?? false
-					let rhsVal = rhs.complete ?? false
-					if lhsVal == rhsVal { return false }
-					return ascending ? !lhsVal : lhsVal
-				case \RowAppEntity.$level:
-					let lhsLevel = lhs.level ?? 0
-					let rhsLevel = rhs.level ?? 0
-					return ascending ? lhsLevel < rhsLevel : lhsLevel > rhsLevel
-				default:
-					return false
+			switch primarySort.by {
+			case \RowAppEntity.$rowOrder:
+				if primarySort.order == .descending {
+					entities.reverse()
+				}
+			default:
+				entities.sort { lhs, rhs in
+					let ascending = primarySort.order == .ascending
+					switch primarySort.by {
+					case \RowAppEntity.$topic:
+						let result = (lhs.topic ?? "").localizedCaseInsensitiveCompare(rhs.topic ?? "")
+						return ascending ? result == .orderedAscending : result == .orderedDescending
+					case \RowAppEntity.$complete:
+						let lhsVal = lhs.complete ?? false
+						let rhsVal = rhs.complete ?? false
+						if lhsVal == rhsVal { return false }
+						return ascending ? !lhsVal : lhsVal
+					case \RowAppEntity.$level:
+						let lhsLevel = lhs.level ?? 0
+						let rhsLevel = rhs.level ?? 0
+						return ascending ? lhsLevel < rhsLevel : lhsLevel > rhsLevel
+					default:
+						return false
+					}
 				}
 			}
 		} else {

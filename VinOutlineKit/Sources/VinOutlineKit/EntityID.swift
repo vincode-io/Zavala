@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreTransferable
 
 public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable, Sendable {
 	case account(Int)
