@@ -64,14 +64,14 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 				if (key == .codeInline || key == .font) && attributes[.codeInline] != nil {
 					if let baseFont = baseAttributes[.font] as? UIFont {
 						let size = baseFont.pointSize - 2
-						var monoFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
+						var monospacedSystemFont = UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
 						if let currentFont = newAttributes[.font] as? UIFont {
 							let traits = currentFont.fontDescriptor.symbolicTraits
-							if let descriptor = monoFont.fontDescriptor.withSymbolicTraits(traits) {
-								monoFont = UIFont(descriptor: descriptor, size: size)
+							if let descriptor = monospacedSystemFont.fontDescriptor.withSymbolicTraits(traits) {
+								monospacedSystemFont = UIFont(descriptor: descriptor, size: size)
 							}
 						}
-						newAttributes[.font] = monoFont
+						newAttributes[.font] = monospacedSystemFont
 						newAttributes[.codeInline] = true
 					}
 				} else if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = baseAttributes[.font] as? UIFont {
@@ -79,7 +79,14 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 					if charsInRange.containsEmoji || charsInRange.containsSymbols {
 						newAttributes[key] = oldFont.withSize(newFont.pointSize)
 					} else {
-						let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
+						// The monospacedSystemFont is a special monospaced font lets us know that this text used
+						// to be a code inline stretch, but is now being switched back to the defined font for this Topic or Note.
+						let monospacedSystemFont = UIFont.monospacedSystemFont(ofSize: UIFont.systemFontSize, weight: .regular)
+						let ufd = if oldFont.fontName == monospacedSystemFont.fontName {
+							newFont.fontDescriptor
+						} else {
+							oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
+						}
 						let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
 
 						if newFont.isValidFor(value: charsInRange) {
