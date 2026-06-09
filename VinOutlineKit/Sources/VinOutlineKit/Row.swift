@@ -517,13 +517,13 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 
 		if let topicMarkdown {
 			self.topic = importMarkdown(topicMarkdown, isInNotes: false)
-		} else if let topicMarkdown = self.topicMarkdown(type: .markdown) {
+		} else if let topicMarkdown = self.topicMarkdown(type: .md) {
 			self.topic = importMarkdown(topicMarkdown, isInNotes: false)
 		}
 
 		if let noteMarkdown {
 			self.note = importMarkdown(noteMarkdown, isInNotes: true)
-		} else if let noteMarkdown = self.noteMarkdown(type: .markdown) {
+		} else if let noteMarkdown = self.noteMarkdown(type: .md) {
 			self.note = importMarkdown(noteMarkdown, isInNotes: true)
 		}
 

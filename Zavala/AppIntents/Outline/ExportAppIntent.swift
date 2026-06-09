@@ -62,11 +62,11 @@ struct ExportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
 			}
 		case .markdownDoc:
 			if let markdownData = outline.markdownDoc(useAltLinks: useAltLinks).data(using: .utf8) {
-				exportFile = IntentFile(data: markdownData, filename: outline.filename(type: .markdown), type: .markdown)
+				exportFile = IntentFile(data: markdownData, filename: outline.filename(type: .md), type: .md)
 			}
 		case .markdownList:
 			if let markdownData = outline.markdownList(format: true, useAltLinks: useAltLinks).data(using: .utf8) {
-				exportFile = IntentFile(data: markdownData, filename: outline.filename(type: .markdown), type: .markdown)
+				exportFile = IntentFile(data: markdownData, filename: outline.filename(type: .md), type: .md)
 			}
 		case .pdfDoc:
 			let textView = UITextView()

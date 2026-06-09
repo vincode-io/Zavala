@@ -14,7 +14,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard !(session.items.first?.localObject is Document) else { return true }
-		return session.hasItemsConforming(toTypeIdentifiers: [UTType.markdown.identifier, UTType.opml.identifier])
+		return session.hasItemsConforming(toTypeIdentifiers: [UTType.md.identifier, UTType.opml.identifier])
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -65,7 +65,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 
 				let provider = dropItem.dragItem.itemProvider
 
-				provider.loadDataRepresentation(forTypeIdentifier: UTType.markdown.identifier) { (markdownData, error) in
+				provider.loadDataRepresentation(forTypeIdentifier: UTType.md.identifier) { (markdownData, error) in
 					guard let markdownData else { return }
 					Task { @MainActor in
 						if let document = try? await account.importMarkdown(markdownData, defaults: AppDefaults.shared.outlineDefaults, tags: tags) {

@@ -55,8 +55,8 @@ struct RowAppEntity: AppEntity {
 		if let outline = appDelegate.accountManager.findDocument(documentEntityID)?.outline {
 			self.outline = OutlineAppEntity(outline: outline)
 		}
-		self.topic = row.topicMarkdown(type: .markdown)
-		self.note = row.noteMarkdown(type: .markdown)
+		self.topic = row.topicMarkdown(type: .md)
+		self.note = row.noteMarkdown(type: .md)
 		self.complete = row.isComplete
 		self.expanded = row.isExpanded
 		self.level = row.trueLevel

@@ -450,7 +450,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 
 	@objc func importMarkdown() {
-		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.markdown])
+		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.md])
 		docPicker.delegate = markdownDocumentPickerDelegate
 		docPicker.modalPresentationStyle = .formSheet
 		docPicker.allowsMultipleSelection = true

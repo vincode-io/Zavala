@@ -14,7 +14,7 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard documentContainers?.uniqueAccount != nil else { return false }
-		return session.hasItemsConforming(toTypeIdentifiers: [UTType.markdown.identifier, UTType.opml.identifier])
+		return session.hasItemsConforming(toTypeIdentifiers: [UTType.md.identifier, UTType.opml.identifier])
 	}
 		
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
@@ -26,7 +26,7 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 
 			let provider = dropItem.dragItem.itemProvider
 
-			provider.loadDataRepresentation(forTypeIdentifier: UTType.markdown.identifier) { (markdownData, error) in
+			provider.loadDataRepresentation(forTypeIdentifier: UTType.md.identifier) { (markdownData, error) in
 				guard let markdownData else { return }
 				Task { @MainActor in
 					if let document = try? await account.importMarkdown(markdownData, defaults: AppDefaults.shared.outlineDefaults, tags: tags) {

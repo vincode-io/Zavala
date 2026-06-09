@@ -186,7 +186,7 @@ extension MainCoordinator {
 		
 		for outline in outlines {
 			if let data = outline.markdownDoc(useSidecar: true).data(using: .utf8) {
-				exports.append((data: data, filename: outline.filename(type: .markdown)))
+				exports.append((data: data, filename: outline.filename(type: .md)))
 				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
 			}
 		}
@@ -200,7 +200,7 @@ extension MainCoordinator {
 		
 		for outline in outlines {
 			if let data = outline.markdownList(format: true, useSidecar: true).data(using: .utf8) {
-				exports.append((data: data, filename: outline.filename(type: .markdown)))
+				exports.append((data: data, filename: outline.filename(type: .md)))
 				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
 			}
 		}
