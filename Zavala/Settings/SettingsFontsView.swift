@@ -101,8 +101,6 @@ struct SettingsFontAddMenu: View {
 		} label: {
 			Label(String.addControlLabel, systemImage: "plus")
 		}
-		.menuStyle(.borderlessButton)
-		.foregroundStyle(Color(.label))
 		.popover(item: $presentingFieldConfig) { fieldConfig in
 			SettingsFontConfigView(fieldConfig: fieldConfig)
 		}
