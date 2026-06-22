@@ -1122,8 +1122,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				.shortcutsLight
 			}
 
-			let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: shortcutsImage, children: [shortcutListMenu, editShortcutsMenu])
-			shareActions.append(shortcutsMenu)
+			if #available(iOS 27.0, *) {
+				let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, children: [shortcutListMenu, editShortcutsMenu])
+				shareActions.append(shortcutsMenu)
+			} else {
+				let shortcutsMenu = UIMenu(title: .shortcutsControlLabel, image: shortcutsImage, children: [shortcutListMenu, editShortcutsMenu])
+				shareActions.append(shortcutsMenu)
+			}
 		}
 
 		let printDocAction = UIAction(title: .printDocEllipsisControlLabel) { [weak self] _ in
