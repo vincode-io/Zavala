@@ -21,13 +21,9 @@ protocol EditorTagInputTextFieldDelegate: AnyObject {
 
 class EditorTagInputTextField: SearchTextField, EditorTextInput {
 
-	#if targetEnvironment(macCatalyst)
-	@objc(_focusRingType)
-	var focusRingType: UInt {
-		return 1 //NSFocusRingTypeNone
-	}
-	#endif
-	
+	// This is a borderless inline field in the tag pill, so it never shows a focus ring.
+	override var wantsFocusRing: Bool { false }
+
 	weak var editorDelegate: EditorTagInputTextFieldDelegate?
 
 	var coordinates: CursorCoordinates? = nil
