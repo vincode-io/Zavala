@@ -20,7 +20,7 @@ class MacRenameTagViewController: MacFormViewController {
 		
 		tagNameTextField.delegate = self
 		tagNameTextField.text = tagDocuments?.name
-		
+
 		renameButton.role = .primary
 		NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: tagNameTextField)
 		updateUI()
@@ -30,7 +30,7 @@ class MacRenameTagViewController: MacFormViewController {
 		super.viewDidAppear(animated)
 		tagNameTextField.becomeFirstResponder()
 	}
-	
+
 	@IBAction func submit(_ sender: Any) {
 		submitAndDismiss()
 	}
