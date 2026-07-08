@@ -38,7 +38,7 @@ open class EnhancedTextField: UITextField {
 		// rounded halo matching the field's laid-out bounds.
 		guard bounds != focusRingBounds else { return }
 		focusRingBounds = bounds
-		focusEffect = UIFocusHaloEffect(roundedRect: bounds, cornerRadius: 5, curve: .continuous)
+		focusEffect = UIFocusHaloEffect(roundedRect: bounds, cornerRadius: 6, curve: .continuous)
 	}
 	#endif
 
