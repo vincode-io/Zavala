@@ -24,7 +24,7 @@ open class EnhancedTextField: UITextField {
 	open var wantsFocusRing: Bool { true }
 
 	#if targetEnvironment(macCatalyst)
-	private var focusRingBounds: CGRect = .zero
+	private var textFieldBounds: CGRect = .zero
 
 	open override func layoutSubviews() {
 		super.layoutSubviews()
@@ -36,9 +36,10 @@ open class EnhancedTextField: UITextField {
 
 		// The default UIFocusEffect() draws a square halo, so we supply an explicit
 		// rounded halo matching the field's laid-out bounds.
-		guard bounds != focusRingBounds else { return }
-		focusRingBounds = bounds
-		focusEffect = UIFocusHaloEffect(roundedRect: bounds, cornerRadius: 6, curve: .continuous)
+		guard bounds != textFieldBounds else { return }
+		textFieldBounds = bounds
+		let focusRingBounds = CGRect(x: bounds.minX - 2, y: bounds.minY - 2, width: bounds.width + 4, height: bounds.height + 4)
+		focusEffect = UIFocusHaloEffect(roundedRect: focusRingBounds, cornerRadius: 6, curve: .continuous)
 	}
 	#endif
 
