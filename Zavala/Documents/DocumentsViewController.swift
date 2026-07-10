@@ -15,7 +15,12 @@ import VinUtility
 
 @MainActor
 protocol DocumentsDelegate: UINavigationControllerDelegate  {
-	func openDocuments(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNavigationBranch: Bool, animated: Bool)
+	func openDocuments(_: DocumentsViewController,
+					   documentContainers: [DocumentContainer],
+					   documents: [Document],
+					   saveCurrentOutline: Bool,
+					   isNavigationBranch: Bool,
+					   animated: Bool)
 	func editCurrentDocument(_: DocumentsViewController, isNew: Bool, selectRow: EntityID?)
 	func showGetInfo(_: DocumentsViewController, outline: Outline)
 	func addLock(_: DocumentsViewController, outline: Outline)
@@ -234,6 +239,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 				delegate?.openDocuments(self,
 										documentContainers: documentContainers,
 										documents: [prevSelectedDoc],
+										saveCurrentOutline: true,
 										isNavigationBranch: false,
 										animated: false)
 				delegate?.editCurrentDocument(self, isNew: false, selectRow: nil)
@@ -250,7 +256,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 
-	func openDocument(_ document: Document?, isNavigationBranch: Bool = true, animated: Bool) {
+	func openDocument(_ document: Document?, saveCurrentOutline: Bool = true, isNavigationBranch: Bool = true, animated: Bool) {
 		guard let documentContainers else { return }
 
 		collectionView.deselectAll()
@@ -260,12 +266,14 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			delegate?.openDocuments(self,
 									documentContainers: documentContainers,
 									documents: [document],
+									saveCurrentOutline: saveCurrentOutline,
 									isNavigationBranch: isNavigationBranch,
 									animated: animated)
 		} else {
 			delegate?.openDocuments(self,
 									documentContainers: documentContainers,
 									documents: [],
+									saveCurrentOutline: saveCurrentOutline,
 									isNavigationBranch: isNavigationBranch,
 									animated: animated)
 		}
@@ -475,6 +483,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		delegate?.openDocuments(self,
 								documentContainers: documentContainers,
 								documents: documents,
+								saveCurrentOutline: true,
 								isNavigationBranch: false,
 								animated: true)
 	}
@@ -551,6 +560,7 @@ extension DocumentsViewController {
 			delegate?.openDocuments(self,
 									documentContainers: documentContainers,
 									documents: [],
+									saveCurrentOutline: true,
 									isNavigationBranch: false,
 									animated: true)
 			return
@@ -560,6 +570,7 @@ extension DocumentsViewController {
 		delegate?.openDocuments(self,
 								documentContainers: documentContainers,
 								documents: selectedDocuments,
+								saveCurrentOutline: true,
 								isNavigationBranch: true,
 								animated: true)
 	}
@@ -581,6 +592,7 @@ extension DocumentsViewController {
 			delegate?.openDocuments(self,
 									documentContainers: documentContainers,
 									documents: [],
+									saveCurrentOutline: true,
 									isNavigationBranch: false,
 									animated: true)
 			return
@@ -590,6 +602,7 @@ extension DocumentsViewController {
 		delegate?.openDocuments(self,
 								documentContainers: documentContainers,
 								documents: selectedDocuments,
+								saveCurrentOutline: true,
 								isNavigationBranch: true,
 								animated: true)
 	}
@@ -682,6 +695,7 @@ extension DocumentsViewController {
 			self.delegate?.openDocuments(self,
 										 documentContainers: documentContainers,
 										 documents: [],
+										 saveCurrentOutline: true,
 										 isNavigationBranch: isNavigationBranch,
 										 animated: true)
 			return
@@ -719,6 +733,7 @@ extension DocumentsViewController {
 			self.delegate?.openDocuments(self,
 										 documentContainers: documentContainers,
 										 documents: [],
+										 saveCurrentOutline: true,
 										 isNavigationBranch: isNavigationBranch,
 										 animated: true)
 		}
@@ -1099,6 +1114,7 @@ private extension DocumentsViewController {
 				self.delegate?.openDocuments(self,
 											 documentContainers: documentContainers,
 											 documents: [],
+											 saveCurrentOutline: true,
 											 isNavigationBranch: true,
 											 animated: true)
 			}

@@ -958,7 +958,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		])
 	}
 	
-	func open(_ newOutline: Outline?, searchText: String? = nil) {
+	func open(_ newOutline: Outline?, saveCurrentOutline: Bool = true, searchText: String? = nil) {
 		guard outline != newOutline else {
 			if let newOutline {
 				reload(newOutline)
@@ -970,7 +970,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		messageLabel = nil
 		dismissLockedView()
 
-		checkPointOutline()
+		// We might not want to save the current outline if it has already been checkpointed. For example when swiping
+		// back to the document view and it was already checkpointed in 
+		if saveCurrentOutline {
+			checkPointOutline()
+		}
 
 		// After this point as long as we don't have this Outline open in other
 		// windows, no more collection view updates should happen for it.
