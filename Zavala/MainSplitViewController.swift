@@ -534,6 +534,7 @@ extension MainSplitViewController: DocumentsDelegate {
 	func openDocuments(_: DocumentsViewController,
 					   documentContainers: [DocumentContainer],
 					   documents: [Document],
+					   saveCurrentOutline: Bool,
 					   isNavigationBranch: Bool,
 					   animated: Bool) {
 
@@ -547,7 +548,7 @@ extension MainSplitViewController: DocumentsDelegate {
 		
 		guard documents.count == 1, let document = documents.first else {
 			activityManager.invalidateSelectDocument()
-			editorViewController?.open(nil)
+			editorViewController?.open(nil, saveCurrentOutline: saveCurrentOutline)
 			if documents.isEmpty {
 				editorViewController?.showMessage(.noSelectionLabel)
 			} else {
@@ -770,8 +771,9 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
 		if isCollapsed && viewController === documentsViewController && lastMainControllerToAppear == .editor {
-			activityManager.invalidateSelectDocument()
-			documentsViewController?.openDocument(nil, isNavigationBranch: false, animated: false)
+			// We have to checkpoint the outline here to save the current cursor position correctly. If we did it in didShow,
+			// the first responder will already be cleared.
+			editorViewController?.checkPointOutline()
 			return
 		}
 	}
@@ -796,8 +798,14 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 			}
 			return
 		}
+
+		if isCollapsed && viewController === documentsViewController && lastMainControllerToAppear == .editor {
+			activityManager.invalidateSelectDocument()
+			documentsViewController?.openDocument(nil, saveCurrentOutline: false, isNavigationBranch: false, animated: false)
+			return
+		}
 	}
-	
+
 }
 
 // MARK: OpenQuicklyViewControllerDelegate
