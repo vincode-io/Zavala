@@ -1029,10 +1029,34 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		Task {
 			await unload()
 		}
-		
+
 		return print
 	}
-	
+
+	/// Prints the outline the way it currently appears on screen: filtered rows are omitted and the
+	/// contents of collapsed rows are not shown.
+	public func printScreen() -> NSAttributedString {
+		let print = NSMutableAttributedString()
+		load()
+
+		appendPrintTitle(attrString: print)
+
+		rows.forEach {
+			let visitor = PrintListVisitor(numberingStyle: numberingStyle ?? .none,
+										   isCompletedFilterOn: isCompletedFilterOn,
+										   isNotesFilterOn: isNotesFilterOn,
+										   respectCollapsed: true)
+			$0.visit(visitor: visitor.visitor)
+			print.append(visitor.print)
+		}
+
+		Task {
+			await unload()
+		}
+
+		return print
+	}
+
 	public func textContent() -> String {
 		load(includeImages: false)
 		

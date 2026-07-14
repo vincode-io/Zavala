@@ -33,6 +33,7 @@ protocol DocumentsDelegate: UINavigationControllerDelegate  {
 	func exportOPMLs(_: DocumentsViewController, outlines: [Outline])
 	func printDocs(_: DocumentsViewController, outlines: [Outline])
 	func printLists(_: DocumentsViewController, outlines: [Outline])
+	func printScreens(_: DocumentsViewController, outlines: [Outline])
 }
 
 class DocumentsViewController: UICollectionViewController, MainControllerIdentifiable, DocumentsActivityItemsConfigurationDelegate {
@@ -971,6 +972,7 @@ private extension DocumentsViewController {
 			var printActions = [UIAction]()
 			printActions.append(self.printDocsAction(outlines: outlines))
 			printActions.append(self.printListsAction(outlines: outlines))
+			printActions.append(self.printScreensAction(outlines: outlines))
 			let printMenu = UIMenu(title: .printControlLabel, image: .print, children: printActions)
 			shareMenuItems.append(printMenu)
 
@@ -1074,6 +1076,12 @@ private extension DocumentsViewController {
 	func printListsAction(outlines: [Outline]) -> UIAction {
 		return UIAction(title: .printListControlEllipsisLabel) { action in
 			self.delegate?.printLists(self, outlines: outlines)
+		}
+	}
+
+	func printScreensAction(outlines: [Outline]) -> UIAction {
+		return UIAction(title: .printScreenControlEllipsisLabel) { action in
+			self.delegate?.printScreens(self, outlines: outlines)
 		}
 	}
 	

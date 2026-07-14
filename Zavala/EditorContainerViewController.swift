@@ -190,6 +190,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		printLists()
 	}
 
+	@objc func printScreens(_ sender: Any?) {
+		printScreens()
+	}
+
 	@objc func showGetInfo(_ sender: Any?) {
 		showGetInfo()
 	}
@@ -233,7 +237,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 			return appDelegate.accountManager.isSyncAvailable
 		case .manageSharing:
 			return !isManageSharingUnavailable && editorViewController?.outline?.isLocked != true
-		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
+		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists, .printScreens:
 			return !isOutlineFunctionsUnavailable
 		case .addLock:
 			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true && editorViewController?.outline?.isCollaborating != true
@@ -315,6 +319,10 @@ extension EditorContainerViewController: EditorDelegate {
 
 	func printList(_: EditorViewController, outline: Outline) {
 		printListsForOutlines([outline])
+	}
+
+	func printScreen(_: EditorViewController, outline: Outline) {
+		printScreensForOutlines([outline])
 	}
 
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate) {

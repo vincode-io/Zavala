@@ -15,15 +15,29 @@ import Foundation
 final class PrintListVisitor {
 	
 	let numberingStyle: Outline.NumberingStyle
-	
+	let isCompletedFilterOn: Bool
+	let isNotesFilterOn: Bool
+	let respectCollapsed: Bool
+
 	var indentLevel = 0
 	var print = NSMutableAttributedString()
 
-	init(numberingStyle: Outline.NumberingStyle) {
+	init(numberingStyle: Outline.NumberingStyle,
+		 isCompletedFilterOn: Bool = false,
+		 isNotesFilterOn: Bool = false,
+		 respectCollapsed: Bool = false) {
 		self.numberingStyle = numberingStyle
+		self.isCompletedFilterOn = isCompletedFilterOn
+		self.isNotesFilterOn = isNotesFilterOn
+		self.respectCollapsed = respectCollapsed
 	}
-	
+
 	func visitor(_ visited: Row) {
+		// Skip completed rows (and their descendants) when the completed filter is on, just like the on-screen view.
+		if isCompletedFilterOn && (visited.isComplete ?? false) {
+			return
+		}
+
 		#if canImport(UIKit)
 		if let topic = visited.topic {
 			print.append(NSAttributedString(string: "\n"))
@@ -75,7 +89,7 @@ final class PrintListVisitor {
 			print.append(printTopic)
 		}
 		
-		if let note = visited.note {
+		if let note = visited.note, !isNotesFilterOn {
 			var attrs = [NSAttributedString.Key : Any]()
 			attrs[.foregroundColor] = UIColor.darkGray
 
@@ -100,7 +114,12 @@ final class PrintListVisitor {
 			print.append(noteTopic)
 		}
 		#endif
-		
+
+		// Don't show the contents of collapsed rows when mirroring the on-screen view.
+		if respectCollapsed && !visited.isExpanded {
+			return
+		}
+
 		indentLevel = indentLevel + 1
 		visited.rows.forEach {
 			$0.visit(visitor: self.visitor)

@@ -361,6 +361,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 										 input: "p",
 										 modifierFlags: [.command])
 
+	let printScreensCommand = UIKeyCommand(title: .printScreenControlEllipsisLabel,
+										   action: .printScreens,
+										   input: "p",
+										   modifierFlags: [.control, .command])
+
 	let shareCommand = UICommand(title: .shareEllipsisControlLabel, image: .share, action: .share)
 
 	let manageSharingCommand = UICommand(title: .manageSharingEllipsisControlLabel, action: .manageSharing)
@@ -674,8 +679,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importMenu, exportMenu])
 		builder.insertChild(importExportMenu, atEndOfMenu: .file)
 
-		let printMenu = UIMenu(title: "", options: .displayInline, children: [printDocsCommand, printListsCommand])
-		builder.insertChild(printMenu, atEndOfMenu: .file)
+		let printMenu = UIMenu(title: .printControlLabel, image: .print, children: [printDocsCommand, printListsCommand, printScreensCommand])
+		let printInlineMenu = UIMenu(title: "", options: .displayInline, children: [printMenu])
+		builder.insertChild(printInlineMenu, atEndOfMenu: .file)
 
 		// Edit
 		builder.replaceChildren(ofMenu: .standardEdit) { oldElements in

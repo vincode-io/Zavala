@@ -22,6 +22,7 @@ extension Selector {
 	static let exportOPMLs = #selector(MainCoordinatorResponder.exportOPMLs(_:))
 	static let printDocs = #selector(MainCoordinatorResponder.printDocs(_:))
 	static let printLists = #selector(MainCoordinatorResponder.printLists(_:))
+	static let printScreens = #selector(MainCoordinatorResponder.printScreens(_:))
 	static let copyDocumentLink = #selector(MainCoordinatorResponder.copyDocumentLink(_:))
 	static let addLock = #selector(MainCoordinatorResponder.addLock(_:))
 	static let removeLock = #selector(MainCoordinatorResponder.removeLock(_:))
@@ -42,6 +43,7 @@ extension Selector {
 	@objc func exportOPMLs(_ sender: Any?)
 	@objc func printDocs(_ sender: Any?)
 	@objc func printLists(_ sender: Any?)
+	@objc func printScreens(_ sender: Any?)
 	@objc func copyDocumentLink(_ sender: Any?)
 	@objc func addLock(_ sender: Any?)
 	@objc func removeLock(_ sender: Any?)
@@ -302,7 +304,24 @@ extension MainCoordinator {
 			textView.attributedText = outline.printDoc()
 			pdfs.append(textView.generatePDF())
 		}
-		
+
+		let title = ListFormatter.localizedString(byJoining: outlines.compactMap({ $0.title }).sorted())
+		printPDFs(pdfs, title: title)
+	}
+
+	func printScreens() {
+		printScreensForOutlines(selectedOutlines)
+	}
+
+	func printScreensForOutlines(_ outlines: [Outline]) {
+		var pdfs = [Data]()
+
+		for outline in outlines {
+			let textView = UITextView()
+			textView.attributedText = outline.printScreen()
+			pdfs.append(textView.generatePDF())
+		}
+
 		let title = ListFormatter.localizedString(byJoining: outlines.compactMap({ $0.title }).sorted())
 		printPDFs(pdfs, title: title)
 	}

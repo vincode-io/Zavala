@@ -311,7 +311,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			return appDelegate.accountManager.isSyncAvailable
 		case .manageSharing:
 			return !isManageSharingUnavailable && editorViewController?.outline?.isLocked != true
-		case .share, .showGetInfo, .deleteOutline, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
+		case .share, .showGetInfo, .deleteOutline, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists, .printScreens:
 			return !isOutlineFunctionsUnavailable
 		case .addLock:
 			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true && editorViewController?.outline?.isCollaborating != true
@@ -414,6 +414,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 
 	@objc func printLists(_ sender: Any?) {
 		printLists()
+	}
+
+	@objc func printScreens(_ sender: Any?) {
+		printScreens()
 	}
 
 	@objc func showGetInfo(_ sender: Any?) {
@@ -644,7 +648,11 @@ extension MainSplitViewController: DocumentsDelegate {
 	func printLists(_: DocumentsViewController, outlines: [Outline]) {
 		printListsForOutlines(outlines)
 	}
-	
+
+	func printScreens(_: DocumentsViewController, outlines: [Outline]) {
+		printScreensForOutlines(outlines)
+	}
+
 }
 
 // MARK: EditorDelegate
@@ -718,7 +726,11 @@ extension MainSplitViewController: EditorDelegate {
 	func printList(_: EditorViewController, outline: Outline) {
 		printListsForOutlines([outline])
 	}
-	
+
+	func printScreen(_: EditorViewController, outline: Outline) {
+		printScreensForOutlines([outline])
+	}
+
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate) {
 		if traitCollection.userInterfaceIdiom == .mac {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.viewImage)

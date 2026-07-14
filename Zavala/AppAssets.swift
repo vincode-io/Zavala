@@ -366,6 +366,8 @@ extension String {
 	static let printDocEllipsisControlLabel = String(localized: "button.text.print-doc-with-ellipsis", comment: "Action: Print Doc…")
 	static let printListControlLabel = String(localized: "button.text.print-list", comment: "Action: Print List")
 	static let printListControlEllipsisLabel = String(localized: "button.text.print-list-with-ellipsis", comment: "Label: Print List…")
+	static let printScreenControlLabel = String(localized: "button.text.print-screen", comment: "Action: Print Screen")
+	static let printScreenControlEllipsisLabel = String(localized: "button.text.print-screen-with-ellipsis", comment: "Label: Print Screen…")
 	static let privacyPolicyControlLabel = String(localized: "label.text.privacy-policy", comment: "Label: Privacy Policy")
 	static let purpleControlLabel = String(localized: "button.text.purple", comment: "Set Font Color Action: Purple")
 

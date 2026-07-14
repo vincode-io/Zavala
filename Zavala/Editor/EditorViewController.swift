@@ -83,6 +83,7 @@ protocol EditorDelegate: AnyObject {
 	func exportOPML(_: EditorViewController, outline: Outline)
 	func printDoc(_: EditorViewController, outline: Outline)
 	func printList(_: EditorViewController, outline: Outline)
+	func printScreen(_: EditorViewController, outline: Outline)
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate)
 }
 
@@ -1141,7 +1142,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		let printListAction = UIAction(title: .printListControlEllipsisLabel) { [weak self] _ in
 			self?.printList()
 		}
-		shareActions.append(UIMenu(title: .printControlLabel, image: .print, children: [printDocAction, printListAction]))
+		let printScreenAction = UIAction(title: .printScreenControlEllipsisLabel) { [weak self] _ in
+			self?.printScreen()
+		}
+		shareActions.append(UIMenu(title: .printControlLabel, image: .print, children: [printDocAction, printListAction, printScreenAction]))
 
 		let exportPDFDoc = UIAction(title: .exportPDFDocEllipsisControlLabel) { [weak self] _ in
 			guard let self, let outline = self.outline else { return }
@@ -1401,6 +1405,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard let outline else { return }
 		currentRowTextView?.saveText()
 		delegate?.printList(self, outline: outline)
+	}
+
+	func printScreen() {
+		guard let outline else { return }
+		currentRowTextView?.saveText()
+		delegate?.printScreen(self, outline: outline)
 	}
 	
 	// MARK: Actions
