@@ -20,6 +20,21 @@ extension NSAttributedString.Key {
 	static let searchResult: NSAttributedString.Key = .init("io.vincode.Zavala.SearchResult")
 }
 
+/// Captures the attributed text and selection before a formatting change so the change can be
+/// registered with the undo manager. Must be a class so it can be passed as the `object` argument
+/// to `UndoManager.registerUndo(withTarget:selector:object:)`.
+private final class FormattingUndoState: NSObject {
+	let attributedText: NSAttributedString
+	let selectedRange: NSRange
+	let actionName: String
+
+	init(attributedText: NSAttributedString, selectedRange: NSRange, actionName: String) {
+		self.attributedText = attributedText
+		self.selectedRange = selectedRange
+		self.actionName = actionName
+	}
+}
+
 class EditorRowTextView: UITextView, EditorTextInput {
 	
 	var rowID: String?
@@ -388,18 +403,17 @@ class EditorRowTextView: UITextView, EditorTextInput {
     }
 
 	@objc func toggleCodeInline(_ sender: Any?) {
-		// Save the current string so that we have something to undo to
+		// Save the current string so that any pending typing is committed as its own undoable action
 		saveText()
 
 		if selectedRange.length > 0 {
-			textStorage.beginEditing()
-			if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
-				textStorage.removeAttribute(.codeInline, range: selectedRange)
-			} else {
-				textStorage.addAttribute(.codeInline, value: true, range: selectedRange)
+			applyUndoableFormatting(actionName: .codeInlineControlLabel) {
+				if textStorage.attribute(.codeInline, at: selectedRange.location, effectiveRange: nil) != nil {
+					textStorage.removeAttribute(.codeInline, range: selectedRange)
+				} else {
+					textStorage.addAttribute(.codeInline, value: true, range: selectedRange)
+				}
 			}
-			textStorage.endEditing()
-			processTextChanges()
 		} else {
 			if typingAttributes[.codeInline] != nil {
 				typingAttributes.removeValue(forKey: .codeInline)
@@ -413,18 +427,17 @@ class EditorRowTextView: UITextView, EditorTextInput {
 	}
 
 	@objc func toggleHighlight(_ sender: Any?) {
-		// Save the current string so that we have something to undo to
+		// Save the current string so that any pending typing is committed as its own undoable action
 		saveText()
 
 		if selectedRange.length > 0 {
-			textStorage.beginEditing()
-			if textStorage.attribute(.textHighlightStyle, at: selectedRange.location, effectiveRange: nil) as? NSAttributedString.TextHighlightStyle == .default {
-				textStorage.removeAttribute(.textHighlightStyle, range: selectedRange)
-			} else {
-				textStorage.addAttribute(.textHighlightStyle, value: NSAttributedString.TextHighlightStyle.default, range: selectedRange)
+			applyUndoableFormatting(actionName: .highlightControlLabel) {
+				if textStorage.attribute(.textHighlightStyle, at: selectedRange.location, effectiveRange: nil) as? NSAttributedString.TextHighlightStyle == .default {
+					textStorage.removeAttribute(.textHighlightStyle, range: selectedRange)
+				} else {
+					textStorage.addAttribute(.textHighlightStyle, value: NSAttributedString.TextHighlightStyle.default, range: selectedRange)
+				}
 			}
-			textStorage.endEditing()
-			processTextChanges()
 		} else {
 			if typingAttributes[.textHighlightStyle] as? NSAttributedString.TextHighlightStyle == .default {
 				typingAttributes.removeValue(forKey: .textHighlightStyle)
@@ -435,6 +448,47 @@ class EditorRowTextView: UITextView, EditorTextInput {
 
 		// Update the format menu
 		UIMenuSystem.main.setNeedsRebuild()
+	}
+
+	/// Applies an attribute-only change to the text storage and registers it with the text view's
+	/// undo manager so that it participates in undo/redo on the same stack as typing, bold, and italic.
+	private func applyUndoableFormatting(actionName: String, _ changes: () -> Void) {
+		let restoreState = FormattingUndoState(attributedText: NSAttributedString(attributedString: attributedText),
+											   selectedRange: selectedRange,
+											   actionName: actionName)
+
+		textStorage.beginEditing()
+		changes()
+		textStorage.endEditing()
+
+		registerFormattingUndo(restoreState)
+
+		processTextChanges()
+	}
+
+	/// Registers an undo that restores a captured attributed text. The selector-based registration is used
+	/// because `StackedUndoManger` forwards it to the text view's own undo manager, keeping formatting on the
+	/// same undo stack as typing.
+	private func registerFormattingUndo(_ state: FormattingUndoState) {
+		undoManager?.setActionName(state.actionName)
+		undoManager?.registerUndo(withTarget: self, selector: #selector(restoreFormatting(_:)), object: state)
+	}
+
+	/// Restores the captured formatting state and registers the inverse so undo and redo can toggle
+	/// the change back and forth indefinitely.
+	@objc private func restoreFormatting(_ state: FormattingUndoState) {
+		let inverseState = FormattingUndoState(attributedText: NSAttributedString(attributedString: attributedText),
+											   selectedRange: selectedRange,
+											   actionName: state.actionName)
+
+		textStorage.beginEditing()
+		textStorage.setAttributedString(state.attributedText)
+		textStorage.endEditing()
+		selectedRange = state.selectedRange
+
+		registerFormattingUndo(inverseState)
+
+		processTextChanges()
 	}
 
 	@objc func insertNewline(_ sender: Any) {
