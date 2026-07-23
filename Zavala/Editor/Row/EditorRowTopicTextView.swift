@@ -255,9 +255,22 @@ class EditorRowTopicTextView: EditorRowTextView {
 		linkTextAttributes = linkAttrs
 		
 		if let topic = configuration.rowTopic {
-            attributedText = topic
+			// A completed Topic dims its text via the foreground alpha above, but the native highlight style
+			// draws its own opaque background and contrasting foreground, ignoring that alpha. Mark the
+			// highlighted runs so the layout fragment can dim them to match the surrounding text.
+			if configuration.rowIsComplete || configuration.rowIsAnyParentComplete {
+				let dimmedTopic = NSMutableAttributedString(attributedString: topic)
+				dimmedTopic.enumerateAttribute(.textHighlightStyle, in: NSRange(0..<dimmedTopic.length)) { value, range, _ in
+					if value as? NSAttributedString.TextHighlightStyle == .default {
+						dimmedTopic.addAttribute(.dimmedHighlight, value: true, range: range)
+					}
+				}
+				attributedText = dimmedTopic
+			} else {
+				attributedText = topic
+			}
         }
-        
+
 		addSearchHighlighting(isInNotes: false)
 		
 		if let cursorRange {

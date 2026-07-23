@@ -18,6 +18,10 @@ extension Selector {
 extension NSAttributedString.Key {
 	static let selectedSearchResult: NSAttributedString.Key = .init("io.vincode.Zavala.SelectedSearchResult")
 	static let searchResult: NSAttributedString.Key = .init("io.vincode.Zavala.SearchResult")
+
+	/// A display-only marker placed on highlight-formatted runs in a completed Topic so the layout
+	/// fragment knows to dim them. It is never persisted; `cleansedAttributedText` strips it before saving.
+	static let dimmedHighlight: NSAttributedString.Key = .init("io.vincode.Zavala.DimmedHighlight")
 }
 
 /// Captures the attributed text and selection before a formatting change so the change can be
@@ -175,6 +179,8 @@ class EditorRowTextView: UITextView, EditorTextInput {
 		cleanText.enumerateAttribute(.backgroundColor, in:  NSRange(0..<cleanText.length)) { value, range, stop in
 			cleanText.removeAttribute(.backgroundColor, range: range)
 		}
+		// The dimmed highlight marker is a transient display attribute for completed Topics; never persist it.
+		cleanText.removeAttribute(.dimmedHighlight, range: NSRange(0..<cleanText.length))
 		return cleanText
 	}
 	
