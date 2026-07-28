@@ -920,20 +920,26 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		requestCloudKitUpdate(for: id)
 
 		guard isBeingViewed else { return }
-		
-		let inserted = tagIDs!.count
-		let reload = inserted - 1
-		var changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]), reloads: Set([reload]))
+
+		// The collection view data source counts resolved `tags`, not raw `tagIDs`.
+		// Deriving indices from tagIDs.count crashes with an invalid batch update
+		// whenever the outline references a tag ID that no longer resolves.
+		guard let insertedIndex = tags.firstIndex(of: tag) else { return }
+		var changes = OutlineElementChanges(section: .tags, inserts: Set([insertedIndex + 1]), reloads: Set([insertedIndex]))
 		changes.isReloadsAnimatable = true
 		outlineElementsDidChange(changes)
 	}
-	
+
 	public func deleteTag(_ tag: Tag) {
 		guard let index = tagIDs?.firstIndex(where: { $0 == tag.id }) else { return }
-		
+
 		if isCloudKit && ancestorTagIDs == nil {
 			ancestorTagIDs = tagIDs
 		}
+
+		// Capture the visual position among the resolved `tags` before removal, since
+		// the collection view indexes displayed tags, not raw tag IDs.
+		let visualIndex = tags.firstIndex(of: tag)
 
 		tagIDs?.remove(at: index)
 		self.updated = Date()
@@ -941,10 +947,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outlineTagsDidChange()
 		requestCloudKitUpdate(for: id)
 
-		guard isBeingViewed else { return }
+		guard isBeingViewed, let visualIndex else { return }
 
-		let reload = tagIDs?.count ?? 1
-		var changes = OutlineElementChanges(section: .tags, deletes: Set([index]), reloads: Set([reload]))
+		let reload = tags.count
+		var changes = OutlineElementChanges(section: .tags, deletes: Set([visualIndex]), reloads: Set([reload]))
 		changes.isReloadsAnimatable = true
 		outlineElementsDidChange(changes)
 	}

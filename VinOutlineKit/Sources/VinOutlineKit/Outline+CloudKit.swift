@@ -544,8 +544,14 @@ private extension Outline {
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()
 		var deletes = Set<Int>()
-		
-		let tagDiff = tagIDs.difference(from: oldTagIDs).inferringMoves()
+
+		// Diff over the resolvable tag IDs only. The collection view data source counts
+		// resolved `tags`, so diffing raw IDs that don't resolve would produce offsets
+		// that don't match the section's item count and crash the batch update.
+		let resolvableTagIDs = tagIDs.filter { account?.findTag(tagID: $0) != nil }
+		let resolvableOldTagIDs = oldTagIDs.filter { account?.findTag(tagID: $0) != nil }
+
+		let tagDiff = resolvableTagIDs.difference(from: resolvableOldTagIDs).inferringMoves()
 		for change in tagDiff {
 			switch change {
 			case .insert(let offset, _, let associated):
