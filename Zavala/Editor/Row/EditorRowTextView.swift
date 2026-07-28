@@ -675,8 +675,36 @@ extension EditorRowTextView {
 	}
 	
     func processTextEditingEnding() {
+        trimTrailingSpaceIfNeeded()
         saveText()
     }
+
+	/// When editing ends with the cursor at the very end of the field and a single
+	/// space separating it from the last word, drop that trailing space before saving.
+	private func trimTrailingSpaceIfNeeded() {
+		// Only normalize text the user actually edited this session.
+		guard isTextChanged else { return }
+
+		// Don't touch text mid-composition (e.g. Japanese multistage input).
+		guard markedTextRange == nil else { return }
+
+		let length = textStorage.length
+
+		// The cursor must sit at the very end of the field, with nothing selected.
+		guard selectedRange.location == length, selectedRange.length == 0 else { return }
+
+		// The text must end in a space...
+		let text = textStorage.string
+		guard text.hasSuffix(" ") else { return }
+
+		// ...and the character before it must not be whitespace, so there is exactly
+		// one space between the cursor and the last word.
+		let withoutTrailingSpace = text.dropLast()
+		guard let priorCharacter = withoutTrailingSpace.last, !priorCharacter.isWhitespace else { return }
+
+		textStorage.deleteCharacters(in: NSRange(location: length - 1, length: 1))
+		selectedRange = NSRange(location: textStorage.length, length: 0)
+	}
 
     func processTextChanges() {
         // If we deleted to the beginning of the line, remove any residual links
