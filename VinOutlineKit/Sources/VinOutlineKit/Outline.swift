@@ -795,6 +795,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	/// Add a row and all its decendents to the index (called when row is added anywhere in the outline)
 	func addToIndex(_ row: Row) {
+		// Guard against a cyclic row tree. If the row is already indexed we would otherwise
+		// recurse forever and overflow the stack.
+		guard rowIndex[row.id] == nil else { return }
 		rowIndex[row.id] = row
 		for child in row.rows {
 			addToIndex(child)
@@ -804,7 +807,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	/// Remove a row and all its descendants from the index
 	func removeFromIndex(_ row: Row) {
-		rowIndex.removeValue(forKey: row.id)
+		// Guard against a cyclic row tree. If the row wasn't indexed we've already visited it
+		// and would otherwise recurse forever.
+		guard rowIndex.removeValue(forKey: row.id) != nil else { return }
 		for child in row.rows {
 			removeFromIndex(child)
 		}
@@ -2562,6 +2567,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 
 	func moveRows(_ rowMoves: [RowMove], rowStrings: RowStrings? = nil) {
+		// Never allow a row to be moved into itself or one of its own descendants. Doing so would
+		// create a cycle in the row tree and cause infinite recursion when reindexing the rows.
+		let rowMoves = rowMoves.filter { rowMove in
+			guard let destinationRow = rowMove.toParent as? Row else { return true }
+			return destinationRow != rowMove.row && !destinationRow.isDecendent(rowMove.row)
+		}
+
+		guard !rowMoves.isEmpty else { return }
+
 		beginCloudKitBatchRequest()
 		defer {
 			endCloudKitBatchRequest()
