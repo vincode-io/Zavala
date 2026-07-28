@@ -2478,21 +2478,36 @@ private extension EditorViewController {
 	}
 	
 	func reload(_ newOutline: Outline) {
+		// When we're handed the exact same Outline instance that we already have loaded,
+		// there's no need to unload/reload it. Doing so churns the shared beingUsedCount,
+		// and because the unload is deferred onto a Task while the load happens inline, a
+		// racing lifecycle transition can drive the count negative and trip the fatalError
+		// in Outline.unload(). Just refresh the UI instead.
+		guard outline !== newOutline else {
+			collectionView.reloadData()
+
+			if let cursorCoordinates = currentRowTextView?.coordinates {
+				restoreCursorPosition(cursorCoordinates, scroll: false)
+			}
+
+			return
+		}
+
 		outline?.decrementBeingViewedCount()
-		
+
 		let oldOutline = outline
 		Task {
 			await oldOutline?.unload()
 		}
 
 		outline = newOutline
-		
+
 		outline?.load()
 		outline?.incrementBeingViewedCount()
 		outline?.prepareForViewing()
 
 		collectionView.reloadData()
-		
+
 		if let cursorCoordinates = currentRowTextView?.coordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: false)
 		}
