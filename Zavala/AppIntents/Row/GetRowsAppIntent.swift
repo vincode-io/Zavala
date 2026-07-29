@@ -80,9 +80,9 @@ struct GetRowsAppIntent: DeprecatedAppIntent, CustomIntentMigratedAppIntent, Pre
 			outline.load()
             defer { Task { await outline.unload() } }
 
-			if let row = outline.findRow(id: entityID.rowUUID) {
+			if let row = outline.findRow(id: entityID.rowUUID), let entity = RowAppEntity(row: row) {
                 await suspend()
-                return .result(value: [RowAppEntity(row: row)])
+                return .result(value: [entity])
             } else {
                 await suspend()
                 return .result(value: [])
@@ -124,7 +124,7 @@ struct GetRowsAppIntent: DeprecatedAppIntent, CustomIntentMigratedAppIntent, Pre
 
 		await outline.unload()
 		await suspend()
-		return .result(value: visitor.results.map({RowAppEntity(row: $0)}))
+		return .result(value: visitor.results.compactMap({ RowAppEntity(row: $0) }))
     }
 }
 

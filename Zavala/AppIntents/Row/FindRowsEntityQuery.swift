@@ -28,8 +28,9 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 					  outline.isLocked != true else { continue }
 				outline.load()
 				outlines.append(outline)
-				guard let row = outline.findRow(id: entityID.rowUUID) else { continue }
-				entities.append(RowAppEntity(row: row))
+				guard let row = outline.findRow(id: entityID.rowUUID),
+					  let entity = RowAppEntity(row: row) else { continue }
+				entities.append(entity)
 			}
 
 			return (entities, outlines)
@@ -201,7 +202,7 @@ private extension FindRowsEntityQuery {
 			return nil
 		}
 
-		let entity = RowAppEntity(row: row)
+		guard let entity = RowAppEntity(row: row) else { return nil }
 
 		// Apply any remaining non-URL comparators
 		let otherComparators = comparators.filter { !$0.isURLComparator }
@@ -220,7 +221,9 @@ private extension FindRowsEntityQuery {
 	@MainActor
 	func collectAllRows(from rows: [Row], into result: inout [RowAppEntity]) {
 		for row in rows {
-			result.append(RowAppEntity(row: row))
+			if let entity = RowAppEntity(row: row) {
+				result.append(entity)
+			}
 			collectAllRows(from: row.rows, into: &result)
 		}
 	}
@@ -228,17 +231,18 @@ private extension FindRowsEntityQuery {
 	@MainActor
 	func collectMatchingRows(from rows: [Row], comparators: [RowComparator], mode: ComparatorMode, into result: inout [RowAppEntity]) {
 		for row in rows {
-			let entity = RowAppEntity(row: row)
-			let matches = comparators.map { $0.matches(entity) }
-			let isMatch: Bool
-			switch mode {
-			case .and:
-				isMatch = matches.allSatisfy { $0 }
-			case .or:
-				isMatch = matches.contains { $0 }
-			}
-			if isMatch {
-				result.append(entity)
+			if let entity = RowAppEntity(row: row) {
+				let matches = comparators.map { $0.matches(entity) }
+				let isMatch: Bool
+				switch mode {
+				case .and:
+					isMatch = matches.allSatisfy { $0 }
+				case .or:
+					isMatch = matches.contains { $0 }
+				}
+				if isMatch {
+					result.append(entity)
+				}
 			}
 			collectMatchingRows(from: row.rows, comparators: comparators, mode: mode, into: &result)
 		}
@@ -253,7 +257,7 @@ private extension [RowComparator] {
 	var outlineEntityIDValue: EntityID? {
 		for comparator in self {
 			if case .outlineEquals(let outline) = comparator {
-				return outline?.id
+				return outline.id
 			}
 		}
 		return nil
@@ -286,7 +290,7 @@ enum RowComparator: Sendable {
 	case levelLessThanOrEqual(Int?)
 	case levelGreaterThan(Int?)
 	case levelGreaterThanOrEqual(Int?)
-	case outlineEquals(OutlineAppEntity?)
+	case outlineEquals(OutlineAppEntity)
 	case urlEquals(URL?)
 
 	var isOutlineEntityIDComparator: Bool {
@@ -336,7 +340,7 @@ enum RowComparator: Sendable {
 			guard let level = entity.level, let value else { return false }
 			return level >= value
 		case .outlineEquals(let value):
-			return entity.outline?.id == value?.id
+			return entity.outline.id == value.id
 		case .urlEquals(let value):
 			return entity.url == value
 		}

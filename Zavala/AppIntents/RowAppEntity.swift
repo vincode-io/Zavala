@@ -21,7 +21,7 @@ struct RowAppEntity: AppEntity {
 	var entityID: EntityID
 
 	@Property(title: LocalizedStringResource("label.text.outline", comment: "Outline"))
-	var outline: OutlineAppEntity?
+	var outline: OutlineAppEntity
 
     @Property(title: LocalizedStringResource("label.text.topic", comment: "topic"))
     var topic: String?
@@ -52,13 +52,14 @@ struct RowAppEntity: AppEntity {
 	}
 
 	@MainActor
-	init(row: Row) {
+	init?(row: Row) {
+		let documentEntityID = EntityID.document(row.entityID.accountID, row.entityID.documentUUID)
+		guard let outline = appDelegate.accountManager.findDocument(documentEntityID)?.outline else {
+			return nil
+		}
 		self.id = row.entityID
 		self.entityID = self.id
-		let documentEntityID = EntityID.document(row.entityID.accountID, row.entityID.documentUUID)
-		if let outline = appDelegate.accountManager.findDocument(documentEntityID)?.outline {
-			self.outline = OutlineAppEntity(outline: outline)
-		}
+		self.outline = OutlineAppEntity(outline: outline)
 		self.topic = row.topicMarkdown(type: .md)
 		self.note = row.noteMarkdown(type: .md)
 		self.complete = row.isComplete

@@ -164,7 +164,7 @@ struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 		}
 		
 		await suspend()
-		return .result(value: movedRows.map({RowAppEntity(row: $0)}))
+		return .result(value: movedRows.compactMap({ RowAppEntity(row: $0) }))
     }
 	
 	private func suspendUnloadAndThrow(outlines: Set<Outline>) async throws {

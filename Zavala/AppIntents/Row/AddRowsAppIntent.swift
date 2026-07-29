@@ -90,7 +90,7 @@ struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
 		
 		await outline.unload()
 		await suspend()
-		return .result(value: rows.map({RowAppEntity(row: $0)}))
+		return .result(value: rows.compactMap({ RowAppEntity(row: $0) }))
     }
 	
 	private func suspendUnloadAndThrow(outline: Outline) async throws {
