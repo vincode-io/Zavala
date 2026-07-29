@@ -11,7 +11,10 @@ import AppIntents
 import VinOutlineKit
 
 struct RowAppEntity: AppEntity {
-    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.row", comment: "Row"))
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(
+		name: LocalizedStringResource("label.text.row-name", defaultValue: "Row", table: "AppIntents", comment: "The name of the Row type. Singular/plural forms live in AppIntents.stringsdict; Shortcuts uses the plural for 'Find Rows'."),
+		numericFormat: LocalizedStringResource("label.text.row-count", defaultValue: "\(placeholder: .int) Rows", comment: "A count of Rows, e.g. '2 Rows'")
+	)
 	static let defaultQuery = FindRowsEntityQuery()
 
 	@Property(title: LocalizedStringResource("label.text.id", comment: "ID"))

@@ -11,7 +11,10 @@ import AppIntents
 import VinOutlineKit
 
 struct OutlineAppEntity: AppEntity, Equatable {
-	static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("label.text.outline", comment: "Outline"))
+	static let typeDisplayRepresentation = TypeDisplayRepresentation(
+		name: LocalizedStringResource("label.text.outline-name", defaultValue: "Outline", table: "AppIntents", comment: "The name of the Outline type. Singular/plural forms live in AppIntents.stringsdict; Shortcuts uses the plural for 'Find Outlines'."),
+		numericFormat: LocalizedStringResource("label.text.outline-count", defaultValue: "\(placeholder: .int) Outlines", comment: "A count of Outlines, e.g. '2 Outlines'")
+	)
 	static let defaultQuery = FindOutlinesEntityQuery()
 	
 	@Property(title: LocalizedStringResource("label.text.id", comment: "ID"))

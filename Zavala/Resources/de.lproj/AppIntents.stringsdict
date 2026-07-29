@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>label.text.outline-name</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@variable@</string>
+		<key>variable</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>one</key>
+			<string>Gliederung</string>
+			<key>other</key>
+			<string>Gliederungen</string>
+		</dict>
+	</dict>
+	<key>label.text.row-name</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@variable@</string>
+		<key>variable</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>one</key>
+			<string>Zeile</string>
+			<key>other</key>
+			<string>Zeilen</string>
+		</dict>
+	</dict>
+</dict>
+</plist>
