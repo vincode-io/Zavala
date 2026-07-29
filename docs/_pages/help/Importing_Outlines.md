@@ -1,7 +1,7 @@
 ---
 layout: single
-title: Import Outlines
-permalink: /help/Import_Outlines.md/
+title: Importing Outlines
+permalink: /help/Importing_Outlines.md/
 header:
   overlay_image: /assets/images/phone_and_laptop.png
   overlay_filter: 0.5

@@ -31,7 +31,8 @@ platforms and I will try to call it out when they are different.
 		* [Link Dialog](Link_Dialog.md)
 * Common Tasks
 	* [Creating an Outline](Creating_an_Outline.md)
-	* [Import Outlines](Import_Outlines.md)
+	* [Printing Outlines](Printing_Outlines.md)
+	* [Importing Outlines](Importing_Outlines.md)
 	* [Exporting Outlines](Exporting_Outlines.md)
 	* [Task Management](Task_Management.md)
 	* [Reusing an Outline](Reusing_an_Outline.md)
