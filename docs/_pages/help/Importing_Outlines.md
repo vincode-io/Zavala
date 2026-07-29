@@ -21,7 +21,7 @@ more structured than Markdown.
 All collection to import them and associate that Tag with them.
 		* You can drag into the Document VIew to import into the selected collection.
 	* iOS
-		* You can use either the Import OPML or Import Markdown option in the More menu.
-In the Documents view.
+		* You can use either the Import OPML or Import Markdown option in the More menu
+in the Documents view.
 		* You can also drag to the Collection Column or Document View the same way that
 you can on macOS
