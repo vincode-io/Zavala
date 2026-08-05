@@ -11580,6 +11580,41 @@
         }
       }
     },
+    "label.text.parent-entity-id" : {
+      "comment" : "Parent Entity ID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übergeordnete Entitäts-ID"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parent Entity ID"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parent Entity ID"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parent Entity ID"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "父实体 ID"
+          }
+        }
+      }
+    },
     "label.text.error" : {
       "comment" : "Label: Error",
       "localizations" : {

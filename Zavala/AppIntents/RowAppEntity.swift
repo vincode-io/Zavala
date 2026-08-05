@@ -23,6 +23,9 @@ struct RowAppEntity: AppEntity {
 	@Property(title: LocalizedStringResource("label.text.entity-id", comment: "Entity ID"))
 	var entityID: EntityID
 
+	@Property(title: LocalizedStringResource("label.text.parent-entity-id", comment: "Parent Entity ID"))
+	var parentEntityID: EntityID
+
 	@Property(title: LocalizedStringResource("label.text.outline", comment: "Outline"))
 	var outline: OutlineAppEntity
 
@@ -62,6 +65,11 @@ struct RowAppEntity: AppEntity {
 		}
 		self.id = row.entityID
 		self.entityID = self.id
+		if let parentRow = row.parent as? Row {
+			self.parentEntityID = parentRow.entityID
+		} else {
+			self.parentEntityID = outline.id
+		}
 		self.outline = OutlineAppEntity(outline: outline)
 		self.topic = row.topicMarkdown(type: .md)
 		self.note = row.noteMarkdown(type: .md)

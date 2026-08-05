@@ -82,6 +82,9 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 		Property(\RowAppEntity.$outline) {
 			EqualToComparator { RowComparator.outlineEquals($0) }
 		}
+		Property(\RowAppEntity.$parentEntityID) {
+			EqualToComparator { RowComparator.parentEntityIDEquals($0) }
+		}
 		Property(\RowAppEntity.$url) {
 			EqualToComparator { RowComparator.urlEquals($0) }
 		}
@@ -123,6 +126,51 @@ struct FindRowsEntityQuery: EntityPropertyQuery, ZavalaAppIntent {
 				}
 			}
 			if let outline = await MainActor.run(body: { appDelegate.accountManager.findDocument(outlineEntityID)?.outline }) {
+				await outline.unload()
+			}
+		} else if let parentEntityID = comparators.parentEntityIDValue {
+			// Restrict the search to the direct children of the parent, whether the
+			// parent EntityID refers to an Outline (top-level rows) or a Row.
+			let documentEntityID: EntityID
+			switch parentEntityID {
+			case .document:
+				documentEntityID = parentEntityID
+			case .row(let accountID, let documentUUID, _):
+				documentEntityID = .document(accountID, documentUUID)
+			default:
+				documentEntityID = parentEntityID
+			}
+
+			await MainActor.run {
+				guard let outline = appDelegate.accountManager.findDocument(documentEntityID)?.outline,
+					  outline.isLocked != true else { return }
+				outline.load()
+
+				let childRows: [Row]
+				switch parentEntityID {
+				case .document:
+					childRows = outline.rows
+				case .row:
+					childRows = outline.findRow(id: parentEntityID.rowUUID)?.rows ?? []
+				default:
+					childRows = []
+				}
+
+				let otherComparators = comparators.filter { !$0.isParentEntityIDComparator }
+				for row in childRows {
+					guard let entity = RowAppEntity(row: row) else { continue }
+					if otherComparators.isEmpty {
+						entities.append(entity)
+					} else {
+						let matches = otherComparators.map { $0.matches(entity) }
+						let isMatch = mode == .and ? matches.allSatisfy { $0 } : matches.contains { $0 }
+						if isMatch {
+							entities.append(entity)
+						}
+					}
+				}
+			}
+			if let outline = await MainActor.run(body: { appDelegate.accountManager.findDocument(documentEntityID)?.outline }) {
 				await outline.unload()
 			}
 		} else {
@@ -272,6 +320,15 @@ private extension [RowComparator] {
 		return nil
 	}
 
+	var parentEntityIDValue: EntityID? {
+		for comparator in self {
+			if case .parentEntityIDEquals(let entityID) = comparator {
+				return entityID
+			}
+		}
+		return nil
+	}
+
 }
 
 enum RowComparator: Sendable {
@@ -292,6 +349,7 @@ enum RowComparator: Sendable {
 	case levelGreaterThanOrEqual(Int?)
 	case outlineEquals(OutlineAppEntity)
 	case urlEquals(URL?)
+	case parentEntityIDEquals(EntityID)
 
 	var isOutlineEntityIDComparator: Bool {
 		if case .outlineEquals = self { return true }
@@ -300,6 +358,11 @@ enum RowComparator: Sendable {
 
 	var isURLComparator: Bool {
 		if case .urlEquals = self { return true }
+		return false
+	}
+
+	var isParentEntityIDComparator: Bool {
+		if case .parentEntityIDEquals = self { return true }
 		return false
 	}
 
@@ -343,6 +406,8 @@ enum RowComparator: Sendable {
 			return entity.outline.id == value.id
 		case .urlEquals(let value):
 			return entity.url == value
+		case .parentEntityIDEquals(let value):
+			return entity.parentEntityID == value
 		}
 	}
 }
