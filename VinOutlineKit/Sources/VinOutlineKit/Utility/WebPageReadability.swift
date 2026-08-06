@@ -62,9 +62,14 @@ struct WebPageReadability {
 			throw AccountError.webPageParserError
 		}
 
-		let images = await downloadImages(contentHTML: content, baseURL: url)
+		let cleanedContent = content
+			.replacing("&amp;", with: "&")
+			.replacing("&nbsp;", with: " ")
+			.replacing("\u{00A0}", with: " ")
 
-		return Content(title: article?.title, html: content, images: images)
+		let images = await downloadImages(contentHTML: cleanedContent, baseURL: url)
+
+		return Content(title: article?.title, html: cleanedContent, images: images)
 	}
 
 }
