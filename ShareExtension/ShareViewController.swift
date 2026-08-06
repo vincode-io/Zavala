@@ -34,7 +34,7 @@ class ShareViewController: UIViewController {
 
 		guard let url = await extractURL() else { return }
 
-		SharedWebImportQueue.enqueue(url)
+		WebImportQueue.enqueue(url)
 	}
 
 	private func extractURL() async -> URL? {

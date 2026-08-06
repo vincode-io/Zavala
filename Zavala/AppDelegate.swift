@@ -1020,11 +1020,10 @@ final class WebImportQueuePresenter: NSObject, NSFilePresenter {
 	private let onChange: @Sendable () -> Void
 
 	init?(onChange: @escaping @Sendable () -> Void) {
-		guard let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as? String,
-			  let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) else {
+		guard let fileURL = WebImportQueue.fileURL else {
 			return nil
 		}
-		self.presentedItemURL = containerURL.appendingPathComponent("PendingWebImports.json")
+		self.presentedItemURL = fileURL
 		self.onChange = onChange
 		super.init()
 	}

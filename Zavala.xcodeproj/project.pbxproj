@@ -34,7 +34,6 @@
 		5126E7572AEF484000015491 /* VinOutlineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5126E7562AEF484000015491 /* VinOutlineKit */; };
 		51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51278E76257F37AC0034F1CB /* Dialog.storyboard */; };
 		512E3D9330241EA00028D3F6 /* ShareExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 512E3D8930241EA00028D3F6 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		512E3DA5302427D90028D3F6 /* SharedWebImportQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512E3D8030241D7D0028D3F6 /* SharedWebImportQueue.swift */; };
 		512E3DA6302427E10028D3F6 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512E3D8130241D7D0028D3F6 /* ShareViewController.swift */; };
 		51341E04272B55080005425B /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51341E03272B55080005425B /* InsetLabel.swift */; };
 		51408FFC2AEF44DC006AEE75 /* VinOutlineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51408FFB2AEF44DC006AEE75 /* VinOutlineKit */; };
@@ -174,6 +173,8 @@
 		51E14F342560732F00320EDB /* CollectionsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F332560732F00320EDB /* CollectionsItem.swift */; };
 		51E2156D2C8766C400358782 /* EditorRowHighlightLayoutFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E2156C2C8766AD00358782 /* EditorRowHighlightLayoutFragment.swift */; };
 		51E508ED2B4B1F490041B826 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 51E508EC2B4B1F490041B826 /* Localizable.xcstrings */; };
+		51EC7F0A30253F2100B6A9F1 /* WebImportQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EC7F0930253F2100B6A9F1 /* WebImportQueue.swift */; };
+		51EC7F0B30253F2100B6A9F1 /* WebImportQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EC7F0930253F2100B6A9F1 /* WebImportQueue.swift */; };
 		51F2859425AD11100019C573 /* CollectionsSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859325AD11100019C573 /* CollectionsSearchCell.swift */; };
 		51F2859725AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */; };
 		51F2859B25AD12800019C573 /* CollectionsSearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */; };
@@ -264,7 +265,6 @@
 		51278E76257F37AC0034F1CB /* Dialog.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
 		512D375025EEFC01000FA597 /* Zavala-dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Zavala-dev.entitlements"; sourceTree = "<group>"; };
 		512E3D7F30241D7D0028D3F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		512E3D8030241D7D0028D3F6 /* SharedWebImportQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedWebImportQueue.swift; sourceTree = "<group>"; };
 		512E3D8130241D7D0028D3F6 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		512E3D8230241D7D0028D3F6 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		512E3D8430241DD10028D3F6 /* Zavala_shareext_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_shareext_target.xcconfig; sourceTree = "<group>"; };
@@ -431,6 +431,7 @@
 		51E14F332560732F00320EDB /* CollectionsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsItem.swift; sourceTree = "<group>"; };
 		51E2156C2C8766AD00358782 /* EditorRowHighlightLayoutFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowHighlightLayoutFragment.swift; sourceTree = "<group>"; };
 		51E508EC2B4B1F490041B826 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		51EC7F0930253F2100B6A9F1 /* WebImportQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebImportQueue.swift; sourceTree = "<group>"; };
 		51F2859325AD11100019C573 /* CollectionsSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchCell.swift; sourceTree = "<group>"; };
 		51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentConfiguration.swift; sourceTree = "<group>"; };
 		51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentView.swift; sourceTree = "<group>"; };
@@ -501,7 +502,6 @@
 			isa = PBXGroup;
 			children = (
 				512E3D7F30241D7D0028D3F6 /* Info.plist */,
-				512E3D8030241D7D0028D3F6 /* SharedWebImportQueue.swift */,
 				512E3D8130241D7D0028D3F6 /* ShareViewController.swift */,
 				512E3D8230241D7D0028D3F6 /* ShareExtension.entitlements */,
 			);
@@ -580,6 +580,7 @@
 			isa = PBXGroup;
 			children = (
 				5167606325F95E4600AC0EBD /* DocumentIndexer.swift */,
+				51EC7F0930253F2100B6A9F1 /* WebImportQueue.swift */,
 				510D38FB2BA4D1700080E950 /* Resources */,
 			);
 			path = Shared;
@@ -1168,7 +1169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				512E3DA6302427E10028D3F6 /* ShareViewController.swift in Sources */,
-				512E3DA5302427D90028D3F6 /* SharedWebImportQueue.swift in Sources */,
+				51EC7F0B30253F2100B6A9F1 /* WebImportQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1188,6 +1189,7 @@
 				51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */,
 				5167606425F95E4600AC0EBD /* DocumentIndexer.swift in Sources */,
 				517A9E3C26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift in Sources */,
+				51EC7F0A30253F2100B6A9F1 /* WebImportQueue.swift in Sources */,
 				516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */,
 				5164B35427582D810039600B /* MainOpenQuicklyViewController.swift in Sources */,
 				511EC2BF2B3F58E0002D89A5 /* SettingsSceneDelegate.swift in Sources */,

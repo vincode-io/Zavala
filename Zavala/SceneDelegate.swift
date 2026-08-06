@@ -205,51 +205,9 @@ private extension SceneDelegate {
 
 	/// Imports any web page URLs the Share extension left in the shared app group queue.
 	func importPendingWebPages() {
-		let urls = PendingWebImportStore.drain()
+		let urls = WebImportQueue.drain()
 		guard !urls.isEmpty else { return }
 		mainSplitViewController.importWebPages(urls: urls)
-	}
-
-}
-
-/// Reads (and clears) the queue of web page URLs the Share extension writes to the shared app group
-/// container, using NSFileCoordinator for safe cross-process access. The extension owns the write
-/// side (`SharedWebImportQueue.enqueue`); the file name, location, and JSON format must stay in sync
-/// between the two.
-private enum PendingWebImportStore {
-
-	private static let queueFileName = "PendingWebImports.json"
-
-	private static var queueFileURL: URL? {
-		guard let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as? String,
-			  let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) else {
-			return nil
-		}
-		return containerURL.appendingPathComponent(queueFileName)
-	}
-
-	/// Reads all queued URLs and clears the file using a coordinated write.
-	static func drain() -> [URL] {
-		guard let fileURL = queueFileURL,
-			  FileManager.default.fileExists(atPath: fileURL.path) else {
-			return []
-		}
-
-		var result = [URL]()
-		let coordinator = NSFileCoordinator()
-		var coordinatorError: NSError?
-
-		coordinator.coordinate(writingItemAt: fileURL, options: .forDeleting, error: &coordinatorError) { actualURL in
-			if let data = try? Data(contentsOf: actualURL),
-			   let decoded = try? JSONDecoder().decode([String].self, from: data) {
-				result = decoded.compactMap { URL(string: $0) }
-			}
-			if !result.isEmpty {
-				try? Data("[]".utf8).write(to: actualURL, options: .atomic)
-			}
-		}
-
-		return result
 	}
 
 }
