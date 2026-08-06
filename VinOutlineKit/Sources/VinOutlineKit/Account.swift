@@ -28,8 +28,10 @@ public enum AccountError: LocalizedError {
 	case fileReadError
 	case markdownParserError
 	case opmlParserError
+	case webPageDownloadError
+	case webPageParserError
 	case renameTagNameExistsError
-	
+
 	public var errorDescription: String? {
 		switch self {
 		case .fileReadError:
@@ -38,6 +40,10 @@ public enum AccountError: LocalizedError {
 			return .accountErrorMarkdownParse
 		case .opmlParserError:
 			return .accountErrorOPMLParse
+		case .webPageDownloadError:
+			return .accountErrorWebPageDownload
+		case .webPageParserError:
+			return .accountErrorWebPageParse
 		case .renameTagNameExistsError:
 			return .accountErrorRenameTagExists
 		case .securityScopeError:
@@ -245,6 +251,56 @@ public final class Account: Identifiable, Equatable {
 		parser.visit(markdownDocument)
 
 		let outline = parser.outline
+
+		outline.ownerName = defaults.ownerName
+		outline.ownerEmail = defaults.ownerEmail
+		outline.ownerURL = defaults.ownerURL
+		outline.numberingStyle = defaults.numberingStyle
+		outline.automaticallyCreateLinks = defaults.automaticallyCreateLinks
+		outline.automaticallyChangeLinkTitles = defaults.automaticallyChangeLinkTitles
+		outline.checkSpellingWhileTyping = defaults.checkSpellingWhileTyping
+		outline.correctSpellingAutomatically = defaults.correctSpellingAutomatically
+
+		for tag in tags ?? [Tag]() {
+			outline.createTag(tag)
+		}
+
+		// Do all the normal housekeeping stuff that keeps things running around here.
+		let document = Document.outline(outline)
+		documents?.append(document)
+		accountDocumentsDidChange()
+
+		outline.zoneID = cloudKitManager?.outlineZone.zoneID
+
+		disambiguate(document: document)
+		outline.updateAllLinkRelationships()
+		fixAltLinks(excluding: outline)
+
+		await outline.forceSave()
+		saveToCloudKit(document)
+		await outline.unload()
+
+		return document
+	}
+
+	@discardableResult
+	public func importWebPage(_ url: URL, defaults: Outline.Defaults, tags: [Tag]?) async throws -> Document {
+		let content = try await WebPageReadability.fetch(url: url)
+
+		// Parse the readable content into an Outline
+		let parser = ImportWebPageParser(account: self, baseURL: url, sourceImages: content.images)
+		parser.parse(contentHTML: content.html)
+
+		let outline = parser.outline
+
+		// Prefer the Readability title, fall back to the page's <title>, then a placeholder.
+		if let contentTitle = content.title, let title = contentTitle.trimmed() {
+			outline.title = title
+		} else if let title = await WebPageTitle.find(forURL: url) {
+			outline.title = title
+		} else {
+			outline.title = .noTitle
+		}
 
 		outline.ownerName = defaults.ownerName
 		outline.ownerEmail = defaults.ownerEmail

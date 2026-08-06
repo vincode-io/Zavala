@@ -1,5 +1,5 @@
 {
-  "originHash" : "bdef035fc67ab7e95ebea2e51b652232e58ce4714935665f74fb59dbf746deb7",
+  "originHash" : "ba3ad17b3a1c2c62918555f9a8c6f71b0f9807e14888ae67de4a92f1bcf666c3",
   "pins" : [
     {
       "identity" : "semaphore",
@@ -47,12 +47,30 @@
       }
     },
     {
+      "identity" : "swiftyjscore",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattmassicotte/SwiftyJSCore.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "0f709316e5642a4545a89ea48b7c982c26e42884"
+      }
+    },
+    {
       "identity" : "vincloudkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vincode-io/VinCloudKit.git",
       "state" : {
         "branch" : "main",
         "revision" : "cf19ba5ca96a305947d34b15362a349e30f6093b"
+      }
+    },
+    {
+      "identity" : "vinreadability",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vincode-io/VinReadability.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "fff764f6fca78ad236720ebbd2b2bff532d337dd"
       }
     },
     {
@@ -69,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vincode-io/VinXML.git",
       "state" : {
-        "branch" : "release",
-        "revision" : "38e83e0cf0c631e7f2aa1a0b73ac83e16f929c81"
+        "branch" : "main",
+        "revision" : "70d0e7429a41f8e0f071ab1e2bda669cc696ed69"
       }
     }
   ],

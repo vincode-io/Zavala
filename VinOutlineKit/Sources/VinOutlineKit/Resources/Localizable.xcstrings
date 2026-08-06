@@ -538,6 +538,29 @@
         }
       }
     },
+    "label.text.unable-to-download-web-page" : {
+      "comment" : "Label: Unable to download the web page.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Webseite konnte nicht heruntergeladen werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to download the web page."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法下载该网页。"
+          }
+        }
+      }
+    },
     "label.text.unable-to-process-markdown" : {
       "comment" : "Label: Unable to process the Markdown data.",
       "localizations" : {
@@ -608,6 +631,29 @@
         }
       }
     },
+    "label.text.unable-to-process-web-page" : {
+      "comment" : "Label: Unable to extract readable content from the web page.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus der Webseite konnte kein lesbarer Inhalt extrahiert werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to extract readable content from the web page."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法从该网页中提取可读内容。"
+          }
+        }
+      }
+    },
     "label.text.unable-to-read-import-file" : {
       "comment" : "Label: Unable to read the import file.",
       "localizations" : {
@@ -644,5 +690,5 @@
       }
     }
   },
-  "version" : "1.0"
+  "version" : "1.3"
 }

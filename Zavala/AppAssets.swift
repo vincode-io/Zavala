@@ -302,8 +302,12 @@ extension String {
 	
 	static let imageControlLabel = String(localized: "label.text.image", comment: "Label: Image")
 	static let importFailedTitle = String(localized: "label.text.import-failed", comment: "Error Message Title: Import Failed")
+	static let importWebPageNoURLMessage = String(localized: "label.text.import-web-page-no-url", comment: "Error Message: The clipboard doesn’t contain a valid web page address.")
+	static let importWebPagePromptMessage = String(localized: "label.text.import-web-page-prompt", comment: "Prompt: Enter the address of the web page to import.")
 	static let importControlLabel = String(localized: "button.text.import", comment: "Action: Import")
 	static let importMarkdownEllipsisControlLabel = String(localized: "button.text.import-markdown-with-ellipsis", comment: "Action: Import Markdown…")
+	static let importWebPageControlLabel = String(localized: "button.text.import-web-page", comment: "Action: Import Web Page")
+	static let importWebPageEllipsisControlLabel = String(localized: "button.text.import-web-page-with-ellipsis", comment: "Action: Import Web Page…")
 	static let importOPMLControlLabel = String(localized: "button.text.import-opml", comment: "Action: Import OPML")
 	static let importOPMLEllipsisControlLabel = String(localized: "button.text.import-opml-with-ellipsis", comment: "Action: Import OPML…")
 	static let indigoControlLabel = String(localized: "button.text.set-font-indigo", comment: "Set Font Color Action: Indigo")

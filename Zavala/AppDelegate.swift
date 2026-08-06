@@ -17,6 +17,7 @@ extension Selector {
 	static let showSettings = #selector(FileActionResponder.showSettings(_:))
 	static let sync = #selector(FileActionResponder.sync(_:))
 	static let importMarkdown = #selector(FileActionResponder.importMarkdown(_:))
+	static let importWebPage = #selector(FileActionResponder.importWebPage(_:))
 	static let importOPML = #selector(FileActionResponder.importOPML(_:))
 	static let createOutline = #selector(FileActionResponder.createOutline(_:))
 	static let newWindow = #selector(AppDelegate.newWindow(_:))
@@ -36,6 +37,7 @@ extension Selector {
 	@objc func showSettings(_ sender: Any?)
 	@objc func sync(_ sender: Any?)
 	@objc func importMarkdown(_ sender: Any?)
+	@objc func importWebPage(_ sender: Any?)
 	@objc func importOPML(_ sender: Any?)
 	@objc func createOutline(_ sender: Any?)
 	@objc func showOpenQuickly(_ sender: Any?)
@@ -45,6 +47,8 @@ extension Selector {
 class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	public private(set) var accountManager: AccountManager!
+
+	private var webImportQueuePresenter: WebImportQueuePresenter?
 
 	let showSettings = UIKeyCommand(title: .settingsEllipsisControlLabel,
 									image: .settings,
@@ -77,6 +81,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												  modifierFlags: [.control, .command])
 	
 	let importMarkdownCommand = UICommand(title: .importMarkdownEllipsisControlLabel, action: .importMarkdown)
+
+	let importWebPageCommand = UICommand(title: .importWebPageEllipsisControlLabel, action: .importWebPage)
 
 	let importOPMLCommand = UIKeyCommand(title: .importOPMLEllipsisControlLabel,
 										 action: .importOPML,
@@ -459,7 +465,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		NSUbiquitousKeyValueStore.default.synchronize()
 		
 		documentIndexer = DocumentIndexer()
-		
+
+		// Observe the shared Share extension queue so a running app imports web pages the moment the
+		// extension writes one, without needing to be activated or opened via URL scheme.
+		webImportQueuePresenter = WebImportQueuePresenter {
+			Task { @MainActor in
+				NotificationCenter.default.post(name: .PendingWebImportsAvailable, object: nil)
+			}
+		}
+		if let webImportQueuePresenter {
+			NSFileCoordinator.addFilePresenter(webImportQueuePresenter)
+		}
+
 		return true
 	}
 
@@ -553,6 +570,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	@objc func importMarkdown(_ sender: Any?) {
 		#if targetEnvironment(macCatalyst)
 		appKitPlugin?.importMarkdown()
+		#endif
+	}
+
+	@objc func importWebPage(_ sender: Any?) {
+		#if targetEnvironment(macCatalyst)
+		appKitPlugin?.importWebPage(withTitle: .importWebPageControlLabel,
+								   message: .importWebPagePromptMessage,
+								   importTitle: .importControlLabel,
+								   cancelTitle: .cancelControlLabel,
+								   placeholder: "https://example.com")
 		#endif
 	}
 
@@ -669,7 +696,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let sharingMenu = UIMenu(title: "", options: .displayInline, children: sharingMenuChildren)
 		builder.insertChild(sharingMenu, atEndOfMenu: .file)
 
-		let importMenu = UIMenu(title: .importControlLabel, image: .importDocument, children: [importMarkdownCommand, importOPMLCommand])
+		let importMenu = UIMenu(title: .importControlLabel, image: .importDocument, children: [importMarkdownCommand, importWebPageCommand, importOPMLCommand])
 		let exportMenu = UIMenu(title: .exportControlLabel, image: .export, children: [exportPDFDocsCommand,
 																					   exportPDFListsCommand,
 																					   exportMarkdownDocsCommand,
@@ -818,7 +845,7 @@ extension AppDelegate: AppKitPluginDelegate {
 	func importOPMLFile(_ url: URL) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		guard let account = accountManager.findAccount(accountID: accountID) ?? accountManager.activeAccounts.first else { return }
-		
+
 		Task {
 			guard let document = try? await account.importOPML(url, tags: nil) else { return }
 
@@ -827,7 +854,20 @@ extension AppDelegate: AppKitPluginDelegate {
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		}
 	}
-	
+
+	func importWebPageURL(_ url: URL) {
+		let accountID = AppDefaults.shared.lastSelectedAccountID
+		guard let account = accountManager.findAccount(accountID: accountID) ?? accountManager.activeAccounts.first else { return }
+
+		Task {
+			guard let document = try? await account.importWebPage(url, defaults: AppDefaults.shared.outlineDefaults, tags: nil) else { return }
+
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: accountManager, document: document).userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
+	}
+
 }
 
 // MARK: ErrorHandler
@@ -962,5 +1002,36 @@ private extension AppDelegate {
 
 		UIApplication.shared.shortcutItems = shortcutItems.reversed()
 	}
+}
+
+extension Notification.Name {
+	static let PendingWebImportsAvailable = Notification.Name("io.vincode.Zavala.pendingWebImportsAvailable")
+}
+
+/// Watches the shared Share extension queue file via NSFileCoordinator. When the extension performs
+/// a coordinated write, `presentedItemDidChange()` fires — even while this app is only backgrounded
+/// (the common case on macOS) — so the app can import the queued web page immediately instead of
+/// waiting to be activated or opened via its URL scheme.
+final class WebImportQueuePresenter: NSObject, NSFilePresenter {
+
+	let presentedItemURL: URL?
+	let presentedItemOperationQueue = OperationQueue()
+
+	private let onChange: @Sendable () -> Void
+
+	init?(onChange: @escaping @Sendable () -> Void) {
+		guard let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as? String,
+			  let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) else {
+			return nil
+		}
+		self.presentedItemURL = containerURL.appendingPathComponent("PendingWebImports.json")
+		self.onChange = onChange
+		super.init()
+	}
+
+	func presentedItemDidChange() {
+		onChange()
+	}
+
 }
 

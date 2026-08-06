@@ -66,6 +66,32 @@ import UniformTypeIdentifiers
 		}
 	}
 
+	func importWebPage(withTitle title: String, message: String, importTitle: String, cancelTitle: String, placeholder: String) {
+		let alert = NSAlert()
+		alert.messageText = title
+		alert.informativeText = message
+		alert.addButton(withTitle: importTitle)
+		alert.addButton(withTitle: cancelTitle)
+
+		let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 320, height: 24))
+		textField.placeholderString = placeholder
+
+		// Pre-populate from the pasteboard when it already holds a web page address.
+		if let clipboard = NSPasteboard.general.string(forType: .string)?.trimmingCharacters(in: .whitespacesAndNewlines),
+		   let url = URL(string: clipboard), let scheme = url.scheme, scheme.hasPrefix("http") {
+			textField.stringValue = clipboard
+		}
+
+		alert.accessoryView = textField
+		alert.window.initialFirstResponder = textField
+
+		guard alert.runModal() == .alertFirstButtonReturn else { return }
+
+		let enteredText = textField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+		guard let url = URL(string: enteredText), let scheme = url.scheme, scheme.hasPrefix("http") else { return }
+		delegate?.importWebPageURL(url)
+	}
+
 	func configureOpenQuickly(_ window: NSObject?) {
 		guard let nsWindow = window as? NSWindow else { return }
 		nsWindow.title = String(localized: "label.text.open-quickly", bundle: .ext, comment: "Window Title: Open Quickly")

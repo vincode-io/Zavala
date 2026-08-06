@@ -28,6 +28,10 @@ extension String {
 											  bundle: .module, comment: "Label: Unable to process the Markdown data.")
 	static let accountErrorOPMLParse = String(localized: "label.text.unable-to-process-opml",
                                               bundle: .module, comment: "Label: Unable to process the OPML data.")
+	static let accountErrorWebPageDownload = String(localized: "label.text.unable-to-download-web-page",
+												  bundle: .module, comment: "Label: Unable to download the web page.")
+	static let accountErrorWebPageParse = String(localized: "label.text.unable-to-process-web-page",
+												  bundle: .module, comment: "Label: Unable to extract readable content from the web page.")
 	static let accountErrorRenameTagExists = String(localized: "label.text.tag-already-exists",
                                                     bundle: .module, comment: "Label: This Tag name already exists. Please choose a different name.")
 	static let accountErrorScopedResource =	String(localized: "label.text.unable-to-access-security-scoped-resoruces",

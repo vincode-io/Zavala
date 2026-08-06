@@ -33,6 +33,9 @@
 		5125D01A26BE181500703DA4 /* SpotlightIndexExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 515D452026BB553600228229 /* SpotlightIndexExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5126E7572AEF484000015491 /* VinOutlineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5126E7562AEF484000015491 /* VinOutlineKit */; };
 		51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51278E76257F37AC0034F1CB /* Dialog.storyboard */; };
+		512E3D9330241EA00028D3F6 /* ShareExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 512E3D8930241EA00028D3F6 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		512E3DA5302427D90028D3F6 /* SharedWebImportQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512E3D8030241D7D0028D3F6 /* SharedWebImportQueue.swift */; };
+		512E3DA6302427E10028D3F6 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512E3D8130241D7D0028D3F6 /* ShareViewController.swift */; };
 		51341E04272B55080005425B /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51341E03272B55080005425B /* InsetLabel.swift */; };
 		51408FFC2AEF44DC006AEE75 /* VinOutlineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51408FFB2AEF44DC006AEE75 /* VinOutlineKit */; };
 		5142C295260AC78C0094571F /* OutlineFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C294260AC78C0094571F /* OutlineFontConfig.swift */; };
@@ -126,6 +129,7 @@
 		51A6A3252C39E8B3002AFEC1 /* GetCurrentOutlineAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4A22C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
 		51AC4DCE2B360C76002FF9AD /* GetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC4DCD2B360C76002FF9AD /* GetInfoView.swift */; };
+		51B1F05B3024F92200383D91 /* ImportWebPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B1F05A3024F92200383D91 /* ImportWebPageViewController.swift */; };
 		51B2B2C82563A2180090C56B /* EditorRowTopicTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */; };
 		51B2B2CE2563AAF60090C56B /* EditorRowContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorRowContentConfiguration.swift */; };
 		51B49BAE2F6618B100FDFE62 /* FindOutlinesEntityQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B49BAD2F6618B100FDFE62 /* FindOutlinesEntityQuery.swift */; };
@@ -185,6 +189,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		512E3D9130241EA00028D3F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 512E3D8830241EA00028D3F6;
+			remoteInfo = ShareExtension;
+		};
 		515D452526BB553600228229 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
@@ -218,6 +229,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				512E3D9330241EA00028D3F6 /* ShareExtension.appex in Embed PlugIns */,
 				5125D01A26BE181500703DA4 /* SpotlightIndexExtension.appex in Embed PlugIns */,
 				51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */,
 			);
@@ -251,6 +263,12 @@
 		512229672563507E008041AF /* EditorRowViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowViewCell.swift; sourceTree = "<group>"; };
 		51278E76257F37AC0034F1CB /* Dialog.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
 		512D375025EEFC01000FA597 /* Zavala-dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Zavala-dev.entitlements"; sourceTree = "<group>"; };
+		512E3D7F30241D7D0028D3F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		512E3D8030241D7D0028D3F6 /* SharedWebImportQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedWebImportQueue.swift; sourceTree = "<group>"; };
+		512E3D8130241D7D0028D3F6 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		512E3D8230241D7D0028D3F6 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
+		512E3D8430241DD10028D3F6 /* Zavala_shareext_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_shareext_target.xcconfig; sourceTree = "<group>"; };
+		512E3D8930241EA00028D3F6 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		51341E03272B55080005425B /* InsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
 		513F32A12594062C0003048F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		51408FF42AEF41C8006AEE75 /* VinOutlineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VinOutlineKit; sourceTree = "<group>"; };
@@ -350,6 +368,7 @@
 		51A6A2E92C39E63B002AFEC1 /* ShowOutlineAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowOutlineAppIntent.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
 		51AC4DCD2B360C76002FF9AD /* GetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoView.swift; sourceTree = "<group>"; };
+		51B1F05A3024F92200383D91 /* ImportWebPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWebPageViewController.swift; sourceTree = "<group>"; };
 		51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowTopicTextView.swift; sourceTree = "<group>"; };
 		51B2B2CD2563AAF60090C56B /* EditorRowContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowContentConfiguration.swift; sourceTree = "<group>"; };
 		51B49BAD2F6618B100FDFE62 /* FindOutlinesEntityQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindOutlinesEntityQuery.swift; sourceTree = "<group>"; };
@@ -427,6 +446,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		512E3D8630241EA00028D3F6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		515D451D26BB553600228229 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -469,6 +495,17 @@
 				511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */,
 			);
 			path = Backlink;
+			sourceTree = "<group>";
+		};
+		512E3D8330241D7D0028D3F6 /* ShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				512E3D7F30241D7D0028D3F6 /* Info.plist */,
+				512E3D8030241D7D0028D3F6 /* SharedWebImportQueue.swift */,
+				512E3D8130241D7D0028D3F6 /* ShareViewController.swift */,
+				512E3D8230241D7D0028D3F6 /* ShareExtension.entitlements */,
+			);
+			path = ShareExtension;
 			sourceTree = "<group>";
 		};
 		514BB9D5255B595300C8DBDF /* Utility */ = {
@@ -601,6 +638,7 @@
 				5181A9362554D92000C153E8 /* Zavala */,
 				51E060B025A4547400194066 /* AppKitPlugin */,
 				515D452B26BB557200228229 /* SpotlightIndexExtension */,
+				512E3D8330241D7D0028D3F6 /* ShareExtension */,
 				5167606225F95E0400AC0EBD /* Shared */,
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
@@ -617,6 +655,7 @@
 				5181A9342554D92000C153E8 /* Zavala.app */,
 				51E060AF25A4547400194066 /* AppKitPlugin.bundle */,
 				515D452026BB553600228229 /* SpotlightIndexExtension.appex */,
+				512E3D8930241EA00028D3F6 /* ShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -771,6 +810,7 @@
 				51C4C3B02555E964004E0206 /* Zavala_project.xcconfig */,
 				5167605525F95B2900AC0EBD /* Zavala_spotlightext_target.xcconfig */,
 				51E060D625A45B8500194066 /* Zavala_target_common.xcconfig */,
+				512E3D8430241DD10028D3F6 /* Zavala_shareext_target.xcconfig */,
 			);
 			path = xcconfig;
 			sourceTree = "<group>";
@@ -876,6 +916,7 @@
 			children = (
 				51278E76257F37AC0034F1CB /* Dialog.storyboard */,
 				51AC4DCD2B360C76002FF9AD /* GetInfoView.swift */,
+				51B1F05A3024F92200383D91 /* ImportWebPageViewController.swift */,
 				511B29E425FEE4DC00C04239 /* LinkViewController.swift */,
 				51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */,
 				519185062713453700B7E177 /* MacRenameTagViewController.swift */,
@@ -898,6 +939,25 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		512E3D8830241EA00028D3F6 /* ShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 512E3D9530241EA00028D3F6 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
+			buildPhases = (
+				512E3D8530241EA00028D3F6 /* Sources */,
+				512E3D8630241EA00028D3F6 /* Frameworks */,
+				512E3D8730241EA00028D3F6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareExtension;
+			packageProductDependencies = (
+			);
+			productName = ShareExtension;
+			productReference = 512E3D8930241EA00028D3F6 /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		515D451F26BB553600228229 /* SpotlightIndexExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 515D452826BB553600228229 /* Build configuration list for PBXNativeTarget "SpotlightIndexExtension" */;
@@ -935,6 +995,7 @@
 			dependencies = (
 				51E060D025A45AA800194066 /* PBXTargetDependency */,
 				515D452626BB553600228229 /* PBXTargetDependency */,
+				512E3D9230241EA00028D3F6 /* PBXTargetDependency */,
 			);
 			name = Zavala;
 			packageProductDependencies = (
@@ -970,9 +1031,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					512E3D8830241EA00028D3F6 = {
+						CreatedOnToolsVersion = 27.0;
+					};
 					515D451F26BB553600228229 = {
 						CreatedOnToolsVersion = 13.0;
 					};
@@ -1007,11 +1071,19 @@
 				5181A9332554D92000C153E8 /* Zavala */,
 				51E060AE25A4547400194066 /* AppKitPlugin */,
 				515D451F26BB553600228229 /* SpotlightIndexExtension */,
+				512E3D8830241EA00028D3F6 /* ShareExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		512E3D8730241EA00028D3F6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		515D451E26BB553600228229 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1091,6 +1163,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		512E3D8530241EA00028D3F6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				512E3DA6302427E10028D3F6 /* ShareViewController.swift in Sources */,
+				512E3DA5302427D90028D3F6 /* SharedWebImportQueue.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		515D451C26BB553600228229 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1157,6 +1238,7 @@
 				51A6A31D2C39E8B3002AFEC1 /* GetRowsAppIntent.swift in Sources */,
 				51A6A31E2C39E8B3002AFEC1 /* ImportAppIntent.swift in Sources */,
 				51A6A31F2C39E8B3002AFEC1 /* MoveRowsAppIntent.swift in Sources */,
+				51B1F05B3024F92200383D91 /* ImportWebPageViewController.swift in Sources */,
 				51A6A3202C39E8B3002AFEC1 /* RemoveRowsAppIntent.swift in Sources */,
 				51B5E5AB2F579B060033090F /* EditShortcutsMenuView.swift in Sources */,
 				51A6A3212C39E8B3002AFEC1 /* RowExpandedStateAppEnum.swift in Sources */,
@@ -1272,6 +1354,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		512E3D9230241EA00028D3F6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 512E3D8830241EA00028D3F6 /* ShareExtension */;
+			targetProxy = 512E3D9130241EA00028D3F6 /* PBXContainerItemProxy */;
+		};
 		515D452626BB553600228229 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 515D451F26BB553600228229 /* SpotlightIndexExtension */;
@@ -1299,6 +1386,20 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		512E3D9630241EA00028D3F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 512E3D8430241DD10028D3F6 /* Zavala_shareext_target.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		512E3D9730241EA00028D3F6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 512E3D8430241DD10028D3F6 /* Zavala_shareext_target.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
 		515D452926BB553600228229 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5167605525F95B2900AC0EBD /* Zavala_spotlightext_target.xcconfig */;
@@ -1358,6 +1459,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		512E3D9530241EA00028D3F6 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				512E3D9630241EA00028D3F6 /* Debug */,
+				512E3D9730241EA00028D3F6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		515D452826BB553600228229 /* Build configuration list for PBXNativeTarget "SpotlightIndexExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

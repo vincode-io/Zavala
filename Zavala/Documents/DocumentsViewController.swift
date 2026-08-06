@@ -345,6 +345,27 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 
+	func importWebPage(url: URL) {
+		guard let documentContainers,
+			  let account = documentContainers.uniqueAccount else { return }
+
+		Task { @MainActor in
+			do {
+				let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
+				let document = try await account.importWebPage(url, defaults: AppDefaults.shared.outlineDefaults, tags: tags)
+
+				try await Task.sleep(for: .seconds(0.5))
+
+				await loadDocuments(animated: true)
+				openDocument(document, animated: true)
+
+				DocumentIndexer.updateIndex(for: document)
+			} catch {
+				self.presentError(title: .importFailedTitle, message: error.localizedDescription)
+			}
+		}
+	}
+
 	func importOPMLs(urls: [URL]) {
 		guard let documentContainers,
 			  let account = documentContainers.uniqueAccount else { return }
@@ -464,6 +485,42 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		docPicker.modalPresentationStyle = .formSheet
 		docPicker.allowsMultipleSelection = true
 		self.present(docPicker, animated: true)
+	}
+
+	@objc func importWebPage() {
+		// The main window presents an in-window sheet for URL entry. (Single-outline editor windows
+		// route through AppDelegate to a native AppKit prompt instead.)
+		let importViewController = ImportWebPageViewController()
+		importViewController.prefilledURLString = Self.clipboardWebURL()?.absoluteString
+		importViewController.onImport = { [weak self] url in
+			self?.importWebPage(url: url)
+		}
+
+		if traitCollection.userInterfaceIdiom == .mac {
+			importViewController.preferredContentSize = CGSize(width: 460, height: 128)
+			present(importViewController, animated: true)
+		} else {
+			let navController = UINavigationController(rootViewController: importViewController)
+			navController.preferredContentSize = CGSize(width: 400, height: 150)
+			navController.modalPresentationStyle = .formSheet
+			present(navController, animated: true)
+		}
+	}
+
+	/// Returns the clipboard contents as an http(s) URL, or nil when the clipboard has no web address.
+	private static func clipboardWebURL() -> URL? {
+		let pasteboard = UIPasteboard.general
+
+		if pasteboard.hasURLs, let url = pasteboard.url, let scheme = url.scheme, scheme.hasPrefix("http") {
+			return url
+		}
+
+		if let string = pasteboard.string?.trimmingCharacters(in: .whitespacesAndNewlines),
+		   let url = URL(string: string), let scheme = url.scheme, scheme.hasPrefix("http") {
+			return url
+		}
+
+		return nil
 	}
 
 	@objc func importOPML() {
@@ -830,6 +887,10 @@ private extension DocumentsViewController {
 			self?.importMarkdown()
 		}
 
+		let importWebPageAction = UIAction(title: .importWebPageEllipsisControlLabel) { [weak self] _ in
+			self?.importWebPage()
+		}
+
 		let importOPMLAction = UIAction(title: .importOPMLEllipsisControlLabel) { [weak self] _ in
 			self?.importOPML()
 		}
@@ -874,7 +935,7 @@ private extension DocumentsViewController {
 		let sortByMenu = UIMenu(title: "", options: .displayInline, children: [sortByTitle, sortByCreated, sortByUpdated])
 		let sortOrderMenu = UIMenu(title: "", options: .displayInline, children: [sortAscending, sortDescending])
 		
-		let importMenu = UIMenu(title: "", options: .displayInline, children: [importMarkdownAction, importOPMLAction])
+		let importMenu = UIMenu(title: "", options: .displayInline, children: [importMarkdownAction, importWebPageAction, importOPMLAction])
 		let sortMenu = UIMenu(title: "", options: .displayInline, children: [UIMenu(title: .sortDocumentsControlLabel, image: .sort, children: [sortByMenu, sortOrderMenu])])
 
 		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [importMenu, sortMenu])

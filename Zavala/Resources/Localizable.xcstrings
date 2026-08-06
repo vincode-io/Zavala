@@ -3206,6 +3206,52 @@
         }
       }
     },
+    "button.text.import-web-page" : {
+      "comment" : "Action: Import Web Page",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Webseite importieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Web Page"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入网页"
+          }
+        }
+      }
+    },
+    "button.text.import-web-page-with-ellipsis" : {
+      "comment" : "Action: Import Web Page…",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Webseite importieren …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Web Page…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入网页…"
+          }
+        }
+      }
+    },
     "button.text.indented-with-children" : {
       "comment" : "Label: Indented with Children",
       "localizations" : {
@@ -11580,41 +11626,6 @@
         }
       }
     },
-    "label.text.parent-entity-id" : {
-      "comment" : "Parent Entity ID",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Übergeordnete Entitäts-ID"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Parent Entity ID"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Parent Entity ID"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Parent Entity ID"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "父实体 ID"
-          }
-        }
-      }
-    },
     "label.text.error" : {
       "comment" : "Label: Error",
       "localizations" : {
@@ -11998,6 +12009,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "导入失败"
+          }
+        }
+      }
+    },
+    "label.text.import-web-page-no-url" : {
+      "comment" : "Error Message: The clipboard doesn’t contain a valid web page address.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Zwischenablage enthält keine gültige Webseitenadresse."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The clipboard doesn’t contain a valid web page address."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "剪贴板不包含有效的网页地址。"
+          }
+        }
+      }
+    },
+    "label.text.import-web-page-prompt" : {
+      "comment" : "Prompt: Enter the address of the web page to import.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geben Sie die Adresse der zu importierenden Webseite ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the address of the web page to import."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请输入要导入的网页地址。"
           }
         }
       }
@@ -13890,6 +13947,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "所有者主页网址"
+          }
+        }
+      }
+    },
+    "label.text.parent-entity-id" : {
+      "comment" : "Parent Entity ID",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übergeordnete Entitäts-ID"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parent Entity ID"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parent Entity ID"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parent Entity ID"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "父实体 ID"
           }
         }
       }
@@ -15912,5 +16004,5 @@
       }
     }
   },
-  "version" : "1.0"
+  "version" : "1.3"
 }

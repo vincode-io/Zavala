@@ -15,7 +15,7 @@ final class MarkdownParserTests: VOKTestCase {
 		parser.visit(document)
 
 		#expect(parser.rows.count == 1)
-		#expect(parser.rows[0].topicMarkdown(type: .markdown) == "This is just a sentence.")
+		#expect(parser.rows[0].topicMarkdown(type: .md) == "This is just a sentence.")
 	}
 
 	@Test func multipleTextRow() throws {
@@ -32,7 +32,7 @@ final class MarkdownParserTests: VOKTestCase {
 		parser.visit(document)
 
 		#expect(parser.rows.count == 1)
-		#expect(parser.rows[0].topicMarkdown(type: .markdown) == "This is _just_ a sentence.")
+		#expect(parser.rows[0].topicMarkdown(type: .md) == "This is _just_ a sentence.")
 	}
 
 	@Test func orderedList() throws {

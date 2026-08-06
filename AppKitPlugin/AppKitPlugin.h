@@ -9,6 +9,7 @@ NS_SWIFT_UI_ACTOR
 @protocol AppKitPluginDelegate <NSObject>
 - (void)importMarkdownFile:(nonnull NSURL *)url;
 - (void)importOPMLFile:(nonnull NSURL *)url;
+- (void)importWebPageURL:(nonnull NSURL *)url;
 @end
 
 NS_SWIFT_UI_ACTOR
@@ -18,6 +19,7 @@ NS_SWIFT_UI_ACTOR
 - (void)stop;
 - (void)importMarkdown;
 - (void)importOPML;
+- (void)importWebPageWithTitle:(nonnull NSString *)title message:(nonnull NSString *)message importTitle:(nonnull NSString *)importTitle cancelTitle:(nonnull NSString *)cancelTitle placeholder:(nonnull NSString *)placeholder;
 - (void)configureOpenQuickly:(NSObject  * _Nullable)window;
 - (void)configureAbout:(NSObject  * _Nullable)window;
 - (void)configureSettings:(NSObject  * _Nullable)window;

@@ -299,6 +299,15 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			documentsViewController?.importOPMLs(urls: urls)
 		}
 	}
+
+	func importWebPages(urls: [URL]) {
+		Task {
+			await selectDefaultDocumentContainerIfNecessary()
+			for url in urls {
+				documentsViewController?.importWebPage(url: url)
+			}
+		}
+	}
 	
 	func validateToolbar() {
 		self.sceneDelegate?.validateToolbar()
@@ -370,6 +379,13 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		Task {
 			await selectDefaultDocumentContainerIfNecessary()
 			documentsViewController?.importMarkdown()
+		}
+	}
+
+	@objc func importWebPage(_ sender: Any?) {
+		Task {
+			await selectDefaultDocumentContainerIfNecessary()
+			documentsViewController?.importWebPage()
 		}
 	}
 
