@@ -294,7 +294,7 @@ public final class Account: Identifiable, Equatable {
 		let outline = parser.outline
 
 		// Prefer the Readability title, fall back to the page's <title>, then a placeholder.
-		if let contentTitle = content.title, let title = contentTitle.trimmed() {
+		if let contentTitle = content.title, let title = WebPageTitleCleaner.clean(contentTitle) {
 			outline.title = title
 		} else if let title = await WebPageTitle.find(forURL: url) {
 			outline.title = title

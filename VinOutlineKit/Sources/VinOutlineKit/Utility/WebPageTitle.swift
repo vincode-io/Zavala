@@ -64,27 +64,8 @@ private extension WebPageTitle {
 		guard let unparsedTitle = title else {
 			return nil
 		}
-		
-		// Fix these messed up compound titles that web designers like to use.
-		var allRanges = [Range<String.Index>]()
-		let compoundDelimiters = Set([": ", " | ", " • ", " › ", " :: ", " » ", " - ", " — ", " · "])
-		for compoundDelimiter in compoundDelimiters {
-			if let range = unparsedTitle.range(of: compoundDelimiter, options: .backwards) {
-				allRanges.append(range)
-			}
-		}
-		
-		// If there is lots of the compound delimiters in the title, we'll allow one of them
-		switch allRanges.count {
-		case 0:
-			return unparsedTitle.trimmed()
-		case 1:
-			return String(unparsedTitle[..<allRanges[0].lowerBound]).trimmed()
-		default:
-			let sortedRanges = allRanges.sorted(by: { $0.lowerBound < $1.lowerBound } )
-			return String(unparsedTitle[..<sortedRanges[1].lowerBound]).trimmed()
-		}
 
+		return WebPageTitleCleaner.clean(unparsedTitle)
 	}
 	
 }
