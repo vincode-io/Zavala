@@ -351,6 +351,7 @@ extension String {
 	static let noTitleLabel = String(localized: "label.text.no-title", comment: "Label: (No Title)")
 	static let numberingStyleControlLabel = String(localized: "label.text.numbering-style", comment: "Label: Numbering Style")
 
+	static let openInBrowserControlLabel = String(localized: "button.text.open-in-browser", comment: "Action: Open in Browser")
 	static let openQuicklyEllipsisControlLabel = String(localized: "button.text.open-quickly-with-ellipsis", comment: "Action: Open Quickly…")
 	static let openQuicklySearchPlaceholder = String(localized: "button.text.open-quickly", comment: "Action: Open Quickly")
 	static let outlineControlLabel = String(localized: "label.text.outline", comment: "Label: Outline")
@@ -441,6 +442,7 @@ extension String {
 	static let useSelectionForFindControlLabel = String(localized: "button.text.use-selection-for-find", comment: "Action: Use Selection For Find")
 	static let useMainWindowAsDefaultControlLabel = String(localized: "button.text.use-main-window-as-default", comment: "Action: Use Main Window as Default")
  
+	static let webPageControlLabel = String(localized: "label.text.web-page", comment: "Label: Web Page")
 	static let websiteControlLabel = String(localized: "label.text.website", comment: "Label: Website")
 	static let wideControlLabel = String(localized: "button.text.wide", comment: "Label: Wide")
 	static let wordCountLabel = String(localized: "label.text.word-count", comment: "Label: Word Count")

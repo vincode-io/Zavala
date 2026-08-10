@@ -287,6 +287,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 	}
 
+	var ancestorWebPageURL: String?
+	var serverWebPageURL: String?
+	public internal(set) var webPageURL: String? {
+		willSet {
+			if isCloudKit && ancestorWebPageURL == nil {
+				ancestorWebPageURL = webPageURL
+			}
+		}
+	}
+
 	var ancestorCreated: Date?
 	var serverCreated: Date?
 	public var created: Date? {
@@ -726,6 +736,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.ownerEmail = coder.ownerEmail
 		self.ancestorOwnerURL = coder.ancestorOwnerURL
 		self.ownerURL = coder.ownerURL
+		self.ancestorWebPageURL = coder.ancestorWebPageURL
+		self.webPageURL = coder.webPageURL
 		self.verticleScrollState = coder.verticleScrollState
 		self.isFilterOn = coder.isFilterOn
 		self.isCompletedFiltered = coder.isCompletedFiltered
@@ -1147,7 +1159,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		if let ownerURL {
 			opml.append("  <ownerID>\(ownerURL.escapingXMLCharacters)</ownerID>\n")
 		}
-		
+		if let webPageURL {
+			opml.append("  <webPageURL>\(webPageURL.escapingXMLCharacters)</webPageURL>\n")
+		}
+
 		opml.append("  <expansionState>\(expansionState)</expansionState>\n")
 		
 		if let verticleScrollState {
@@ -2953,6 +2968,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 							ownerEmail: ownerEmail,
 							ancestorOwnerURL: ancestorOwnerURL,
 							ownerURL: ownerURL,
+							ancestorWebPageURL: ancestorWebPageURL,
+							webPageURL: webPageURL,
 							verticleScrollState: verticleScrollState,
 							isFilterOn: isFilterOn,
 							isCompletedFiltered: isCompletedFiltered, 

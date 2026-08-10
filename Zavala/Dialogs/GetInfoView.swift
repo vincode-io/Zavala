@@ -115,6 +115,11 @@ struct GetInfoView: View {
 					.font(.footnote)
 					.foregroundStyle(.secondary)
 			}
+			if let webPageURL = getInfoViewModel.webPageURL {
+				Section(String.webPageControlLabel) {
+					WebPageURLRow(url: webPageURL)
+				}
+			}
 			Section(String.statisticsControlLabel) {
 				HStack(alignment: .firstTextBaseline) {
 					Text(String.wordCountLabel)
@@ -157,6 +162,26 @@ struct GetInfoView: View {
 	}
 }
 
+struct WebPageURLRow: View {
+
+	@Environment(\.openURL) private var openURL
+
+	let url: URL
+
+	var body: some View {
+		HStack(alignment: .firstTextBaseline) {
+			Text(url.absoluteString)
+				.foregroundStyle(.secondary)
+			Spacer()
+			Button(String.openInBrowserControlLabel, systemImage: "arrow.up.right.square") {
+				openURL(url)
+			}
+			.labelStyle(.iconOnly)
+			.buttonStyle(.borderless)
+		}
+	}
+}
+
 @MainActor
 class GetInfoViewModel: ObservableObject {
 	
@@ -171,6 +196,7 @@ class GetInfoViewModel: ObservableObject {
 	@Published var ownerName: String
 	@Published var ownerEmail: String
 	@Published var ownerURL: String
+	let webPageURL: URL?
 	var createdLabel: String
 	var updatedLabel: String
 	var wordCount: Int
@@ -187,7 +213,14 @@ class GetInfoViewModel: ObservableObject {
 		self.ownerName = outline.ownerName ?? ""
 		self.ownerEmail = outline.ownerEmail ?? ""
 		self.ownerURL = outline.ownerURL ?? ""
-		
+
+		if let webPageURL = outline.webPageURL {
+			self.webPageURL = URL(string: webPageURL)
+		} else {
+			self.webPageURL = nil
+		}
+
+
 		if let created = outline.created {
 			createdLabel = .createdOnLabel(date: created)
 		} else {

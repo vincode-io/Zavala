@@ -302,6 +302,8 @@ public final class Account: Identifiable, Equatable {
 			outline.title = .noTitle
 		}
 
+		outline.webPageURL = url.absoluteString
+
 		outline.ownerName = defaults.ownerName
 		outline.ownerEmail = defaults.ownerEmail
 		outline.ownerURL = defaults.ownerURL
@@ -368,7 +370,8 @@ public final class Account: Identifiable, Equatable {
 		outline.ownerName = headNode?["ownerName"]?.first?.content
 		outline.ownerEmail = headNode?["ownerEmail"]?.first?.content
 		outline.ownerURL = headNode?["ownerID"]?.first?.content
-		
+		outline.webPageURL = headNode?["webPageURL"]?.first?.content
+
 		if let verticleScrollState = headNode?["vertScrollState"]?.first?.content {
 			outline.verticleScrollState = Int(verticleScrollState)
 		}

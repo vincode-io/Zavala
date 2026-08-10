@@ -32,6 +32,8 @@ struct OutlineCoder: Codable {
 	public let ownerEmail: String?
 	public let ancestorOwnerURL: String?
 	public let ownerURL: String?
+	public let ancestorWebPageURL: String?
+	public let webPageURL: String?
 	public let verticleScrollState: Int?
 	public let isFilterOn: Bool?
 	public let isCompletedFiltered: Bool?
@@ -83,6 +85,8 @@ struct OutlineCoder: Codable {
 		case ownerEmail
 		case ancestorOwnerURL
 		case ownerURL
+		case ancestorWebPageURL
+		case webPageURL
 		case verticleScrollState
 		case isFilterOn
 		case isCompletedFiltered

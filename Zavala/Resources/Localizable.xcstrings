@@ -3882,6 +3882,41 @@
         }
       }
     },
+    "button.text.open-in-browser" : {
+      "comment" : "Action: Open in Browser",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Browser öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Open in Browser"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open in Browser"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open in Browser"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在浏览器中打开"
+          }
+        }
+      }
+    },
     "button.text.open-quickly" : {
       "comment" : "Action: Open Quickly",
       "localizations" : {
@@ -15862,6 +15897,41 @@
         }
       },
       "shouldTranslate" : false
+    },
+    "label.text.web-page" : {
+      "comment" : "Label: Web Page",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Webseite"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Web Page"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Web Page"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Web Page"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网页"
+          }
+        }
+      }
     },
     "label.text.website" : {
       "comment" : "Label: Website",

@@ -24,6 +24,7 @@ extension Outline: VCKModel {
 			static let ownerName = "ownerName"
 			static let ownerEmail = "ownerEmail"
 			static let ownerURL = "ownerURL"
+			static let webPageURL = "webPageURL"
 			static let created = "created"
 			static let updated = "updated"
 			static let tagNames = "tagNames"
@@ -272,6 +273,7 @@ extension Outline: VCKModel {
         ownerName = record[Outline.CloudKitRecord.Fields.ownerName] as? String
         ownerEmail = record[Outline.CloudKitRecord.Fields.ownerEmail] as? String
         ownerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
+        webPageURL = record[Outline.CloudKitRecord.Fields.webPageURL] as? String
 
 		applyTags(record, account)
 		applyDocumentLinks(record)
@@ -320,6 +322,7 @@ extension Outline: VCKModel {
         serverOwnerName = record[Outline.CloudKitRecord.Fields.ownerName] as? String
         serverOwnerEmail = record[Outline.CloudKitRecord.Fields.ownerEmail] as? String
         serverOwnerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
+        serverWebPageURL = record[Outline.CloudKitRecord.Fields.webPageURL] as? String
 
         let errorTagNames = record[Outline.CloudKitRecord.Fields.tagNames] as? [String] ?? [String]()
         serverTagIDs = errorTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
@@ -383,6 +386,9 @@ extension Outline: VCKModel {
 
         let recordOwnerURL = merge(client: ownerURL, ancestor: ancestorOwnerURL, server: serverOwnerURL)
         record[Outline.CloudKitRecord.Fields.ownerURL] = recordOwnerURL
+
+        let recordWebPageURL = merge(client: webPageURL, ancestor: ancestorWebPageURL, server: serverWebPageURL)
+        record[Outline.CloudKitRecord.Fields.webPageURL] = recordWebPageURL
 
         // Write empty rowOrder for backward compatibility with older clients
         // Primary ordering now uses fractional indexing (order/parentID on each Row)
@@ -448,6 +454,9 @@ extension Outline: VCKModel {
 
         ancestorOwnerURL = nil
         serverOwnerURL = nil
+
+        ancestorWebPageURL = nil
+        serverWebPageURL = nil
 
         ancestorTagIDs = nil
         serverTagIDs = nil
