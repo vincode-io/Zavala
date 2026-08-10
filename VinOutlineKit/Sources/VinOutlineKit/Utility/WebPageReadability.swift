@@ -62,8 +62,15 @@ struct WebPageReadability {
 			throw AccountError.webPageParserError
 		}
 
-		let cleanedContent = content
-			.replacing("&amp;", with: "&")
+		// Readability can hand back double-encoded content, so an escaped non-breaking space
+		// arrives as "&amp;amp;nbsp;". Unwind the extra "&amp;" layers first (a single pass
+		// can't, since replacing doesn't re-scan text it just inserted), then collapse the
+		// resulting "&nbsp;" and literal non-breaking spaces.
+		var cleanedContent = content
+		while cleanedContent.contains("&amp;") {
+			cleanedContent = cleanedContent.replacing("&amp;", with: "&")
+		}
+		cleanedContent = cleanedContent
 			.replacing("&nbsp;", with: " ")
 			.replacing("\u{00A0}", with: " ")
 
