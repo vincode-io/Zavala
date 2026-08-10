@@ -360,66 +360,74 @@ private extension CloudKitManager {
 		}
 		
 		// Send the grouped changes
-		
-		let leftOverRequests = try await withThrowingTaskGroup(of: ([EntityID], [EntityID]).self, returning: OrderedSet<CloudKitActionRequest>.self) { taskGroup in
-			var leftOverRequests = requests
-			
-			for zoneID in modifications.keys {
-				guard let cloudKitZone = findZone(zoneID: zoneID) else { continue }
-				try await cloudKitZone.upgradeAndValidateZoneVersion()
-				
-				let (modelsToSave, recordIDsToDelete) = modifications[zoneID]!
-				
-				let strategy = VCKModifyStrategy.onlyIfServerUnchanged
-				
-				taskGroup.addTask {
-					let (completedSaves, completedDeletes) = try await cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy)
-					await self.updateSyncMetaData(savedRecords: completedSaves)
 
-					let savedEntityIDs = completedSaves.compactMap { EntityID(description: $0.recordID.recordName) }
-					let deletedEntityIDs = completedDeletes.compactMap { EntityID(description: $0.recordName) }
-					
-					return (savedEntityIDs, deletedEntityIDs)
-				}
-								
-				do {
-					for try await (savedEntityIDs, deletedEntityIDs) in taskGroup {
-						leftOverRequests.subtract(savedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
-						leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+		do {
+			let leftOverRequests = try await withThrowingTaskGroup(of: ([EntityID], [EntityID]).self, returning: OrderedSet<CloudKitActionRequest>.self) { taskGroup in
+				var leftOverRequests = requests
+
+				for zoneID in modifications.keys {
+					guard let cloudKitZone = findZone(zoneID: zoneID) else { continue }
+					try await cloudKitZone.upgradeAndValidateZoneVersion()
+
+					let (modelsToSave, recordIDsToDelete) = modifications[zoneID]!
+
+					let strategy = VCKModifyStrategy.onlyIfServerUnchanged
+
+					taskGroup.addTask {
+						let (completedSaves, completedDeletes) = try await cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy)
+						await self.updateSyncMetaData(savedRecords: completedSaves)
+
+						let savedEntityIDs = completedSaves.compactMap { EntityID(description: $0.recordID.recordName) }
+						let deletedEntityIDs = completedDeletes.compactMap { EntityID(description: $0.recordName) }
+
+						return (savedEntityIDs, deletedEntityIDs)
 					}
-				} catch {
-					if let ckError = error as? CKError {
-						switch ckError.code {
-						case .zoneNotFound:
-							account?.deleteAllDocuments(with: zoneID)
-							// We remove everything so that we get any child row requests as well. We probably could be more surgical here.
-							leftOverRequests.removeAll()
-						case .userDeletedZone:
-							account?.deleteAllDocuments(with: zoneID)
-							throw VCKError.userDeletedZone
-						default:
-							throw ckError
+
+					do {
+						for try await (savedEntityIDs, deletedEntityIDs) in taskGroup {
+							leftOverRequests.subtract(savedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+							leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
 						}
-					} else {
-						throw error
+					} catch {
+						if let ckError = error as? CKError {
+							switch ckError.code {
+							case .zoneNotFound:
+								account?.deleteAllDocuments(with: zoneID)
+								// We remove everything so that we get any child row requests as well. We probably could be more surgical here.
+								leftOverRequests.removeAll()
+							case .userDeletedZone:
+								account?.deleteAllDocuments(with: zoneID)
+								throw VCKError.userDeletedZone
+							default:
+								throw ckError
+							}
+						} else {
+							throw error
+						}
 					}
 				}
-			}
-			
-			return leftOverRequests
-		}
-		
-		for mods in modifications.values {
-			for save in mods.0 {
-				save.clearSyncData()
-			}
-		}
 
-		self.logger.info("Saving \(leftOverRequests.count) requests.")
-		
-		await requestsSemaphore.wait()
-		CloudKitActionRequest.append(cloudKitAccountFolder: cloudKitAccountFolder, requests: leftOverRequests)
-		requestsSemaphore.signal()
+				return leftOverRequests
+			}
+
+			for mods in modifications.values {
+				for save in mods.0 {
+					save.clearSyncData()
+				}
+			}
+
+			self.logger.info("Saving \(leftOverRequests.count) requests.")
+
+			await requestsSemaphore.wait()
+			CloudKitActionRequest.append(cloudKitAccountFolder: cloudKitAccountFolder, requests: leftOverRequests)
+			requestsSemaphore.signal()
+		} catch {
+			await requestsSemaphore.wait()
+			CloudKitActionRequest.append(cloudKitAccountFolder: cloudKitAccountFolder, requests: requests)
+			requestsSemaphore.signal()
+
+			throw error
+		}
 	}
 	
 	func fetchAllChanges() async throws {
