@@ -249,7 +249,7 @@ public class CloudKitManager {
 		guard let zone = findZone(zoneID: zoneID) else { return }
 
 		Task { @MainActor in
-			if let shareRecord = try await zone.fetch(externalID: outline.cloudKitShareRecordName!) as? CKShare {
+			if let shareRecord = try? await zone.fetch(externalID: outline.cloudKitShareRecordName!) as? CKShare {
 				outline.cloudKitShareRecord = shareRecord
 			}
 		}

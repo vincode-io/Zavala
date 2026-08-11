@@ -561,7 +561,7 @@ extension DocumentsViewController: UICloudSharingControllerDelegate {
 	
 	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
 		Task {
-			try await Task.sleep(for: .seconds(2))
+			try? await Task.sleep(for: .seconds(2))
 			await appDelegate.accountManager.sync()
 		}
 	}

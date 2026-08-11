@@ -56,7 +56,7 @@ struct GetImagesForOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, P
 		let allImages = imageGroups.flatMap({ $0 })
 		
 		for image in allImages {
-			let file = await IntentFile(data: image.data!, filename: "\(image.id.imageUUID).png", type: .png)
+			let file = IntentFile(data: image.data!, filename: "\(image.id.imageUUID).png", type: .png)
 			files.append(file)
 		}
 		

@@ -58,7 +58,7 @@ struct GetRowsAppIntent: DeprecatedAppIntent, CustomIntentMigratedAppIntent, Pre
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$entityID, \.$search, \.$regularExpression, \.$completionState, \.$expandedState, \.$excludedRows, \.$startDepth, \.$endDepth)) { entityID, search, regularExpression, completionState, expandedState, excludedRows, startDepth, endDepth in
             DisplayRepresentation(
-                title: LocalizedStringResource("intent.prediction.get-rows-matching-\(search!)-starting-at-\(entityID)", comment: "Get Rows matching <search> starting at <entityID>"),
+				title: LocalizedStringResource("intent.prediction.get-rows-matching-\(search!)-starting-at-\(String(describing: entityID))", comment: "Get Rows matching <search> starting at <entityID>"),
                 subtitle: nil
             )
         }
