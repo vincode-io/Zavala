@@ -2424,14 +2424,17 @@ private extension EditorViewController {
 
 		if traitCollection.userInterfaceIdiom != .mac {
 			keyboardToolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
-			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-			
+
 			if traitCollection.userInterfaceIdiom == .pad {
-				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+				keyboardToolBar.items = [moveButtonsBarButtonItem, .flexibleSpace(), insertButtonsBarButtonItem]
 			} else {
-				let hideKeyboardBarButtonItem = UIBarButtonItem(image: .hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
-				hideKeyboardBarButtonItem.accessibilityLabel = .hideKeyboardControlLabel
-				keyboardToolBar.items = [moveButtonsBarButtonItem, .fixedSpace(), hideKeyboardBarButtonItem, .fixedSpace(), insertButtonsBarButtonItem]
+				if #available(iOS 27.0, *) {
+					keyboardToolBar.items = [moveButtonsBarButtonItem, .flexibleSpace(), insertButtonsBarButtonItem]
+				} else {
+					let hideKeyboardBarButtonItem = UIBarButtonItem(image: .hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
+					hideKeyboardBarButtonItem.accessibilityLabel = .hideKeyboardControlLabel
+					keyboardToolBar.items = [moveButtonsBarButtonItem, .fixedSpace(), hideKeyboardBarButtonItem, .fixedSpace(), insertButtonsBarButtonItem]
+				}
 			}
 			
 			keyboardToolBar.sizeToFit()
