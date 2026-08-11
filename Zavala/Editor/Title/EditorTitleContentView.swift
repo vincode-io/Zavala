@@ -40,7 +40,6 @@ class EditorTitleContentView: UIView, UIContentView {
 			textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
 			textView.widthAnchor.constraint(greaterThanOrEqualToConstant: 20),
 			textView.leadingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.leadingAnchor, constant: 4),
-			textView.trailingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.trailingAnchor, constant: 4)
 		])
 
 		apply()
