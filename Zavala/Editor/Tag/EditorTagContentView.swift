@@ -9,25 +9,23 @@ import UIKit
 
 class EditorTagContentView: UIView, UIContentView {
 
-	let button = UIButton()
+	let button = EditorTagPaddedButton()
 	weak var delegate: EditorTagViewCellDelegate?
-	
+
 	var appliedConfiguration: EditorTagContentConfiguration!
-	
+
 	init(configuration: EditorTagContentConfiguration) {
 		self.delegate = configuration.delegate
 		super.init(frame: .zero)
 
 		layoutMargins = .init(top: 8, left: 4, bottom: 8, right: 4)
-		
+
 		addSubview(button)
-		
+
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.titleLabel?.font = OutlineFontCache.shared.tagFont
 		button.backgroundColor = .systemGray4
 		button.setTitleColor(OutlineFontCache.shared.tagColor, for: .normal)
-		button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
-		button.layer.cornerRadius = button.intrinsicContentSize.height / 2
 
 		let deleteAction = UIAction(title: .removeTagControlLabel, image: .delete, attributes: .destructive) { [weak self] _ in
 			guard let self, let name = self.button.currentTitle else { return }
@@ -35,7 +33,7 @@ class EditorTagContentView: UIView, UIContentView {
 		}
 		let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [deleteAction])
 		button.menu = menu
-		
+
 		let buttonMaxWidth = UIFontMetrics(forTextStyle: .body).scaledValue(for: 250)
 
 		NSLayoutConstraint.activate([
@@ -48,11 +46,11 @@ class EditorTagContentView: UIView, UIContentView {
 
 		apply(configuration: configuration)
 	}
-	
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-	
+
 	var configuration: UIContentConfiguration {
 		get { appliedConfiguration }
 		set {
@@ -60,16 +58,19 @@ class EditorTagContentView: UIView, UIContentView {
 			apply(configuration: newConfig)
 		}
 	}
-	
+
 	private func apply(configuration: EditorTagContentConfiguration) {
 		button.titleLabel?.font = OutlineFontCache.shared.tagFont
 		button.setTitleColor(OutlineFontCache.shared.tagColor, for: .normal)
-		button.layer.cornerRadius = button.intrinsicContentSize.height / 2
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		delegate = configuration.delegate
 		button.setTitle(configuration.name, for: .normal)
 	}
-	
-}
 
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		button.layer.cornerRadius = button.bounds.height / 2
+	}
+
+}

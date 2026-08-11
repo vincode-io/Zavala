@@ -179,6 +179,7 @@
 		51F2859725AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */; };
 		51F2859B25AD12800019C573 /* CollectionsSearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */; };
 		51F2DC7B2586E101003BD5CE /* EditorRowNoteTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2DC7A2586E101003BD5CE /* EditorRowNoteTextView.swift */; };
+		51F8FB45302B1A3700C92283 /* EditorTagPaddedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F8FB44302B1A2B00C92283 /* EditorTagPaddedButton.swift */; };
 		51FA273A2B3B6493008B665E /* SettingsAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA27392B3B6493008B665E /* SettingsAccountsView.swift */; };
 		51FA273C2B3B68DE008B665E /* SettingsOutlineOwnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA273B2B3B68DE008B665E /* SettingsOutlineOwnerView.swift */; };
 		51FA273E2B3B6A12008B665E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA273D2B3B6A12008B665E /* SettingsView.swift */; };
@@ -436,6 +437,7 @@
 		51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentConfiguration.swift; sourceTree = "<group>"; };
 		51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentView.swift; sourceTree = "<group>"; };
 		51F2DC7A2586E101003BD5CE /* EditorRowNoteTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowNoteTextView.swift; sourceTree = "<group>"; };
+		51F8FB44302B1A2B00C92283 /* EditorTagPaddedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagPaddedButton.swift; sourceTree = "<group>"; };
 		51FA27392B3B6493008B665E /* SettingsAccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAccountsView.swift; sourceTree = "<group>"; };
 		51FA273B2B3B68DE008B665E /* SettingsOutlineOwnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOutlineOwnerView.swift; sourceTree = "<group>"; };
 		51FA273D2B3B6A12008B665E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -541,12 +543,13 @@
 			children = (
 				514F221025C4CCE4004E02CD /* EditorTagContentConfiguration.swift */,
 				514F221325C4CD00004E02CD /* EditorTagContentView.swift */,
-				514F220C25C4CCA6004E02CD /* EditorTagViewCell.swift */,
 				514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */,
 				514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */,
-				514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */,
 				51DB0DCC27496CBE008312EC /* EditorTagInputPill.swift */,
+				514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */,
 				514F221725C4D076004E02CD /* EditorTagInputViewCell.swift */,
+				51F8FB44302B1A2B00C92283 /* EditorTagPaddedButton.swift */,
+				514F220C25C4CCA6004E02CD /* EditorTagViewCell.swift */,
 			);
 			path = Tag;
 			sourceTree = "<group>";
@@ -1281,6 +1284,7 @@
 				51341E04272B55080005425B /* InsetLabel.swift in Sources */,
 				51B5E5A82F5793440033090F /* ShortcutRunner.swift in Sources */,
 				51A1EC4427243B3600463A15 /* GenericRowIdentifier.swift in Sources */,
+				51F8FB45302B1A3700C92283 /* EditorTagPaddedButton.swift in Sources */,
 				5116894529BDA0E500318832 /* AboutSceneDelegate.swift in Sources */,
 				511B29FD2601901C00C04239 /* EditorBacklinkViewCell.swift in Sources */,
 				51B2B2CE2563AAF60090C56B /* EditorRowContentConfiguration.swift in Sources */,

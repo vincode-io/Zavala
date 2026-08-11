@@ -28,7 +28,7 @@ class EditorTagInputPill: UIView {
 	let textField: EditorTagInputTextField
 	var textFieldTrailingConstraint: NSLayoutConstraint?
 
-	let button: UIButton
+	let button: EditorTagPaddedButton
 	var buttonWidthConstraint: NSLayoutConstraint?
 	var buttonIsShowing = false
 	
@@ -39,7 +39,7 @@ class EditorTagInputPill: UIView {
 	override init(frame: CGRect) {
 		border = UIView()
 		textField = EditorTagInputTextField()
-		button = UIButton()
+		button = EditorTagPaddedButton()
 
 		super.init(frame: frame)
 
@@ -53,7 +53,7 @@ class EditorTagInputPill: UIView {
 
 		button.addTarget(textField, action: #selector(EditorTagInputTextField.createTag), for: .touchUpInside)
 		button.tintColor = .white
-		button.contentEdgeInsets = .init(top: 0, left: 5, bottom: 0, right: 8)
+		button.titleInsets = .init(top: 4, left: 5, bottom: 4, right: 8)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(button)
 		
@@ -67,9 +67,9 @@ class EditorTagInputPill: UIView {
 			border.leadingAnchor.constraint(equalTo: leadingAnchor),
 			border.bottomAnchor.constraint(equalTo: bottomAnchor),
 			border.trailingAnchor.constraint(equalTo: trailingAnchor),
-			textField.topAnchor.constraint(equalTo: border.topAnchor, constant: 4),
+			textField.topAnchor.constraint(equalTo: border.topAnchor, constant: 2),
 			textField.leadingAnchor.constraint(equalTo: border.layoutMarginsGuide.leadingAnchor),
-			textField.bottomAnchor.constraint(equalTo: border.bottomAnchor, constant: -4),
+			textField.bottomAnchor.constraint(equalTo: border.bottomAnchor, constant: -2),
 			textField.widthAnchor.constraint(lessThanOrEqualToConstant: textFieldMaxWidth),
 			button.topAnchor.constraint(equalTo: topAnchor),
 			button.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -98,7 +98,7 @@ class EditorTagInputPill: UIView {
 			border.layer.borderColor = UIColor.tertiarySystemBackground.cgColor
 		}
 	}
-	
+
 	// MARK: API
 	
 	func updateAppearance() {
@@ -108,6 +108,7 @@ class EditorTagInputPill: UIView {
 		layer.cornerRadius = cornerRadius
 		border.layer.cornerRadius = cornerRadius
 		button.titleLabel?.font = UIFont.systemFont(ofSize: OutlineFontCache.shared.tagFont.pointSize)
+		button.invalidateIntrinsicContentSize()
 	}
 	
 	func reset() {
