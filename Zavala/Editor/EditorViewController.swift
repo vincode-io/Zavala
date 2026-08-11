@@ -378,8 +378,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
-			collectionView.topEdgeEffect.style = .hard
-			
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
