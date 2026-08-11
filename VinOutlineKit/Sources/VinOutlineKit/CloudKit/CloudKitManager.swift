@@ -11,6 +11,7 @@ import UIKit
 import Foundation
 #endif
 import OSLog
+import Network
 import SystemConfiguration
 import CloudKit
 import AsyncAlgorithms
@@ -58,30 +59,11 @@ public class CloudKitManager {
 	private let syncSemaphore = AsyncSemaphore(value: 1)
 
 	private var isSyncing = false
-	private var isNetworkAvailable: Bool {
-		var zeroAddress = sockaddr_in()
-		zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
-		zeroAddress.sin_family = sa_family_t(AF_INET)
 
-		guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
-			 $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-				 SCNetworkReachabilityCreateWithAddress(nil, $0)
-			 }
-		 }) else {
-			 return false
-		 }
+	nonisolated private let pathMonitor = NWPathMonitor()
+	nonisolated private let pathMonitorQueue = DispatchQueue(label: "com.vincode.VinOutlineKit.pathMonitor")
+	private var isNetworkAvailable = true
 
-		 var flags: SCNetworkReachabilityFlags = []
-		 if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
-			 return false
-		 }
-
-		 let isReachable = flags.contains(.reachable)
-		 let needsConnection = flags.contains(.connectionRequired)
-
-		 return (isReachable && !needsConnection)
-	}
-		
 	init(account: Account, errorHandler: ErrorHandler, cloudKitAccountFolder: URL) {
 		self.account = account
 
@@ -95,9 +77,25 @@ public class CloudKitManager {
 		migrateSharedDatabaseChangeToken()
 		outlineZone.migrateChangeToken()
 		
+		// Start network monitoring
+		pathMonitor.pathUpdateHandler = { [weak self] path in
+			Task { [weak self] in
+				await self?.updateNetworkStatus(path.status == .satisfied)
+			}
+		}
+		pathMonitor.start(queue: pathMonitorQueue)
+
 		startWorkTask()
 	}
-	
+
+	deinit {
+		pathMonitor.cancel()
+	}
+
+	private func updateNetworkStatus(_ isAvailable: Bool) {
+		isNetworkAvailable = isAvailable
+	}
+
 	func firstTimeSetup() async {
 		do {
 			// This will create the record zone if one doesn't exist
