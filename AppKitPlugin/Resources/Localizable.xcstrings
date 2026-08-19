@@ -28,6 +28,12 @@
             "value" : "Automatic"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "自動"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -61,6 +67,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dark"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ダーク"
           }
         },
         "zh-Hans" : {
@@ -98,6 +110,12 @@
             "value" : "Light"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ライト"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -131,6 +149,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ was moved or renamed while open."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@は開いている間に移動または名称変更されました。"
           }
         },
         "zh-Hans" : {
@@ -168,6 +192,12 @@
             "value" : "This app "
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "このアプリ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -201,6 +231,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Moving an open application can cause unexpected behaviour. Manually relaunch the application to continue."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "開いているアプリケーションを移動すると、予期しない動作が発生する可能性があります。続けるには、アプリケーションを手動で再起動してください。"
           }
         },
         "zh-Hans" : {
@@ -238,6 +274,12 @@
             "value" : "Open Quickly"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すばやく開く"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -273,6 +315,12 @@
             "value" : "Terminate"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "終了"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -282,5 +330,5 @@
       }
     }
   },
-  "version" : "1.0"
+  "version" : "1.3"
 }

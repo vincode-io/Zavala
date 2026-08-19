@@ -28,6 +28,12 @@
             "value" : "Decimal"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "数字"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -61,6 +67,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Legal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リーガル"
           }
         },
         "zh-Hans" : {
@@ -98,6 +110,12 @@
             "value" : "None"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "なし"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -131,6 +149,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simple"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "シンプル"
           }
         },
         "zh-Hans" : {
@@ -180,6 +204,12 @@
             "value" : "All"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すべて"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -213,6 +243,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "An unexpected CloudKit error occurred."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "予期しないCloudKitエラーが発生しました。"
           }
         },
         "zh-Hans" : {
@@ -250,6 +286,12 @@
             "value" : "The iCloud database is incompatible with this version of the app. Please update to the latest app version to continue syncing."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "iCloudデータベースはこのバージョンのアプリと互換性がありません。同期を続けるには、最新バージョンのアプリにアップデートしてください。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -283,6 +325,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "(No Title)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "（タイトルなし）"
           }
         },
         "zh-Hans" : {
@@ -320,6 +368,12 @@
             "value" : "On My iPad"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "自分のiPad上"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -353,6 +407,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "On My iPhone"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "自分のiPhone上"
           }
         },
         "zh-Hans" : {
@@ -390,6 +450,12 @@
             "value" : "On My Mac"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "自分のMac上"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -423,6 +489,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "検索"
           }
         },
         "zh-Hans" : {
@@ -460,6 +532,12 @@
             "value" : "This Tag name already exists. Please choose a different name."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "このタグ名はすでに存在します。別の名前を選択してください。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -493,6 +571,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to access security scoped resource."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "セキュリティスコープ付きリソースにアクセスできませんでした。"
           }
         },
         "zh-Hans" : {
@@ -530,6 +614,12 @@
             "value" : "Unable to deserialise the row data."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行データをデシリアライズできませんでした。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -551,6 +641,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to download the web page."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Webページをダウンロードできませんでした。"
           }
         },
         "zh-Hans" : {
@@ -588,6 +684,12 @@
             "value" : "Unable to process the Markdown data."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Markdownデータを処理できませんでした。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -623,6 +725,12 @@
             "value" : "Unable to process the OPML data."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "OPMLデータを処理できませんでした。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -644,6 +752,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to extract readable content from the web page."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Webページから読み取り可能なコンテンツを抽出できませんでした。"
           }
         },
         "zh-Hans" : {
@@ -679,6 +793,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to read the import file."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "インポートファイルを読み込めませんでした。"
           }
         },
         "zh-Hans" : {

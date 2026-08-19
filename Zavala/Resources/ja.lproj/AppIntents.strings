@@ -1,0 +1,6 @@
+/* The name of the Outline type. Singular/plural forms live in AppIntents.stringsdict; Shortcuts uses the plural for 'Find Outlines'. */
+"label.text.outline-name" = "Outline";
+
+/* The name of the Row type. Singular/plural forms live in AppIntents.stringsdict; Shortcuts uses the plural for 'Find Rows'. */
+"label.text.row-name" = "Row";
+

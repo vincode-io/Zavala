@@ -29,6 +29,12 @@
             "value" : "Zavala"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavala"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -51,6 +57,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Outliner"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインエディタ"
           }
         },
         "zh-Hans" : {
@@ -89,6 +101,12 @@
             "value" : "Zavala uses Face ID to unlock locked outlines."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavalaはロックされたアウトラインのロックを解除するためにFace IDを使用します。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -123,6 +141,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copyright © 2020-2026 Maurice C. Parker\nAll Rights Reserved."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Copyright © 2020-2026 Maurice C. Parker\n無断複製・転載を禁じます。"
           }
         },
         "zh-Hans" : {
@@ -161,46 +185,16 @@
             "value" : "Zavala wants to use your photos so that you can insert them into outlines."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavalaは、写真をアウトラインに挿入できるようにするために写真へのアクセスを求めています。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zavala 请求访问您的相册，以便您可以将图片插入到大纲中。"
-          }
-        }
-      }
-    },
-    "Zavala Outliner" : {
-      "comment" : "Spotlight Search Terms",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zavala Gliederung"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zavala Outliner"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zavala Outliner"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zavala Outliner"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zavala 大纲编辑器"
           }
         }
       }
@@ -233,6 +227,12 @@
             "value" : "zavala outliner"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "zavalaアウトラインエディタ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -240,7 +240,49 @@
           }
         }
       }
+    },
+    "Zavala Outliner" : {
+      "comment" : "Spotlight Search Terms",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zavala Gliederung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zavala Outliner"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zavala Outliner"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zavala Outliner"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavalaアウトラインエディタ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zavala 大纲编辑器"
+          }
+        }
+      }
     }
   },
-  "version" : "1.0"
+  "version" : "1.3"
 }

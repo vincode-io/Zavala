@@ -1,0 +1,258 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "2Sd-6R-Tb9.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"New Outline\"; ObjectID = \"2Sd-6R-Tb9\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "New Outline"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "新規アウトライン"
+          }
+        }
+      }
+    },
+    "3jR-Kr-AbI.title" : {
+      "comment" : "Class = \"UIBarButtonItem\"; title = \"New Outline\"; ObjectID = \"3jR-Kr-AbI\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "New Outline"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "新規アウトライン"
+          }
+        }
+      }
+    },
+    "5AK-ci-8I5.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Update\"; ObjectID = \"5AK-ci-8I5\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Update"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "更新"
+          }
+        }
+      }
+    },
+    "5oW-OS-be4.title" : {
+      "comment" : "Class = \"UINavigationItem\"; title = \"Tag Name\"; ObjectID = \"5oW-OS-be4\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tag Name"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグ名"
+          }
+        }
+      }
+    },
+    "6V6-oZ-nn3.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"Text:\"; ObjectID = \"6V6-oZ-nn3\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Text:"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "テキスト:"
+          }
+        }
+      }
+    },
+    "hXm-fm-iqD.placeholder" : {
+      "comment" : "Class = \"UITextField\"; placeholder = \"Text\"; ObjectID = \"hXm-fm-iqD\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Text"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "テキスト"
+          }
+        }
+      }
+    },
+    "I9F-eA-IBo.title" : {
+      "comment" : "Class = \"UINavigationItem\"; title = \"Link\"; ObjectID = \"I9F-eA-IBo\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Link"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リンク"
+          }
+        }
+      }
+    },
+    "KeX-HO-OVZ.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Cancel\"; ObjectID = \"KeX-HO-OVZ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cancel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "キャンセル"
+          }
+        }
+      }
+    },
+    "Kqh-2r-Qd0.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Rename\"; ObjectID = \"Kqh-2r-Qd0\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Rename"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "名称変更"
+          }
+        }
+      }
+    },
+    "npa-bs-Cvy.placeholder" : {
+      "comment" : "Class = \"UITextField\"; placeholder = \"Link\"; ObjectID = \"npa-bs-Cvy\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Link"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リンク"
+          }
+        }
+      }
+    },
+    "oVm-MW-Uag.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"Link:\"; ObjectID = \"oVm-MW-Uag\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Link:"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リンク:"
+          }
+        }
+      }
+    },
+    "PwU-x7-F4H.text" : {
+      "comment" : "Class = \"UILabel\"; text = \"Tag Name:\"; ObjectID = \"PwU-x7-F4H\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tag Name:"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグ名:"
+          }
+        }
+      }
+    },
+    "SFe-64-fzK.placeholder" : {
+      "comment" : "Class = \"UITextField\"; placeholder = \"Tag Name\"; ObjectID = \"SFe-64-fzK\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tag Name"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグ名"
+          }
+        }
+      }
+    },
+    "SqN-L1-aXl.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Cancel\"; ObjectID = \"SqN-L1-aXl\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cancel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "キャンセル"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.3"
+}

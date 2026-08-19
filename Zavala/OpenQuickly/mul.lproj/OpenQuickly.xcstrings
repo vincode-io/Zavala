@@ -1,0 +1,114 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "1C9-32-WHN.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"New Outline\"; ObjectID = \"1C9-32-WHN\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "New Outline"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "新規アウトライン"
+          }
+        }
+      }
+    },
+    "5qy-iE-SRe.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Open\"; ObjectID = \"5qy-iE-SRe\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "開く"
+          }
+        }
+      }
+    },
+    "L9g-l9-eOK.placeholder" : {
+      "comment" : "Class = \"UITextField\"; placeholder = \"Outline Name\"; ObjectID = \"L9g-l9-eOK\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Outline Name"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトライン名"
+          }
+        }
+      }
+    },
+    "OSd-my-c2Q.placeholder" : {
+      "comment" : "Class = \"UITextField\"; placeholder = \"Open Quickly\"; ObjectID = \"OSd-my-c2Q\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open Quickly"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すばやく開く"
+          }
+        }
+      }
+    },
+    "TmL-0b-c4c.normalTitle" : {
+      "comment" : "Class = \"UIButton\"; normalTitle = \"Cancel\"; ObjectID = \"TmL-0b-c4c\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cancel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "キャンセル"
+          }
+        }
+      }
+    },
+    "uNw-0Z-jOF.placeholder" : {
+      "comment" : "Class = \"UITextField\"; placeholder = \"Open Quickly\"; ObjectID = \"uNw-0Z-jOF\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open Quickly"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すばやく開く"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.3"
+}

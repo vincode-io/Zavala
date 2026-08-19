@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-      "shouldTranslate" : false
-    },
     "accessibility.text.complete" : {
       "comment" : "Accessibility Label: Complete",
       "localizations" : {
@@ -29,6 +26,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Complete"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "完了"
           }
         },
         "zh-Hans" : {
@@ -66,6 +69,12 @@
             "value" : "Actual Size"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "実際のサイズ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -99,6 +108,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "追加"
           }
         },
         "zh-Hans" : {
@@ -136,6 +151,12 @@
             "value" : "Add Lock"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ロックを追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -169,6 +190,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Note"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "メモを追加"
           }
         },
         "zh-Hans" : {
@@ -206,6 +233,12 @@
             "value" : "Add Note Level"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "メモレベルを追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -239,6 +272,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Numbering Level"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "番号レベルを追加"
           }
         },
         "zh-Hans" : {
@@ -276,6 +315,12 @@
             "value" : "Add Row"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -309,6 +354,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Row Above"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "上に行を追加"
           }
         },
         "zh-Hans" : {
@@ -346,6 +397,12 @@
             "value" : "Add Row After"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "後に行を追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -379,6 +436,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Row Below"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "下に行を追加"
           }
         },
         "zh-Hans" : {
@@ -416,6 +479,12 @@
             "value" : "Add Row Inside"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "内側に行を追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -449,6 +518,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Row Outside"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "外側に行を追加"
           }
         },
         "zh-Hans" : {
@@ -486,6 +561,12 @@
             "value" : "Add Tag"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグを追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -519,6 +600,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Topic Level"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "トピックレベルを追加"
           }
         },
         "zh-Hans" : {
@@ -556,6 +643,12 @@
             "value" : "Always Delete Without Asking"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "確認せずに常に削除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -589,6 +682,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ascending"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "昇順"
           }
         },
         "zh-Hans" : {
@@ -626,6 +725,12 @@
             "value" : "Always At Same Level"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "常に同じレベル"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -659,6 +764,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Automatic"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "自動"
           }
         },
         "zh-Hans" : {
@@ -696,6 +807,12 @@
             "value" : "Back"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "戻る"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -729,6 +846,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "キャンセル"
           }
         },
         "zh-Hans" : {
@@ -766,6 +889,12 @@
             "value" : "Change Link Titles Automatically"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リンクタイトルを自動的に変更"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -799,6 +928,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Check Spelling While Typing"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "入力中にスペルチェック"
           }
         },
         "zh-Hans" : {
@@ -836,6 +971,12 @@
             "value" : "Collapse"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "折りたたむ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -869,6 +1010,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Collapse All"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すべて折りたたむ"
           }
         },
         "zh-Hans" : {
@@ -906,6 +1053,12 @@
             "value" : "Collapse All in Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトライン内をすべて折りたたむ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -939,6 +1092,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Collapse All in Row"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行内をすべて折りたたむ"
           }
         },
         "zh-Hans" : {
@@ -976,6 +1135,12 @@
             "value" : "Copy"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "コピー"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1009,6 +1174,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copy Document Link"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ドキュメントリンクをコピー"
           }
         },
         "zh-Hans" : {
@@ -1046,6 +1217,12 @@
             "value" : "Copy Document Links"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ドキュメントリンクをコピー"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1079,6 +1256,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copy Row Link"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行リンクをコピー"
           }
         },
         "zh-Hans" : {
@@ -1116,6 +1299,12 @@
             "value" : "Correct Spelling Automatically"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "スペルを自動的に修正"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1149,6 +1338,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Create Links Automatically"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リンクを自動的に作成"
           }
         },
         "zh-Hans" : {
@@ -1186,6 +1381,12 @@
             "value" : "Cut"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "カット"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1219,6 +1420,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Delete"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "削除"
           }
         },
         "zh-Hans" : {
@@ -1256,6 +1463,12 @@
             "value" : "Delete Note"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "メモを削除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1289,6 +1502,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Delete Once"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "今回のみ削除"
           }
         },
         "zh-Hans" : {
@@ -1326,6 +1545,12 @@
             "value" : "Delete Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを削除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1359,6 +1584,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The outline will be deleted and unrecoverable."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "このアウトラインは削除され、復元できなくなります。"
           }
         },
         "zh-Hans" : {
@@ -1396,6 +1627,12 @@
             "value" : "The outlines will be deleted and unrecoverable."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "これらのアウトラインは削除され、復元できなくなります。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1429,6 +1666,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Delete Row"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を削除"
           }
         },
         "zh-Hans" : {
@@ -1466,6 +1709,12 @@
             "value" : "Delete Rows"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を削除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1499,6 +1748,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Any child Tag associated with this Tag will also be deleted. No Outlines associated with this Tag will be deleted."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "このタグに関連付けられた子タグもすべて削除されます。このタグに関連付けられたアウトラインは削除されません。"
           }
         },
         "zh-Hans" : {
@@ -1536,6 +1791,12 @@
             "value" : "Any child Tag associated with these Tags will also be deleted. No Outlines associated with these Tags will be deleted."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "これらのタグに関連付けられた子タグもすべて削除されます。これらのタグに関連付けられたアウトラインは削除されません。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1569,6 +1830,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Descending"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "降順"
           }
         },
         "zh-Hans" : {
@@ -1606,6 +1873,12 @@
             "value" : "Disable Animations"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アニメーションを無効にする"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1639,6 +1912,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Duplicate"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "複製"
           }
         },
         "zh-Hans" : {
@@ -1676,6 +1955,12 @@
             "value" : "Duplicate Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを複製"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1709,6 +1994,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Duplicate Row"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を複製"
           }
         },
         "zh-Hans" : {
@@ -1746,6 +2037,12 @@
             "value" : "Duplicate Rows"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を複製"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1781,6 +2078,12 @@
             "value" : "Email Feedback"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "フィードバックをメール送信"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1814,6 +2117,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enable iCloud"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "iCloudを有効にする"
           }
         },
         "zh-Hans" : {
@@ -2043,6 +2352,60 @@
             }
           }
         },
+        "ja" : {
+          "variations" : {
+            "device" : {
+              "appletv" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のApple TV上で有効にする"
+                }
+              },
+              "applevision" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のApple Vision Pro上で有効にする"
+                }
+              },
+              "applewatch" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のApple Watch上で有効にする"
+                }
+              },
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のiPad上で有効にする"
+                }
+              },
+              "iphone" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のiPhone上で有効にする"
+                }
+              },
+              "ipod" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のiPod上で有効にする"
+                }
+              },
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のMac上で有効にする"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のデバイス上で有効にする"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2076,6 +2439,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expand"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "展開"
           }
         },
         "zh-Hans" : {
@@ -2113,6 +2482,12 @@
             "value" : "Expand All"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すべて展開"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2146,6 +2521,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expand All in Outline"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトライン内をすべて展開"
           }
         },
         "zh-Hans" : {
@@ -2183,6 +2564,12 @@
             "value" : "Expand All in Row"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行内をすべて展開"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2216,6 +2603,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Export"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "エクスポート"
           }
         },
         "zh-Hans" : {
@@ -2253,6 +2646,12 @@
             "value" : "Export Markdown Doc…"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Markdownドキュメントをエクスポート…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2286,6 +2685,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Export Markdown List…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Markdownリストをエクスポート…"
           }
         },
         "zh-Hans" : {
@@ -2323,6 +2728,12 @@
             "value" : "Export OPML…"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "OPMLをエクスポート…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2356,6 +2767,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Export PDF Doc…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "PDFドキュメントをエクスポート…"
           }
         },
         "zh-Hans" : {
@@ -2393,6 +2810,12 @@
             "value" : "Export PDF List…"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "PDFリストをエクスポート…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2426,6 +2849,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Filter"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "フィルタ"
           }
         },
         "zh-Hans" : {
@@ -2463,6 +2892,12 @@
             "value" : "Filter Notes"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "メモをフィルタ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2496,6 +2931,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Find"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "検索"
           }
         },
         "zh-Hans" : {
@@ -2533,6 +2974,12 @@
             "value" : "Find Next"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "次を検索"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2566,6 +3013,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Find Previous"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "前を検索"
           }
         },
         "zh-Hans" : {
@@ -2603,6 +3056,12 @@
             "value" : "Find…"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "検索…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2636,6 +3095,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fix It"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "修正"
           }
         },
         "zh-Hans" : {
@@ -2673,6 +3138,12 @@
             "value" : "Focus In"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "フォーカス"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2706,6 +3177,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Focus Out"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "フォーカス解除"
           }
         },
         "zh-Hans" : {
@@ -2743,6 +3220,12 @@
             "value" : "Forward"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "進む"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2776,6 +3259,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Full Width"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "全幅"
           }
         },
         "zh-Hans" : {
@@ -2813,6 +3302,12 @@
             "value" : "General"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "一般"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2846,6 +3341,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get Info"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "情報を見る"
           }
         },
         "zh-Hans" : {
@@ -2883,6 +3384,12 @@
             "value" : "Go Backward"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "戻る"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2916,6 +3423,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Go Forward"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "進む"
           }
         },
         "zh-Hans" : {
@@ -2953,6 +3466,12 @@
             "value" : "Group Row"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行をグループ化"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2986,6 +3505,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Group Rows"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行をグループ化"
           }
         },
         "zh-Hans" : {
@@ -3023,6 +3548,12 @@
             "value" : "Hide Keyboard"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "キーボードを非表示"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3056,6 +3587,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Highlight"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ハイライト"
           }
         },
         "zh-Hans" : {
@@ -3093,6 +3630,12 @@
             "value" : "Import"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "インポート"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3126,6 +3669,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Import Markdown…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Markdownをインポート…"
           }
         },
         "zh-Hans" : {
@@ -3163,6 +3712,12 @@
             "value" : "Import OPML"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "OPMLをインポート"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3198,6 +3753,12 @@
             "value" : "Import OPML…"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "OPMLをインポート…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3221,6 +3782,12 @@
             "value" : "Import Web Page"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Webページをインポート"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3242,6 +3809,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Import Web Page…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Webページをインポート…"
           }
         },
         "zh-Hans" : {
@@ -3279,6 +3852,12 @@
             "value" : "Indented With Children"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "子項目とともにインデント"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3312,6 +3891,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Insert Image"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "画像を挿入"
           }
         },
         "zh-Hans" : {
@@ -3349,6 +3934,12 @@
             "value" : "Insert Image…"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "画像を挿入…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3382,6 +3973,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Italic"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "イタリック"
           }
         },
         "zh-Hans" : {
@@ -3419,6 +4016,12 @@
             "value" : "Jump to Note"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "メモに移動"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3452,6 +4055,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jump to Topic"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "トピックに移動"
           }
         },
         "zh-Hans" : {
@@ -3489,6 +4098,12 @@
             "value" : "Large"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "大"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3522,6 +4137,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Light"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ライト"
           }
         },
         "zh-Hans" : {
@@ -3559,6 +4180,12 @@
             "value" : "Lock Now"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "今すぐロック"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3592,6 +4219,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Medium"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "中"
           }
         },
         "zh-Hans" : {
@@ -3629,6 +4262,12 @@
             "value" : "Mint"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ミント"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3662,6 +4301,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Move Down"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "下に移動"
           }
         },
         "zh-Hans" : {
@@ -3699,6 +4344,12 @@
             "value" : "Move Left"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "左に移動"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3732,6 +4383,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Move Right"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "右に移動"
           }
         },
         "zh-Hans" : {
@@ -3769,6 +4426,12 @@
             "value" : "Move Up"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "上に移動"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3802,6 +4465,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "New Outline"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "新規アウトライン"
           }
         },
         "zh-Hans" : {
@@ -3839,6 +4508,12 @@
             "value" : "Next Result"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "次の検索結果"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3872,6 +4547,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Normal"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "標準"
           }
         },
         "zh-Hans" : {
@@ -3909,6 +4590,12 @@
             "value" : "Open in Browser"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ブラウザで開く"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3942,6 +4629,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open Quickly"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すばやく開く"
           }
         },
         "zh-Hans" : {
@@ -3979,6 +4672,12 @@
             "value" : "Open Quickly…"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すばやく開く…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4012,6 +4711,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Orange"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "オレンジ"
           }
         },
         "zh-Hans" : {
@@ -4049,6 +4754,12 @@
             "value" : "Paste"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ペースト"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4082,6 +4793,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pink"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ピンク"
           }
         },
         "zh-Hans" : {
@@ -4119,6 +4836,12 @@
             "value" : "Previous Result"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "前の検索結果"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4152,6 +4875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Print"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "プリント"
           }
         },
         "zh-Hans" : {
@@ -4189,6 +4918,12 @@
             "value" : "Print Doc"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ドキュメントをプリント"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4222,6 +4957,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Print Doc…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ドキュメントをプリント…"
           }
         },
         "zh-Hans" : {
@@ -4259,6 +5000,12 @@
             "value" : "Print List"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リストをプリント"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4292,6 +5039,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Print List..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リストをプリント…"
           }
         },
         "zh-Hans" : {
@@ -4329,6 +5082,12 @@
             "value" : "Print Screen"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "画面をプリント"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4362,6 +5121,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Print Screen..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "画面をプリント…"
           }
         },
         "zh-Hans" : {
@@ -4399,6 +5164,12 @@
             "value" : "Purple"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "紫"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4432,6 +5203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Red"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "赤"
           }
         },
         "zh-Hans" : {
@@ -4469,6 +5246,12 @@
             "value" : "Redo"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "やり直す"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4502,6 +5285,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "取り除く"
           }
         },
         "zh-Hans" : {
@@ -4539,6 +5328,12 @@
             "value" : "Remove Lock"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ロックを解除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4572,6 +5367,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove Tag"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグを削除"
           }
         },
         "zh-Hans" : {
@@ -4609,6 +5410,12 @@
             "value" : "Rename"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "名称変更"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4642,6 +5449,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Replace"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "置換"
           }
         },
         "zh-Hans" : {
@@ -4679,6 +5492,12 @@
             "value" : "Restore"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "復元"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4712,6 +5531,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Save"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "保存"
           }
         },
         "zh-Hans" : {
@@ -4749,6 +5574,12 @@
             "value" : "Select"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "選択"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4782,6 +5613,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dark"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ダーク"
           }
         },
         "zh-Hans" : {
@@ -4819,6 +5656,12 @@
             "value" : "Blue"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "青"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4852,6 +5695,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bold"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ボールド"
           }
         },
         "zh-Hans" : {
@@ -4889,6 +5738,12 @@
             "value" : "Brown"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "茶色"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4922,6 +5777,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Code"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "コード"
           }
         },
         "zh-Hans" : {
@@ -4959,6 +5820,12 @@
             "value" : "Cyan"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "シアン"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4992,6 +5859,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Green"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "緑"
           }
         },
         "zh-Hans" : {
@@ -5029,6 +5902,12 @@
             "value" : "Indigo"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "インディゴ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5062,6 +5941,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Share"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "共有"
           }
         },
         "zh-Hans" : {
@@ -5099,6 +5984,12 @@
             "value" : "Share…"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "共有…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5132,6 +6023,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shortcuts"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ショートカット"
           }
         },
         "zh-Hans" : {
@@ -5169,6 +6066,12 @@
             "value" : "Show Shortcuts Menu"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ショートカットメニューを表示"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5202,6 +6105,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Small"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "小"
           }
         },
         "zh-Hans" : {
@@ -5239,6 +6148,12 @@
             "value" : "Sort Documents"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ドキュメントを並べ替え"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5272,6 +6187,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sort Rows"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を並べ替え"
           }
         },
         "zh-Hans" : {
@@ -5309,6 +6230,12 @@
             "value" : "Split Row"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を分割"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5342,6 +6269,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sync"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "同期"
           }
         },
         "zh-Hans" : {
@@ -5379,6 +6312,12 @@
             "value" : "Teal"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ティール"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5412,6 +6351,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Toggle Sidebar"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "サイドバーを表示/非表示"
           }
         },
         "zh-Hans" : {
@@ -5449,6 +6394,12 @@
             "value" : "Turn Filter Off"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "フィルタをオフにする"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5482,6 +6433,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Turn Filter On"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "フィルタをオンにする"
           }
         },
         "zh-Hans" : {
@@ -5519,6 +6476,12 @@
             "value" : "Uncomplete"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "未完了に戻す"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5552,6 +6515,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Undo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "取り消す"
           }
         },
         "zh-Hans" : {
@@ -5589,6 +6558,12 @@
             "value" : "Unlock Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインのロックを解除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5622,6 +6597,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Use Main Window as Default"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "メインウインドウをデフォルトにする"
           }
         },
         "zh-Hans" : {
@@ -5659,6 +6640,12 @@
             "value" : "Use Selection For Find"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "検索に選択した項目を使用"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5692,6 +6679,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wide"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "幅広"
           }
         },
         "zh-Hans" : {
@@ -5729,6 +6722,12 @@
             "value" : "Yellow"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "黄色"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5764,6 +6763,12 @@
             "value" : "Zoom In"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "拡大"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5797,6 +6802,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zoom Out"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "縮小"
           }
         },
         "zh-Hans" : {
@@ -5858,6 +6869,12 @@
             "value" : "Adds an Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを追加します"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5891,6 +6908,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add a Tag to the given Outline."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "指定したアウトラインにタグを追加します。"
           }
         },
         "zh-Hans" : {
@@ -5928,6 +6951,12 @@
             "value" : "Update the details of an Outline."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインの詳細を更新します。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5961,6 +6990,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get the currently viewed outline from the foremost window for Zavala."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavalaの最前面のウインドウで現在表示しているアウトラインを取得します。"
           }
         },
         "zh-Hans" : {
@@ -5998,6 +7033,12 @@
             "value" : "Gets the name of the currently selected Tags if there are any."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "現在選択されているタグがある場合は、その名前を取得します。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6031,6 +7072,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get Outlines based on search criteria."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "検索条件に基づいてアウトラインを取得します。"
           }
         },
         "zh-Hans" : {
@@ -6068,6 +7115,12 @@
             "value" : "Deletes an Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを削除します"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6101,6 +7154,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Removes a Tag from the given Outline."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "指定したアウトラインからタグを削除します。"
           }
         },
         "zh-Hans" : {
@@ -6138,6 +7197,12 @@
             "value" : "Shows the given outline in the foremost window of Zavala."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "指定したアウトラインをZavalaの最前面のウインドウに表示します。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6171,6 +7236,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Rows to Outline"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインに行を追加"
           }
         },
         "zh-Hans" : {
@@ -6208,6 +7279,12 @@
             "value" : "Copy Rows in or between Outlines"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトライン内またはアウトライン間で行をコピー"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6241,6 +7318,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Delete the specified Rows."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "指定した行を削除します。"
           }
         },
         "zh-Hans" : {
@@ -6278,6 +7361,12 @@
             "value" : "Gets all the Images associated with the given Outline. Useful for integrating with Outlines exported as Markdown."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "指定したアウトラインに関連付けられたすべての画像を取得します。アウトラインをMarkdownとして書き出す際の統合に便利です。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6311,6 +7400,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get Rows from an Outline."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインから行を取得します。"
           }
         },
         "zh-Hans" : {
@@ -6348,6 +7443,12 @@
             "value" : "Import an Outline."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインをインポートします。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6381,6 +7482,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Move Rows in or between Outlines"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトライン内またはアウトライン間で行を移動"
           }
         },
         "zh-Hans" : {
@@ -6418,6 +7525,12 @@
             "value" : "Update the details of a Row"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行の詳細を更新します。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6452,6 +7565,12 @@
             "value" : "Get Outlines has been deprecated. Use Find Outlines instead."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "“アウトラインを取得”は廃止されました。代わりに“アウトラインを検索”を使用してください。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6484,6 +7603,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get Rows has been deprecated. Use Find Rows instead."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "“行を取得”は廃止されました。代わりに“行を検索”を使用してください。"
           }
         },
         "zh-Hans" : {
@@ -6521,6 +7646,12 @@
             "value" : "Account Type"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アカウントタイプ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6554,6 +7685,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Which Account do you want to add this Outline to?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "このアウトラインをどのアカウントに追加しますか？"
           }
         },
         "zh-Hans" : {
@@ -6591,6 +7728,12 @@
             "value" : "Complete"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "完了"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6624,6 +7767,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Completion State"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "完了状態"
           }
         },
         "zh-Hans" : {
@@ -6661,6 +7810,12 @@
             "value" : "Created End Date"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "作成終了日"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6694,6 +7849,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Created Start Date"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "作成開始日"
           }
         },
         "zh-Hans" : {
@@ -6731,6 +7892,12 @@
             "value" : "Destination"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "移動先"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6764,6 +7931,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Detail"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "詳細"
           }
         },
         "zh-Hans" : {
@@ -6801,6 +7974,12 @@
             "value" : "Document Link"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ドキュメントリンク"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6834,6 +8013,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "End Depth"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "終了の深さ"
           }
         },
         "zh-Hans" : {
@@ -6871,6 +8056,12 @@
             "value" : "Entity ID"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "エンティティID"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6904,6 +8095,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Excluded Rows"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "除外する行"
           }
         },
         "zh-Hans" : {
@@ -6941,6 +8138,12 @@
             "value" : "Expanded"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "展開済み"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6974,6 +8177,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expanded State"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "展開状態"
           }
         },
         "zh-Hans" : {
@@ -7011,6 +8220,12 @@
             "value" : "Export Link Type"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "書き出しリンクのタイプ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7044,6 +8259,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Export Type"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "書き出しタイプ"
           }
         },
         "zh-Hans" : {
@@ -7081,6 +8302,12 @@
             "value" : "Markdown Doc"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Markdownドキュメント"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7114,6 +8341,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Markdown List"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Markdownリスト"
           }
         },
         "zh-Hans" : {
@@ -7151,6 +8384,12 @@
             "value" : "PDF Doc"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "PDFドキュメント"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7184,6 +8423,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "PDF List"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "PDFリスト"
           }
         },
         "zh-Hans" : {
@@ -7221,6 +8466,12 @@
             "value" : "Import Type"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "読み込みタイプ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7254,6 +8505,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Input File"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "入力ファイル"
           }
         },
         "zh-Hans" : {
@@ -7291,6 +8548,12 @@
             "value" : "Input Images"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "入力画像"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7324,6 +8587,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Note"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "メモ"
           }
         },
         "zh-Hans" : {
@@ -7361,6 +8630,12 @@
             "value" : "Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトライン"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7394,6 +8669,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "What is the title of the new Outline?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "新規アウトラインのタイトルは何ですか?"
           }
         },
         "zh-Hans" : {
@@ -7431,6 +8712,12 @@
             "value" : "Owner Email"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "所有者のメールアドレス"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7464,6 +8751,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Owner Name"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "所有者名"
           }
         },
         "zh-Hans" : {
@@ -7501,6 +8794,12 @@
             "value" : "Owner URL"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "所有者のURL"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7534,6 +8833,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Regular Expression"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "正規表現"
           }
         },
         "zh-Hans" : {
@@ -7571,6 +8876,12 @@
             "value" : "Relative File Links"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "相対ファイルリンク"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7604,6 +8915,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Row Link"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行リンク"
           }
         },
         "zh-Hans" : {
@@ -7641,6 +8958,12 @@
             "value" : "Rows"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7674,6 +8997,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "検索"
           }
         },
         "zh-Hans" : {
@@ -7711,6 +9040,12 @@
             "value" : "Start Depth"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "開始の深さ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7744,6 +9079,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tag"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグ"
           }
         },
         "zh-Hans" : {
@@ -7781,6 +9122,12 @@
             "value" : "Tag Name"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグ名"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7814,6 +9161,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tag Names"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグ名"
           }
         },
         "zh-Hans" : {
@@ -7851,6 +9204,12 @@
             "value" : "Title"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タイトル"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7884,6 +9243,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Topic"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "トピック"
           }
         },
         "zh-Hans" : {
@@ -7921,6 +9286,12 @@
             "value" : "Topics"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "トピック"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7953,6 +9324,12 @@
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Markdown"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Markdown"
           }
         },
@@ -7991,6 +9368,12 @@
             "value" : "OPML"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "OPML"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8024,6 +9407,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Updated End Date"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "更新終了日"
           }
         },
         "zh-Hans" : {
@@ -8061,6 +9450,12 @@
             "value" : "Updated Start Date"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "更新開始日"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8094,6 +9489,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zavala Deep Links"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavalaディープリンク"
           }
         },
         "zh-Hans" : {
@@ -8131,6 +9532,12 @@
             "value" : "Import the %1$@ %2$@ into %3$@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@ %2$@を%3$@にインポート"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8164,6 +9571,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add %1$@ to %2$@ at %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@を%2$@の%3$@に追加"
           }
         },
         "zh-Hans" : {
@@ -8201,6 +9614,12 @@
             "value" : "Add Outline titled %1$@ to %2$@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@というタイトルのアウトラインを%2$@に追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8234,6 +9653,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add %1$@ to %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@を%2$@に追加"
           }
         },
         "zh-Hans" : {
@@ -8271,6 +9696,12 @@
             "value" : "Copy %1$@ to %2$@ at %3$@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@を%2$@の%3$@にコピー"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8304,6 +9735,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Export the %1$@ as %2$@ using %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@を%3$@を使用して%2$@として書き出す"
           }
         },
         "zh-Hans" : {
@@ -8341,6 +9778,12 @@
             "value" : "Get Images for %@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@の画像を取得"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8374,6 +9817,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get Rows matching %1$@ starting at %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%2$@から開始して%1$@に一致する行を取得"
           }
         },
         "zh-Hans" : {
@@ -8411,6 +9860,12 @@
             "value" : "Move %1$@ to %2$@ at %3$@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@を%2$@の%3$@に移動"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8444,6 +9899,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@を削除"
           }
         },
         "zh-Hans" : {
@@ -8481,6 +9942,12 @@
             "value" : "Remove %1$@ from %2$@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@を%2$@から削除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8514,6 +9981,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set %1$@ of %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%2$@の%1$@を設定"
           }
         },
         "zh-Hans" : {
@@ -8551,6 +10024,12 @@
             "value" : "Set %1$@ of %2$@ to %3$@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%2$@の%1$@を%3$@に設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8584,6 +10063,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set %1$@ of %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%2$@の%1$@を設定"
           }
         },
         "zh-Hans" : {
@@ -8621,6 +10106,12 @@
             "value" : "Set %1$@ of %2$@ to %3$@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%2$@の%1$@を%3$@に設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8654,6 +10145,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set %1$@ of %2$@ to %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%2$@の%1$@を%3$@に設定"
           }
         },
         "zh-Hans" : {
@@ -8691,6 +10188,12 @@
             "value" : "Set %1$@ of %2$@ to %3$@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%2$@の%1$@を%3$@に設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8724,6 +10227,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set %1$@ of %2$@ to %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%2$@の%1$@を%3$@に設定"
           }
         },
         "zh-Hans" : {
@@ -8761,6 +10270,12 @@
             "value" : "Show %@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@を表示"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8794,6 +10309,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "What is the %@ to add?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "追加する%@は何ですか？"
           }
         },
         "zh-Hans" : {
@@ -8830,6 +10351,12 @@
             "value" : "Add tag ${tagName} to ${outline}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}にタグ${tagName}を追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8862,6 +10389,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show ${outline}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}を表示"
           }
         },
         "zh-Hans" : {
@@ -8898,6 +10431,12 @@
             "value" : "Add ${topics} to ${entityID} at ${destination}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${entityID}の${destination}に${topics}を追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8930,6 +10469,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Outline ${title} to ${accountType}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトライン${title}を${accountType}に追加"
           }
         },
         "zh-Hans" : {
@@ -8966,6 +10511,12 @@
             "value" : "Copy ${rows} to ${entityID} at ${destination}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${entityID}の${destination}に${rows}をコピー"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8998,6 +10549,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Export the ${outline} as ${exportType} using ${exportLinkType}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}を${exportLinkType}を使用して${exportType}として書き出す"
           }
         },
         "zh-Hans" : {
@@ -9034,6 +10591,12 @@
             "value" : "Get Current Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "現在のアウトラインを取得"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9066,6 +10629,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get Current Tags"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "現在のタグを取得"
           }
         },
         "zh-Hans" : {
@@ -9102,6 +10671,12 @@
             "value" : "Get images for ${outline}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}の画像を取得"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9134,6 +10709,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get Outlines"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを取得"
           }
         },
         "zh-Hans" : {
@@ -9170,6 +10751,12 @@
             "value" : "Get Rows matching ${search} start at ${entityID}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${entityID}から開始して${search}に一致する行を取得"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9202,6 +10789,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Import the ${importType} ${inputFile} into ${accountType}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${importType} ${inputFile}を${accountType}にインポート"
           }
         },
         "zh-Hans" : {
@@ -9238,6 +10831,12 @@
             "value" : "Move ${rows} to ${entityID} at ${destination}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${entityID}の${destination}に${rows}を移動"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9270,6 +10869,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove ${outline}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}を削除"
           }
         },
         "zh-Hans" : {
@@ -9306,6 +10911,12 @@
             "value" : "Remove ${rows}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${rows}を削除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9338,6 +10949,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove ${tagName} from ${outline}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}から${tagName}を削除"
           }
         },
         "zh-Hans" : {
@@ -9374,6 +10991,12 @@
             "value" : "Set ${detail} of ${outline}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}の${detail}を設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9406,6 +11029,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set ${detail} of ${outline} to ${ownerEmail}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}の${detail}を${ownerEmail}に設定"
           }
         },
         "zh-Hans" : {
@@ -9442,6 +11071,12 @@
             "value" : "Set ${detail} of ${outline} to ${ownerName}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}の${detail}を${ownerName}に設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9474,6 +11109,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set ${detail} of ${outline} to ${ownerURL}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}の${detail}を${ownerURL}に設定"
           }
         },
         "zh-Hans" : {
@@ -9510,6 +11151,12 @@
             "value" : "Set ${detail} of ${outline} to ${title}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${outline}の${detail}を${title}に設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9542,6 +11189,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set ${detail} of ${rows}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${rows}の${detail}を設定"
           }
         },
         "zh-Hans" : {
@@ -9578,6 +11231,12 @@
             "value" : "Set ${detail} of ${rows} to ${complete}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${rows}の${detail}を${complete}に設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9610,6 +11269,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set ${detail} of ${rows} to ${expanded}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${rows}の${detail}を${expanded}に設定"
           }
         },
         "zh-Hans" : {
@@ -9646,6 +11311,12 @@
             "value" : "Set ${detail} of ${rows} to ${note}"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${rows}の${detail}を${note}に設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9678,6 +11349,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set ${detail} of ${rows} to ${topic}"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "${rows}の${detail}を${topic}に設定"
           }
         },
         "zh-Hans" : {
@@ -9715,6 +11392,12 @@
             "value" : "Add Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9748,6 +11431,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add Outline Tag"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインタグを追加"
           }
         },
         "zh-Hans" : {
@@ -9785,6 +11474,12 @@
             "value" : "Add Rows"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を追加"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9818,6 +11513,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copy Rows"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行をコピー"
           }
         },
         "zh-Hans" : {
@@ -9855,6 +11556,12 @@
             "value" : "Edit Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを編集"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9888,6 +11595,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Edit Rows"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を編集"
           }
         },
         "zh-Hans" : {
@@ -9925,6 +11638,12 @@
             "value" : "Export"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "書き出し"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9958,6 +11677,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Export the outline in various formats."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインをさまざまなフォーマットで書き出します。"
           }
         },
         "zh-Hans" : {
@@ -9995,6 +11720,12 @@
             "value" : "Get Current Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "現在のアウトラインを取得"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10028,6 +11759,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get Current Tags"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "現在のタグを取得"
           }
         },
         "zh-Hans" : {
@@ -10065,6 +11802,12 @@
             "value" : "Get Images for Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインの画像を取得"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10098,6 +11841,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get Outlines"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを取得"
           }
         },
         "zh-Hans" : {
@@ -10135,6 +11884,12 @@
             "value" : "Get Rows"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を取得"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10168,6 +11923,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Import"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "読み込み"
           }
         },
         "zh-Hans" : {
@@ -10205,6 +11966,12 @@
             "value" : "Move Rows"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を移動"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10238,6 +12005,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove Outline"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを削除"
           }
         },
         "zh-Hans" : {
@@ -10275,6 +12048,12 @@
             "value" : "Remove Outline Tag"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインタグを削除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10308,6 +12087,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove Rows"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を削除"
           }
         },
         "zh-Hans" : {
@@ -10345,6 +12130,12 @@
             "value" : "Show Outline"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインを表示"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10378,6 +12169,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "About Zavala"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavalaについて"
           }
         },
         "zh-Hans" : {
@@ -10415,6 +12212,12 @@
             "value" : "Account Type"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アカウントタイプ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10448,6 +12251,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Accounts"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アカウント"
           }
         },
         "zh-Hans" : {
@@ -10485,6 +12294,12 @@
             "value" : "Acknowledgements"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "謝辞"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10518,6 +12333,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Developed by [Maurice C. Parker](https://vincode.io)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "開発: [Maurice C. Parker](https://vincode.io)"
           }
         },
         "zh-Hans" : {
@@ -10555,6 +12376,12 @@
             "value" : "App icon by [Brad Ellis](https://hachyderm.io/@bradellis)"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Appアイコン: [Brad Ellis](https://hachyderm.io/@bradellis)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10588,6 +12415,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Authentication failed."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "認証に失敗しました。"
           }
         },
         "zh-Hans" : {
@@ -10625,6 +12458,12 @@
             "value" : "Backlinks"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "バックリンク"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10658,6 +12497,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bug Tracker"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "バグトラッカー"
           }
         },
         "zh-Hans" : {
@@ -10695,6 +12540,12 @@
             "value" : "Close"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "閉じる"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10728,6 +12579,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Collapsed"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "折りたたみ済み"
           }
         },
         "zh-Hans" : {
@@ -10765,6 +12622,12 @@
             "value" : "Colour Palette"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "カラーパレット"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10798,6 +12661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Community Discussion"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "コミュニティディスカッション"
           }
         },
         "zh-Hans" : {
@@ -10835,6 +12704,12 @@
             "value" : "Complete"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "完了"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10868,6 +12743,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contributors"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "貢献者"
           }
         },
         "zh-Hans" : {
@@ -10905,6 +12786,12 @@
             "value" : "Copyright © Vincode, Inc. 2020-%@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Copyright © Vincode, Inc. 2020-%@年"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10938,6 +12825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Create Rows"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行を作成"
           }
         },
         "zh-Hans" : {
@@ -10975,6 +12868,12 @@
             "value" : "Created"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "作成日"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11008,6 +12907,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ at %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : " %1$@ %2$@"
           }
         },
         "zh-Hans" : {
@@ -11045,6 +12950,12 @@
             "value" : "Delete Completed"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "完了した行を削除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11080,6 +12991,12 @@
             "value" : "Delete Completed Rows"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "完了した行を削除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11113,6 +13030,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Are you sure you want to delete the completed rows?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "完了した行を削除してもよろしいですか?"
           }
         },
         "zh-Hans" : {
@@ -11198,6 +13121,24 @@
             }
           }
         },
+        "ja" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%i個のタグを削除してもよろしいですか?"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%i個のタグを削除してもよろしいですか?"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11231,6 +13172,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Are you sure you want to delete the ”%@” outline?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "“%@”アウトラインを削除してもよろしいですか?"
           }
         },
         "zh-Hans" : {
@@ -11268,6 +13215,24 @@
             "value" : "Are you sure you want to delete %lld outlines?"
           }
         },
+        "ja" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld個のアウトラインを削除してもよろしいですか?"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld個のアウトラインを削除してもよろしいですか?"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11301,6 +13266,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Are you sure you want to delete the ”%@” tag?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "“%@”タグを削除してもよろしいですか?"
           }
         },
         "zh-Hans" : {
@@ -11338,6 +13309,12 @@
             "value" : "Directly After"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "直後"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11371,6 +13348,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Directly Before"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "直前"
           }
         },
         "zh-Hans" : {
@@ -11408,6 +13391,12 @@
             "value" : "Document Not Found"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ドキュメントが見つかりません"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11441,6 +13430,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The requested document could not be found. It was most likely deleted and is no longer available."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "要求されたドキュメントが見つかりませんでした。削除された可能性が高く、現在は利用できません。"
           }
         },
         "zh-Hans" : {
@@ -11478,6 +13473,12 @@
             "value" : "Done"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "完了"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11511,6 +13512,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Edit Document ”%@”"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "“%@”を編集"
           }
         },
         "zh-Hans" : {
@@ -11548,6 +13555,12 @@
             "value" : "Edit Menu"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "編集メニュー"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11581,6 +13594,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Editor"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "エディタ"
           }
         },
         "zh-Hans" : {
@@ -11618,6 +13637,12 @@
             "value" : "Email"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "メール"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11651,6 +13676,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entity ID"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "エンティティID"
           }
         },
         "zh-Hans" : {
@@ -11688,6 +13719,12 @@
             "value" : "Error"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "エラー"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11721,6 +13758,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expanded"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "展開済み"
           }
         },
         "zh-Hans" : {
@@ -11758,6 +13801,12 @@
             "value" : "Filter Completed"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "完了した行をフィルタ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11793,6 +13842,12 @@
             "value" : "Fonts"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "フォント"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11826,6 +13881,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Format"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "フォーマット"
           }
         },
         "zh-Hans" : {
@@ -11899,6 +13960,12 @@
             "value" : "Help"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ヘルプ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11932,6 +13999,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "History"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "履歴"
           }
         },
         "zh-Hans" : {
@@ -12005,6 +14078,12 @@
             "value" : "Image"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "画像"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12040,6 +14119,12 @@
             "value" : "Import Failed"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "インポートに失敗しました"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12063,6 +14148,12 @@
             "value" : "The clipboard doesn’t contain a valid web page address."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "クリップボードに有効なWebページのアドレスが含まれていません。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12084,6 +14175,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enter the address of the web page to import."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "インポートするWebページのアドレスを入力してください。"
           }
         },
         "zh-Hans" : {
@@ -12121,6 +14218,12 @@
             "value" : "Inside at End"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "内側の末尾"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12154,6 +14257,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Inside at Start"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "内側の先頭"
           }
         },
         "zh-Hans" : {
@@ -12191,6 +14300,12 @@
             "value" : "The specified Account isn't available to be used."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "指定されたアカウントは使用できません。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12224,6 +14339,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The Entity ID is required in this context."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "このコンテキストではエンティティIDが必要です。"
           }
         },
         "zh-Hans" : {
@@ -12261,6 +14382,12 @@
             "value" : "The specified Destination is not valid for the Entity specified by the Entity ID."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "指定された移動先は、エンティティIDで指定されたエンティティに対して無効です。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12294,6 +14421,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unable to find the Outline or Row specified by the Entity ID."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "エンティティIDで指定されたアウトラインまたは行が見つかりませんでした。"
           }
         },
         "zh-Hans" : {
@@ -12331,6 +14464,12 @@
             "value" : "No Tags are currently selected."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "現在、タグが選択されていません。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12364,6 +14503,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The requested Outline was locked."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "要求されたアウトラインはロックされています。"
           }
         },
         "zh-Hans" : {
@@ -12401,6 +14546,12 @@
             "value" : "The requested Outline was not found."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "要求されたアウトラインが見つかりませんでした。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12434,6 +14585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "There isn't an Outline currently being viewed."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "現在表示しているアウトラインがありません。"
           }
         },
         "zh-Hans" : {
@@ -12471,6 +14628,12 @@
             "value" : "An unexpected error occurred. Please try again."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "予期しないエラーが発生しました。やり直してみてください。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12504,6 +14667,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keychain delete failed: %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "キーチェーンの削除に失敗しました: %lld"
           }
         },
         "zh-Hans" : {
@@ -12541,6 +14710,12 @@
             "value" : "Keychain read failed: %lld"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "キーチェーンの読み込みに失敗しました: %lld"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12574,6 +14749,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keychain write failed: %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "キーチェーンへの書き込みに失敗しました: %lld"
           }
         },
         "zh-Hans" : {
@@ -12611,6 +14792,12 @@
             "value" : "Level"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "レベル"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12644,6 +14831,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Link"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リンク"
           }
         },
         "zh-Hans" : {
@@ -12681,6 +14874,12 @@
             "value" : "Link..."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リンク…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12714,6 +14913,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lock %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ をロック"
           }
         },
         "zh-Hans" : {
@@ -12751,6 +14956,12 @@
             "value" : "This outline is locked."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "このアウトラインはロックされています。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12784,6 +14995,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Manage Sharing..."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "共有を管理…"
           }
         },
         "zh-Hans" : {
@@ -12821,6 +15038,12 @@
             "value" : "Max Width"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "最大幅"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12854,6 +15077,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "More"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "その他"
           }
         },
         "zh-Hans" : {
@@ -12891,6 +15120,12 @@
             "value" : "Move"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "移動"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12924,6 +15159,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Multiple Selections"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "複数選択"
           }
         },
         "zh-Hans" : {
@@ -12961,6 +15202,12 @@
             "value" : "Name"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "名前"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12994,6 +15241,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Navigation"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ナビゲーション"
           }
         },
         "zh-Hans" : {
@@ -13031,6 +15284,12 @@
             "value" : "New Main Window"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "新規メインウインドウ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13064,6 +15323,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No encryption key found for this outline."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "このアウトラインの暗号化キーが見つかりません。"
           }
         },
         "zh-Hans" : {
@@ -13101,6 +15366,12 @@
             "value" : "No Selection"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "選択なし"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13134,6 +15405,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "(No Title)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "（タイトルなし）"
           }
         },
         "zh-Hans" : {
@@ -13171,6 +15448,12 @@
             "value" : "None"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "なし"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13204,6 +15487,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Note"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "メモ"
           }
         },
         "zh-Hans" : {
@@ -13241,6 +15530,24 @@
             "value" : "Note Level %lld"
           }
         },
+        "ja" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "メモレベル %lld"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "メモレベル %lld"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13276,6 +15583,12 @@
             "value" : "Numbering Level %lld"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "番号レベル %lld"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13309,6 +15622,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Numbering Style"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "番号スタイル"
           }
         },
         "zh-Hans" : {
@@ -13538,6 +15857,60 @@
             }
           }
         },
+        "ja" : {
+          "variations" : {
+            "device" : {
+              "appletv" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のApple TV上"
+                }
+              },
+              "applevision" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のApple Vision上"
+                }
+              },
+              "applewatch" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のApple Watch上"
+                }
+              },
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のiPad上"
+                }
+              },
+              "iphone" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のiPhone上"
+                }
+              },
+              "ipod" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のiPod上"
+                }
+              },
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のMac上"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "自分のデバイス上"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13573,6 +15946,12 @@
             "value" : "This information is included in OPML documents to attribute ownership."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "この情報は所有権を示すためにOPMLドキュメントに含まれます。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13606,6 +15985,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Outline"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトライン"
           }
         },
         "zh-Hans" : {
@@ -13692,6 +16077,24 @@
             }
           }
         },
+        "ja" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld アウトライン"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld アウトライン"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
           "variations" : {
             "plural" : {
@@ -13733,6 +16136,12 @@
             "value" : "Outline Defaults"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインのデフォルト設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13766,6 +16175,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Outline Detail"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインの詳細"
           }
         },
         "zh-Hans" : {
@@ -13803,6 +16218,12 @@
             "value" : "Outline Owner"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "アウトラインの所有者"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13836,6 +16257,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Outside"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "外側"
           }
         },
         "zh-Hans" : {
@@ -13873,6 +16300,12 @@
             "value" : "Owner"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "所有者"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13906,6 +16339,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Owner Email"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "所有者のメール"
           }
         },
         "zh-Hans" : {
@@ -13943,6 +16382,12 @@
             "value" : "Owner Name"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "所有者名"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13976,6 +16421,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Owner URL"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "所有者のURL"
           }
         },
         "zh-Hans" : {
@@ -14013,6 +16464,12 @@
             "value" : "Parent Entity ID"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "親エンティティID"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14046,6 +16503,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preferences…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "環境設定…"
           }
         },
         "zh-Hans" : {
@@ -14083,6 +16546,12 @@
             "value" : "Primary Text"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "第1テキスト"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14116,6 +16585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Privacy Policy"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "プライバシーポリシー"
           }
         },
         "zh-Hans" : {
@@ -14153,6 +16628,12 @@
             "value" : "Quaternary Text"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "第4テキスト"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14186,6 +16667,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Readable"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "読みやすい幅"
           }
         },
         "zh-Hans" : {
@@ -14223,6 +16710,12 @@
             "value" : "Reference"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "参照"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14256,6 +16749,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "References: "
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "参照： "
           }
         },
         "zh-Hans" : {
@@ -14293,6 +16792,12 @@
             "value" : "Release Notes"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "リリースノート"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14326,6 +16831,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove iCloud Account"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "iCloudアカウントを削除"
           }
         },
         "zh-Hans" : {
@@ -14363,6 +16874,12 @@
             "value" : "Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this computer."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "iCloudアカウントを削除してもよろしいですか? iCloudアカウント内のすべてのドキュメントがこのコンピュータから削除されます。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14396,6 +16913,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove lock from %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ のロックを削除"
           }
         },
         "zh-Hans" : {
@@ -14433,6 +16956,12 @@
             "value" : "Restore Defaults"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "デフォルトに戻す"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14466,6 +16995,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Are you sure you want to restore the defaults? All your font customisations will be lost."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "デフォルトに戻してもよろしいですか? フォントのカスタマイズはすべて失われます。"
           }
         },
         "zh-Hans" : {
@@ -14504,6 +17039,12 @@
             "value" : "Row"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14537,6 +17078,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Row Completion State"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行の完了状態"
           }
         },
         "zh-Hans" : {
@@ -14623,6 +17170,18 @@
             }
           }
         },
+        "ja" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "%lld 行"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
           "variations" : {
             "plural" : {
@@ -14664,6 +17223,12 @@
             "value" : "Row Destination"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行の移動先"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14697,6 +17262,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Row Detail"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行の詳細"
           }
         },
         "zh-Hans" : {
@@ -14734,6 +17305,12 @@
             "value" : "Row Expanded State"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行の展開状態"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14767,6 +17344,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Row Indent"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行インデント"
           }
         },
         "zh-Hans" : {
@@ -14804,6 +17387,12 @@
             "value" : "Row Order"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行の順序"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14837,6 +17426,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Row Spacing"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "行間隔"
           }
         },
         "zh-Hans" : {
@@ -14874,6 +17469,12 @@
             "value" : "Scroll Mode"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "スクロールモード"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14907,6 +17508,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "検索"
           }
         },
         "zh-Hans" : {
@@ -14944,6 +17551,12 @@
             "value" : "Secondary Text"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "第2テキスト"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14977,6 +17590,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "See documents in ”%@”"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "“%@”内のドキュメントを表示"
           }
         },
         "zh-Hans" : {
@@ -15014,6 +17633,12 @@
             "value" : "Settings"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "設定"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15047,6 +17672,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Settings…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "設定…"
           }
         },
         "zh-Hans" : {
@@ -15084,6 +17715,12 @@
             "value" : "Share"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "共有"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15117,6 +17754,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The shortcut \"%@\" was cancelled."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ショートカット「%@」はキャンセルされました。"
           }
         },
         "zh-Hans" : {
@@ -15154,6 +17797,12 @@
             "value" : "The shortcut \"%@\" returned an error: %@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ショートカット「%@」がエラーを返しました: %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15187,6 +17836,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shortcut Error"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ショートカットエラー"
           }
         },
         "zh-Hans" : {
@@ -15224,6 +17879,12 @@
             "value" : "Shortcut Name"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ショートカット名"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15257,6 +17918,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Statistics"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "統計"
           }
         },
         "zh-Hans" : {
@@ -15294,6 +17961,12 @@
             "value" : "Tag"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15327,6 +18000,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tags"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグ"
           }
         },
         "zh-Hans" : {
@@ -15364,6 +18043,12 @@
             "value" : "Tertiary Text"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "第3テキスト"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15397,6 +18082,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Title"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タイトル"
           }
         },
         "zh-Hans" : {
@@ -15434,6 +18125,12 @@
             "value" : "Topic"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "トピック"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15467,6 +18164,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Topic Level %lld"
+          }
+        },
+        "ja" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "トピックレベル %lld"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "machine_translated",
+                  "value" : "トピックレベル %lld"
+                }
+              }
+            }
           }
         },
         "zh-Hans" : {
@@ -15504,6 +18219,12 @@
             "value" : "Typewriter"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タイプライター"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15537,6 +18258,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Typing"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "入力"
           }
         },
         "zh-Hans" : {
@@ -15574,6 +18301,12 @@
             "value" : "Unable to open the Shortcuts app."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ショートカットAppを開けませんでした。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15607,6 +18340,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The provided Markdown input could not be parsed."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "指定されたMarkdown入力を解析できませんでした。"
           }
         },
         "zh-Hans" : {
@@ -15644,6 +18383,12 @@
             "value" : "The provided OPML input could not be parsed."
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "指定されたOPML入力を解析できませんでした。"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15677,6 +18422,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uncomplete"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "未完了"
           }
         },
         "zh-Hans" : {
@@ -15714,6 +18465,12 @@
             "value" : "Undo Menu"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "取り消しメニュー"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15747,6 +18504,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unknown"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "不明"
           }
         },
         "zh-Hans" : {
@@ -15784,6 +18547,12 @@
             "value" : "Unlock %@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ のロックを解除"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15819,6 +18588,12 @@
             "value" : "Updated"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "更新日"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15852,6 +18627,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ at %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%1$@ %2$@"
           }
         },
         "zh-Hans" : {
@@ -15925,6 +18706,12 @@
             "value" : "Web Page"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Webページ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15958,6 +18745,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Website"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Webサイト"
           }
         },
         "zh-Hans" : {
@@ -15995,6 +18788,12 @@
             "value" : "Word Count"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "単語数"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16030,6 +18829,12 @@
             "value" : "Zavala Help"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavalaヘルプ"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16063,6 +18868,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Collapse Parent Row"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "親の行を折りたたむ"
           }
         },
         "zh-Hans" : {
