@@ -5,9 +5,27 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"New Outline\"; ObjectID = \"2Sd-6R-Tb9\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Neue Gliederung"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "New Outline"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "New Outline"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "New Outline"
           }
         },
@@ -15,6 +33,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "新規アウトライン"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "新建大纲"
           }
         }
       }
@@ -23,9 +47,27 @@
       "comment" : "Class = \"UIBarButtonItem\"; title = \"New Outline\"; ObjectID = \"3jR-Kr-AbI\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Neue Gliederung"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "New Outline"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "New Outline"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "New Outline"
           }
         },
@@ -34,6 +76,12 @@
             "state" : "machine_translated",
             "value" : "新規アウトライン"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "新建大纲"
+          }
         }
       }
     },
@@ -41,13 +89,37 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"Update\"; ObjectID = \"5AK-ci-8I5\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Aktualisieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Update"
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Update"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Update"
+          }
+        },
         "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "更新"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "更新"
@@ -59,9 +131,27 @@
       "comment" : "Class = \"UINavigationItem\"; title = \"Tag Name\"; ObjectID = \"5oW-OS-be4\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Schlagwort-Name"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Tag Name"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tag Name"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Tag Name"
           }
         },
@@ -69,6 +159,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "タグ名"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "标签名称"
           }
         }
       }
@@ -77,9 +173,27 @@
       "comment" : "Class = \"UILabel\"; text = \"Text:\"; ObjectID = \"6V6-oZ-nn3\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Text:"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Text:"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Text:"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Text:"
           }
         },
@@ -88,6 +202,12 @@
             "state" : "machine_translated",
             "value" : "テキスト:"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "文本:"
+          }
         }
       }
     },
@@ -95,9 +215,27 @@
       "comment" : "Class = \"UITextField\"; placeholder = \"Text\"; ObjectID = \"hXm-fm-iqD\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Text"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Text"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Text"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Text"
           }
         },
@@ -106,6 +244,12 @@
             "state" : "machine_translated",
             "value" : "テキスト"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "文本"
+          }
         }
       }
     },
@@ -113,9 +257,27 @@
       "comment" : "Class = \"UINavigationItem\"; title = \"Link\"; ObjectID = \"I9F-eA-IBo\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Link"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Link"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Link"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Link"
           }
         },
@@ -123,6 +285,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "リンク"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "链接"
           }
         }
       }
@@ -131,9 +299,27 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"Cancel\"; ObjectID = \"KeX-HO-OVZ\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Abbrechen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Cancel"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Cancel"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Cancel"
           }
         },
@@ -141,6 +327,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "キャンセル"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "取消"
           }
         }
       }
@@ -149,9 +341,27 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"Rename\"; ObjectID = \"Kqh-2r-Qd0\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Umbenennen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Rename"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Rename"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Rename"
           }
         },
@@ -160,6 +370,12 @@
             "state" : "machine_translated",
             "value" : "名称変更"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "重命名"
+          }
         }
       }
     },
@@ -167,9 +383,27 @@
       "comment" : "Class = \"UITextField\"; placeholder = \"Link\"; ObjectID = \"npa-bs-Cvy\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Link"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Link"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Link"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Link"
           }
         },
@@ -178,6 +412,12 @@
             "state" : "machine_translated",
             "value" : "リンク"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "链接"
+          }
         }
       }
     },
@@ -185,9 +425,27 @@
       "comment" : "Class = \"UILabel\"; text = \"Link:\"; ObjectID = \"oVm-MW-Uag\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Link:"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Link:"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Link:"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Link:"
           }
         },
@@ -196,6 +454,12 @@
             "state" : "machine_translated",
             "value" : "リンク:"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "链接:"
+          }
         }
       }
     },
@@ -203,9 +467,27 @@
       "comment" : "Class = \"UILabel\"; text = \"Tag Name:\"; ObjectID = \"PwU-x7-F4H\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Schlagwort-Name:"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Tag Name:"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tag Name:"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Tag Name:"
           }
         },
@@ -214,6 +496,12 @@
             "state" : "machine_translated",
             "value" : "タグ名:"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "标签名称:"
+          }
         }
       }
     },
@@ -221,9 +509,27 @@
       "comment" : "Class = \"UITextField\"; placeholder = \"Tag Name\"; ObjectID = \"SFe-64-fzK\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Schlagwort-Name"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Tag Name"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Tag Name"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Tag Name"
           }
         },
@@ -232,6 +538,12 @@
             "state" : "machine_translated",
             "value" : "タグ名"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "标签名称"
+          }
         }
       }
     },
@@ -239,9 +551,27 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"Cancel\"; ObjectID = \"SqN-L1-aXl\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Abbrechen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Cancel"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Cancel"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Cancel"
           }
         },
@@ -249,6 +579,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "キャンセル"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "取消"
           }
         }
       }

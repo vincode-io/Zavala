@@ -5,9 +5,27 @@
       "comment" : "Class = \"UICommand\"; title = \"Item 1\"; ObjectID = \"0n5-hS-FVg\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Element 1"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Item 1"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Item 1"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Item 1"
           }
         },
@@ -16,6 +34,12 @@
             "state" : "machine_translated",
             "value" : "項目 1"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "项目 1"
+          }
         }
       }
     },
@@ -23,9 +47,27 @@
       "comment" : "Class = \"UITableViewSection\"; headerTitle = \"Font\"; ObjectID = \"8RY-Ox-fEs\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Schriftart"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Font"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Font"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Font"
           }
         },
@@ -34,6 +76,12 @@
             "state" : "machine_translated",
             "value" : "フォント"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "字体"
+          }
         }
       }
     },
@@ -41,9 +89,27 @@
       "comment" : "Class = \"UITableViewSection\"; headerTitle = \"Preview\"; ObjectID = \"9wX-hO-thR\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vorschau"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Preview"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Preview"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Preview"
           }
         },
@@ -52,6 +118,12 @@
             "state" : "machine_translated",
             "value" : "プレビュー"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "预览"
+          }
         }
       }
     },
@@ -59,9 +131,27 @@
       "comment" : "Class = \"UIViewController\"; title = \"Settings\"; ObjectID = \"aij-M4-PYg\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Einstellungen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Settings"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Settings"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Settings"
           }
         },
@@ -70,6 +160,12 @@
             "state" : "machine_translated",
             "value" : "設定"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "设置"
+          }
         }
       }
     },
@@ -77,16 +173,40 @@
       "comment" : "Class = \"UILabel\"; text = \"Color\"; ObjectID = \"dva-9n-Wrm\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Farbe"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Color"
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Colour"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Colour"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "カラー"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "颜色"
           }
         }
       }
@@ -95,9 +215,27 @@
       "comment" : "Class = \"UINavigationItem\"; title = \"Root View Controller\"; ObjectID = \"kVY-TB-B9D\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Root View Controller"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Root View Controller"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Root View Controller"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Root View Controller"
           }
         },
@@ -106,6 +244,12 @@
             "state" : "machine_translated",
             "value" : "ルートビューコントローラ"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "根视图控制器"
+          }
         }
       }
     },
@@ -113,9 +257,27 @@
       "comment" : "Class = \"UIButton\"; configuration.title = \"Button\"; ObjectID = \"OId-zK-KYw\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Taste"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Button"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Button"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Button"
           }
         },
@@ -123,6 +285,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "ボタン"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "按钮"
           }
         }
       }
@@ -131,9 +299,27 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"Button\"; ObjectID = \"OId-zK-KYw\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Taste"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Button"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Button"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Button"
           }
         },
@@ -141,6 +327,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "ボタン"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "按钮"
           }
         }
       }
@@ -149,9 +341,27 @@
       "comment" : "Class = \"UICommand\"; title = \"Item 2\"; ObjectID = \"SaO-VL-YXj\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Element 2"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Item 2"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Item 2"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Item 2"
           }
         },
@@ -160,6 +370,12 @@
             "state" : "machine_translated",
             "value" : "項目 2"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "项目 2"
+          }
         }
       }
     },
@@ -167,9 +383,27 @@
       "comment" : "Class = \"UILabel\"; text = \"Sample Text\"; ObjectID = \"SNz-Wt-44U\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Beispieltext"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Sample Text"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Sample Text"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Sample Text"
           }
         },
@@ -178,6 +412,12 @@
             "state" : "machine_translated",
             "value" : "サンプルテキスト"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "示例文本"
+          }
         }
       }
     },
@@ -185,9 +425,27 @@
       "comment" : "Class = \"UIButton\"; configuration.title = \"Button\"; ObjectID = \"zm6-ZX-RUU\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Taste"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Button"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Button"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Button"
           }
         },
@@ -195,6 +453,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "ボタン"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "按钮"
           }
         }
       }
@@ -203,9 +467,27 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"Button\"; ObjectID = \"zm6-ZX-RUU\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Taste"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Button"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Button"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Button"
           }
         },
@@ -213,6 +495,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "ボタン"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "按钮"
           }
         }
       }

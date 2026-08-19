@@ -5,13 +5,37 @@
       "comment" : "Bundle display name",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavala"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Zavala"
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavala"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavala"
+          }
+        },
         "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Zavala"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "Zavala"
@@ -23,13 +47,37 @@
       "comment" : "Bundle name",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ShareExtension"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "ShareExtension"
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ShareExtension"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ShareExtension"
+          }
+        },
         "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "ShareExtension"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "ShareExtension"

@@ -5,9 +5,27 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"New Outline\"; ObjectID = \"1C9-32-WHN\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Neue Gliederung"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "New Outline"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "New Outline"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "New Outline"
           }
         },
@@ -16,6 +34,12 @@
             "state" : "machine_translated",
             "value" : "新規アウトライン"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "新建大纲"
+          }
         }
       }
     },
@@ -23,9 +47,27 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"Open\"; ObjectID = \"5qy-iE-SRe\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Öffnen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Open"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Open"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Open"
           }
         },
@@ -34,6 +76,12 @@
             "state" : "machine_translated",
             "value" : "開く"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "打开"
+          }
         }
       }
     },
@@ -41,9 +89,27 @@
       "comment" : "Class = \"UITextField\"; placeholder = \"Outline Name\"; ObjectID = \"L9g-l9-eOK\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gliederungsname"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Outline Name"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Outline Name"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Outline Name"
           }
         },
@@ -52,6 +118,12 @@
             "state" : "machine_translated",
             "value" : "アウトライン名"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "大纲名称"
+          }
         }
       }
     },
@@ -59,9 +131,27 @@
       "comment" : "Class = \"UITextField\"; placeholder = \"Open Quickly\"; ObjectID = \"OSd-my-c2Q\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Schnell öffnen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Open Quickly"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Open Quickly"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Open Quickly"
           }
         },
@@ -69,6 +159,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "すばやく開く"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "快速打开"
           }
         }
       }
@@ -77,9 +173,27 @@
       "comment" : "Class = \"UIButton\"; normalTitle = \"Cancel\"; ObjectID = \"TmL-0b-c4c\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Abbrechen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Cancel"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Cancel"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Cancel"
           }
         },
@@ -88,6 +202,12 @@
             "state" : "machine_translated",
             "value" : "キャンセル"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "取消"
+          }
         }
       }
     },
@@ -95,9 +215,27 @@
       "comment" : "Class = \"UITextField\"; placeholder = \"Open Quickly\"; ObjectID = \"uNw-0Z-jOF\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Schnell öffnen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Open Quickly"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Open Quickly"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
             "value" : "Open Quickly"
           }
         },
@@ -105,6 +243,12 @@
           "stringUnit" : {
             "state" : "machine_translated",
             "value" : "すばやく開く"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "快速打开"
           }
         }
       }
