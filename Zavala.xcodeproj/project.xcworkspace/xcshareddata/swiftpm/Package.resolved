@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-async-algorithms",
       "state" : {
-        "revision" : "d0b4a06d0f173a2f3be27d3ea21b3c3aa18db440",
-        "version" : "1.1.4"
+        "revision" : "3da39bbc4e687d4192af7c9cf4eab805745a0b9c",
+        "version" : "1.1.5"
       }
     },
     {
@@ -25,7 +25,7 @@
       "location" : "https://github.com/swiftlang/swift-cmark.git",
       "state" : {
         "branch" : "gfm",
-        "revision" : "cbd8eae0689857c873063f28b9a80419ec718e20"
+        "revision" : "7898f1b3e4befeecee56cb4a3bc8eebd2cb63219"
       }
     },
     {
@@ -43,16 +43,16 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "c281baa59e2b0d3ddc72848741217af811f66d39"
+        "revision" : "27b7fc1a19068bcea3d2072db0ce86360d1400ed"
       }
     },
     {
       "identity" : "swiftyjscore",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mattmassicotte/SwiftyJSCore.git",
+      "location" : "https://github.com/vincode-io/SwiftyJSCore.git",
       "state" : {
         "branch" : "main",
-        "revision" : "0f709316e5642a4545a89ea48b7c982c26e42884"
+        "revision" : "3be19d78e55206ea0e8da05ff814046ae3bcbada"
       }
     },
     {
@@ -61,7 +61,7 @@
       "location" : "https://github.com/vincode-io/VinCloudKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "cf19ba5ca96a305947d34b15362a349e30f6093b"
+        "revision" : "e8204e52d31acaa3d9e1adcb4ad99a84478d4f0d"
       }
     },
     {
@@ -70,7 +70,7 @@
       "location" : "https://github.com/vincode-io/VinReadability.git",
       "state" : {
         "branch" : "main",
-        "revision" : "fff764f6fca78ad236720ebbd2b2bff532d337dd"
+        "revision" : "9319333c31397f180f553a055e7af82deb49a856"
       }
     },
     {
