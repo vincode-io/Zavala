@@ -59,6 +59,18 @@
             "value" : "Outliner"
           }
         },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outliner"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outliner"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "machine_translated",
