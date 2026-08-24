@@ -17,7 +17,7 @@ extension Selector {
 	static let showSettings = #selector(FileActionResponder.showSettings(_:))
 	static let sync = #selector(FileActionResponder.sync(_:))
 	static let importMarkdown = #selector(FileActionResponder.importMarkdown(_:))
-	static let importWebPage = #selector(FileActionResponder.importWebPage(_:))
+	static let importHTML = #selector(FileActionResponder.importHTML(_:))
 	static let importOPML = #selector(FileActionResponder.importOPML(_:))
 	static let createOutline = #selector(FileActionResponder.createOutline(_:))
 	static let newWindow = #selector(AppDelegate.newWindow(_:))
@@ -37,7 +37,7 @@ extension Selector {
 	@objc func showSettings(_ sender: Any?)
 	@objc func sync(_ sender: Any?)
 	@objc func importMarkdown(_ sender: Any?)
-	@objc func importWebPage(_ sender: Any?)
+	@objc func importHTML(_ sender: Any?)
 	@objc func importOPML(_ sender: Any?)
 	@objc func createOutline(_ sender: Any?)
 	@objc func showOpenQuickly(_ sender: Any?)
@@ -82,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	let importMarkdownCommand = UICommand(title: .importMarkdownEllipsisControlLabel, action: .importMarkdown)
 
-	let importWebPageCommand = UICommand(title: .importWebPageEllipsisControlLabel, action: .importWebPage)
+	let importHTMLCommand = UICommand(title: .importHTMLEllipsisControlLabel, action: .importHTML)
 
 	let importOPMLCommand = UIKeyCommand(title: .importOPMLEllipsisControlLabel,
 										 action: .importOPML,
@@ -573,13 +573,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		#endif
 	}
 
-	@objc func importWebPage(_ sender: Any?) {
+	@objc func importHTML(_ sender: Any?) {
 		#if targetEnvironment(macCatalyst)
-		appKitPlugin?.importWebPage(withTitle: .importWebPageControlLabel,
-								   message: .importWebPagePromptMessage,
-								   importTitle: .importControlLabel,
-								   cancelTitle: .cancelControlLabel,
-								   placeholder: "https://example.com")
+		appKitPlugin?.importHTML()
 		#endif
 	}
 
@@ -696,7 +692,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let sharingMenu = UIMenu(title: "", options: .displayInline, children: sharingMenuChildren)
 		builder.insertChild(sharingMenu, atEndOfMenu: .file)
 
-		let importMenu = UIMenu(title: .importControlLabel, image: .importDocument, children: [importMarkdownCommand, importWebPageCommand, importOPMLCommand])
+		let importMenu = UIMenu(title: .importControlLabel, image: .importDocument, children: [importMarkdownCommand, importHTMLCommand, importOPMLCommand])
 		let exportMenu = UIMenu(title: .exportControlLabel, image: .export, children: [exportPDFDocsCommand,
 																					   exportPDFListsCommand,
 																					   exportMarkdownDocsCommand,
@@ -855,12 +851,12 @@ extension AppDelegate: AppKitPluginDelegate {
 		}
 	}
 
-	func importWebPageURL(_ url: URL) {
+	func importHTMLFile(_ url: URL) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		guard let account = accountManager.findAccount(accountID: accountID) ?? accountManager.activeAccounts.first else { return }
 
 		Task {
-			guard let document = try? await account.importWebPage(url, defaults: AppDefaults.shared.outlineDefaults, tags: nil) else { return }
+			guard let document = try? await account.importHTML(url, defaults: AppDefaults.shared.outlineDefaults, tags: nil) else { return }
 
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: accountManager, document: document).userInfo]

@@ -3644,6 +3644,88 @@
         }
       }
     },
+    "button.text.import-html" : {
+      "comment" : "Action: Import HTML",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTML importieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import HTML"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import HTML"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import HTML"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "HTMLをインポート"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入 HTML"
+          }
+        }
+      }
+    },
+    "button.text.import-html-with-ellipsis" : {
+      "comment" : "Action: Import HTML…",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTML importieren…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import HTML…"
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import HTML…"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import HTML…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "HTMLをインポート…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入 HTML…"
+          }
+        }
+      }
+    },
     "button.text.import-markdown-with-ellipsis" : {
       "comment" : "Action: Import Markdown…",
       "localizations" : {
@@ -3763,64 +3845,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "导入 OPML…"
-          }
-        }
-      }
-    },
-    "button.text.import-web-page" : {
-      "comment" : "Action: Import Web Page",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Webseite importieren"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Import Web Page"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Webページをインポート"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "导入网页"
-          }
-        }
-      }
-    },
-    "button.text.import-web-page-with-ellipsis" : {
-      "comment" : "Action: Import Web Page…",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Webseite importieren …"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Import Web Page…"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Webページをインポート…"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "导入网页…"
           }
         }
       }
@@ -14129,64 +14153,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "导入失败"
-          }
-        }
-      }
-    },
-    "label.text.import-web-page-no-url" : {
-      "comment" : "Error Message: The clipboard doesn’t contain a valid web page address.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die Zwischenablage enthält keine gültige Webseitenadresse."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The clipboard doesn’t contain a valid web page address."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "クリップボードに有効なWebページのアドレスが含まれていません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "剪贴板不包含有效的网页地址。"
-          }
-        }
-      }
-    },
-    "label.text.import-web-page-prompt" : {
-      "comment" : "Prompt: Enter the address of the web page to import.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geben Sie die Adresse der zu importierenden Webseite ein."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter the address of the web page to import."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "インポートするWebページのアドレスを入力してください。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请输入要导入的网页地址。"
           }
         }
       }

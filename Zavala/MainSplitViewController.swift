@@ -382,10 +382,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		}
 	}
 
-	@objc func importWebPage(_ sender: Any?) {
+	@objc func importHTML(_ sender: Any?) {
 		Task {
 			await selectDefaultDocumentContainerIfNecessary()
-			documentsViewController?.importWebPage()
+			documentsViewController?.importHTML()
 		}
 	}
 

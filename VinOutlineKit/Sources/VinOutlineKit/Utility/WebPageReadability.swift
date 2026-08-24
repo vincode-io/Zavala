@@ -49,12 +49,24 @@ struct WebPageReadability {
 			throw AccountError.webPageDownloadError
 		}
 
+		return try await extract(html: html, baseURL: url)
+	}
+
+	/// Runs already-loaded HTML through Readability and downloads its images.
+	///
+	/// - Parameters:
+	///   - html: The raw page HTML.
+	///   - baseURL: The page's origin, used as Readability's document URL and to resolve relative
+	///     image `src` values. Pass `nil` when the HTML has no web origin (e.g. a local file); in
+	///     that case only images with absolute `http(s)` URLs are downloaded.
+	/// - Throws: `AccountError.webPageParserError` if Readability can't extract content.
+	static func extract(html: String, baseURL: URL?) async throws -> Content {
 		let article: ReadabilityArticle?
 		do {
 			let readability = try await Readability()
-			article = try await readability.parse(html: html, url: url.absoluteString)
+			article = try await readability.parse(html: html, url: baseURL?.absoluteString ?? "")
 		} catch {
-			logger.error("Readability failed for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
+			logger.error("Readability failed with error: \(error.localizedDescription, privacy: .public)")
 			throw AccountError.webPageParserError
 		}
 
@@ -74,7 +86,7 @@ struct WebPageReadability {
 			.replacing("&nbsp;", with: " ")
 			.replacing("\u{00A0}", with: " ")
 
-		let images = await downloadImages(contentHTML: cleanedContent, baseURL: url)
+		let images = await downloadImages(contentHTML: cleanedContent, baseURL: baseURL)
 
 		return Content(title: article?.title, html: cleanedContent, images: images)
 	}
@@ -90,7 +102,7 @@ private extension WebPageReadability {
 	}
 
 	/// Downloads every image referenced in the content HTML, keyed by the original `src` value.
-	static func downloadImages(contentHTML: String, baseURL: URL) async -> [String: Data] {
+	static func downloadImages(contentHTML: String, baseURL: URL?) async -> [String: Data] {
 		// Do all VinXML work synchronously up front so no non-Sendable node crosses an await.
 		var sources = [String]()
 		if let doc = try? VinXML.XMLDocument(html: contentHTML),

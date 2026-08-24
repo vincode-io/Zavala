@@ -89,6 +89,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var addButton: ButtonGroup.Button!
 
 	private lazy var markdownDocumentPickerDelegate = MarkdownDocumentPickerDelegate(viewController: self)
+	private lazy var htmlDocumentPickerDelegate = HTMLDocumentPickerDelegate(viewController: self)
 	private lazy var opmlDocumentPickerDelegate = OPMLDocumentPickerDelegate(viewController: self)
 
 	private var loadDocumentsChannel = AsyncChannel<Void>()
@@ -366,6 +367,29 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 
+	func importHTMLs(urls: [URL]) {
+		guard let documentContainers,
+			  let account = documentContainers.uniqueAccount else { return }
+
+		for url in urls {
+			Task { @MainActor in
+				do {
+					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
+					let document = try await account.importHTML(url, defaults: AppDefaults.shared.outlineDefaults, tags: tags)
+
+					try await Task.sleep(for: .seconds(0.5))
+
+					await loadDocuments(animated: true)
+					openDocument(document, animated: true)
+
+					DocumentIndexer.updateIndex(for: document)
+				} catch {
+					self.presentError(title: .importFailedTitle, message: error.localizedDescription)
+				}
+			}
+		}
+	}
+
 	func importOPMLs(urls: [URL]) {
 		guard let documentContainers,
 			  let account = documentContainers.uniqueAccount else { return }
@@ -487,40 +511,12 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		self.present(docPicker, animated: true)
 	}
 
-	@objc func importWebPage() {
-		// The main window presents an in-window sheet for URL entry. (Single-outline editor windows
-		// route through AppDelegate to a native AppKit prompt instead.)
-		let importViewController = ImportWebPageViewController()
-		importViewController.prefilledURLString = Self.clipboardWebURL()?.absoluteString
-		importViewController.onImport = { [weak self] url in
-			self?.importWebPage(url: url)
-		}
-
-		if traitCollection.userInterfaceIdiom == .mac {
-			importViewController.preferredContentSize = CGSize(width: 460, height: 128)
-			present(importViewController, animated: true)
-		} else {
-			let navController = UINavigationController(rootViewController: importViewController)
-			navController.preferredContentSize = CGSize(width: 400, height: 150)
-			navController.modalPresentationStyle = .formSheet
-			present(navController, animated: true)
-		}
-	}
-
-	/// Returns the clipboard contents as an http(s) URL, or nil when the clipboard has no web address.
-	private static func clipboardWebURL() -> URL? {
-		let pasteboard = UIPasteboard.general
-
-		if pasteboard.hasURLs, let url = pasteboard.url, let scheme = url.scheme, scheme.hasPrefix("http") {
-			return url
-		}
-
-		if let string = pasteboard.string?.trimmingCharacters(in: .whitespacesAndNewlines),
-		   let url = URL(string: string), let scheme = url.scheme, scheme.hasPrefix("http") {
-			return url
-		}
-
-		return nil
+	@objc func importHTML() {
+		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.html])
+		docPicker.delegate = htmlDocumentPickerDelegate
+		docPicker.modalPresentationStyle = .formSheet
+		docPicker.allowsMultipleSelection = true
+		self.present(docPicker, animated: true)
 	}
 
 	@objc func importOPML() {
@@ -887,8 +883,8 @@ private extension DocumentsViewController {
 			self?.importMarkdown()
 		}
 
-		let importWebPageAction = UIAction(title: .importWebPageEllipsisControlLabel) { [weak self] _ in
-			self?.importWebPage()
+		let importHTMLAction = UIAction(title: .importHTMLEllipsisControlLabel) { [weak self] _ in
+			self?.importHTML()
 		}
 
 		let importOPMLAction = UIAction(title: .importOPMLEllipsisControlLabel) { [weak self] _ in
@@ -935,7 +931,7 @@ private extension DocumentsViewController {
 		let sortByMenu = UIMenu(title: "", options: .displayInline, children: [sortByTitle, sortByCreated, sortByUpdated])
 		let sortOrderMenu = UIMenu(title: "", options: .displayInline, children: [sortAscending, sortDescending])
 		
-		let importMenu = UIMenu(title: "", options: .displayInline, children: [importMarkdownAction, importWebPageAction, importOPMLAction])
+		let importMenu = UIMenu(title: "", options: .displayInline, children: [importMarkdownAction, importHTMLAction, importOPMLAction])
 		let sortMenu = UIMenu(title: "", options: .displayInline, children: [UIMenu(title: .sortDocumentsControlLabel, image: .sort, children: [sortByMenu, sortOrderMenu])])
 
 		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [importMenu, sortMenu])
@@ -1238,6 +1234,22 @@ private final class MarkdownDocumentPickerDelegate: NSObject, UIDocumentPickerDe
 
 	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
 		viewController?.importMarkdowns(urls: urls)
+	}
+
+}
+
+// MARK: HTMLDocumentPickerDelegate
+
+private final class HTMLDocumentPickerDelegate: NSObject, UIDocumentPickerDelegate {
+
+	weak var viewController: DocumentsViewController?
+
+	init(viewController: DocumentsViewController? = nil) {
+		self.viewController = viewController
+	}
+
+	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+		viewController?.importHTMLs(urls: urls)
 	}
 
 }

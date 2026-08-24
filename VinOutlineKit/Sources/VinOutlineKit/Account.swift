@@ -335,6 +335,74 @@ public final class Account: Identifiable, Equatable {
 		return document
 	}
 
+	public func importHTML(_ url: URL, defaults: Outline.Defaults, tags: [Tag]?) async throws -> Document {
+		guard url.startAccessingSecurityScopedResource() else { throw AccountError.securityScopeError }
+		defer {
+			url.stopAccessingSecurityScopedResource()
+		}
+
+		var fileData: Data?
+		var fileError: NSError? = nil
+		NSFileCoordinator().coordinate(readingItemAt: url, error: &fileError) { (url) in
+			fileData = try? Data(contentsOf: url)
+		}
+
+		guard fileError == nil else { throw fileError! }
+		guard let htmlData = fileData, let html = String(data: htmlData, encoding: .utf8) else { throw AccountError.fileReadError }
+
+		return try await importHTML(html, filename: url.deletingPathExtension().lastPathComponent, defaults: defaults, tags: tags)
+	}
+
+	@discardableResult
+	public func importHTML(_ html: String, filename: String?, defaults: Outline.Defaults, tags: [Tag]?) async throws -> Document {
+		let content = try await WebPageReadability.extract(html: html, baseURL: nil)
+
+		// Parse the readable content into an Outline
+		let parser = ImportWebPageParser(account: self, baseURL: nil, sourceImages: content.images)
+		parser.parse(contentHTML: content.html)
+
+		let outline = parser.outline
+
+		// Prefer the Readability title, fall back to the source file's name, then a placeholder.
+		if let contentTitle = content.title, let title = WebPageTitleCleaner.clean(contentTitle) {
+			outline.title = title
+		} else if let filename, !filename.isEmpty {
+			outline.title = filename
+		} else {
+			outline.title = .noTitle
+		}
+
+		outline.ownerName = defaults.ownerName
+		outline.ownerEmail = defaults.ownerEmail
+		outline.ownerURL = defaults.ownerURL
+		outline.numberingStyle = defaults.numberingStyle
+		outline.automaticallyCreateLinks = defaults.automaticallyCreateLinks
+		outline.automaticallyChangeLinkTitles = defaults.automaticallyChangeLinkTitles
+		outline.checkSpellingWhileTyping = defaults.checkSpellingWhileTyping
+		outline.correctSpellingAutomatically = defaults.correctSpellingAutomatically
+
+		for tag in tags ?? [Tag]() {
+			outline.createTag(tag)
+		}
+
+		// Do all the normal housekeeping stuff that keeps things running around here.
+		let document = Document.outline(outline)
+		documents?.append(document)
+		accountDocumentsDidChange()
+
+		outline.zoneID = cloudKitManager?.outlineZone.zoneID
+
+		disambiguate(document: document)
+		outline.updateAllLinkRelationships()
+		fixAltLinks(excluding: outline)
+
+		await outline.forceSave()
+		saveToCloudKit(document)
+		await outline.unload()
+
+		return document
+	}
+
 	@discardableResult
 	public func importOPML(_ opmlData: Data, tags: [Tag]?, images: [String:  Data]? = nil) async throws -> Document {
 		let opmlString = try convertOPMLAttributeNewlines(opmlData)

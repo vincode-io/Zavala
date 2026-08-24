@@ -66,30 +66,21 @@ import UniformTypeIdentifiers
 		}
 	}
 
-	func importWebPage(withTitle title: String, message: String, importTitle: String, cancelTitle: String, placeholder: String) {
-		let alert = NSAlert()
-		alert.messageText = title
-		alert.informativeText = message
-		alert.addButton(withTitle: importTitle)
-		alert.addButton(withTitle: cancelTitle)
+	func importHTML() {
+		let panel = NSOpenPanel()
+		panel.canDownloadUbiquitousContents = true
+		panel.canResolveUbiquitousConflicts = true
+		panel.canChooseFiles = true
+		panel.allowsMultipleSelection = false
+		panel.canChooseDirectories = false
+		panel.resolvesAliases = true
+		panel.allowedContentTypes = [.html]
+		panel.allowsOtherFileTypes = false
 
-		let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 320, height: 24))
-		textField.placeholderString = placeholder
-
-		// Pre-populate from the pasteboard when it already holds a web page address.
-		if let clipboard = NSPasteboard.general.string(forType: .string)?.trimmingCharacters(in: .whitespacesAndNewlines),
-		   let url = URL(string: clipboard), let scheme = url.scheme, scheme.hasPrefix("http") {
-			textField.stringValue = clipboard
+		let modalResult = panel.runModal()
+		if modalResult == NSApplication.ModalResponse.OK, let url = panel.url {
+			delegate?.importHTMLFile(url)
 		}
-
-		alert.accessoryView = textField
-		alert.window.initialFirstResponder = textField
-
-		guard alert.runModal() == .alertFirstButtonReturn else { return }
-
-		let enteredText = textField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-		guard let url = URL(string: enteredText), let scheme = url.scheme, scheme.hasPrefix("http") else { return }
-		delegate?.importWebPageURL(url)
 	}
 
 	func configureOpenQuickly(_ window: NSObject?) {
