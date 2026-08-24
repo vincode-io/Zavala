@@ -23,6 +23,8 @@ struct SettingsAccountsView: View {
 			.onChange(of: enableLocalAccount) { old, new in
 				AppDefaults.shared.enableLocalAccount = new
 			}
+			.fixMacTogglePadding()
+
 			Toggle(isOn: $enableCloudKit) {
 				Text(String.enableCloudKitControlLabel)
 			}
@@ -35,6 +37,7 @@ struct SettingsAccountsView: View {
 					cloudKitAlertIsPresenting = true
 				}
 			}
+			.fixMacTogglePadding()
 		}
 		.controlSize(.small)
 		.alert(String.removeICloudAccountTitle, isPresented: $cloudKitAlertIsPresenting) {

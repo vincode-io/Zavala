@@ -71,6 +71,7 @@ struct GetInfoView: View {
 				}
 				.toggleStyle(.switch)
 				.controlSize(.small)
+				.fixMacTogglePadding()
 
 				Toggle(isOn: $getInfoViewModel.correctSpellingAutomatically) {
 					Text(String.correctSpellingAutomaticallyControlLabel)
@@ -78,18 +79,22 @@ struct GetInfoView: View {
 				.toggleStyle(.switch)
 				.controlSize(.small)
 				.disabled(getInfoViewModel.checkSpellingWhileTyping == false)
+				.fixMacTogglePadding()
 
 				Toggle(isOn: $getInfoViewModel.automaticallyCreateLinks) {
 					Text(String.automaticallyCreateLinksControlLabel)
 				}
 				.toggleStyle(.switch)
 				.controlSize(.small)
+				.fixMacTogglePadding()
 
 				Toggle(isOn: $getInfoViewModel.automaticallyChangeLinkTitles) {
 					Text(String.automaticallyChangeLinkTitlesControlLabel)
 				}
 				.toggleStyle(.switch)
 				.controlSize(.small)
+				.fixMacTogglePadding()
+
 			}
 			Section(String.ownerControlLabel) {
 				TextField(text: $getInfoViewModel.ownerName) {

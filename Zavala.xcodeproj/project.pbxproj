@@ -65,6 +65,7 @@
 		516D223C2B4F0BE200440901 /* RequestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D223B2B4F0BE200440901 /* RequestReview.swift */; };
 		516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */; };
 		516F5373260829060038BAF8 /* OutlineFontDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5372260829060038BAF8 /* OutlineFontDefaults.swift */; };
+		5172957C303CDE91000A9EFA /* FixMacTogglePadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5172957B303CDE91000A9EFA /* FixMacTogglePadding.swift */; };
 		5177B7B42733D0AA006EB1E3 /* EditorTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5177B7B32733D0AA006EB1E3 /* EditorTextInput.swift */; };
 		517A9E1B2602ACE000EF346A /* OutlineEditorSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E1A2602ACE000EF346A /* OutlineEditorSceneDelegate.swift */; };
 		517A9E1F2602AD6B00EF346A /* EditorContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E1E2602AD6B00EF346A /* EditorContainerViewController.swift */; };
@@ -309,6 +310,7 @@
 		516D223B2B4F0BE200440901 /* RequestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestReview.swift; sourceTree = "<group>"; };
 		516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedSearchTextField.swift; sourceTree = "<group>"; };
 		516F5372260829060038BAF8 /* OutlineFontDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontDefaults.swift; sourceTree = "<group>"; };
+		5172957B303CDE91000A9EFA /* FixMacTogglePadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixMacTogglePadding.swift; sourceTree = "<group>"; };
 		5177B7B32733D0AA006EB1E3 /* EditorTextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextInput.swift; sourceTree = "<group>"; };
 		517A9E1A2602ACE000EF346A /* OutlineEditorSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineEditorSceneDelegate.swift; sourceTree = "<group>"; };
 		517A9E1E2602AD6B00EF346A /* EditorContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContainerViewController.swift; sourceTree = "<group>"; };
@@ -527,6 +529,7 @@
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */,
 				511B29F126014FBA00C04239 /* EnhancedTextField.swift */,
+				5172957B303CDE91000A9EFA /* FixMacTogglePadding.swift */,
 				51A1EC4327243B3600463A15 /* GenericRowIdentifier.swift */,
 				51341E03272B55080005425B /* InsetLabel.swift */,
 				5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */,
@@ -1335,6 +1338,7 @@
 				519897C42ADE13F3008A6FA4 /* ButtonGroup.swift in Sources */,
 				51FA27402B3B718B008B665E /* SettingsOutlineDefaultsView.swift in Sources */,
 				5109BC52293445EB0022E90B /* DocumentsActivityItemsConfiguration.swift in Sources */,
+				5172957C303CDE91000A9EFA /* FixMacTogglePadding.swift in Sources */,
 				5147287A2D0CEB75009CDB0D /* DocumentSortOrder.swift in Sources */,
 				51C71C74273F264600F6C779 /* ImageSceneDelegate.swift in Sources */,
 				514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */,

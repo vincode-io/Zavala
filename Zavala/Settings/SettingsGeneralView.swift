@@ -40,6 +40,7 @@ struct SettingsGeneralView: View {
 				AppDefaults.shared.showShortcutsMenu = new
 				UIMenuSystem.main.setNeedsRebuild()
 			}
+			.fixMacTogglePadding()
 
 			#if targetEnvironment(macCatalyst)
 			Toggle(isOn: $enableMainWindowAsDefault) {
@@ -50,6 +51,7 @@ struct SettingsGeneralView: View {
 			.onChange(of: enableMainWindowAsDefault) { old, new in
 				AppDefaults.shared.enableMainWindowAsDefault = new
 			}
+			.fixMacTogglePadding()
 			#endif
 		}
 	}

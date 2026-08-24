@@ -42,6 +42,7 @@ struct SettingsOutlineDefaultsView: View {
 			.onChange(of: checkSpellingWhileTyping) { old, new in
 				AppDefaults.shared.checkSpellingWhileTyping = new
 			}
+			.fixMacTogglePadding()
 
 			Toggle(isOn: $correctSpellingAutomatically) {
 				Text(String.correctSpellingAutomaticallyControlLabel)
@@ -52,6 +53,7 @@ struct SettingsOutlineDefaultsView: View {
 				AppDefaults.shared.correctSpellingAutomatically = new
 			}
 			.disabled(checkSpellingWhileTyping == false)
+			.fixMacTogglePadding()
 
 			Toggle(isOn: $automaticallyCreateLinks) {
 				Text(String.automaticallyCreateLinksControlLabel)
@@ -61,6 +63,7 @@ struct SettingsOutlineDefaultsView: View {
 			.onChange(of: automaticallyCreateLinks) { old, new in
 				AppDefaults.shared.automaticallyCreateLinks = new
 			}
+			.fixMacTogglePadding()
 
 			Toggle(isOn: $automaticallyChangeLinkTitles) {
 				Text(String.automaticallyChangeLinkTitlesControlLabel)
@@ -70,6 +73,7 @@ struct SettingsOutlineDefaultsView: View {
 			.onChange(of: automaticallyChangeLinkTitles) { old, new in
 				AppDefaults.shared.automaticallyChangeLinkTitles = new
 			}
+			.fixMacTogglePadding()
 		}
 	}
 	

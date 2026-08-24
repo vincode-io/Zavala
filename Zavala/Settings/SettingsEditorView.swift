@@ -107,6 +107,7 @@ struct SettingsEditorView: View {
 			.onChange(of: disableEditorAnimations) { old, new in
 				AppDefaults.shared.disableEditorAnimations = new
 			}
+			.fixMacTogglePadding()
 
 			NavigationLink(String.fontsControlLabel) {
 				SettingsFontsView()
