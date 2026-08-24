@@ -2692,8 +2692,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public func unload() async {
 		beingUsedCount = beingUsedCount - 1
 
-		guard beingUsedCount > -1 else { fatalError("This Outline was unloaded more times than it was loaded.") }
-		
+		// A negative count means unload() was called more times than load(), which points to a
+		// lifecycle bookkeeping bug in a caller. This shouldn't terminate the app, so we clamp the
+		// count back to zero and log it. In debug builds we still trap so the imbalance gets noticed.
+		guard beingUsedCount > -1 else {
+			logger.fault("Outline \(self.id.description, privacy: .public) was unloaded more times than it was loaded; clamping beingUsedCount to 0.")
+			assertionFailure("This Outline was unloaded more times than it was loaded.")
+			beingUsedCount = 0
+			return
+		}
+
 		guard beingUsedCount == 0 else { return }
 
 		await rowsFile?.saveIfNecessary()

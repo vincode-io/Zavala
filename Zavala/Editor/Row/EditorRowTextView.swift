@@ -363,6 +363,16 @@ class EditorRowTextView: UITextView, EditorTextInput {
         let attrText = NSMutableAttributedString(string: text, attributes: attrs)
 		
 		textStorage.beginEditing()
+
+		// Because we strip trailing spaces under certain conditions,
+        // pad the text storage with spaces if the range extends beyond it so that
+        // replaceCharacters(in:with:) doesn't throw an out of bounds exception.
+        if NSMaxRange(range) > textStorage.length {
+            let padding = NSMaxRange(range) - textStorage.length
+            let paddingText = NSAttributedString(string: String(repeating: " ", count: padding), attributes: attrs)
+            textStorage.append(paddingText)
+        }
+
         textStorage.replaceCharacters(in: range, with: attrText)
 
         let newRange = NSRange(location: range.location, length: attrText.length)

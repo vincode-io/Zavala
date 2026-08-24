@@ -1004,11 +1004,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return
 		}
 
-		guard isViewLoaded else { return }
-
+		// Balance the load()/incrementBeingViewedCount() with the decrement/unload above *before* the
+		// isViewLoaded early return. If open() runs before the view is loaded (e.g. scene restoration),
+		// we would otherwise assign this Outline but never load it, and a later transition would unload()
+		// it without a matching load(), driving beingUsedCount negative and crashing in Outline.unload().
 		outline.load()
 		outline.incrementBeingViewedCount()
 		outline.prepareForViewing()
+
+		guard isViewLoaded else { return }
 
 		updateNavigationMenus()
 		collectionView.reloadData()
@@ -2915,6 +2919,17 @@ private extension EditorViewController {
 	
 	func moveCursorToTitle() {
 		let indexPath = IndexPath(row: 0, section: Outline.Section.title.rawValue)
+
+		// This can be called on a later run loop than the one that validated the collection view (see
+		// moveCursorToTitleOnNew()), so the title section may no longer exist or have any items by the time
+		// we run (e.g. the outline was closed or a search became active). Validate before scrolling or
+		// UICollectionView will raise an exception and crash us.
+		guard !isSearching,
+			  collectionView.numberOfSections > indexPath.section,
+			  collectionView.numberOfItems(inSection: indexPath.section) > indexPath.row else {
+			return
+		}
+
 		collectionView.scrollToItem(at: indexPath, at: [], animated: !AppDefaults.shared.disableEditorAnimations)
 		Task {
 			if let titleCell = self.collectionView.cellForItem(at: indexPath) as? EditorTitleViewCell {
