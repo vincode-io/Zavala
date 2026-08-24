@@ -825,8 +825,8 @@
 				51C4C3AE2555E964004E0206 /* Zavala_project_release.xcconfig */,
 				51C4C3B02555E964004E0206 /* Zavala_project.xcconfig */,
 				5167605525F95B2900AC0EBD /* Zavala_spotlightext_target.xcconfig */,
-				51E060D625A45B8500194066 /* Zavala_target_common.xcconfig */,
 				512E3D8430241DD10028D3F6 /* Zavala_shareext_target.xcconfig */,
+				51E060D625A45B8500194066 /* Zavala_target_common.xcconfig */,
 			);
 			path = xcconfig;
 			sourceTree = "<group>";
