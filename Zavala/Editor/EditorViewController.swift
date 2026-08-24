@@ -1004,11 +1004,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return
 		}
 
-		guard isViewLoaded else { return }
-
+		// Balance the load()/incrementBeingViewedCount() with the decrement/unload above *before* the
+		// isViewLoaded early return. If open() runs before the view is loaded (e.g. scene restoration),
+		// we would otherwise assign this Outline but never load it, and a later transition would unload()
+		// it without a matching load(), driving beingUsedCount negative and crashing in Outline.unload().
 		outline.load()
 		outline.incrementBeingViewedCount()
 		outline.prepareForViewing()
+
+		guard isViewLoaded else { return }
 
 		updateNavigationMenus()
 		collectionView.reloadData()
