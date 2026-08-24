@@ -14,7 +14,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard !(session.items.first?.localObject is Document) else { return true }
-		return session.hasItemsConforming(toTypeIdentifiers: [UTType.md.identifier, UTType.opml.identifier])
+		return session.hasItemsConforming(toTypeIdentifiers: [UTType.md.identifier, UTType.opml.identifier, UTType.html.identifier])
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -59,7 +59,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 			tags = nil
 		}
 
-		// Dragging an OPML or Markdown file into the Collections View
+		// Dragging an OPML, Markdown, or HTML file into the Collections View
 		guard coordinator.items.first?.dragItem.localObject != nil else {
 			for dropItem in coordinator.items {
 
@@ -78,6 +78,15 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 					guard let opmlData else { return }
 					Task { @MainActor in
 						if let document = try? await account.importOPML(opmlData, tags: tags) {
+							DocumentIndexer.updateIndex(for: document)
+						}
+					}
+				}
+
+				provider.loadDataRepresentation(forTypeIdentifier: UTType.html.identifier) { (htmlData, error) in
+					guard let htmlData, let html = String(data: htmlData, encoding: .utf8) else { return }
+					Task { @MainActor in
+						if let document = try? await account.importHTML(html, filename: nil, defaults: AppDefaults.shared.outlineDefaults, tags: tags) {
 							DocumentIndexer.updateIndex(for: document)
 						}
 					}

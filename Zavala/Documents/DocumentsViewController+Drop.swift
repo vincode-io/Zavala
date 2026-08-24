@@ -14,7 +14,7 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard documentContainers?.uniqueAccount != nil else { return false }
-		return session.hasItemsConforming(toTypeIdentifiers: [UTType.md.identifier, UTType.opml.identifier])
+		return session.hasItemsConforming(toTypeIdentifiers: [UTType.md.identifier, UTType.opml.identifier, UTType.html.identifier])
 	}
 		
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
@@ -39,6 +39,15 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 				guard let opmlData else { return }
 				Task { @MainActor in
 					if let document = try? await account.importOPML(opmlData, tags: tags) {
+						DocumentIndexer.updateIndex(for: document)
+					}
+				}
+			}
+
+			provider.loadDataRepresentation(forTypeIdentifier: UTType.html.identifier) { (htmlData, error) in
+				guard let htmlData, let html = String(data: htmlData, encoding: .utf8) else { return }
+				Task { @MainActor in
+					if let document = try? await account.importHTML(html, filename: nil, defaults: AppDefaults.shared.outlineDefaults, tags: tags) {
 						DocumentIndexer.updateIndex(for: document)
 					}
 				}
