@@ -10,11 +10,13 @@ import AppIntents
 
 enum ImportTypeAppEnum: String, AppEnum {
 	case markdown
+	case html
     case opml
 
     static let typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("intent.parameter.import-type", comment: "Intent Parameter: Import Type"))
     static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
 		.markdown: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.type-markdown", comment: "Import type: Markdown")),
+		.html: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.type-html", comment: "Import type: HTML")),
         .opml: DisplayRepresentation(title: LocalizedStringResource("intent.parameter.type-opml", comment: "Import type: OPML"))
     ]
 }

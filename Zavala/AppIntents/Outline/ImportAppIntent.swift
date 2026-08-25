@@ -59,13 +59,21 @@ struct ImportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
 		}
 
 		let outline: Outline
-		if importType == .markdown {
+		switch importType {
+		case .markdown:
 			guard let importedOutline = try? await account.importMarkdown(inputFile.data, defaults: AppDefaults.shared.outlineDefaults, tags: nil, images: images).outline else {
 				await suspend()
 				throw ZavalaAppIntentError.unableToParseMarkdown
 			}
 			outline = importedOutline
-		} else {
+		case .html:
+			guard let html = String(data: inputFile.data, encoding: .utf8),
+				  let importedOutline = try? await account.importHTML(html, filename: nil, defaults: AppDefaults.shared.outlineDefaults, tags: nil).outline else {
+				await suspend()
+				throw ZavalaAppIntentError.unableToParseMarkdown
+			}
+			outline = importedOutline
+		case .opml:
 			guard let importedOutline = try? await account.importOPML(inputFile.data, tags: nil, images: images).outline else {
 				await suspend()
 				throw ZavalaAppIntentError.unableToParseOPML
