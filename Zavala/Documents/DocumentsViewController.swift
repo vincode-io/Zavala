@@ -879,7 +879,7 @@ private extension DocumentsViewController {
 	
 	func buildMoreMenu() -> UIMenu {
 
-		let importMarkdownAction = UIAction(title: .importMarkdownEllipsisControlLabel, image: .importDocument) { [weak self] _ in
+		let importMarkdownAction = UIAction(title: .importMarkdownEllipsisControlLabel) { [weak self] _ in
 			self?.importMarkdown()
 		}
 
@@ -932,7 +932,7 @@ private extension DocumentsViewController {
 		let sortOrderMenu = UIMenu(title: "", options: .displayInline, children: [sortAscending, sortDescending])
 		
 		let importMenu = UIMenu(title: "", options: .displayInline, children: [importMarkdownAction, importHTMLAction, importOPMLAction])
-		let sortMenu = UIMenu(title: "", options: .displayInline, children: [UIMenu(title: .sortDocumentsControlLabel, image: .sort, children: [sortByMenu, sortOrderMenu])])
+		let sortMenu = UIMenu(title: "", options: .displayInline, children: [UIMenu(title: .sortDocumentsControlLabel, children: [sortByMenu, sortOrderMenu])])
 
 		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [importMenu, sortMenu])
 	}
