@@ -6,21 +6,24 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 import VinUtility
 
 @MainActor
 final class MarkdownDocVisitor {
-	
+
 	let useAltLinks: Bool
 	let useSidecar: Bool
+	let linkType: UTType
 	var indentLevel = 0
 	var markdown = String()
-	
+
 	var previousRowWasParagraph = false
-	
-	init(useAltLinks: Bool, useSidecar: Bool) {
+
+	init(useAltLinks: Bool, useSidecar: Bool, linkType: UTType = .md) {
 		self.useAltLinks = useAltLinks
 		self.useSidecar = useSidecar
+		self.linkType = linkType
 	}
 	
 	func visitor(_ visited: Row) {
@@ -33,8 +36,8 @@ final class MarkdownDocVisitor {
 			indentLevel = indentLevel - 1
 		}
 
-		if let topicMarkdown = visited.topicMarkdown(type: .md, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !topicMarkdown.isEmpty {
-			if let noteMarkdown = visited.noteMarkdown(type: .md, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
+		if let topicMarkdown = visited.topicMarkdown(type: linkType, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !topicMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(type: linkType, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
 				markdown.append("\n\n")
 				markdown.append(String(repeating: "#", count: indentLevel + 2))
 				markdown.append(" \(topicMarkdown)")
@@ -47,7 +50,7 @@ final class MarkdownDocVisitor {
 					markdown.append("\n")
 				}
 
-				let listVisitor = MarkdownListVisitor(format: true, useAltLinks: useAltLinks, useSidecar: useSidecar, numberingStyle: .none)
+				let listVisitor = MarkdownListVisitor(format: true, useAltLinks: useAltLinks, useSidecar: useSidecar, numberingStyle: .none, linkType: linkType)
 				markdown.append("\n")
 				visited.visit(visitor: listVisitor.visitor)
 				markdown.append(listVisitor.markdown)
@@ -55,7 +58,7 @@ final class MarkdownDocVisitor {
 				previousRowWasParagraph = false
 			}
 		} else {
-			if let noteMarkdown = visited.noteMarkdown(type: .md, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(type: linkType, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
 				markdown.append("\n\n\(noteMarkdown)")
 				previousRowWasParagraph = true
 			} else {

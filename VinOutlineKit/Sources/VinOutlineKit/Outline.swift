@@ -1099,11 +1099,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return textContent
 	}
 	
-	public func markdownDoc(useAltLinks: Bool = false, useSidecar: Bool = false) -> String {
+	public func markdownDoc(useAltLinks: Bool = false, useSidecar: Bool = false, linkType: UTType = .md) -> String {
 		load()
-		
+
 		var md = "# \(title ?? "")"
-		let visitor = MarkdownDocVisitor(useAltLinks: useAltLinks, useSidecar: useSidecar)
+		let visitor = MarkdownDocVisitor(useAltLinks: useAltLinks, useSidecar: useSidecar, linkType: linkType)
 		rows.forEach {
 			$0.visit(visitor: visitor.visitor)
 		}
@@ -1119,14 +1119,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public func htmlDoc(useAltLinks: Bool = false, useSidecar: Bool = false) -> String {
 		// Reuse the exact same header and list rules as the Markdown Doc export, then render
 		// the resulting Markdown as HTML so the two exports stay structurally identical.
-		let markdown = markdownDoc(useAltLinks: useAltLinks, useSidecar: useSidecar)
+		let markdown = markdownDoc(useAltLinks: useAltLinks, useSidecar: useSidecar, linkType: .html)
 		return wrapInHTMLDocument(body: HTMLFormatter.format(markdown))
 	}
 
 	public func htmlList(useAltLinks: Bool = false, useSidecar: Bool = false) -> String {
 		// Reuse the exact same list rules as the Markdown List export, then render the
 		// resulting Markdown as HTML so the two exports stay structurally identical.
-		let markdown = markdownList(format: true, useAltLinks: useAltLinks, useSidecar: useSidecar)
+		let markdown = markdownList(format: true, useAltLinks: useAltLinks, useSidecar: useSidecar, linkType: .html)
 		return wrapInHTMLDocument(body: HTMLFormatter.format(markdown))
 	}
 
@@ -1148,12 +1148,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return html
 	}
 
-	public func markdownList(format: Bool, useAltLinks: Bool = false, useSidecar: Bool = false) -> String {
+	public func markdownList(format: Bool, useAltLinks: Bool = false, useSidecar: Bool = false, linkType: UTType = .md) -> String {
 		load()
-		
+
 		var md = "# \(title ?? "")\n\n"
 		rows.forEach {
-			let visitor = MarkdownListVisitor(format: format, useAltLinks: useAltLinks, useSidecar: useSidecar, numberingStyle: numberingStyle ?? .none)
+			let visitor = MarkdownListVisitor(format: format, useAltLinks: useAltLinks, useSidecar: useSidecar, numberingStyle: numberingStyle ?? .none, linkType: linkType)
 			$0.visit(visitor: visitor.visitor)
 			md.append(visitor.markdown)
 			md.append("\n")
