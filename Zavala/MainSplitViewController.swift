@@ -320,7 +320,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			return appDelegate.accountManager.isSyncAvailable
 		case .manageSharing:
 			return !isManageSharingUnavailable && editorViewController?.outline?.isLocked != true
-		case .share, .showGetInfo, .deleteOutline, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists, .printScreens:
+		case .share, .showGetInfo, .deleteOutline, .exportPDFDocs, .exportPDFLists, .exportHTMLDocs, .exportHTMLLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists, .printScreens:
 			return !isOutlineFunctionsUnavailable
 		case .addLock:
 			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true && editorViewController?.outline?.isCollaborating != true
@@ -410,6 +410,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 
 	@objc func exportPDFLists(_ sender: Any?) {
 		exportPDFLists()
+	}
+
+	@objc func exportHTMLDocs(_ sender: Any?) {
+		exportHTMLDocs()
+	}
+
+	@objc func exportHTMLLists(_ sender: Any?) {
+		exportHTMLLists()
 	}
 
 	@objc func exportMarkdownDocs(_ sender: Any?) {
@@ -645,6 +653,14 @@ extension MainSplitViewController: DocumentsDelegate {
 		exportPDFListsForOutlines(outlines)
 	}
 	
+	func exportHTMLDocs(_: DocumentsViewController, outlines: [Outline]) {
+		exportHTMLDocsForOutlines(outlines)
+	}
+
+	func exportHTMLLists(_: DocumentsViewController, outlines: [Outline]) {
+		exportHTMLListsForOutlines(outlines)
+	}
+
 	func exportMarkdownDocs(_: DocumentsViewController, outlines: [Outline]) {
 		exportMarkdownDocsForOutlines(outlines)
 	}
@@ -723,6 +739,14 @@ extension MainSplitViewController: EditorDelegate {
 		exportPDFListsForOutlines([outline])
 	}
 	
+	func exportHTMLDoc(_: EditorViewController, outline: Outline) {
+		exportHTMLDocsForOutlines([outline])
+	}
+
+	func exportHTMLList(_: EditorViewController, outline: Outline) {
+		exportHTMLListsForOutlines([outline])
+	}
+
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {
 		exportMarkdownDocsForOutlines([outline])
 	}

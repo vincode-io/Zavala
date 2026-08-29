@@ -60,6 +60,14 @@ struct ExportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
 			if let opmlData = outline.opml(useAltLinks: useAltLinks).data(using: .utf8) {
 				exportFile = IntentFile(data: opmlData, filename: outline.filename(type: .opml), type: .opml)
 			}
+		case .htmlDoc:
+			if let htmlData = outline.htmlDoc(useAltLinks: useAltLinks).data(using: .utf8) {
+				exportFile = IntentFile(data: htmlData, filename: outline.filename(type: .html), type: .html)
+			}
+		case .htmlList:
+			if let htmlData = outline.htmlList(useAltLinks: useAltLinks).data(using: .utf8) {
+				exportFile = IntentFile(data: htmlData, filename: outline.filename(type: .html), type: .html)
+			}
 		case .markdownDoc:
 			if let markdownData = outline.markdownDoc(useAltLinks: useAltLinks).data(using: .utf8) {
 				exportFile = IntentFile(data: markdownData, filename: outline.filename(type: .md), type: .md)

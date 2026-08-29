@@ -14,6 +14,7 @@ import UniformTypeIdentifiers
 import OSLog
 import CloudKit
 import OrderedCollections
+import Markdown
 import VinUtility
 
 public extension Notification.Name {
@@ -1115,6 +1116,38 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return md
 	}
 	
+	public func htmlDoc(useAltLinks: Bool = false, useSidecar: Bool = false) -> String {
+		// Reuse the exact same header and list rules as the Markdown Doc export, then render
+		// the resulting Markdown as HTML so the two exports stay structurally identical.
+		let markdown = markdownDoc(useAltLinks: useAltLinks, useSidecar: useSidecar)
+		return wrapInHTMLDocument(body: HTMLFormatter.format(markdown))
+	}
+
+	public func htmlList(useAltLinks: Bool = false, useSidecar: Bool = false) -> String {
+		// Reuse the exact same list rules as the Markdown List export, then render the
+		// resulting Markdown as HTML so the two exports stay structurally identical.
+		let markdown = markdownList(format: true, useAltLinks: useAltLinks, useSidecar: useSidecar)
+		return wrapInHTMLDocument(body: HTMLFormatter.format(markdown))
+	}
+
+	private func wrapInHTMLDocument(body: String) -> String {
+		var html = "<!DOCTYPE html>\n"
+		html.append("<html>\n")
+		html.append("<head>\n")
+		html.append("<meta charset=\"utf-8\">\n")
+		html.append("<title>\(title?.escapingXMLCharacters ?? "")</title>\n")
+		html.append("<style>\n")
+		html.append("h1 { text-align: center; }\n")
+		html.append("</style>\n")
+		html.append("</head>\n")
+		html.append("<body>\n")
+		html.append(body)
+		html.append("</body>\n")
+		html.append("</html>\n")
+
+		return html
+	}
+
 	public func markdownList(format: Bool, useAltLinks: Bool = false, useSidecar: Bool = false) -> String {
 		load()
 		

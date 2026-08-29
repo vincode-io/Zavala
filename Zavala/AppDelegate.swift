@@ -73,6 +73,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 
 	let exportPDFListsCommand = UICommand(title: .exportPDFListEllipsisControlLabel, action: .exportPDFLists)
 
+	let exportHTMLDocsCommand = UICommand(title: .exportHTMLDocEllipsisControlLabel, action: .exportHTMLDocs)
+
+	let exportHTMLListsCommand = UICommand(title: .exportHTMLListEllipsisControlLabel, action: .exportHTMLLists)
+
 	let exportMarkdownDocsCommand = UICommand(title: .exportMarkdownDocEllipsisControlLabel, action: .exportMarkdownDocs)
 	
 	let exportMarkdownListsCommand = UIKeyCommand(title: .exportMarkdownListEllipsisControlLabel,
@@ -695,6 +699,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		let importMenu = UIMenu(title: .importControlLabel, image: .importDocument, children: [importMarkdownCommand, importHTMLCommand, importOPMLCommand])
 		let exportMenu = UIMenu(title: .exportControlLabel, image: .export, children: [exportPDFDocsCommand,
 																					   exportPDFListsCommand,
+																					   exportHTMLDocsCommand,
+																					   exportHTMLListsCommand,
 																					   exportMarkdownDocsCommand,
 																					   exportMarkdownListsCommand,
 																					   exportOPMLsCommand])

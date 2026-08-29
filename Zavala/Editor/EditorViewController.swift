@@ -78,6 +78,8 @@ protocol EditorDelegate: AnyObject {
 	func lockNow(_: EditorViewController, outline: Outline)
 	func exportPDFDoc(_: EditorViewController, outline: Outline)
 	func exportPDFList(_: EditorViewController, outline: Outline)
+	func exportHTMLDoc(_: EditorViewController, outline: Outline)
+	func exportHTMLList(_: EditorViewController, outline: Outline)
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline)
 	func exportMarkdownList(_: EditorViewController, outline: Outline)
 	func exportOPML(_: EditorViewController, outline: Outline)
@@ -1159,6 +1161,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			guard let self, let outline = self.outline else { return }
 			self.delegate?.exportPDFList(self, outline: outline)
 		}
+		let exportHTMLDoc = UIAction(title: .exportHTMLDocEllipsisControlLabel) { [weak self] _ in
+			guard let self, let outline = self.outline else { return }
+			self.delegate?.exportHTMLDoc(self, outline: outline)
+		}
+		let exportHTMLList = UIAction(title: .exportHTMLListEllipsisControlLabel) { [weak self] _ in
+			guard let self, let outline = self.outline else { return }
+			self.delegate?.exportHTMLList(self, outline: outline)
+		}
 		let exportMarkdownDoc = UIAction(title: .exportMarkdownDocEllipsisControlLabel) { [weak self] _ in
 			guard let self, let outline = self.outline else { return }
 			self.delegate?.exportMarkdownDoc(self, outline: outline)
@@ -1171,7 +1181,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			guard let self, let outline = self.outline else { return }
 			self.delegate?.exportOPML(self, outline: outline)
 		}
-		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
+		let exportActions = [exportPDFDoc, exportPDFList, exportHTMLDoc, exportHTMLList, exportMarkdownDoc, exportMarkdownList, exportOPML]
 		shareActions.append(UIMenu(title: .exportControlLabel, image: .export, children: exportActions))
 
 		let deleteCompletedRowsAction = UIAction(title: .deleteCompletedRowsControlLabel,

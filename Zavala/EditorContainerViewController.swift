@@ -170,6 +170,14 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		exportPDFLists()
 	}
 
+	@objc func exportHTMLDocs(_ sender: Any?) {
+		exportHTMLDocs()
+	}
+
+	@objc func exportHTMLLists(_ sender: Any?) {
+		exportHTMLLists()
+	}
+
 	@objc func exportMarkdownDocs(_ sender: Any?) {
 		exportMarkdownDocs()
 	}
@@ -237,7 +245,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 			return appDelegate.accountManager.isSyncAvailable
 		case .manageSharing:
 			return !isManageSharingUnavailable && editorViewController?.outline?.isLocked != true
-		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists, .printScreens:
+		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportHTMLDocs, .exportHTMLLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists, .printScreens:
 			return !isOutlineFunctionsUnavailable
 		case .addLock:
 			return !isOutlineFunctionsUnavailable && editorViewController?.outline?.isLocked != true && editorViewController?.outline?.isCollaborating != true
@@ -299,6 +307,14 @@ extension EditorContainerViewController: EditorDelegate {
 
 	func exportPDFList(_: EditorViewController, outline: Outline) {
 		exportPDFListsForOutlines([outline])
+	}
+
+	func exportHTMLDoc(_: EditorViewController, outline: Outline) {
+		exportHTMLDocsForOutlines([outline])
+	}
+
+	func exportHTMLList(_: EditorViewController, outline: Outline) {
+		exportHTMLListsForOutlines([outline])
 	}
 
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {

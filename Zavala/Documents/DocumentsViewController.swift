@@ -28,6 +28,8 @@ protocol DocumentsDelegate: UINavigationControllerDelegate  {
 	func lockNow(_: DocumentsViewController, outlines: [Outline])
 	func exportPDFDocs(_: DocumentsViewController, outlines: [Outline])
 	func exportPDFLists(_: DocumentsViewController, outlines: [Outline])
+	func exportHTMLDocs(_: DocumentsViewController, outlines: [Outline])
+	func exportHTMLLists(_: DocumentsViewController, outlines: [Outline])
 	func exportMarkdownDocs(_: DocumentsViewController, outlines: [Outline])
 	func exportMarkdownLists(_: DocumentsViewController, outlines: [Outline])
 	func exportOPMLs(_: DocumentsViewController, outlines: [Outline])
@@ -1020,6 +1022,8 @@ private extension DocumentsViewController {
 			var exportActions = [UIAction]()
 			exportActions.append(self.exportPDFDocsOutlineAction(outlines: outlines))
 			exportActions.append(self.exportPDFListsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportHTMLDocsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportHTMLListsOutlineAction(outlines: outlines))
 			exportActions.append(self.exportMarkdownDocsOutlineAction(outlines: outlines))
 			exportActions.append(self.exportMarkdownListsOutlineAction(outlines: outlines))
 			exportActions.append(self.exportOPMLsAction(outlines: outlines))
@@ -1106,6 +1110,18 @@ private extension DocumentsViewController {
 		}
 	}
 	
+	func exportHTMLDocsOutlineAction(outlines: [Outline]) -> UIAction {
+        return UIAction(title: .exportHTMLDocEllipsisControlLabel) { action in
+			self.delegate?.exportHTMLDocs(self, outlines: outlines)
+		}
+	}
+
+	func exportHTMLListsOutlineAction(outlines: [Outline]) -> UIAction {
+        return UIAction(title: .exportHTMLListEllipsisControlLabel) { action in
+			self.delegate?.exportHTMLLists(self, outlines: outlines)
+		}
+	}
+
 	func exportMarkdownDocsOutlineAction(outlines: [Outline]) -> UIAction {
         return UIAction(title: .exportMarkdownDocEllipsisControlLabel) { action in
 			self.delegate?.exportMarkdownDocs(self, outlines: outlines)

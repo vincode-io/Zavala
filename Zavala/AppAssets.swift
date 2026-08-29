@@ -260,6 +260,8 @@ extension String {
 	static let authenticationFailedError = String(localized: "label.text.authentication-failed", comment: "Error: Authentication failed.")
 	static let errorAlertTitle = String(localized: "label.text.error", comment: "Label: Error")
 	static let exportControlLabel = String(localized: "button.text.export", comment: "Action: Export")
+	static let exportHTMLDocEllipsisControlLabel = String(localized: "button.text.export-html-doc-with-ellipsis", comment: "Action: Export HTML Doc…")
+	static let exportHTMLListEllipsisControlLabel = String(localized: "button.text.export-html-list-with-ellipsis", comment: "Action: Export HTML List…")
 	static let exportMarkdownDocEllipsisControlLabel = String(localized: "button.text.export-markdown-doc-with-ellipsis", comment: "Action: Export Markdown Doc…")
 	static let exportMarkdownListEllipsisControlLabel = String(localized: "button.text.export-markdown-list-with-ellipsis", comment: "Action: Export Markdown List…")
 	static let exportPDFDocEllipsisControlLabel = String(localized: "button.text.export-pdf-doc-with-ellipsis", comment: "Action: Export PDF Doc…")

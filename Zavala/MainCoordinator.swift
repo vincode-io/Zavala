@@ -17,6 +17,8 @@ extension Selector {
 	static let manageSharing = #selector(MainCoordinatorResponder.manageSharing(_:))
 	static let exportPDFDocs = #selector(MainCoordinatorResponder.exportPDFDocs(_:))
 	static let exportPDFLists = #selector(MainCoordinatorResponder.exportPDFLists(_:))
+	static let exportHTMLDocs = #selector(MainCoordinatorResponder.exportHTMLDocs(_:))
+	static let exportHTMLLists = #selector(MainCoordinatorResponder.exportHTMLLists(_:))
 	static let exportMarkdownDocs = #selector(MainCoordinatorResponder.exportMarkdownDocs(_:))
 	static let exportMarkdownLists = #selector(MainCoordinatorResponder.exportMarkdownLists(_:))
 	static let exportOPMLs = #selector(MainCoordinatorResponder.exportOPMLs(_:))
@@ -38,6 +40,8 @@ extension Selector {
 	@objc func manageSharing(_ sender: Any?)
 	@objc func exportPDFDocs(_ sender: Any?)
 	@objc func exportPDFLists(_ sender: Any?)
+	@objc func exportHTMLDocs(_ sender: Any?)
+	@objc func exportHTMLLists(_ sender: Any?)
 	@objc func exportMarkdownDocs(_ sender: Any?)
 	@objc func exportMarkdownLists(_ sender: Any?)
 	@objc func exportOPMLs(_ sender: Any?)
@@ -146,6 +150,14 @@ extension MainCoordinator {
 		exportPDFListsForOutlines(selectedOutlines)
 	}
 	
+	func exportHTMLDocs() {
+		exportHTMLDocsForOutlines(selectedOutlines)
+	}
+
+	func exportHTMLLists() {
+		exportHTMLListsForOutlines(selectedOutlines)
+	}
+
 	func exportMarkdownDocs() {
 		exportMarkdownDocsForOutlines(selectedOutlines)
 	}
@@ -182,17 +194,45 @@ extension MainCoordinator {
 		export(exports)
 	}
 	
+	func exportHTMLDocsForOutlines(_ outlines: [Outline]) {
+		var exports = [(data: Data, filename: String)]()
+		var imageDirectoryURLs = [URL]()
+
+		for outline in outlines {
+			if let data = outline.htmlDoc(useSidecar: true).data(using: .utf8) {
+				exports.append((data: data, filename: outline.filename(type: .html)))
+				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
+			}
+		}
+
+		export(exports, additionalURLs: imageDirectoryURLs)
+	}
+
+	func exportHTMLListsForOutlines(_ outlines: [Outline]) {
+		var exports = [(data: Data, filename: String)]()
+		var imageDirectoryURLs = [URL]()
+
+		for outline in outlines {
+			if let data = outline.htmlList(useSidecar: true).data(using: .utf8) {
+				exports.append((data: data, filename: outline.filename(type: .html)))
+				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
+			}
+		}
+
+		export(exports, additionalURLs: imageDirectoryURLs)
+	}
+
 	func exportMarkdownDocsForOutlines(_ outlines: [Outline]) {
 		var exports = [(data: Data, filename: String)]()
 		var imageDirectoryURLs = [URL]()
-		
+
 		for outline in outlines {
 			if let data = outline.markdownDoc(useSidecar: true).data(using: .utf8) {
 				exports.append((data: data, filename: outline.filename(type: .md)))
 				imageDirectoryURLs.append(contentsOf: writeImageDirectory(for: outline))
 			}
 		}
-		
+
 		export(exports, additionalURLs: imageDirectoryURLs)
 	}
 	
