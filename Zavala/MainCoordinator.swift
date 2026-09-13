@@ -58,7 +58,7 @@ extension Selector {
 protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
 	var activityManager: ActivityManager { get }
 	var editorViewController: EditorViewController? { get }
-	var selectedDocuments: [Document] { get }
+	var selectedDocuments: [VinOutlineKit.Document] { get }
 }
 
 extension MainCoordinator {

@@ -840,7 +840,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func documentIsLockedDidChange(_ note: Notification) {
-		if let noteOutline = (note.object as? Document)?.outline, noteOutline == self.outline {
+		if let noteOutline = (note.object as? VinOutlineKit.Document)?.outline, noteOutline == self.outline {
 			if isShowingLockedView {
 				dismissLockedView()
 			}

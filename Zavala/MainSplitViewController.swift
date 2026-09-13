@@ -65,7 +65,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		return activity
 	}
 	
-	var selectedDocuments: [Document] {
+	var selectedDocuments: [VinOutlineKit.Document] {
 		return documentsViewController?.selectedDocuments ?? []
 	}
 	
@@ -562,7 +562,7 @@ extension MainSplitViewController: DocumentsDelegate {
 
 	func openDocuments(_: DocumentsViewController,
 					   documentContainers: [DocumentContainer],
-					   documents: [Document],
+					   documents: [VinOutlineKit.Document],
 					   saveCurrentOutline: Bool,
 					   isNavigationBranch: Bool,
 					   animated: Bool) {
@@ -877,7 +877,7 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 
 private extension MainSplitViewController {
 	
-	func editDocument(_ document: Document, selectRow: EntityID? = nil, isNavigationBranch: Bool) {
+	func editDocument(_ document: VinOutlineKit.Document, selectRow: EntityID? = nil, isNavigationBranch: Bool) {
 		self.documentsViewController?.openDocument(document, isNavigationBranch: isNavigationBranch, animated: false)
 		self.documentsViewController?.editCurrentDocument(selectRow: selectRow)
 		self.lastMainControllerToAppear = .editor
