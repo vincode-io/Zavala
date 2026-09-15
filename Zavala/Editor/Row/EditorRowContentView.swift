@@ -91,6 +91,19 @@ class EditorRowContentView: UIView, UIContentView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	/// Routes a tap from the cell to whichever text view it landed on. The text views stay out of the touch
+	/// path until they are being edited so that rows can be dragged, so taps have to be forwarded to them.
+	func handleTap(at point: CGPoint) {
+		let textView: EditorRowTextView
+		if noteTextView.superview != nil, point.y > noteTextView.frame.minY {
+			textView = noteTextView
+		} else {
+			textView = topicTextView
+		}
+
+		textView.handleTap(at: convert(point, to: textView))
+	}
+
 	// This prevents the navigation controller backswipe from trigging a row swipe event
 	override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
 		if gestureRecognizer is UISwipeGestureRecognizer {

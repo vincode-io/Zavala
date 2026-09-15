@@ -112,6 +112,11 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		// The selected document is the split view's state, not a transient highlight. Without this,
+		// UICollectionViewController clears it on every viewWillAppear, which happens whenever something
+		// is presented over the split view and dismissed again, such as zooming an image in the editor.
+		clearsSelectionOnViewWillAppear = false
+
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 			collectionView.allowsMultipleSelection = true

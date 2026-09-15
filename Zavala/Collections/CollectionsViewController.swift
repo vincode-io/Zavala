@@ -83,7 +83,12 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
     override func viewDidLoad() {
 		super.viewDidLoad()
-        
+
+		// The selected collection is the split view's state, not a transient highlight. Without this,
+		// UICollectionViewController clears it on every viewWillAppear, which happens whenever something
+		// is presented over the split view and dismissed again, such as zooming an image in the editor.
+		clearsSelectionOnViewWillAppear = false
+
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidReload(_:)), name: .AccountDidReload, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)

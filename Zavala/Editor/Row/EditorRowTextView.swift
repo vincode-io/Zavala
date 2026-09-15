@@ -206,20 +206,6 @@ class EditorRowTextView: UITextView, EditorTextInput {
 		self.dropInteractionDelegate = EditorRowDropInteractionDelegate(textView: self)
 		self.addInteraction(UIDropInteraction(delegate: dropInteractionDelegate))
 		
-		// These gesture recognizers will conflict with the row dragging if not removed.
-		if traitCollection.userInterfaceIdiom != .mac {
-			gestureRecognizers?.forEach {
-				if $0.name == "com.apple.UIKit.dragInitiation" ||
-					$0.name == "com.apple.UIKit.dragFailureRelationships" ||
-					$0.name == "com.apple.UIKit.dragExclusionRelationships" ||
-					$0.name == "com.apple.UIKit.longPressClickDriverPrimary" ||
-					$0.name == "com.apple.UIKit.clickPresentationExclusion" ||
-					$0.name == "com.apple.UIKit.clickPresentationFailure" {
-					removeGestureRecognizer($0)
-				}
-			}
-		}
-			
 		self.allowsEditingTextAttributes = true
 		self.isScrollEnabled = false
 		self.textContainer.lineFragmentPadding = 0
@@ -243,7 +229,25 @@ class EditorRowTextView: UITextView, EditorTextInput {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
- 
+
+	/// Keeps the text view out of the touch path unless it is being edited.
+	///
+	/// UIKit installs its own drag and context menu interactions on a `UITextView`, and their gestures beat
+	/// those of any interaction on an ancestor view. Since a row's text views cover the whole cell, they win
+	/// every long press and the collection view's drag interaction never gets to lift the row. Declining the
+	/// hit test keeps the text view's gestures out of the touch entirely, so the touch lands on the
+	/// collection view instead, which routes taps back here through `handleTap(at:)`.
+	///
+	/// Only touches are turned away. Drag and drop resolves its target with a nil event and has to keep
+	/// finding us, or a row's `UIDropInteraction` would stop accepting text and image drops. The Mac doesn't
+	/// have the gesture conflict, so it is left alone.
+	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+		if let event, event.type == .touches, !isFirstResponder, traitCollection.userInterfaceIdiom != .mac {
+			return nil
+		}
+		return super.hitTest(point, with: event)
+	}
+
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .editLink:
@@ -312,7 +316,45 @@ class EditorRowTextView: UITextView, EditorTextInput {
 	}
 	
 	// MARK: API
-	
+
+	/// Handles a tap that the collection view received on this text view's behalf. Because the text view
+	/// stays out of the touch path until it is being edited, the link and image interactions that UIKit
+	/// would normally perform have to be handled here too.
+	func handleTap(at point: CGPoint) {
+		guard let position = closestPosition(to: point) else {
+			becomeFirstResponder()
+			return
+		}
+
+		// Only act on a link or image when the row isn't already being edited. Once the cursor is in the
+		// row, a tap should place the cursor just like it does in any other text view.
+		if !isFirstResponder {
+			let tapOffset = offset(from: beginningOfDocument, to: position)
+
+			if tapOffset < textStorage.length {
+				if let url = textStorage.attribute(.link, at: tapOffset, effectiveRange: nil) as? URL {
+					UIApplication.shared.open(url)
+					return
+				}
+
+				var attachmentRange = NSRange()
+				if let attachment = textStorage.attribute(.attachment, at: tapOffset, effectiveRange: &attachmentRange) as? NSTextAttachment,
+				   let image = attachment.image,
+				   let attachmentRect = firstRect(for: attachmentRange) {
+					zoomImage(image, rect: convert(attachmentRect, to: nil))
+					return
+				}
+			}
+		}
+
+		guard becomeFirstResponder() else { return }
+		selectedTextRange = textRange(from: position, to: position)
+	}
+
+	func zoomImage(_ image: UIImage, rect: CGRect) {
+		fatalError("zoomImage has not been implemented")
+	}
+
 	func updateTextPreferences() {
 		if outlineCheckSpellingWhileTyping {
 			self.spellCheckingType = .yes

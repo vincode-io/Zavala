@@ -127,11 +127,15 @@ class EditorRowNoteTextView: EditorRowTextView {
 		let result = findAndSelectLink()
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
-	
+
+	override func zoomImage(_ image: UIImage, rect: CGRect) {
+		editorDelegate?.zoomImage(self, image, rect: rect)
+	}
+
 	func update(configuration: EditorRowContentConfiguration) {
 		// Don't update the row if we are in the middle of entering multistage characters, e.g. Japanese
 		guard markedTextRange == nil else { return }
-		
+
 		self.rowID = configuration.rowID
 		self.rowHasChildren = configuration.rowHasChildren
 		self.outlineCheckSpellingWhileTyping = configuration.outlineCheckSpellingWhileTyping

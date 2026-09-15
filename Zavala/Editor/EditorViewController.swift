@@ -361,7 +361,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var imageBlocker: UIView?
 	private var lockedHostingController: UIHostingController<EditorLockedOutlineView>?
 	private var lockedContentScreen: UIView?
-	
+
+	private var createInitialRowGestureRecognizer: UITapGestureRecognizer?
+	private var rowTapGestureRecognizer: UITapGestureRecognizer?
+
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -401,7 +404,18 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		let tapGestureRecogniser = UITapGestureRecognizer(target: self, action: #selector(createInitialRowIfNecessary))
 		tapGestureRecogniser.delegate = self
 		collectionView.addGestureRecognizer(tapGestureRecogniser)
-		
+		createInitialRowGestureRecognizer = tapGestureRecogniser
+
+		// On iOS the row text views stay out of the touch path unless they are being edited so that the
+		// collection view's drag interaction wins the long press and rows can be dragged. That means putting
+		// the cursor in a tapped row becomes our job rather than the text view's.
+		if traitCollection.userInterfaceIdiom != .mac {
+			let rowTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleRowTap(_:)))
+			rowTapGestureRecognizer.delegate = self
+			collectionView.addGestureRecognizer(rowTapGestureRecognizer)
+			self.rowTapGestureRecognizer = rowTapGestureRecognizer
+		}
+
 		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.outline = outline
 			cell.delegate = self
@@ -1438,6 +1452,19 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard let outline, outline.rows.count == 0 else { return }
 		createRow(afterRows: nil)
 	}
+
+	@objc func handleRowTap(_ gestureRecognizer: UITapGestureRecognizer) {
+		let point = gestureRecognizer.location(in: collectionView)
+		guard let indexPath = collectionView.indexPathForItem(at: point),
+			  let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else {
+			return
+		}
+
+		// A tap that puts the cursor in a row shouldn't leave a row selection behind
+		collectionView.deselectAll()
+
+		rowCell.handleTap(at: gestureRecognizer.location(in: rowCell))
+	}
 	
 	@objc func sync() {
 		if appDelegate.accountManager.isSyncAvailable {
@@ -1947,6 +1974,14 @@ extension EditorViewController: UIGestureRecognizerDelegate {
 	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
 		let point = gestureRecognizer.location(in: collectionView)
 		let indexPath = collectionView.indexPathForItem(at: point)
+
+		if gestureRecognizer === rowTapGestureRecognizer {
+			// Only taps that land on a row get routed to its text views, and never ones that land on a
+			// control like the disclosure button, which has to handle its own touches.
+			guard let indexPath, indexPath.section == adjustedRowsSection else { return false }
+			return !(collectionView.hitTest(point, with: nil) is UIControl)
+		}
+
 		return indexPath == nil
 	}
 	

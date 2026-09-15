@@ -117,6 +117,14 @@ class EditorRowViewCell: UICollectionViewListCell {
 		contentConfiguration = content
 	}
 	
+	/// Routes a tap that the collection view received on this cell's behalf. The row text views stay out of
+	/// the touch path until they are being edited so that the collection view's drag interaction owns the
+	/// long press, which means taps have to be forwarded to them explicitly.
+	func handleTap(at point: CGPoint) {
+		guard let rowContentView = contentView as? EditorRowContentView else { return }
+		rowContentView.handleTap(at: convert(point, to: rowContentView))
+	}
+
 	func isDroppable(session: UIDropSession) -> Bool {
 		let cursorLocation = session.location(in: self)
 		return (bounds.minY < cursorLocation.y && bounds.maxY - 1 > cursorLocation.y)
