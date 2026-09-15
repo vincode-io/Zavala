@@ -328,27 +328,46 @@ class EditorRowTextView: UITextView, EditorTextInput {
 
 		// Only act on a link or image when the row isn't already being edited. Once the cursor is in the
 		// row, a tap should place the cursor just like it does in any other text view.
-		if !isFirstResponder {
-			let tapOffset = offset(from: beginningOfDocument, to: position)
+		if !isFirstResponder, let tapOffset = characterIndex(at: point) {
+			if let url = textStorage.attribute(.link, at: tapOffset, effectiveRange: nil) as? URL {
+				UIApplication.shared.open(url)
+				return
+			}
 
-			if tapOffset < textStorage.length {
-				if let url = textStorage.attribute(.link, at: tapOffset, effectiveRange: nil) as? URL {
-					UIApplication.shared.open(url)
-					return
-				}
-
-				var attachmentRange = NSRange()
-				if let attachment = textStorage.attribute(.attachment, at: tapOffset, effectiveRange: &attachmentRange) as? NSTextAttachment,
-				   let image = attachment.image,
-				   let attachmentRect = firstRect(for: attachmentRange) {
-					zoomImage(image, rect: convert(attachmentRect, to: nil))
-					return
-				}
+			var attachmentRange = NSRange()
+			if let attachment = textStorage.attribute(.attachment, at: tapOffset, effectiveRange: &attachmentRange) as? NSTextAttachment,
+			   let image = attachment.image,
+			   let attachmentRect = firstRect(for: attachmentRange) {
+				zoomImage(image, rect: convert(attachmentRect, to: nil))
+				return
 			}
 		}
 
 		guard becomeFirstResponder() else { return }
 		selectedTextRange = textRange(from: position, to: position)
+	}
+
+	/// Returns the index of the character the point lands on, or `nil` if the point isn't inside any
+	/// character.
+	///
+	/// `closestPosition(to:)` answers a different question: it returns the nearest insertion point, which is
+	/// a boundary *between* characters, so it can't say which character was touched. Tapping the left half of
+	/// a character gives the boundary before it and the right half gives the boundary after it. That is fine
+	/// for placing a cursor, but for a wide run like an image attachment it means anything past the halfway
+	/// mark resolves to the following character. So take both characters either side of the boundary and
+	/// pick the one whose glyph actually contains the point.
+	private func characterIndex(at point: CGPoint) -> Int? {
+		guard let position = closestPosition(to: point) else { return nil }
+
+		let boundary = offset(from: beginningOfDocument, to: position)
+
+		for candidate in [boundary, boundary - 1] where candidate >= 0 && candidate < textStorage.length {
+			if let characterRect = firstRect(for: NSRange(location: candidate, length: 1)), characterRect.contains(point) {
+				return candidate
+			}
+		}
+
+		return nil
 	}
 
 	func zoomImage(_ image: UIImage, rect: CGRect) {
