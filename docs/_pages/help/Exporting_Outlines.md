@@ -21,6 +21,15 @@ This exports a PDF file by treating the Outline as a document. See
 
 This exports a PDF file as a traditional outilne.
 
+## HTML Doc
+
+This exports a HTML file by treating the Outline as a document. See
+[The Notes Field](The_Notes_Field.md) .
+
+## HTML List
+
+This exports a HTML file as a traditional outline using HTML lists.
+
 ## Markdown Doc
 
 This exports a Markdown file by treating the Outline as a document. See

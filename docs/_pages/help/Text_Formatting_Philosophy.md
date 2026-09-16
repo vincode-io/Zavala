@@ -54,12 +54,11 @@ Since OPML doesn’t support formatting, we use Markdown inside the OPML text
 fields. That allows us to have formatting that is only limited by Markdown’s
 syntax.
 
-As of now, we only support the basic Markdown syntax. Extensions have been made
-to Markdown, but we don’t currently have any plans support them.
-
 Markdown supports bold, italics, links, and embedded images. It doesn’t support
 highlighting, strike-through, or
-[underlining](https://mobile.twitter.com/gruber/status/299372697593462784) .
+[underlining](https://mobile.twitter.com/gruber/status/299372697593462784) by
+default. We do support an extension of Markdown that enables us to have
+highlighted text however.
 
 ## Markdown, Wiki, and Twitter Syntax
 

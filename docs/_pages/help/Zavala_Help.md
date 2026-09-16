@@ -29,6 +29,7 @@ platforms and I will try to call it out when they are different.
 	* Dialogs
 		* [Get Info Dialog](Get_Info_Dialog.md)
 		* [Link Dialog](Link_Dialog.md)
+	* [Share Extension](Share_Extension.md)
 * Common Tasks
 	* [Creating an Outline](Creating_an_Outline.md)
 	* [Printing Outlines](Printing_Outlines.md)

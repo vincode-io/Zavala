@@ -42,6 +42,10 @@ collection in the Collections View.
 The right-most column of the Main Window. The editor shows the currently
 selected Outline and allows you to edit its content and properties.
 
+## HTML
+
+Hyper Text Markup Language - The main building block of the World Wide Web.
+
 ## Locking
 
 Encrypts an Outline and prevents access to the Outline until a biometric key or
@@ -90,6 +94,12 @@ A hierarchal structure of Rows.
 You can search across all the content in all the Outlines at the same time. The
 search field for Outline Search is located in the Collections View.
 
+## Personal Knowledge Management
+
+Sometimes abbreviated as PKM, it is the systematic process of capturing,
+organizing, connecting, and retrieving your personal information and insights
+so that the remain useful over time.
+
 ## Row
 
 The main building block of an Outline. All Rows have a Topic and optionally
@@ -110,3 +120,8 @@ Collections View so that you can find the associated Outlines easily.
 ## Topic
 
 The main text entry type in an Outline.  Sometimes called a Headline.
+
+## Web Clipper
+
+A tool that saves content from the internet directly into an application, such
+as Zavala. Zavala’s web clipper is the [Share Extension.](Share_Extension.md)
