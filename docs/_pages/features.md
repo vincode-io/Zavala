@@ -8,10 +8,10 @@ header:
 ---
 
 * Use on a Mac, iPhone, and/or iPad for free and forever.
-* Import or export OPML or Markdown documents.
 * Lock and encrypt Outlines for security and privacy.
 * Sync Outlines using iCloud with full offline editing.
 * Share Outlines using iCloud so that you can collaborate on an Outline with one or more other Zavala users in realtime.
+* Use the web clipper share extension to import web pages directly from a web browser.
 * Embed images in your Outline text fields.
 * Customize the fonts used in the Outline Editor.
 * Build custom Shortcuts using Zavala's numerous Shortcut actions.
@@ -27,8 +27,6 @@ header:
 	* You can copy a link to your Outline that you can paste into other applications so that you can get back to your Outline with a single click.
 	* Paste URL’s and have them automatically converted into clickable hypertext links.
 * Sharing
-	* You can import OPML files.
-	* You can export OPML files.
-	* You can export Outlines formatted as Markdown.
-	* You can export Outlines formatted as Markdown blog posts.
+	* You can import OPML, Markdown, and HTML files.
+	* You can export OPML, Markdown, and HTML files.
 	* Print your outlines.
