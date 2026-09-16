@@ -1057,15 +1057,18 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return print
 	}
 
-	/// Prints the outline the way it currently appears on screen: filtered rows are omitted and the
-	/// contents of collapsed rows are not shown.
+	/// Prints the outline the way it currently appears on screen: filtered rows are omitted, the
+	/// contents of collapsed rows are not shown and, when focused, only the focus row and its
+	/// children are included.
 	public func printScreen() -> NSAttributedString {
 		let print = NSMutableAttributedString()
 		load()
 
 		appendPrintTitle(attrString: print)
 
-		rows.forEach {
+		let printRows = if let focusRow { [focusRow] } else { rows }
+
+		printRows.forEach {
 			let visitor = PrintListVisitor(numberingStyle: numberingStyle ?? .none,
 										   isCompletedFilterOn: isCompletedFilterOn,
 										   isNotesFilterOn: isNotesFilterOn,
