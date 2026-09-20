@@ -129,7 +129,7 @@ private extension EditorCollectionViewCompositionalLayout {
 				
 				// Need to bump it up by an appended margin
 				let rowWidth = rowSizes[currentRow][1] - rowSizes[currentRow][0] // last.x - first.x
-				let appendedMargin = (collectionView!.frame.width - leftPadding  - rowWidth - leftPadding) / 2
+				let appendedMargin = (collectionView!.safeAreaLayoutGuide.layoutFrame.width - leftPadding  - rowWidth - leftPadding) / 2
 				leftMargin += appendedMargin
 				
 				currentRow += 1
