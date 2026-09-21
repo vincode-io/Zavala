@@ -326,6 +326,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var focusBarButtonItem: UIBarButtonItem!
 	private var filterBarButtonItem: UIBarButtonItem!
 
+	// Tracks whether the Focus item has been pushed out of the navigation bar because we are too narrow
+	// to hold all of its items. When it has been, the More menu picks it up instead.
+	private var isFocusBarButtonItemInMoreMenu = false
+
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
 	private var tagInputRegistration: UICollectionView.CellRegistration<EditorTagInputViewCell, EntityID>?
@@ -357,6 +361,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
+
+	// The narrowest we can get before the Focus item has to leave the navigation bar for the More menu
+	private static let focusBarButtonItemMinimumWidth = 400.0
 	private var childRowIndent = AppDefaults.shared.createRows == .indentedWithChildren
 	private var rowIndentSize = AppDefaults.shared.rowIndentSize
 	private var rowSpacingSize = AppDefaults.shared.rowSpacingSize
@@ -500,7 +507,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			transitionContentOffset = collectionView.contentOffset
 		}
 		
-		if #unavailable(iOS 27.0) {
+		if #available(iOS 27.0, *) {
+			updateNavigationBarButtonItems(width: size.width)
+		} else {
 			navButtonGroup.containerWidth = size.width
 			actionsButtonGroup.containerWidth = size.width
 		}
@@ -1090,6 +1099,24 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	func buildMoreMenu() -> UIMenu {
+		var focusActions = [UIMenuElement]()
+
+		// When the navigation bar is too narrow for the Focus item, it lives here instead.
+		if isFocusBarButtonItemInMoreMenu {
+			let focusAction: UIAction
+			if !(outline?.isFocusOutUnavailable() ?? true) {
+				focusAction = UIAction(title: .focusOutControlLabel, image: .focusActive) { [weak self] _ in
+					self?.toggleFocus(nil)
+				}
+			} else {
+				focusAction = UIAction(title: .focusInControlLabel, image: .focusInactive) { [weak self] _ in
+					self?.toggleFocus(nil)
+				}
+				focusAction.attributes = (currentRows?.count ?? 0) == 1 ? [] : .disabled
+			}
+			focusActions.append(focusAction)
+		}
+
 		var outlineActions = [UIMenuElement]()
 
 		let getInfoAction = UIAction(title: .getInfoControlLabel, image: .getInfo) { [weak self] _ in
@@ -1228,7 +1255,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)
 		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
 
-		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [outlineMenu, shareMenu, changeMenu])
+		var menus = [UIMenuElement]()
+		if !focusActions.isEmpty {
+			menus.append(UIMenu(title: "", options: .displayInline, children: focusActions))
+		}
+		menus.append(contentsOf: [outlineMenu, shareMenu, changeMenu])
+
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: menus)
 	}
 
 	func showLockedView(outline: Outline) {
@@ -2599,10 +2632,24 @@ private extension EditorViewController {
 			barButtonItem.isPaddingRemoved = true
 		}
 
+		updateNavigationBarButtonItems(width: view.bounds.width)
+	}
+
+	/// Lays out the navigation bar's items for the given width and rebuilds the More menu to match. The
+	/// Focus item doesn't fit at narrow widths, so at those widths it moves into the More menu instead.
+	@available(iOS 27.0, *)
+	func updateNavigationBarButtonItems(width: CGFloat) {
+		isFocusBarButtonItemInMoreMenu = width < Self.focusBarButtonItemMinimumWidth
+		moreMenuBarButtonItem.menu = buildMoreMenu()
+
 		guard traitCollection.userInterfaceIdiom != .mac else { return }
 
 		// Right bar button items are laid out trailing to leading
-		var navigationBarItems = [filterBarButtonItem!, focusBarButtonItem!, moreMenuBarButtonItem!]
+		var navigationBarItems = [filterBarButtonItem!]
+		if !isFocusBarButtonItemInMoreMenu {
+			navigationBarItems.append(focusBarButtonItem)
+		}
+		navigationBarItems.append(moreMenuBarButtonItem)
 		if traitCollection.userInterfaceIdiom != .pad {
 			navigationBarItems.append(undoMenuBarButtonItem)
 		}
@@ -2612,7 +2659,7 @@ private extension EditorViewController {
 
 	@available(iOS 27.0, *)
 	func updateNavigationBarButtonItemsUI() {
-		moreMenuBarButtonItem.menu = buildMoreMenu()
+		updateNavigationBarButtonItems(width: view.bounds.width)
 
 		if !(outline?.isFocusOutUnavailable() ?? true) {
 			focusBarButtonItem.accessibilityLabel = .focusOutControlLabel
