@@ -90,6 +90,9 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var moreMenuButton: ButtonGroup.Button!
 	private var addButton: ButtonGroup.Button!
 
+	private var moreMenuBarButtonItem: UIBarButtonItem!
+	private var addBarButtonItem: UIBarButtonItem!
+
 	private lazy var markdownDocumentPickerDelegate = MarkdownDocumentPickerDelegate(viewController: self)
 	private lazy var htmlDocumentPickerDelegate = HTMLDocumentPickerDelegate(viewController: self)
 	private lazy var opmlDocumentPickerDelegate = OPMLDocumentPickerDelegate(viewController: self)
@@ -122,10 +125,20 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.allowsMultipleSelection = true
 			collectionView.contentInset = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
 		} else {
-			let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-			moreMenuButton = navButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
-			addButton = navButtonGroup.addButton(label: .addControlLabel, image: .newOutline, selector: .createOutline)
-			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+			if #available(iOS 27.0, *) {
+				moreMenuBarButtonItem = UIBarButtonItem(image: .ellipsis, style: .plain, target: nil, action: nil)
+				moreMenuBarButtonItem.accessibilityLabel = .moreControlLabel
+				moreMenuBarButtonItem.isPaddingRemoved = true
+
+				addBarButtonItem = UIBarButtonItem(image: .newOutline, style: .plain, target: nil, action: .createOutline)
+				addBarButtonItem.accessibilityLabel = .addControlLabel
+				addBarButtonItem.isPaddingRemoved = true
+			} else {
+				let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
+				moreMenuButton = navButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
+				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .newOutline, selector: .createOutline)
+				navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+			}
 
 			searchController.delegate = self
 			searchController.searchResultsUpdater = self
@@ -135,7 +148,11 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			navigationItem.searchBarPlacementAllowsExternalIntegration = true
 			definesPresentationContext = true
 
-			navigationItem.rightBarButtonItem = navButtonsBarButtonItem
+			if #available(iOS 27.0, *) {
+				navigationItem.rightBarButtonItems = [addBarButtonItem, moreMenuBarButtonItem]
+			} else {
+				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
+			}
 
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
@@ -874,13 +891,23 @@ private extension DocumentsViewController {
 		}
 		
 		if traitCollection.userInterfaceIdiom != .mac {
-			if defaultAccount == nil {
-				navigationItem.rightBarButtonItem = nil
-			} else {
-				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
-			}
+			if #available(iOS 27.0, *) {
+				if defaultAccount == nil {
+					navigationItem.rightBarButtonItems = nil
+				} else {
+					navigationItem.rightBarButtonItems = [addBarButtonItem, moreMenuBarButtonItem]
+				}
 
-			moreMenuButton.menu = buildMoreMenu()
+				moreMenuBarButtonItem.menu = buildMoreMenu()
+			} else {
+				if defaultAccount == nil {
+					navigationItem.rightBarButtonItem = nil
+				} else {
+					navigationItem.rightBarButtonItem = navButtonsBarButtonItem
+				}
+
+				moreMenuButton.menu = buildMoreMenu()
+			}
 		}
 	}
 	

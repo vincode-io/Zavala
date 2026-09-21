@@ -135,11 +135,19 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 				navigationItem.rightBarButtonItem = selectBarButtonItem
 			} else {
-				let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .newOutline, selector: .createOutline)
-				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+				if #available(iOS 27.0, *) {
+					let addBarButtonItem = UIBarButtonItem(image: .newOutline, style: .plain, target: nil, action: .createOutline)
+					addBarButtonItem.accessibilityLabel = .addControlLabel
+					addBarButtonItem.isPaddingRemoved = true
 
-				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
+					navigationItem.rightBarButtonItem = addBarButtonItem
+				} else {
+					let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
+					addButton = navButtonGroup.addButton(label: .addControlLabel, image: .newOutline, selector: .createOutline)
+					let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
+					navigationItem.rightBarButtonItem = navButtonsBarButtonItem
+				}
 			}
 			
 			navigationItem.title = nil

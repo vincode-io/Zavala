@@ -319,6 +319,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var insertNewlineButton: ButtonGroup.Button!
 	private var squareButton: ButtonGroup.Button!
 
+	private var goBackwardBarButtonItem: UIBarButtonItem!
+	private var goForwardBarButtonItem: UIBarButtonItem!
+	private var undoMenuBarButtonItem: UIBarButtonItem!
+	private var moreMenuBarButtonItem: UIBarButtonItem!
+	private var focusBarButtonItem: UIBarButtonItem!
+	private var filterBarButtonItem: UIBarButtonItem!
+
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
 	private var tagInputRegistration: UICollectionView.CellRegistration<EditorTagInputViewCell, EntityID>?
@@ -493,8 +500,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			transitionContentOffset = collectionView.contentOffset
 		}
 		
-		navButtonGroup.containerWidth = size.width
-		actionsButtonGroup.containerWidth = size.width
+		if #unavailable(iOS 27.0) {
+			navButtonGroup.containerWidth = size.width
+			actionsButtonGroup.containerWidth = size.width
+		}
+
 		leftToolbarButtonGroup.containerWidth = size.width
 		rightToolbarButtonGroup.containerWidth = size.width
 	}
@@ -1124,7 +1134,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		var shareActions = [UIMenuElement]()
 
 		let shareAction = UIAction(title: .shareEllipsisControlLabel, image: .share) { [weak self] _ in
-			self?.share(sourceView: self?.moreMenuButton)
+			guard let self else { return }
+			if #available(iOS 27.0, *) {
+				share(sourceItem: moreMenuBarButtonItem)
+			} else {
+				share(sourceItem: moreMenuButton)
+			}
 		}
 		shareActions.append(shareAction)
 
@@ -1322,7 +1337,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				}
 			})
 		}
-		goBackwardButton.menu = UIMenu(title: "", children: backwardItems)
+		let backwardMenu = UIMenu(title: "", children: backwardItems)
+		if #available(iOS 27.0, *) {
+			goBackwardBarButtonItem.menu = backwardMenu
+		} else {
+			goBackwardButton.menu = backwardMenu
+		}
 
 		var forwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoForwardStack.enumerated() {
@@ -1333,7 +1353,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				}
 			})
 		}
-		goForwardButton.menu = UIMenu(title: "", children: forwardItems)
+		let forwardMenu = UIMenu(title: "", children: forwardItems)
+		if #available(iOS 27.0, *) {
+			goForwardBarButtonItem.menu = forwardMenu
+		} else {
+			goForwardButton.menu = forwardMenu
+		}
 	}
 	
 	func updateUI() {
@@ -1345,75 +1370,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 		
 		navigationItem.largeTitleDisplayMode = .never
-		moreMenuButton.menu = buildMoreMenu()
-		
-		if !(outline?.isFocusOutUnavailable() ?? true) {
-			focusButton.accessibilityLabel = .focusOutControlLabel
-			focusButton.setImage(.focusActive, for: .normal)
-			focusButton.isEnabled = true
+
+		if #available(iOS 27.0, *) {
+			updateNavigationBarButtonItemsUI()
 		} else {
-			focusButton.accessibilityLabel = .focusInControlLabel
-			focusButton.setImage(.focusInactive, for: .normal)
-			if currentRows?.count ?? 0 == 1 {
-				focusButton.isEnabled = true
-			} else {
-				focusButton.isEnabled = false
-			}
+			updateNavigationButtonGroupsUI()
 		}
-		
-		if isFilterOn {
-			filterButton.accessibilityLabel = .turnFilterOffControlLabel
-			filterButton.setImage(.filterActive, for: .normal)
-		} else {
-			filterButton.accessibilityLabel = .turnFilterOnControlLabel
-			filterButton.setImage(.filterInactive, for: .normal)
-		}
-		
-		filterButton.menu = buildFilterMenu()
-		
-		if outline == nil || isShowingLockedView {
-			filterButton.isEnabled = false
-			moreMenuButton.isEnabled = false
-		} else {
-			filterButton.isEnabled = true
-			moreMenuButton.isEnabled = true
-		}
-		
-		goBackwardButton.isEnabled = !(delegate?.editorViewControllerGoBackwardStack.isEmpty ?? false)
-		goForwardButton.isEnabled = !(delegate?.editorViewControllerGoForwardStack.isEmpty ?? false)
-		
-		undoButton.isEnabled = UIResponder.valid(action: .undo)
-		cutButton.isEnabled = UIResponder.valid(action: .cut)
-		copyButton.isEnabled = UIResponder.valid(action: .copy)
-		pasteButton.isEnabled = UIResponder.valid(action: .paste)
-		redoButton.isEnabled = UIResponder.valid(action: .redo)
-		
-		moveLeftButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsLeft)
-		moveRightButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsRight)
-		moveUpButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsUp)
-		moveDownButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsDown)
-		
-		insertImageButton.isEnabled =  UIResponder.valid(action: .insertImage)
-		linkButton.isEnabled = UIResponder.valid(action: .editLink)
-		boldButton.isEnabled = UIResponder.valid(action: .toggleBoldface)
-		italicButton.isEnabled = UIResponder.valid(action: .toggleItalics)
-		codeInlineButton.isEnabled = UIResponder.valid(action: .toggleCodeInline)
-		
-		// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
-		// only have one row selected at a time while editing and that row either has a note
-		// or it doesn't.
-		if let outline, let currentRows, !outline.isCreateNotesUnavailable(rows: currentRows) {
-			noteButton.isEnabled = true
-			noteButton.setImage(.noteAdd, for: .normal)
-			noteButton.accessibilityLabel = .addNoteControlLabel
-		} else {
-			noteButton.isEnabled = true
-			noteButton.setImage(.noteDelete, for: .normal)
-			noteButton.accessibilityLabel = .deleteNoteControlLabel
-		}
-		
-		insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
-		
+
+		updateKeyboardToolBarUI()
 	}
 	
 	func moveCursorToCurrentRowTopic() {
@@ -1741,10 +1705,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		currentRowTextView?.toggleHighlight(self)
 	}
 
-	func share(sourceView: UIView? = nil) {
+	func share(sourceItem: (any UIPopoverPresentationControllerSourceItem)? = nil) {
 		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
-		if let sourceView {
-			controller.popoverPresentationController?.sourceView = sourceView
+		if let sourceItem {
+			controller.popoverPresentationController?.sourceItem = sourceItem
 		} else {
 			controller.popoverPresentationController?.sourceView = collectionView
 			var rect = collectionView.bounds
@@ -1761,7 +1725,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func showUndoMenu(_ sender: Any?) {
 		updateUI()
-		actionsButtonGroup.showPopOverMenu(for: undoMenuButton)
+		actionsButtonGroup?.showPopOverMenu(for: undoMenuButton)
 	}
 
 	@objc func showFormatMenu(_ sender: Any?) {
@@ -2428,6 +2392,17 @@ extension EditorViewController: ImageTransitionDelegate {
 private extension EditorViewController {
 	
 	func configureButtonBars(size: CGSize) {
+		if #available(iOS 27.0, *) {
+			configureNavigationBarButtonItems()
+		} else {
+			configureNavigationButtonGroups(size: size)
+		}
+
+		configureKeyboardToolBar(size: size)
+	}
+
+	/// The navigation bar buttons for versions before the `isPaddingRemoved` API was available.
+	func configureNavigationButtonGroups(size: CGSize) {
 		undoMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
 		undoButton = undoMenuButtonGroup.addButton(label: .undoControlLabel, image: .undo, selector: .undo)
 		cutButton = undoMenuButtonGroup.addButton(label: .cutControlLabel, image: .cut, selector: .cut)
@@ -2448,6 +2423,21 @@ private extension EditorViewController {
 		filterButton = actionsButtonGroup.addButton(label: .filterControlLabel, image: .filterInactive, showMenu: true)
 		let actionsBarButtonItem = actionsButtonGroup.buildBarButtonItem()
 
+		guard traitCollection.userInterfaceIdiom != .mac else { return }
+
+		navigationItem.rightBarButtonItems = [actionsBarButtonItem, .fixedSpace(), navButtonsBarButtonItem]
+
+		if traitCollection.userInterfaceIdiom == .pad {
+			actionsButtonGroup.remove(undoMenuButton)
+		}
+
+		navButtonGroup.containerWidth = size.width
+		actionsButtonGroup.containerWidth = size.width
+	}
+
+	/// The keyboard toolbar uses a ButtonGroup on every version. A ButtonGroup packs its buttons into a
+	/// single bar button item, which is tighter than anything separate bar button items can lay out.
+	func configureKeyboardToolBar(size: CGSize) {
 		leftToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .left)
 		moveLeftButton = leftToolbarButtonGroup.addButton(label: .moveLeftControlLabel, image: .moveLeft, selector: .moveCurrentRowsLeft)
 		moveRightButton = leftToolbarButtonGroup.addButton(label: .moveRightControlLabel, image: .moveRight, selector: .moveCurrentRowsRight)
@@ -2474,39 +2464,227 @@ private extension EditorViewController {
 		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: .insertReturn)
 		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
-		if traitCollection.userInterfaceIdiom != .mac {
-			keyboardToolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+		guard traitCollection.userInterfaceIdiom != .mac else { return }
 
-			if traitCollection.userInterfaceIdiom == .pad {
+		keyboardToolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+
+		if traitCollection.userInterfaceIdiom == .pad {
+			keyboardToolBar.items = [moveButtonsBarButtonItem, .flexibleSpace(), insertButtonsBarButtonItem]
+		} else {
+			if #available(iOS 27.0, *) {
 				keyboardToolBar.items = [moveButtonsBarButtonItem, .flexibleSpace(), insertButtonsBarButtonItem]
 			} else {
-				if #available(iOS 27.0, *) {
-					keyboardToolBar.items = [moveButtonsBarButtonItem, .flexibleSpace(), insertButtonsBarButtonItem]
-				} else {
-					let hideKeyboardBarButtonItem = UIBarButtonItem(image: .hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
-					hideKeyboardBarButtonItem.accessibilityLabel = .hideKeyboardControlLabel
-					keyboardToolBar.items = [moveButtonsBarButtonItem, .fixedSpace(), hideKeyboardBarButtonItem, .fixedSpace(), insertButtonsBarButtonItem]
-				}
+				let hideKeyboardBarButtonItem = UIBarButtonItem(image: .hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
+				hideKeyboardBarButtonItem.accessibilityLabel = .hideKeyboardControlLabel
+				keyboardToolBar.items = [moveButtonsBarButtonItem, .fixedSpace(), hideKeyboardBarButtonItem, .fixedSpace(), insertButtonsBarButtonItem]
 			}
-			
-			keyboardToolBar.sizeToFit()
-			navigationItem.rightBarButtonItems = [actionsBarButtonItem, .fixedSpace(), navButtonsBarButtonItem]
-
-			if traitCollection.userInterfaceIdiom == .pad {
-				actionsButtonGroup.remove(undoMenuButton)
-				rightToolbarButtonGroup.remove(formatMenuButton)
-				formatMenuButtonGroup.remove(linkButton)
-				rightToolbarButtonGroup.insert(linkButton, at: 1)
-				rightToolbarButtonGroup.insert(codeInlineButton, at: 2)
-				rightToolbarButtonGroup.insert(highlightButton, at: 3)
-			}
-
-			navButtonGroup.containerWidth = size.width
-			actionsButtonGroup.containerWidth = size.width
-			leftToolbarButtonGroup.containerWidth = size.width
-			rightToolbarButtonGroup.containerWidth = size.width
 		}
 
+		keyboardToolBar.sizeToFit()
+
+		if traitCollection.userInterfaceIdiom == .pad {
+			rightToolbarButtonGroup.remove(formatMenuButton)
+			formatMenuButtonGroup.remove(linkButton)
+			rightToolbarButtonGroup.insert(linkButton, at: 1)
+			rightToolbarButtonGroup.insert(codeInlineButton, at: 2)
+			rightToolbarButtonGroup.insert(highlightButton, at: 3)
+		}
+
+		leftToolbarButtonGroup.containerWidth = size.width
+		rightToolbarButtonGroup.containerWidth = size.width
+	}
+
+	/// The navigation bar buttons for versions before the `isPaddingRemoved` API was available.
+	func updateNavigationButtonGroupsUI() {
+		moreMenuButton.menu = buildMoreMenu()
+		
+		if !(outline?.isFocusOutUnavailable() ?? true) {
+			focusButton.accessibilityLabel = .focusOutControlLabel
+			focusButton.setImage(.focusActive, for: .normal)
+			focusButton.isEnabled = true
+		} else {
+			focusButton.accessibilityLabel = .focusInControlLabel
+			focusButton.setImage(.focusInactive, for: .normal)
+			if currentRows?.count ?? 0 == 1 {
+				focusButton.isEnabled = true
+			} else {
+				focusButton.isEnabled = false
+			}
+		}
+		
+		if isFilterOn {
+			filterButton.accessibilityLabel = .turnFilterOffControlLabel
+			filterButton.setImage(.filterActive, for: .normal)
+		} else {
+			filterButton.accessibilityLabel = .turnFilterOnControlLabel
+			filterButton.setImage(.filterInactive, for: .normal)
+		}
+		
+		filterButton.menu = buildFilterMenu()
+		
+		if outline == nil || isShowingLockedView {
+			filterButton.isEnabled = false
+			moreMenuButton.isEnabled = false
+		} else {
+			filterButton.isEnabled = true
+			moreMenuButton.isEnabled = true
+		}
+		
+		goBackwardButton.isEnabled = !(delegate?.editorViewControllerGoBackwardStack.isEmpty ?? false)
+		goForwardButton.isEnabled = !(delegate?.editorViewControllerGoForwardStack.isEmpty ?? false)
+		
+		undoButton.isEnabled = UIResponder.valid(action: .undo)
+		cutButton.isEnabled = UIResponder.valid(action: .cut)
+		copyButton.isEnabled = UIResponder.valid(action: .copy)
+		pasteButton.isEnabled = UIResponder.valid(action: .paste)
+		redoButton.isEnabled = UIResponder.valid(action: .redo)
+	}
+
+	func updateKeyboardToolBarUI() {
+		moveLeftButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsLeft)
+		moveRightButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsRight)
+		moveUpButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsUp)
+		moveDownButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsDown)
+		
+		insertImageButton.isEnabled =  UIResponder.valid(action: .insertImage)
+		linkButton.isEnabled = UIResponder.valid(action: .editLink)
+		boldButton.isEnabled = UIResponder.valid(action: .toggleBoldface)
+		italicButton.isEnabled = UIResponder.valid(action: .toggleItalics)
+		codeInlineButton.isEnabled = UIResponder.valid(action: .toggleCodeInline)
+		
+		// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
+		// only have one row selected at a time while editing and that row either has a note
+		// or it doesn't.
+		if let outline, let currentRows, !outline.isCreateNotesUnavailable(rows: currentRows) {
+			noteButton.isEnabled = true
+			noteButton.setImage(.noteAdd, for: .normal)
+			noteButton.accessibilityLabel = .addNoteControlLabel
+		} else {
+			noteButton.isEnabled = true
+			noteButton.setImage(.noteDelete, for: .normal)
+			noteButton.accessibilityLabel = .deleteNoteControlLabel
+		}
+		
+		insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
+		
+	}
+
+	@available(iOS 27.0, *)
+	func configureNavigationBarButtonItems() {
+		goBackwardBarButtonItem = UIBarButtonItem(image: .goBackward, style: .plain, target: nil, action: .goBackwardOne)
+		goBackwardBarButtonItem.accessibilityLabel = .goBackwardControlLabel
+
+		goForwardBarButtonItem = UIBarButtonItem(image: .goForward, style: .plain, target: nil, action: .goForwardOne)
+		goForwardBarButtonItem.accessibilityLabel = .goForwardControlLabel
+
+		// The items that only have a menu present it on tap. The ones that also have an action present it on a long press.
+		undoMenuBarButtonItem = UIBarButtonItem(image: .undoMenu, style: .plain, target: nil, action: nil)
+		undoMenuBarButtonItem.accessibilityLabel = .undoMenuControlLabel
+		undoMenuBarButtonItem.menu = buildUndoMenu()
+
+		moreMenuBarButtonItem = UIBarButtonItem(image: .ellipsis, style: .plain, target: nil, action: nil)
+		moreMenuBarButtonItem.accessibilityLabel = .moreControlLabel
+
+		focusBarButtonItem = UIBarButtonItem(image: .focusInactive, style: .plain, target: nil, action: .toggleFocus)
+		focusBarButtonItem.accessibilityLabel = .focusInControlLabel
+
+		filterBarButtonItem = UIBarButtonItem(image: .filterInactive, style: .plain, target: nil, action: nil)
+		filterBarButtonItem.accessibilityLabel = .filterControlLabel
+
+		let allBarButtonItems = [goBackwardBarButtonItem!, goForwardBarButtonItem!, undoMenuBarButtonItem!,
+								 moreMenuBarButtonItem!, focusBarButtonItem!, filterBarButtonItem!]
+
+		// This tightens up the spacing between the items, although not nearly as much as a ButtonGroup does
+		for barButtonItem in allBarButtonItems {
+			barButtonItem.isPaddingRemoved = true
+		}
+
+		guard traitCollection.userInterfaceIdiom != .mac else { return }
+
+		// Right bar button items are laid out trailing to leading
+		var navigationBarItems = [filterBarButtonItem!, focusBarButtonItem!, moreMenuBarButtonItem!]
+		if traitCollection.userInterfaceIdiom != .pad {
+			navigationBarItems.append(undoMenuBarButtonItem)
+		}
+		navigationBarItems.append(contentsOf: [.fixedSpace(), goForwardBarButtonItem, goBackwardBarButtonItem])
+		navigationItem.rightBarButtonItems = navigationBarItems
+	}
+
+	@available(iOS 27.0, *)
+	func updateNavigationBarButtonItemsUI() {
+		moreMenuBarButtonItem.menu = buildMoreMenu()
+
+		if !(outline?.isFocusOutUnavailable() ?? true) {
+			focusBarButtonItem.accessibilityLabel = .focusOutControlLabel
+			focusBarButtonItem.image = .focusActive
+			focusBarButtonItem.isEnabled = true
+		} else {
+			focusBarButtonItem.accessibilityLabel = .focusInControlLabel
+			focusBarButtonItem.image = .focusInactive
+			focusBarButtonItem.isEnabled = (currentRows?.count ?? 0) == 1
+		}
+
+		if isFilterOn {
+			filterBarButtonItem.accessibilityLabel = .turnFilterOffControlLabel
+			filterBarButtonItem.image = .filterActive
+		} else {
+			filterBarButtonItem.accessibilityLabel = .turnFilterOnControlLabel
+			filterBarButtonItem.image = .filterInactive
+		}
+
+		filterBarButtonItem.menu = buildFilterMenu()
+
+		if outline == nil || isShowingLockedView {
+			filterBarButtonItem.isEnabled = false
+			moreMenuBarButtonItem.isEnabled = false
+		} else {
+			filterBarButtonItem.isEnabled = true
+			moreMenuBarButtonItem.isEnabled = true
+		}
+
+		goBackwardBarButtonItem.isEnabled = !(delegate?.editorViewControllerGoBackwardStack.isEmpty ?? false)
+		goForwardBarButtonItem.isEnabled = !(delegate?.editorViewControllerGoForwardStack.isEmpty ?? false)
+	}
+
+	/// Replaces the pop over menu of buttons that the ButtonGroup undo menu used. The elements are
+	/// deferred so that they are validated when the menu is displayed instead of when it is built.
+	@available(iOS 27.0, *)
+	func buildUndoMenu() -> UIMenu {
+		let deferredElement = UIDeferredMenuElement.uncached { [weak self] completion in
+			completion(self?.buildUndoMenuElements() ?? [])
+		}
+
+		return UIMenu(title: "", children: [deferredElement])
+	}
+
+	@available(iOS 27.0, *)
+	func buildUndoMenuElements() -> [UIMenuElement] {
+		let undoAction = UIAction(title: .undoControlLabel, image: .undo) { _ in
+			UIApplication.shared.sendAction(.undo, to: nil, from: nil, for: nil)
+		}
+		undoAction.attributes = UIResponder.valid(action: .undo) ? [] : .disabled
+
+		let cutAction = UIAction(title: .cutControlLabel, image: .cut) { _ in
+			UIApplication.shared.sendAction(.cut, to: nil, from: nil, for: nil)
+		}
+		cutAction.attributes = UIResponder.valid(action: .cut) ? [] : .disabled
+
+		let copyAction = UIAction(title: .copyControlLabel, image: .copy) { _ in
+			UIApplication.shared.sendAction(.copy, to: nil, from: nil, for: nil)
+		}
+		copyAction.attributes = UIResponder.valid(action: .copy) ? [] : .disabled
+
+		let pasteAction = UIAction(title: .pasteControlLabel, image: .paste) { _ in
+			UIApplication.shared.sendAction(.paste, to: nil, from: nil, for: nil)
+		}
+		pasteAction.attributes = UIResponder.valid(action: .paste) ? [] : .disabled
+
+		let redoAction = UIAction(title: .redoControlLabel, image: .redo) { _ in
+			UIApplication.shared.sendAction(.redo, to: nil, from: nil, for: nil)
+		}
+		redoAction.attributes = UIResponder.valid(action: .redo) ? [] : .disabled
+
+		return [undoAction, cutAction, copyAction, pasteAction, redoAction]
 	}
 
 	func buildFilterMenu() -> UIMenu {
