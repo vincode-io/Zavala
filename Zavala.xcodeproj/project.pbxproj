@@ -118,7 +118,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Resources/Info.plist,
-				Resources/PrivacyInfo.xcprivacy,
 			);
 			target = 5181A9332554D92000C153E8 /* Zavala */;
 		};
