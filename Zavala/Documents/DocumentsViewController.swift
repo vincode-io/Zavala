@@ -127,10 +127,12 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		} else {
 			if #available(iOS 27.0, *) {
 				moreMenuBarButtonItem = UIBarButtonItem(image: .ellipsis, style: .plain, target: nil, action: nil)
+				moreMenuBarButtonItem.title = .moreControlLabel
 				moreMenuBarButtonItem.accessibilityLabel = .moreControlLabel
 				moreMenuBarButtonItem.isPaddingRemoved = true
 
 				addBarButtonItem = UIBarButtonItem(image: .newOutline, style: .plain, target: nil, action: .createOutline)
+				addBarButtonItem.title = .addControlLabel
 				addBarButtonItem.accessibilityLabel = .addControlLabel
 				addBarButtonItem.isPaddingRemoved = true
 			} else {

@@ -126,6 +126,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 			collectionView.allowsMultipleSelection = true
 		} else {
 			settingsBarButtonItem = UIBarButtonItem(image: .settings, style: .plain, target: nil, action: .showSettings)
+			settingsBarButtonItem.title = .settingsControlLabel
 			settingsBarButtonItem.accessibilityLabel = .settingsControlLabel
 			navigationItem.leftBarButtonItem = settingsBarButtonItem
 			
@@ -137,6 +138,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 			} else {
 				if #available(iOS 27.0, *) {
 					let addBarButtonItem = UIBarButtonItem(image: .newOutline, style: .plain, target: nil, action: .createOutline)
+					addBarButtonItem.title = .addControlLabel
 					addBarButtonItem.accessibilityLabel = .addControlLabel
 					addBarButtonItem.isPaddingRemoved = true
 

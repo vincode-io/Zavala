@@ -2605,23 +2605,29 @@ private extension EditorViewController {
 	@available(iOS 27.0, *)
 	func configureNavigationBarButtonItems() {
 		goBackwardBarButtonItem = UIBarButtonItem(image: .goBackward, style: .plain, target: nil, action: .goBackwardOne)
+		goBackwardBarButtonItem.title = .goBackwardControlLabel
 		goBackwardBarButtonItem.accessibilityLabel = .goBackwardControlLabel
 
 		goForwardBarButtonItem = UIBarButtonItem(image: .goForward, style: .plain, target: nil, action: .goForwardOne)
+		goForwardBarButtonItem.title = .goForwardControlLabel
 		goForwardBarButtonItem.accessibilityLabel = .goForwardControlLabel
 
 		// The items that only have a menu present it on tap. The ones that also have an action present it on a long press.
 		undoMenuBarButtonItem = UIBarButtonItem(image: .undoMenu, style: .plain, target: nil, action: nil)
+		undoMenuBarButtonItem.title = .undoMenuControlLabel
 		undoMenuBarButtonItem.accessibilityLabel = .undoMenuControlLabel
 		undoMenuBarButtonItem.menu = buildUndoMenu()
 
 		moreMenuBarButtonItem = UIBarButtonItem(image: .ellipsis, style: .plain, target: nil, action: nil)
+		moreMenuBarButtonItem.title = .moreControlLabel
 		moreMenuBarButtonItem.accessibilityLabel = .moreControlLabel
 
 		focusBarButtonItem = UIBarButtonItem(image: .focusInactive, style: .plain, target: nil, action: .toggleFocus)
+		focusBarButtonItem.title = .focusInControlLabel
 		focusBarButtonItem.accessibilityLabel = .focusInControlLabel
 
 		filterBarButtonItem = UIBarButtonItem(image: .filterInactive, style: .plain, target: nil, action: nil)
+		filterBarButtonItem.title = .filterControlLabel
 		filterBarButtonItem.accessibilityLabel = .filterControlLabel
 
 		let allBarButtonItems = [goBackwardBarButtonItem!, goForwardBarButtonItem!, undoMenuBarButtonItem!,
@@ -2662,10 +2668,12 @@ private extension EditorViewController {
 		updateNavigationBarButtonItems(width: view.bounds.width)
 
 		if !(outline?.isFocusOutUnavailable() ?? true) {
+			focusBarButtonItem.title = .focusOutControlLabel
 			focusBarButtonItem.accessibilityLabel = .focusOutControlLabel
 			focusBarButtonItem.image = .focusActive
 			focusBarButtonItem.isEnabled = true
 		} else {
+			focusBarButtonItem.title = .focusInControlLabel
 			focusBarButtonItem.accessibilityLabel = .focusInControlLabel
 			focusBarButtonItem.image = .focusInactive
 			focusBarButtonItem.isEnabled = (currentRows?.count ?? 0) == 1
