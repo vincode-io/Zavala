@@ -32,8 +32,10 @@ final class PrintDocVisitor {
 		if let topic = visited.topic {
 			if let note = visited.note {
 				printTopic(topic, row: visited)
-				printNote(note)
-				
+				if note.length > 0 {
+					printNote(note)
+				}
+
 				previousRowWasParagraph = true
 				visitChildren()
 			} else {
@@ -50,7 +52,9 @@ final class PrintDocVisitor {
 			}
 		} else {
 			if let note = visited.note {
-				printNote(note)
+				if note.length > 0 {
+					printNote(note)
+				}
 				previousRowWasParagraph = true
 			} else {
 				previousRowWasParagraph = false

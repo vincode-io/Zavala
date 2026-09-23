@@ -37,11 +37,13 @@ final class MarkdownDocVisitor {
 		}
 
 		if let topicMarkdown = visited.topicMarkdown(type: linkType, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !topicMarkdown.isEmpty {
-			if let noteMarkdown = visited.noteMarkdown(type: linkType, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(type: linkType, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar) {
 				markdown.append("\n\n")
 				markdown.append(String(repeating: "#", count: indentLevel + 2))
 				markdown.append(" \(topicMarkdown)")
-				markdown.append("\n\n\(noteMarkdown)")
+				if !noteMarkdown.isEmpty {
+					markdown.append("\n\n\(noteMarkdown)")
+				}
 				previousRowWasParagraph = true
 				
 				visitChildren()
@@ -58,8 +60,10 @@ final class MarkdownDocVisitor {
 				previousRowWasParagraph = false
 			}
 		} else {
-			if let noteMarkdown = visited.noteMarkdown(type: linkType, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar), !noteMarkdown.isEmpty {
-				markdown.append("\n\n\(noteMarkdown)")
+			if let noteMarkdown = visited.noteMarkdown(type: linkType, format: true, useAltLinks: useAltLinks, useSidecar: useSidecar) {
+				if !noteMarkdown.isEmpty {
+					markdown.append("\n\n\(noteMarkdown)")
+				}
 				previousRowWasParagraph = true
 			} else {
 				previousRowWasParagraph = false
