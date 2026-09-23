@@ -1964,7 +1964,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	
 }
 
-// MARK: EditorTitleViewCellDelegate
+// MARK: UIGestureRecognizerDelegate
 
 extension EditorViewController: UIGestureRecognizerDelegate {
 
