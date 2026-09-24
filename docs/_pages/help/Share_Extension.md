@@ -35,4 +35,5 @@ example, to make a list of favorite cookie recipes.
 ## How good does it work?
 
 That depends on how well the web page is structured. For more detail read
-[Importing Outlines](Importing_Outlines.md) / Supported File Types / HTML.
+[HTML](Importing_Outlines.md#html) in
+[Importing Outlines](Importing_Outlines.md) .
