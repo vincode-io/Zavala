@@ -10,7 +10,7 @@ import CoreTransferable
 import AppIntents
 import VinOutlineKit
 
-struct OutlineAppEntity: AppEntity, Equatable {
+struct OutlineAppEntity: AppEntity, IndexedEntity, Equatable {
 	static let typeDisplayRepresentation = TypeDisplayRepresentation(
 		name: LocalizedStringResource("label.text.outline-name", defaultValue: "Outline", table: "AppIntents", comment: "The name of the Outline type. Singular/plural forms live in AppIntents.stringsdict; Shortcuts uses the plural for 'Find Outlines'."),
 		numericFormat: LocalizedStringResource("label.text.outline-count", defaultValue: "\(placeholder: .int) Outlines", comment: "A count of Outlines, e.g. '2 Outlines'")
@@ -50,6 +50,9 @@ struct OutlineAppEntity: AppEntity, Equatable {
 	@Property(title: LocalizedStringResource("label.text.account-type", comment: "Account Type"))
 	var accountType: AccountTypeAppEnum?
 
+	@Property(title: LocalizedStringResource("label.text.list-print", comment: "List Print"), indexingKey: \.textContent)
+	var listPrint: AttributedString
+
     var displayRepresentation: DisplayRepresentation {
 		DisplayRepresentation(stringLiteral: title ?? .noTitleLabel)
     }
@@ -79,6 +82,8 @@ struct OutlineAppEntity: AppEntity, Equatable {
 		} else {
 			self.accountType = .onMyDevice
 		}
+
+		self.listPrint = AttributedString(outline.printList())
 	}
 	
 }
