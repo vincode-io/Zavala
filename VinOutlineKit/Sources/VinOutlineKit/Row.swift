@@ -429,12 +429,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		self.ancestorParentID = coder.ancestorParentID
 	}
 	
-	public func topicMarkdown(type: UTType, format: Bool = false, useAltLinks: Bool = false, useSidecar: Bool = false) -> String? {
-		return convertAttrString(topic, isInNotes: false, type: type, format: format, useAltLinks: useAltLinks, useSidecar: useSidecar)
+	public func topicMarkdown(type: UTType, format: Bool = false, useAltLinks: Bool = false, useSidecar: Bool = false, headingLinks: [String: String] = [:]) -> String? {
+		return convertAttrString(topic, isInNotes: false, type: type, format: format, useAltLinks: useAltLinks, useSidecar: useSidecar, headingLinks: headingLinks)
 	}
 	
-	public func noteMarkdown(type: UTType, format:Bool = false, useAltLinks: Bool = false, useSidecar: Bool = false) -> String? {
-		return convertAttrString(note, isInNotes: true, type: type, format: format, useAltLinks: useAltLinks, useSidecar: useSidecar)
+	public func noteMarkdown(type: UTType, format:Bool = false, useAltLinks: Bool = false, useSidecar: Bool = false, headingLinks: [String: String] = [:]) -> String? {
+		return convertAttrString(note, isInNotes: true, type: type, format: format, useAltLinks: useAltLinks, useSidecar: useSidecar, headingLinks: headingLinks)
 	}
 	
 	public func duplicate(newOutline: Outline) -> Row {
@@ -744,11 +744,26 @@ private extension Row {
 		return (mutableAttrString, images)
 	}
 	
-	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, type: UTType, format: Bool, useAltLinks: Bool, useSidecar: Bool) -> String? {
+	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, type: UTType, format: Bool, useAltLinks: Bool, useSidecar: Bool, headingLinks: [String: String] = [:]) -> String? {
 		guard let attrString else { return nil	}
 
 		let result = NSMutableAttributedString(attributedString: attrString)
-		
+
+		// Row Links that point at a Row that is exported as a heading become links to that heading.
+		// This has to run before the alt link handling so that these Row Links don't get turned into
+		// links to the top of a document instead.
+		if !headingLinks.isEmpty {
+			result.enumerateAttribute(.link, in: .init(location: 0, length: result.length), options: []) { (value, range, _) in
+				guard let url = value as? URL,
+					  case .row(_, _, let rowUUID)? = EntityID(url: url),
+					  let headingLink = headingLinks[rowUUID],
+					  let headingURL = URL(string: headingLink) else { return }
+
+				result.removeAttribute(.link, range: range)
+				result.addAttribute(.link, value: headingURL, range: range)
+			}
+		}
+
 		if useAltLinks {
 			result.enumerateAttribute(.link, in: .init(location: 0, length: result.length), options: []) { (value, range, _) in
 				guard let url = value as? URL,

@@ -1106,7 +1106,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		load()
 
 		var md = "# \(title ?? "")"
-		let visitor = MarkdownDocVisitor(useAltLinks: useAltLinks, useSidecar: useSidecar, linkType: linkType)
+
+		// Only Markdown gets heading links. The HTML that we generate doesn't have id attributes
+		// on its headings, so a heading anchor wouldn't have anything to link to there.
+		let headingLinks = linkType == .md ? MarkdownDocHeadingLinks(outline: self, linkType: linkType, useAltLinks: useAltLinks).build() : [String: String]()
+
+		let visitor = MarkdownDocVisitor(useAltLinks: useAltLinks, useSidecar: useSidecar, linkType: linkType, headingLinks: headingLinks)
 		rows.forEach {
 			$0.visit(visitor: visitor.visitor)
 		}

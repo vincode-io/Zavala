@@ -54,11 +54,12 @@ final class MarkdownDocExportTests: VOKTestCase {
 
 		let firstHeadingRow = Row(outline: outline, topicMarkdown: "My Heading", noteMarkdown: "First note")
 		let secondHeadingRow = Row(outline: outline, topicMarkdown: "My Heading", noteMarkdown: "Second note")
-		let linkingRow = Row(outline: outline, topicMarkdown: "Linking Row")
-		outline.createRowsInsideAtEnd([firstHeadingRow, secondHeadingRow, linkingRow], afterRowContainer: outline)
+		let firstLinkingRow = Row(outline: outline, topicMarkdown: "First Link")
+		let secondLinkingRow = Row(outline: outline, topicMarkdown: "Second Link")
+		outline.createRowsInsideAtEnd([firstHeadingRow, secondHeadingRow, firstLinkingRow, secondLinkingRow], afterRowContainer: outline)
 
-		try link(firstHeadingRow, to: firstHeadingRow, text: "First")
-		try link(secondHeadingRow, to: secondHeadingRow, text: "Second")
+		try link(firstLinkingRow, to: firstHeadingRow, text: "First")
+		try link(secondLinkingRow, to: secondHeadingRow, text: "Second")
 
 		let markdown = outline.markdownDoc()
 
@@ -68,20 +69,42 @@ final class MarkdownDocExportTests: VOKTestCase {
 		deleteAccountManager(accountManager)
 	}
 
+	@Test("Markdown Doc export links a Row Link to a heading Row in another outline when using alt links")
+	func rowLinkToHeadingRowInOtherOutline() async throws {
+		let accountManager = buildAccountManager()
+		let outline = try buildOutline(accountManager: accountManager, title: "Linking Outline")
+		let otherOutline = try buildOutline(accountManager: accountManager, title: "Other Outline")
+
+		let otherHeadingRow = Row(outline: otherOutline, topicMarkdown: "Other Heading", noteMarkdown: "Other note")
+		otherOutline.createRowsInsideAtEnd([otherHeadingRow], afterRowContainer: otherOutline)
+
+		let linkingRow = Row(outline: outline, topicMarkdown: "Linking Row")
+		outline.createRowsInsideAtEnd([linkingRow], afterRowContainer: outline)
+
+		try link(linkingRow, to: otherHeadingRow, text: "Jump")
+
+		#expect(outline.markdownDoc(useAltLinks: true).contains("[Jump](Other_Outline.md#other-heading)"))
+
+		// Without alt links there is no reason to believe that the other outline was exported too.
+		#expect(outline.markdownDoc().contains("zavala://row"))
+
+		deleteAccountManager(accountManager)
+	}
+
 	@Test("Heading slugs drop punctuation and replace spaces with hyphens")
 	func headingSlugs() {
-		#expect(MarkdownDocVisitor.slug(for: "My Heading") == "my-heading")
-		#expect(MarkdownDocVisitor.slug(for: "  What's New, Zavala?!  ") == "whats-new-zavala")
-		#expect(MarkdownDocVisitor.slug(for: "Snake_case and kebab-case") == "snake_case-and-kebab-case")
-		#expect(MarkdownDocVisitor.slug(for: "!!!") == "")
+		#expect(MarkdownDocHeadingLinks.slug(for: "My Heading") == "my-heading")
+		#expect(MarkdownDocHeadingLinks.slug(for: "  What's New, Zavala?!  ") == "whats-new-zavala")
+		#expect(MarkdownDocHeadingLinks.slug(for: "Snake_case and kebab-case") == "snake_case-and-kebab-case")
+		#expect(MarkdownDocHeadingLinks.slug(for: "!!!") == "")
 	}
 
 }
 
 private extension MarkdownDocExportTests {
 
-	func buildOutline(accountManager: AccountManager) throws -> Outline {
-		let document = try #require(accountManager.localAccount?.createOutline(title: "Test Case"))
+	func buildOutline(accountManager: AccountManager, title: String = "Test Case") throws -> Outline {
+		let document = try #require(accountManager.localAccount?.createOutline(title: title))
 		let outline = try #require(document.outline)
 		outline.load()
 		return outline
