@@ -15059,47 +15059,6 @@
         }
       }
     },
-    "label.text.list-print" : {
-      "comment" : "List Print",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "Listendruck"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "List Print"
-          }
-        },
-        "en-AU" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "List Print"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "List Print"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "リストプリント"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "列表打印"
-          }
-        }
-      }
-    },
     "label.text.lock-outline-auth-prompt-%@" : {
       "comment" : "Auth prompt: Lock <Outline Title>",
       "localizations" : {
