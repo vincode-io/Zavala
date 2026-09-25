@@ -1040,28 +1040,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public func printList() -> NSAttributedString {
 		let print = NSMutableAttributedString()
-
-		appendPrintTitle(attrString: print)
-		print.append(printListBody())
-
-		return print
-	}
-
-	public func printListBody() -> NSAttributedString {
-		let body = NSMutableAttributedString()
 		load()
-
+		
+		appendPrintTitle(attrString: print)
+		
 		rows.forEach {
 			let visitor = PrintListVisitor(numberingStyle: numberingStyle ?? .none)
 			$0.visit(visitor: visitor.visitor)
-			body.append(visitor.print)
+			print.append(visitor.print)
 		}
 
 		Task {
 			await unload()
 		}
 
-		return body
+		return print
 	}
 
 	/// Prints the outline the way it currently appears on screen: filtered rows are omitted, the

@@ -23,10 +23,10 @@ struct OutlineAppEntity: AppEntity, IndexedEntity, Equatable {
 	@Property(title: LocalizedStringResource("label.text.entity-id", comment: "Entity ID"))
 	var entityID: EntityID
 
-	@Property(title: LocalizedStringResource("label.text.title", comment: "Title"), indexingKey: \.title)
+    @Property(title: LocalizedStringResource("label.text.title", comment: "Title"))
     var title: String?
 
-	@Property(title: LocalizedStringResource("label.text.tags", comment: "Tags"), indexingKey: \.keywords)
+	@Property(title: LocalizedStringResource("label.text.tags", comment: "Tags"))
 	var tags: [String]?
 
     @Property(title: LocalizedStringResource("label.text.owner-name", comment: "Owner Name"))
@@ -50,8 +50,8 @@ struct OutlineAppEntity: AppEntity, IndexedEntity, Equatable {
 	@Property(title: LocalizedStringResource("label.text.account-type", comment: "Account Type"))
 	var accountType: AccountTypeAppEnum?
 
-	@Property(title: LocalizedStringResource("label.text.body", comment: "The body text content of an outline"), indexingKey: \.textContent)
-	var body: AttributedString
+	@Property(title: LocalizedStringResource("label.text.list-print", comment: "List Print"), indexingKey: \.textContent)
+	var listPrint: AttributedString
 
     var displayRepresentation: DisplayRepresentation {
 		DisplayRepresentation(stringLiteral: title ?? .noTitleLabel)
@@ -83,7 +83,7 @@ struct OutlineAppEntity: AppEntity, IndexedEntity, Equatable {
 			self.accountType = .onMyDevice
 		}
 
-		self.body = AttributedString(outline.printListBody())
+		self.listPrint = AttributedString(outline.printList())
 	}
 	
 }
