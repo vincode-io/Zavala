@@ -2499,7 +2499,7 @@ private extension EditorViewController {
 
 		guard traitCollection.userInterfaceIdiom != .mac else { return }
 
-		keyboardToolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+		keyboardToolBar = EditorKeyboardToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
 
 		if traitCollection.userInterfaceIdiom == .pad {
 			keyboardToolBar.items = [moveButtonsBarButtonItem, .flexibleSpace(), insertButtonsBarButtonItem]
