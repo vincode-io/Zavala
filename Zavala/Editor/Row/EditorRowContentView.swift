@@ -66,6 +66,12 @@ class EditorRowContentView: UIView, UIContentView {
 		return barView
 	}()
 
+	/// Fixed insets that the row's text and numbering are laid out within. These are what the row spacing
+	/// and bullet/disclosure constants were tuned against. The system's default layout margins can't be used
+	/// because they vary by device (for example they are zero on iPhone Duo), which shifts everything.
+	private static let contentInset: CGFloat = 8
+	private let contentGuide = UILayoutGuide()
+
 	private var barViews = [UIView]()
 	private var appliedConfiguration: EditorRowContentConfiguration?
 	
@@ -74,6 +80,15 @@ class EditorRowContentView: UIView, UIContentView {
 		
 		addSubview(topicTextView)
 		addSubview(barView)
+		
+		// Horizontally follow the safe area, like the bullet and disclosure do, so both stay aligned
+		addLayoutGuide(contentGuide)
+		NSLayoutConstraint.activate([
+			contentGuide.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: Self.contentInset),
+			contentGuide.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -Self.contentInset),
+			contentGuide.topAnchor.constraint(equalTo: topAnchor, constant: Self.contentInset),
+			contentGuide.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Self.contentInset)
+		])
 		
 		let barViewWidthConstraint = barView.widthAnchor.constraint(equalToConstant: 1)
 		barView.barViewWidthConstraint = barViewWidthConstraint
@@ -342,17 +357,17 @@ private extension EditorRowContentView {
 				addSubview(noteTextView)
 
 				NSLayoutConstraint.activate([
-					numberingLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-					numberingLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+					numberingLabel.leadingAnchor.constraint(equalTo: contentGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					numberingLabel.topAnchor.constraint(equalTo: contentGuide.topAnchor, constant: 0 - spacingAdjustment),
 
 					topicTextView.leadingAnchor.constraint(equalTo: numberingLabel.trailingAnchor, constant: 8),
-					topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-					topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+					topicTextView.trailingAnchor.constraint(equalTo: contentGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					topicTextView.topAnchor.constraint(equalTo: contentGuide.topAnchor, constant: 0 - spacingAdjustment),
 					topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: spacingAdjustment / 2),
 					
 					noteTextView.leadingAnchor.constraint(equalTo: numberingLabel.trailingAnchor, constant: 8),
-					noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-					noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
+					noteTextView.trailingAnchor.constraint(equalTo: contentGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					noteTextView.bottomAnchor.constraint(equalTo: contentGuide.bottomAnchor, constant: spacingAdjustment),
 					barView.trailingAnchor.constraint(equalTo: numberingLabel.leadingAnchor)
 				])
 			} else {
@@ -361,13 +376,13 @@ private extension EditorRowContentView {
 				}
 				noteTextView.removeFromSuperview()
 				NSLayoutConstraint.activate([
-					numberingLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-					numberingLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+					numberingLabel.leadingAnchor.constraint(equalTo: contentGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					numberingLabel.topAnchor.constraint(equalTo: contentGuide.topAnchor, constant: 0 - spacingAdjustment),
 
 					topicTextView.leadingAnchor.constraint(equalTo: numberingLabel.trailingAnchor, constant: 8),
-					topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					topicTextView.trailingAnchor.constraint(equalTo: contentGuide.trailingAnchor, constant: adjustedTrailingIndention),
 					topicTextView.topAnchor.constraint(equalTo: numberingLabel.topAnchor),
-					topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
+					topicTextView.bottomAnchor.constraint(equalTo: contentGuide.bottomAnchor, constant: spacingAdjustment),
 					
 					barView.trailingAnchor.constraint(equalTo: numberingLabel.leadingAnchor)
 				])
@@ -381,13 +396,13 @@ private extension EditorRowContentView {
 			if config.isNotesVisible {
 				addSubview(noteTextView)
 				NSLayoutConstraint.activate([
-					topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-					topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-					topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+					topicTextView.leadingAnchor.constraint(equalTo: contentGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					topicTextView.trailingAnchor.constraint(equalTo: contentGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					topicTextView.topAnchor.constraint(equalTo: contentGuide.topAnchor, constant: 0 - spacingAdjustment),
 					topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: spacingAdjustment / 2),
-					noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-					noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-					noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
+					noteTextView.leadingAnchor.constraint(equalTo: contentGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					noteTextView.trailingAnchor.constraint(equalTo: contentGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					noteTextView.bottomAnchor.constraint(equalTo: contentGuide.bottomAnchor, constant: spacingAdjustment),
 					barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
 				])
 			} else {
@@ -396,10 +411,10 @@ private extension EditorRowContentView {
 				}
 				noteTextView.removeFromSuperview()
 				NSLayoutConstraint.activate([
-					topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-					topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-					topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
-					topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
+					topicTextView.leadingAnchor.constraint(equalTo: contentGuide.leadingAnchor, constant: adjustedLeadingIndention),
+					topicTextView.trailingAnchor.constraint(equalTo: contentGuide.trailingAnchor, constant: adjustedTrailingIndention),
+					topicTextView.topAnchor.constraint(equalTo: contentGuide.topAnchor, constant: 0 - spacingAdjustment),
+					topicTextView.bottomAnchor.constraint(equalTo: contentGuide.bottomAnchor, constant: spacingAdjustment),
 					barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
 				])
 			}
