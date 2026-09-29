@@ -503,9 +503,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		// I'm not sure how collectionView could be nil, but we have crash reports where it is
 		guard collectionView != nil else { return }
 		
-		if collectionView.contentOffset != .zero {
-			transitionContentOffset = collectionView.contentOffset
-		}
+		// Save the offset relative to the adjusted content inset. The inset (safe area, navigation bar, etc.)
+		// can change across the transition, such as when folding or unfolding an iPhone Duo, so the raw
+		// content offset wouldn't be valid anymore.
+		let contentOffset = collectionView.contentOffset
+		let adjustedContentInset = collectionView.adjustedContentInset
+		transitionContentOffset = CGPoint(x: contentOffset.x + adjustedContentInset.left,
+										  y: contentOffset.y + adjustedContentInset.top)
 		
 		if #available(iOS 27.0, *) {
 			updateNavigationBarButtonItems(width: size.width)
@@ -520,7 +524,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	override func viewDidLayoutSubviews() {
 		if let offset = transitionContentOffset {
-			collectionView.contentOffset = offset
+			let adjustedContentInset = collectionView.adjustedContentInset
+			collectionView.contentOffset = CGPoint(x: offset.x - adjustedContentInset.left,
+												   y: offset.y - adjustedContentInset.top)
 			transitionContentOffset = nil
 		}
 	}
