@@ -62,6 +62,7 @@ struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
 		}
 
 		await outline.update(defaults: AppDefaults.shared.outlineDefaults)
+		await DocumentIndexer.updateIndex(for: .outline(outline))
 
 		await suspend()
 		return await .result(value: OutlineAppEntity(outline: outline))

@@ -108,7 +108,9 @@ struct EditOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
 		case .ownerURL:
 			outline.update(ownerURL: ownerURL)
 		}
-		
+
+		DocumentIndexer.updateIndex(for: .outline(outline))
+
 		await suspend()
 		return .result(value: OutlineAppEntity(outline: outline))
     }

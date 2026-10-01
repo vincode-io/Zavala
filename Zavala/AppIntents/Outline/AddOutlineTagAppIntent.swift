@@ -52,6 +52,7 @@ struct AddOutlineTagAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predict
 		}
 		
 		outline.createTag(tag)
+		DocumentIndexer.updateIndex(for: .outline(outline))
 		await suspend()
 		
 		return .result()

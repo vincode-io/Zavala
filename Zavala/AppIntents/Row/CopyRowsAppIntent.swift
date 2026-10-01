@@ -105,6 +105,9 @@ struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 			}
 		}
 
+		// Only the destination Outline changes when copying
+		DocumentIndexer.updateIndex(for: .outline(outline))
+
 		for outline in outlines {
 			await outline.unload()
 		}

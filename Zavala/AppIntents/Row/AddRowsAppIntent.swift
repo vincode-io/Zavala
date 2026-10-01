@@ -88,6 +88,7 @@ struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
 			}
 		}
 		
+		DocumentIndexer.updateIndex(for: .outline(outline))
 		await outline.unload()
 		await suspend()
 		return .result(value: rows.compactMap({ RowAppEntity(row: $0) }))

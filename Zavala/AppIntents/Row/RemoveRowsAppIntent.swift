@@ -64,6 +64,7 @@ struct RemoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
 		}
 		
 		for outline in outlines {
+			DocumentIndexer.updateIndex(for: .outline(outline))
 			await outline.unload()
 		}
 		

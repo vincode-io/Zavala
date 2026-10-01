@@ -81,6 +81,8 @@ struct ImportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
 			outline = importedOutline
 		}
 
+		await DocumentIndexer.updateIndex(for: .outline(outline))
+
 		await suspend()
 		return await .result(value: OutlineAppEntity(outline: outline))
     }

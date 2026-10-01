@@ -159,7 +159,9 @@ struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 			}
 		}
 
+		// Both the source and destination Outlines change when moving
 		for outline in outlines {
+			DocumentIndexer.updateIndex(for: .outline(outline))
 			await outline.unload()
 		}
 		

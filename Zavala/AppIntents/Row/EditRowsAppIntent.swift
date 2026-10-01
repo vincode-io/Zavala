@@ -144,6 +144,7 @@ struct EditRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 		}
 		
 		for outline in outlines {
+			DocumentIndexer.updateIndex(for: .outline(outline))
 			await outline.unload()
 		}
 

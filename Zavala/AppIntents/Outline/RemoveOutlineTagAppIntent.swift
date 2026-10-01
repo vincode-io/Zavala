@@ -49,6 +49,7 @@ struct RemoveOutlineTagAppIntent: AppIntent, CustomIntentMigratedAppIntent, Pred
 		if let tag = outline.account?.findTag(name: tagName) {
 			outline.deleteTag(tag)
 			outline.account?.deleteTag(tag)
+			DocumentIndexer.updateIndex(for: .outline(outline))
 		}
 
 		await suspend()
