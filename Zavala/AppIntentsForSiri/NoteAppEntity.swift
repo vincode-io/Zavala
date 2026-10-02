@@ -39,11 +39,8 @@ struct NoteAppEntity: IndexedEntity, Transferable {
 	var modificationDate: Date?
 	var folder: FolderAppEntity?
 
-	/// Uses the name as a plain String. Interpolating the AttributedString itself leaves Siri with an attributed
-	/// format argument to resolve, and Siri showed "(No Title)" instead of the name when it was used. Interpolating
-	/// rather than using a string literal keeps a title that matches a localization key from being translated.
 	var displayRepresentation: DisplayRepresentation {
-		DisplayRepresentation(title: "\(String(name.characters))")
+		DisplayRepresentation(title: "\(name)")
 	}
 
 	// MARK: IndexedEntity
