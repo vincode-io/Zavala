@@ -129,6 +129,8 @@ final class AppDefaults {
 		static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
 		static let correctSpellingAutomatically = "correctSpellingAutomatically"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
+		static let lastNoteReindexVersion = "lastNoteReindexVersion"
+		static let lastIndexedFolders = "lastIndexedFolders"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
 		static let createRows = "createRows";
@@ -235,6 +237,26 @@ final class AppDefaults {
 		}
 		set {
 			Self.setBool(for: Key.lastMainWindowWasClosed, newValue)
+		}
+	}
+
+	/// The app version that last reindexed every Outline so that each one's Spotlight item has its note for Siri.
+	var lastNoteReindexVersion: String? {
+		get {
+			return Self.string(for: Key.lastNoteReindexVersion)
+		}
+		set {
+			Self.setString(for: Key.lastNoteReindexVersion, newValue)
+		}
+	}
+
+	/// The folders last indexed for Siri, so that the folder index is only updated when the Tags change.
+	var lastIndexedFolders: [String] {
+		get {
+			return AppDefaults.store.stringArray(forKey: Key.lastIndexedFolders) ?? []
+		}
+		set {
+			AppDefaults.store.set(newValue, forKey: Key.lastIndexedFolders)
 		}
 	}
 	

@@ -469,6 +469,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		NSUbiquitousKeyValueStore.default.synchronize()
 		
 		documentIndexer = DocumentIndexer()
+		if #available(iOS 27.0, *) {
+			NoteIndexer.start()
+		}
 
 		// Observe the shared Share extension queue so a running app imports web pages the moment the
 		// extension writes one, without needing to be activated or opened via URL scheme.

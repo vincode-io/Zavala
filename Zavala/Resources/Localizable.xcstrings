@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@" : {
+
+    },
     "accessibility.text.complete" : {
       "comment" : "Accessibility Label: Complete",
       "localizations" : {
@@ -14522,6 +14525,88 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在此上下文中需要实体 ID。"
+          }
+        }
+      }
+    },
+    "label.text.intent-error-folder-in-different-account" : {
+      "comment" : "Error text: The Tag is in a different Account than the Outline.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Das Schlagwort befindet sich in einem anderen Account als die Gliederung."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "The Tag is in a different Account than the Outline."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "The Tag is in a different Account to the Outline."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "The Tag is in a different Account to the Outline."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "タグとアウトラインが別のアカウントにあります。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "标签与大纲不在同一账户中。"
+          }
+        }
+      }
+    },
+    "label.text.intent-error-folder-not-found" : {
+      "comment" : "Error text: The requested Tag was not found.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Das angeforderte Schlagwort wurde nicht gefunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "The requested Tag was not found."
+          }
+        },
+        "en-AU" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "The requested Tag was not found."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "The requested Tag was not found."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "要求されたタグが見つかりませんでした。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "找不到请求的标签。"
           }
         }
       }

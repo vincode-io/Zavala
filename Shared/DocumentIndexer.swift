@@ -13,18 +13,25 @@ import CoreSpotlight
 @MainActor
 class DocumentIndexer {
 	
+	/// Lets the app add to a Document's searchable item before it's indexed, and keep additional indexes in sync
+	/// when it's removed, without the extensions that share this file needing to know about them.
+	static var prepareSearchableItem: (@MainActor (CSSearchableItem, Document) -> Void)?
+	static var didRemoveIndex: (@MainActor (Document) -> Void)?
+
 	init() {
 		NotificationCenter.default.addObserver(self, selector: #selector(documentDidDelete(_:)), name: .DocumentDidDelete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentDidChangeBySync(_:)), name: .DocumentDidChangeBySync, object: nil)
 	}
 	
 	static func updateIndex(for document: Document) {
-		let documentIndexAttributes = DocumentIndexAttributes(document: document)
-		CSSearchableIndex.default().indexSearchableItems([documentIndexAttributes.searchableItem])
+		let searchableItem = DocumentIndexAttributes(document: document).searchableItem
+		prepareSearchableItem?(searchableItem, document)
+		CSSearchableIndex.default().indexSearchableItems([searchableItem])
 	}
 
 	static func removeIndex(for document: Document) {
 		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
+		didRemoveIndex?(document)
 	}
 	
 }

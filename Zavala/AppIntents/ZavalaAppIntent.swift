@@ -37,6 +37,45 @@ extension ZavalaAppIntent {
 		}
 		return outline
 	}
+
+	/// Shows the document in the main window, or in a new editor window if there isn't a main window.
+	@MainActor
+	func showDocument(_ entityID: EntityID) async {
+		#if targetEnvironment(macCatalyst)
+		defer {
+			appDelegate.appKitPlugin?.activateIgnoringOtherApps()
+		}
+		#endif
+
+		guard let mainSplitViewController = appDelegate.mainCoordinator as? MainSplitViewController else {
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, documentID: entityID).userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+			return
+		}
+
+		await mainSplitViewController.handleDocument(entityID, isNavigationBranch: false)
+	}
+
+	/// Shows the results of searching for the given text in the main window, opening one if necessary.
+	@MainActor
+	func showSearch(_ searchText: String) async {
+		#if targetEnvironment(macCatalyst)
+		defer {
+			appDelegate.appKitPlugin?.activateIgnoringOtherApps()
+		}
+		#endif
+
+		guard let mainSplitViewController = appDelegate.mainCoordinator as? MainSplitViewController else {
+			let search = Search(accountManager: appDelegate.accountManager, searchText: searchText)
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer)
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, containers: [search]).userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+			return
+		}
+
+		await mainSplitViewController.handleSearch(searchText)
+	}
 }
 
 enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {

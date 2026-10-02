@@ -284,6 +284,34 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 
+	/// Activates the search field with the given text, as if the user had typed it.
+	func beginSearch(_ searchText: String) {
+		searchController.searchBar.text = searchText
+
+		if searchController.isActive {
+			Task {
+				await setDocumentContainers([Search(accountManager: appDelegate.accountManager, searchText: searchText)], isNavigationBranch: false)
+			}
+		} else {
+			Task {
+				await focusSearchBar()
+			}
+		}
+	}
+
+	/// Focusing the search bar presents the search controller the same way a tap does, and
+	/// willPresentSearchController(_:) then starts the search using the search bar's text. The search bar can't
+	/// be focused until it is on screen, which can take a moment when the documents list is being shown in
+	/// response to the search (such as when navigating back from the editor), so keep trying briefly.
+	private func focusSearchBar() async {
+		for _ in 0..<20 {
+			if searchController.isActive || searchController.searchBar.becomeFirstResponder() {
+				return
+			}
+			try? await Task.sleep(for: .milliseconds(100))
+		}
+	}
+
 	func openDocument(_ document: Document?, saveCurrentOutline: Bool = true, isNavigationBranch: Bool = true, animated: Bool) {
 		guard let documentContainers else { return }
 
@@ -840,8 +868,9 @@ extension DocumentsViewController: UISearchControllerDelegate {
 
 	func willPresentSearchController(_ searchController: UISearchController) {
 		heldDocumentContainers = documentContainers
+		let searchText = searchController.searchBar.text ?? ""
 		Task {
-			await setDocumentContainers([Search(accountManager: appDelegate.accountManager, searchText: "")], isNavigationBranch: false)
+			await setDocumentContainers([Search(accountManager: appDelegate.accountManager, searchText: searchText)], isNavigationBranch: false)
 		}
 	}
 

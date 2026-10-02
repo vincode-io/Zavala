@@ -279,6 +279,21 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		}
 	}
 	
+	/// Shows the results of searching for the given text in the platform's search field, as if the user had typed it.
+	func handleSearch(_ searchText: String) async {
+		if traitCollection.userInterfaceIdiom == .mac {
+			let search = Search(accountManager: appDelegate.accountManager, searchText: searchText)
+			await collectionsViewController?.selectDocumentContainers([search], isNavigationBranch: true, animated: false)
+		} else {
+			await selectDefaultDocumentContainerIfNecessary()
+			UIView.performWithoutAnimation {
+				show(.supplementary)
+			}
+			documentsViewController?.beginSearch(searchText)
+		}
+		lastMainControllerToAppear = .documents
+	}
+
 	func handlePin(_ pin: Pin) async {
 		guard let documentContainers = pin.containers else { return }
 		await collectionsViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: true, animated: false)

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AppIntents
 import CoreSpotlight
 import CoreServices
 import VinOutlineKit
@@ -107,7 +108,13 @@ private extension ActivityManager {
 		}
 
 		activity.persistentIdentifier = document.id.description
-		
+
+		// Lets Siri and Apple Intelligence resolve "this note" to the Outline being viewed. Locked
+		// Outlines are skipped because NoteAppEntityQuery doesn't return them.
+		if #available(iOS 27.0, *), !document.isLocked {
+			activity.appEntityIdentifier = EntityIdentifier(for: NoteAppEntity.self, identifier: document.id)
+		}
+
 		return activity
 	}
 	

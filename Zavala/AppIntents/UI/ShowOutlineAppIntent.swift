@@ -9,7 +9,7 @@ import UIKit
 import AppIntents
 import VinOutlineKit
 
-struct ShowOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
+struct ShowOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "ShowOutlineIntent"
     static let title: LocalizedStringResource = LocalizedStringResource("intent.title.show-outline", comment: "Show Outline")
     static let description = IntentDescription(LocalizedStringResource("intent.description.show-outline", comment: "Shows the given outline in the foremost window of Zavala."))
@@ -33,24 +33,7 @@ struct ShowOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
 
 	@MainActor
 	func perform() async throws -> some IntentResult {
-		#if targetEnvironment(macCatalyst)
-		defer {
-			appDelegate.appKitPlugin?.activateIgnoringOtherApps()
-		}
-		#endif
-
-		guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-			  let mainSplitViewController = appDelegate.mainCoordinator as? MainSplitViewController else {
-			
-			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, documentID: outline.id).userInfo]
-			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-
-			return .result()
-		}
-		
-		await mainSplitViewController.handleDocument(outline.id, isNavigationBranch: false)
-	
+		await showDocument(outline.id)
         return .result()
     }
 }
