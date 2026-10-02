@@ -74,7 +74,7 @@ struct NoteAppEntity: IndexedEntity, Transferable {
 		DataRepresentation(exportedContentType: .utf8PlainText) { note in
 			try await MainActor.run {
 				let outline = try unlockedOutline(for: note.id)
-				return Data(outline.printListPlainText().utf8)
+				return Data(outline.markdownList(format: false).utf8)
 			}
 		}
 
@@ -122,7 +122,7 @@ struct NoteAppEntity: IndexedEntity, Transferable {
 
 	@MainActor
 	private static func content(for id: EntityID) throws -> AttributedString {
-		let body = try unlockedOutline(for: id).printListBody()
-		return (try? AttributedString(body, including: \.uiKit)) ?? AttributedString(body)
+		let body = try unlockedOutline(for: id).markdownList(format: false)
+		return AttributedString(body)
 	}
 }
