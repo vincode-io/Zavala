@@ -40,7 +40,7 @@ struct NoteAppEntity: IndexedEntity, Transferable {
 	var folder: FolderAppEntity?
 
 	var displayRepresentation: DisplayRepresentation {
-		DisplayRepresentation(title: "\(name)")
+		return DisplayRepresentation(title: "\(String(name.characters))")
 	}
 
 	// MARK: IndexedEntity
