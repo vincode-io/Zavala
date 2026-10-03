@@ -8,6 +8,7 @@
 import Foundation
 import AppIntents
 import CoreSpotlight
+import os
 import VinOutlineKit
 
 /// Makes notes available to Siri and Apple Intelligence by associating a NoteAppEntity with each Outline's item in
@@ -15,6 +16,8 @@ import VinOutlineKit
 @available(iOS 27.0, *)
 @MainActor
 enum NoteIndexer {
+
+	private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "NoteIndexer")
 
 	private static var folderChangeObservers = [NSObjectProtocol]()
 	private static var reindexFoldersTask: Task<Void, Never>?
@@ -44,6 +47,7 @@ enum NoteIndexer {
 	/// removed from Spotlight instead, the same as when they change through sync. Yields between Outlines because
 	/// each one's text is loaded to index it.
 	static func reindex(_ documents: [Document]) async {
+		logger.info("Reindexing \(documents.count) notes for Siri.")
 		for document in documents {
 			if document.isLocked {
 				DocumentIndexer.removeIndex(for: document)
@@ -52,6 +56,7 @@ enum NoteIndexer {
 			}
 			await Task.yield()
 		}
+		logger.info("Finished reindexing \(documents.count) notes for Siri.")
 	}
 
 	/// Reindexes every Outline once per app version. Outlines indexed before notes were associated with them, or
@@ -105,6 +110,8 @@ enum NoteIndexer {
 
 			guard Set(entries) != Set(previousEntries) else { return }
 
+			logger.info("Reindexing \(folders.count) folders for Siri.")
+
 			let currentIDs = Set(folders.map(\.id.description))
 			let removedIDs = previousEntries
 				.compactMap { $0.split(separator: "\t", omittingEmptySubsequences: false).first.map(String.init) }
@@ -121,8 +128,10 @@ enum NoteIndexer {
 					try await CSSearchableIndex.default().indexAppEntities(folders)
 				}
 				AppDefaults.shared.lastIndexedFolders = entries
+				logger.info("Finished reindexing \(folders.count) folders for Siri.")
 			} catch {
 				// The folders aren't recorded, so indexing them is tried again at the next change or launch
+				logger.error("Reindexing folders for Siri failed: \(error.localizedDescription)")
 			}
 		}
 	}
