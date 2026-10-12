@@ -1,0 +1,17 @@
+CODE_SIGN_STYLE = Automatic
+DEVELOPMENT_TEAM = SHJK2V3AJG
+ORGANIZATION_IDENTIFIER = io.vincode
+
+#include? "../../SharedXcodeSettings/DeveloperSettings.xcconfig"
+#include "./Zavala_ios_target_common.xcconfig"
+
+// End-to-end smoke flows (L3), Mac only. See SPEC.md.
+TEST_TARGET_NAME = Zavala
+GENERATE_INFOPLIST_FILE = YES
+PRODUCT_BUNDLE_IDENTIFIER = $(ORGANIZATION_IDENTIFIER).ZavalaUITests
+PRODUCT_NAME = $(TARGET_NAME)
+SWIFT_EMIT_LOC_STRINGS = NO
+
+// The UI test runner has restricted entitlements (testmanagerd), and macOS kills it at launch if it's
+// signed ad hoc, as local settings sign macOS builds. Sign it with a development certificate.
+CODE_SIGN_IDENTITY[sdk=macosx*] = Apple Development

@@ -1,0 +1,1 @@
+../../VinOutlineKit/Tests/VinOutlineKitTests/Support/OutlineSnapshot.swift

@@ -1,0 +1,14 @@
+CODE_SIGN_STYLE = Automatic
+DEVELOPMENT_TEAM = SHJK2V3AJG
+ORGANIZATION_IDENTIFIER = io.vincode
+
+#include? "../../SharedXcodeSettings/DeveloperSettings.xcconfig"
+#include "./Zavala_ios_target_common.xcconfig"
+
+// App-hosted behavior tests (L2). See SPEC.md.
+TEST_HOST = $(BUILT_PRODUCTS_DIR)/Zavala.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Zavala
+BUNDLE_LOADER = $(TEST_HOST)
+GENERATE_INFOPLIST_FILE = YES
+PRODUCT_BUNDLE_IDENTIFIER = $(ORGANIZATION_IDENTIFIER).ZavalaTests
+PRODUCT_NAME = $(TARGET_NAME)
+SWIFT_EMIT_LOC_STRINGS = NO
