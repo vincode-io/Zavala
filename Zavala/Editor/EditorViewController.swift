@@ -403,6 +403,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			collectionView.refreshControl!.tintColor = .clear
 		}
 
+		// On iPhone the automatic edge effect resolves to soft here, but to hard on Documents,
+		// so the navigation bar looks different between them. Match Documents and the iPad.
+		if traitCollection.userInterfaceIdiom == .phone {
+			collectionView.topEdgeEffect.style = .hard
+			collectionView.updateTopEdgeEffectVisibility()
+		}
+
 		collectionView.delegate = self
 		collectionView.dataSource = self
 		collectionView.dragDelegate = self
@@ -1847,7 +1854,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		self.outline?.verticleScrollState = firstVisibleShadowTableIndex
-		
+
+		if traitCollection.userInterfaceIdiom == .phone {
+			scrollView.updateTopEdgeEffectVisibility()
+		}
+
 		if let tagInput = currentTextInput as? EditorTagInputTextField {
 			tagInput.setNeedsLayout()
 		}

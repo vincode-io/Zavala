@@ -89,6 +89,13 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		// is presented over the split view and dismissed again, such as zooming an image in the editor.
 		clearsSelectionOnViewWillAppear = false
 
+		// On iPhone the automatic edge effect resolves to soft here, but to hard on Documents,
+		// so the navigation bar looks different between them. Match Documents and the iPad.
+		if traitCollection.userInterfaceIdiom == .phone {
+			collectionView.topEdgeEffect.style = .hard
+			collectionView.updateTopEdgeEffectVisibility()
+		}
+
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidReload(_:)), name: .AccountDidReload, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
@@ -282,7 +289,13 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 // MARK: Collection View
 
 extension CollectionsViewController {
-	
+
+	override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		if traitCollection.userInterfaceIdiom == .phone {
+			scrollView.updateTopEdgeEffectVisibility()
+		}
+	}
+
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		// If we don't force the text view to give up focus, we get its additional context menu items
 		if let textView = UIResponder.currentFirstResponder as? UITextView {
