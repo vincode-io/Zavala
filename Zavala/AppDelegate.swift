@@ -411,6 +411,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
 		appDelegate = self
 
+		if TestHost.isActive {
+			accountManager = AccountManager(accountsFolderPath: TestHost.accountsFolderPath, errorHandler: self)
+			let _ = OutlineFontCache.shared
+			return true
+		}
+
 		let oldDocumentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 		let oldDocumentAccountsFolder = oldDocumentAccountURL.appendingPathComponent("Accounts").absoluteString
 
@@ -464,7 +470,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		appKitPlugin.setDelegate(self)
 		appKitPlugin.start()
 		#endif
-		
+
+		guard !TestHost.isActive else { return true }
+
 		UIApplication.shared.registerForRemoteNotifications()
 		NSUbiquitousKeyValueStore.default.synchronize()
 		

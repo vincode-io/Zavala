@@ -15,6 +15,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		08E120233078EB5900D7D99D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5181A9332554D92000C153E8;
+			remoteInfo = Zavala;
+		};
+		08E123FF3079FC7300D7D99D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5181A9332554D92000C153E8;
+			remoteInfo = Zavala;
+		};
 		512E3D9130241EA00028D3F6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
@@ -65,6 +79,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		08E1201F3078EB5900D7D99D /* ZavalaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZavalaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		08E123FB3079FC7300D7D99D /* ZavalaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZavalaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		511EC2BA2B3F5727002D89A5 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		512E3D8930241EA00028D3F6 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		513F32A12594062C0003048F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -124,6 +140,8 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		08E120203078EB5900D7D99D /* ZavalaTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ZavalaTests; sourceTree = "<group>"; };
+		08E123FC3079FC7300D7D99D /* ZavalaUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ZavalaUITests; sourceTree = "<group>"; };
 		5158D21430626BD400141153 /* AppKitPlugin */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (5158D21B30626BD500141153 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = AppKitPlugin; sourceTree = "<group>"; };
 		5158D22030626BE600141153 /* SpotlightIndexExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (5158D22330626BE700141153 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SpotlightIndexExtension; sourceTree = "<group>"; };
 		5158D22930626BEB00141153 /* ShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (5158D22E30626BEC00141153 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ShareExtension; sourceTree = "<group>"; };
@@ -133,6 +151,20 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		08E1201C3078EB5900D7D99D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		08E123F83079FC7300D7D99D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		512E3D8630241EA00028D3F6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -178,6 +210,8 @@
 				5158D22930626BEB00141153 /* ShareExtension */,
 				5158D23330626BEF00141153 /* Shared */,
 				5158D24730626C1500141153 /* xcconfig */,
+				08E120203078EB5900D7D99D /* ZavalaTests */,
+				08E123FC3079FC7300D7D99D /* ZavalaUITests */,
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
 				51BC6B892F54AB2200985B26 /* VinMarkdown */,
@@ -193,6 +227,8 @@
 				51E060AF25A4547400194066 /* AppKitPlugin.bundle */,
 				515D452026BB553600228229 /* SpotlightIndexExtension.appex */,
 				512E3D8930241EA00028D3F6 /* ShareExtension.appex */,
+				08E1201F3078EB5900D7D99D /* ZavalaTests.xctest */,
+				08E123FB3079FC7300D7D99D /* ZavalaUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,6 +244,52 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		08E1201E3078EB5900D7D99D /* ZavalaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08E120273078EB5900D7D99D /* Build configuration list for PBXNativeTarget "ZavalaTests" */;
+			buildPhases = (
+				08E1201B3078EB5900D7D99D /* Sources */,
+				08E1201C3078EB5900D7D99D /* Frameworks */,
+				08E1201D3078EB5900D7D99D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				08E120243078EB5900D7D99D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				08E120203078EB5900D7D99D /* ZavalaTests */,
+			);
+			name = ZavalaTests;
+			packageProductDependencies = (
+			);
+			productName = ZavalaTests;
+			productReference = 08E1201F3078EB5900D7D99D /* ZavalaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		08E123FA3079FC7300D7D99D /* ZavalaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08E124013079FC7300D7D99D /* Build configuration list for PBXNativeTarget "ZavalaUITests" */;
+			buildPhases = (
+				08E123F73079FC7300D7D99D /* Sources */,
+				08E123F83079FC7300D7D99D /* Frameworks */,
+				08E123F93079FC7300D7D99D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				08E124003079FC7300D7D99D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				08E123FC3079FC7300D7D99D /* ZavalaUITests */,
+			);
+			name = ZavalaUITests;
+			packageProductDependencies = (
+			);
+			productName = ZavalaUITests;
+			productReference = 08E123FB3079FC7300D7D99D /* ZavalaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		512E3D8830241EA00028D3F6 /* ShareExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 512E3D9530241EA00028D3F6 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
@@ -316,6 +398,14 @@
 				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					08E1201E3078EB5900D7D99D = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = 5181A9332554D92000C153E8;
+					};
+					08E123FA3079FC7300D7D99D = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = 5181A9332554D92000C153E8;
+					};
 					512E3D8830241EA00028D3F6 = {
 						CreatedOnToolsVersion = 27.0;
 					};
@@ -355,11 +445,27 @@
 				51E060AE25A4547400194066 /* AppKitPlugin */,
 				515D451F26BB553600228229 /* SpotlightIndexExtension */,
 				512E3D8830241EA00028D3F6 /* ShareExtension */,
+				08E1201E3078EB5900D7D99D /* ZavalaTests */,
+				08E123FA3079FC7300D7D99D /* ZavalaUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		08E1201D3078EB5900D7D99D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		08E123F93079FC7300D7D99D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		512E3D8730241EA00028D3F6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -432,6 +538,20 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		08E1201B3078EB5900D7D99D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		08E123F73079FC7300D7D99D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		512E3D8530241EA00028D3F6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -463,6 +583,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		08E120243078EB5900D7D99D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5181A9332554D92000C153E8 /* Zavala */;
+			targetProxy = 08E120233078EB5900D7D99D /* PBXContainerItemProxy */;
+		};
+		08E124003079FC7300D7D99D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5181A9332554D92000C153E8 /* Zavala */;
+			targetProxy = 08E123FF3079FC7300D7D99D /* PBXContainerItemProxy */;
+		};
 		512E3D9230241EA00028D3F6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 512E3D8830241EA00028D3F6 /* ShareExtension */;
@@ -482,6 +612,38 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		08E120253078EB5900D7D99D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5158D24730626C1500141153 /* xcconfig */;
+			baseConfigurationReferenceRelativePath = Zavala_tests_target.xcconfig;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		08E120263078EB5900D7D99D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5158D24730626C1500141153 /* xcconfig */;
+			baseConfigurationReferenceRelativePath = Zavala_tests_target.xcconfig;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		08E124023079FC7300D7D99D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5158D24730626C1500141153 /* xcconfig */;
+			baseConfigurationReferenceRelativePath = Zavala_uitests_target.xcconfig;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		08E124033079FC7300D7D99D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 5158D24730626C1500141153 /* xcconfig */;
+			baseConfigurationReferenceRelativePath = Zavala_uitests_target.xcconfig;
+			buildSettings = {
+			};
+			name = Release;
+		};
 		512E3D9630241EA00028D3F6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 5158D24730626C1500141153 /* xcconfig */;
@@ -565,6 +727,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		08E120273078EB5900D7D99D /* Build configuration list for PBXNativeTarget "ZavalaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08E120253078EB5900D7D99D /* Debug */,
+				08E120263078EB5900D7D99D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		08E124013079FC7300D7D99D /* Build configuration list for PBXNativeTarget "ZavalaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08E124023079FC7300D7D99D /* Debug */,
+				08E124033079FC7300D7D99D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		512E3D9530241EA00028D3F6 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

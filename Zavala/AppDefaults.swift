@@ -109,6 +109,10 @@ final class AppDefaults {
 	private init() {}
 	
 	nonisolated(unsafe) private static let store: UserDefaults = {
+		if TestHost.isActive {
+			UserDefaults().removePersistentDomain(forName: TestHost.defaultsSuiteName)
+			return UserDefaults(suiteName: TestHost.defaultsSuiteName)!
+		}
 		let appIdentifierPrefix = Bundle.main.object(forInfoDictionaryKey: "AppIdentifierPrefix") as! String
 		let suiteName = "\(appIdentifierPrefix)group.\(Bundle.main.bundleIdentifier!)"
 		return UserDefaults.init(suiteName: suiteName)!
