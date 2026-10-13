@@ -43,4 +43,46 @@ struct JoinRowTests {
 		await editor.close()
 	}
 
+	@Test("Joining rows keeps the lower row's note (issue #330)")
+	func joinKeepsLowerNote() async throws {
+		let before = """
+		- Alpha
+		- Bravo
+		  > bravo note
+		"""
+		let after = """
+		- AlphaBravo
+		  > bravo note
+		"""
+		let editor = try await EditorHarness.open(before)
+
+		try await editor.placeCursor(in: "Bravo", at: 0)
+		try await editor.deleteBackward()
+
+		expectUndoRedo(editor, before: before, after: after)
+		await editor.close()
+	}
+
+	@Test("Joining rows that both have notes puts the lower note after the upper note (issue #330)")
+	func joinMergesNotes() async throws {
+		let before = """
+		- Alpha
+		  > alpha note
+		- Bravo
+		  > bravo note
+		"""
+		let after = """
+		- AlphaBravo
+		  > alpha note
+		  > bravo note
+		"""
+		let editor = try await EditorHarness.open(before)
+
+		try await editor.placeCursor(in: "Bravo", at: 0)
+		try await editor.deleteBackward()
+
+		expectUndoRedo(editor, before: before, after: after)
+		await editor.close()
+	}
+
 }

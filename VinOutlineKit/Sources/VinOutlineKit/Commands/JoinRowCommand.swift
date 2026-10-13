@@ -13,6 +13,7 @@ public final class JoinRowCommand: OutlineCommand {
 	var bottomRow: Row
 	var topic: NSAttributedString
 	var undoTopic: NSAttributedString
+	var undoNote: NSAttributedString?
 	var splitCursorPosition: Int
 	
 	var restoreParent: RowContainer?
@@ -32,7 +33,8 @@ public final class JoinRowCommand: OutlineCommand {
 		let attrString = NSMutableAttributedString(attributedString: topRow.topic ?? NSAttributedString())
 		attrString.append(bottomRow.topic ?? NSAttributedString())
 		self.undoTopic = attrString
-		
+		self.undoNote = topRow.note
+
 		self.splitCursorPosition = topRow.topic?.length ?? 0
 		
 		self.restoreParent = bottomRow.parent
@@ -47,6 +49,11 @@ public final class JoinRowCommand: OutlineCommand {
 	
 	public override func undo() {
 		outline.splitRow(newRow: bottomRow, toParent: restoreParent, toIndex: restoreIndex, row: topRow, topic: undoTopic, cursorPosition: splitCursorPosition)
+
+		// Joining may have merged the bottom Row's note into the top Row's, so put the original back
+		if topRow.note != undoNote {
+			outline.updateRow(topRow, rowStrings: .note(undoNote), applyChanges: true)
+		}
 	}
 	
 }

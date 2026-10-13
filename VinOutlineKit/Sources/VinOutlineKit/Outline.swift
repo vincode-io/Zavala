@@ -1749,7 +1749,20 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 		
 		requestCloudKitUpdate(for: topRow.entityID)
-		updateRowStrings(topRow, .topic(topic))
+
+		// Carry the bottom Row's note over so that it isn't lost when the bottom Row is deleted.
+		if let bottomNote = bottomRow.note, bottomNote.length > 0 {
+			let note = NSMutableAttributedString()
+			if let topNote = topRow.note, topNote.length > 0 {
+				note.append(topNote)
+				note.append(NSAttributedString(string: "\n"))
+			}
+			note.append(bottomNote)
+			updateRowStrings(topRow, .both(topic, note))
+		} else {
+			updateRowStrings(topRow, .topic(topic))
+		}
+
 		deleteRows([bottomRow])
 		
 		guard isBeingViewed, let topShadowTableIndex = topRow.shadowTableIndex else { return }
