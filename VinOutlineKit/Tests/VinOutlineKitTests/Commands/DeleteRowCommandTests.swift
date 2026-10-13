@@ -78,6 +78,35 @@ final class DeleteRowCommandTests: VOKTestCase {
 			""")
 	}
 
+	@Test("Deleting multiple rows in outline mode selects the row that takes the first deleted row's place")
+	@MainActor
+	func deleteMultipleRowsSelectsFirstDeletedPosition() async throws {
+		let (outline, accountManager) = try await makeOutline("""
+			- Alpha
+			- Bravo
+			- Charlie
+			- Delta
+			""")
+		defer { deleteAccountManager(accountManager) }
+
+		let recorder = SelectIndexRecorder()
+		let observer = NotificationCenter.default.addObserver(forName: .OutlineElementsDidChange, object: outline, queue: nil) { note in
+			let newSelectIndex = (note.userInfo?[OutlineElementChanges.userInfoKey] as? OutlineElementChanges)?.newSelectIndex
+			MainActor.assumeIsolated {
+				recorder.newSelectIndex = newSelectIndex ?? recorder.newSelectIndex
+			}
+		}
+		defer { NotificationCenter.default.removeObserver(observer) }
+
+		// Pass the rows out of display order so the selection can't depend on the order they're given in.
+		let rows = [try outline.row(titled: "Charlie"), try outline.row(titled: "Alpha")]
+		let command = DeleteRowCommand(actionName: "DeleteRow", undoManager: undoManager, delegate: self, outline: outline, rows: rows, currentRow: nil, rowStrings: nil, isInOutlineMode: true)
+		command.execute()
+
+		let newSelectIndex = try #require(recorder.newSelectIndex)
+		#expect(outline.shadowTable?[newSelectIndex] === (try outline.row(titled: "Bravo")))
+	}
+
 	@Test("Undoing a delete doesn't auto complete the restored row's parent")
 	func deleteCompletedChildAndUndo() async throws {
 		let before = """
@@ -139,4 +168,10 @@ final class DeleteRowCommandTests: VOKTestCase {
 			- Bravo
 			""")
 	}
+}
+
+/// Captures the selection index from the `OutlineElementsDidChange` notifications an outline posts.
+@MainActor
+private final class SelectIndexRecorder {
+	var newSelectIndex: Int?
 }
