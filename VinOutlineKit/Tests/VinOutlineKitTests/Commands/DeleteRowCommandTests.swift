@@ -77,4 +77,66 @@ final class DeleteRowCommandTests: VOKTestCase {
 			- B
 			""")
 	}
+
+	@Test("Undoing a delete doesn't auto complete the restored row's parent")
+	func deleteCompletedChildAndUndo() async throws {
+		let before = """
+			- Alpha
+			  - [x] A1
+			- [x] Bravo
+			  - B1
+			- Charlie
+			"""
+		let (outline, accountManager) = try await makeOutline(before)
+		defer { deleteAccountManager(accountManager) }
+
+		let rows = [try outline.row(titled: "A1"), try outline.row(titled: "Bravo")]
+		let command = DeleteRowCommand(actionName: "DeleteRow", undoManager: undoManager, delegate: self, outline: outline, rows: rows, currentRow: nil, rowStrings: nil, isInOutlineMode: true)
+		command.execute()
+
+		expectEdit(outline, before: before, after: """
+			- Alpha
+			- Charlie
+			""")
+	}
+
+	@Test("Undoing a delete doesn't auto uncomplete the restored row's parent")
+	func deleteUncompletedChildAndUndo() async throws {
+		let before = """
+			- [x] Alpha
+			  - A1
+			- Bravo
+			"""
+		let (outline, accountManager) = try await makeOutline(before)
+		defer { deleteAccountManager(accountManager) }
+
+		let command = DeleteRowCommand(actionName: "DeleteRow", undoManager: undoManager, delegate: self, outline: outline, rows: [try outline.row(titled: "A1")], currentRow: nil, rowStrings: nil, isInOutlineMode: true)
+		command.execute()
+
+		expectEdit(outline, before: before, after: """
+			- [x] Alpha
+			- Bravo
+			""")
+	}
+
+	@Test("Undoing a delete restores a parent that was auto completed by the delete")
+	func deleteLastUncompletedChildAndUndo() async throws {
+		let before = """
+			- Alpha
+			  - [x] A1
+			  - A2
+			- Bravo
+			"""
+		let (outline, accountManager) = try await makeOutline(before)
+		defer { deleteAccountManager(accountManager) }
+
+		let command = DeleteRowCommand(actionName: "DeleteRow", undoManager: undoManager, delegate: self, outline: outline, rows: [try outline.row(titled: "A2")], currentRow: nil, rowStrings: nil, isInOutlineMode: true)
+		command.execute()
+
+		expectEdit(outline, before: before, after: """
+			- [x] Alpha
+			  - [x] A1
+			- Bravo
+			""")
+	}
 }

@@ -13,10 +13,12 @@ public final class DeleteRowCommand: OutlineCommand {
 	var rowStrings: RowStrings?
 	var locations = [(row: Row, parent: RowContainer, index: Int)]()
 	var isInOutlineMode: Bool
+	var oldCompletionStates = [(row: Row, isComplete: Bool?)]()
 
 	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], currentRow: Row?, rowStrings: RowStrings?, isInOutlineMode: Bool) {
 		self.locations = outline.rowLocations(for: rows)
 		self.rows = locations.map { $0.row }
+		self.oldCompletionStates = outline.completionStates(forRowsAndAncestorsOf: self.rows)
 
 		self.currentRow = currentRow
 		self.rowStrings = rowStrings
@@ -31,6 +33,7 @@ public final class DeleteRowCommand: OutlineCommand {
 	
 	public override func undo() {
 		outline.restoreRows(locations)
+		outline.restoreCompletionStates(oldCompletionStates)
 	}
 	
 }

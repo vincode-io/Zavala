@@ -2020,6 +2020,48 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return locations
 	}
 
+	/// The completion state of the given rows and all of their ancestors.
+	///
+	/// Changing the children of a row can auto complete or uncomplete it, which cascades up through its
+	/// ancestors. Save these before such a change and pass them to `restoreCompletionStates(_:)` when
+	/// undoing it so that completion is put back as it was instead of being recalculated.
+	func completionStates(forRowsAndAncestorsOf rows: [Row]) -> [(row: Row, isComplete: Bool?)] {
+		var savedRows = Set<Row>()
+		var states = [(row: Row, isComplete: Bool?)]()
+
+		for row in rows {
+			var affectedRow: Row? = row
+			while let currentRow = affectedRow {
+				if !savedRows.contains(currentRow) {
+					savedRows.insert(currentRow)
+					states.append((row: currentRow, isComplete: currentRow.isComplete))
+				}
+				affectedRow = currentRow.parent as? Row
+			}
+		}
+
+		return states
+	}
+
+	/// Puts back completion states saved by `completionStates(forRowsAndAncestorsOf:)`.
+	///
+	/// The deepest rows are restored first so that any cascading auto complete changes are overwritten
+	/// by the saved state of their ancestors.
+	func restoreCompletionStates(_ states: [(row: Row, isComplete: Bool?)]) {
+		let sortedStates = states.sorted { $0.row.trueLevel > $1.row.trueLevel }
+
+		for (row, isComplete) in sortedStates {
+			let wasComplete = isComplete ?? false
+			guard wasComplete != (row.isComplete ?? false) else { continue }
+
+			if wasComplete {
+				complete(rows: [row])
+			} else {
+				uncomplete(rows: [row])
+			}
+		}
+	}
+
 	/// Puts previously deleted rows back at the parent and child index each one had in the tree.
 	///
 	/// The locations must be in outline order (parents before their children, earlier siblings before

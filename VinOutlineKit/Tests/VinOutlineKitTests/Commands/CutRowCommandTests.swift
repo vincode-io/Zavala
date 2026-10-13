@@ -66,5 +66,24 @@ final class CutRowCommandTests: VOKTestCase {
 			- C
 			""")
 	}
+
+	@Test("Undoing a cut doesn't auto complete the restored row's parent")
+	func cutCompletedChildAndUndo() async throws {
+		let before = """
+			- Alpha
+			  - [x] A1
+			- Bravo
+			"""
+		let (outline, accountManager) = try await makeOutline(before)
+		defer { deleteAccountManager(accountManager) }
+
+		let command = CutRowCommand(actionName: "CutRow", undoManager: undoManager, delegate: self, outline: outline, rows: [try outline.row(titled: "A1")], isInOutlineMode: true)
+		command.execute()
+
+		expectEdit(outline, before: before, after: """
+			- Alpha
+			- Bravo
+			""")
+	}
 }
 

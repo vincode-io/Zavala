@@ -27,58 +27,22 @@ public final class MoveRowRightCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCompletionStates()
+		// Moving a row right can auto complete or uncomplete its new parent, which is the row above it.
+		let newParentRows = rows.compactMap { row -> Row? in
+			guard let container = row.parent,
+				  let rowIndex = container.firstIndexOfRow(row),
+				  rowIndex > 0 else { return nil }
+			return container.rows[rowIndex - 1]
+		}
+		oldCompletionStates = outline.completionStates(forRowsAndAncestorsOf: newParentRows)
+
 		moveRightRows = outline.moveRowsRight(rows, rowStrings: newRowStrings)
 	}
-	
+
 	public override func undo() {
 		guard let moveRightRows else { return }
 		outline.moveRowsLeft(moveRightRows, rowStrings: oldRowStrings)
-		restoreCompletionStates()
-	}
-	
-}
-
-private extension MoveRowRightCommand {
-
-	/// Moving a row right can auto complete or uncomplete the new parent row, which cascades up
-	/// through its ancestors. Save the completion state of every row that could be affected so that
-	/// undo can restore it instead of recalculating it.
-	func saveCompletionStates() {
-		var savedRows = Set<Row>()
-		oldCompletionStates.removeAll()
-
-		for row in rows {
-			guard let container = row.parent,
-				  let rowIndex = container.firstIndexOfRow(row),
-				  rowIndex > 0 else { continue }
-
-			var affectedRow: Row? = container.rows[rowIndex - 1]
-			while let currentRow = affectedRow {
-				if !savedRows.contains(currentRow) {
-					savedRows.insert(currentRow)
-					oldCompletionStates.append((row: currentRow, isComplete: currentRow.isComplete))
-				}
-				affectedRow = currentRow.parent as? Row
-			}
-		}
-	}
-
-	/// Restore the deepest rows first so that any cascading auto complete changes are overwritten by
-	/// the saved state of their ancestors.
-	func restoreCompletionStates() {
-		let sortedStates = oldCompletionStates.sorted { $0.row.trueLevel > $1.row.trueLevel }
-
-		for (row, isComplete) in sortedStates {
-			let wasComplete = isComplete ?? false
-			guard wasComplete != (row.isComplete ?? false) else { continue }
-
-			if wasComplete {
-				outline.complete(rows: [row])
-			} else {
-				outline.uncomplete(rows: [row])
-			}
-		}
+		outline.restoreCompletionStates(oldCompletionStates)
 	}
 
 }
