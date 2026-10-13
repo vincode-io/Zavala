@@ -2863,7 +2863,8 @@ private extension EditorViewController {
 				   let row = outline?.findRow(id: rowID),
 				   let shadowTableIndex = row.shadowTableIndex,
 				   shadowTableIndex + 1 < outline?.shadowTable?.count ?? 0,
-				   let bottomRow = outline?.shadowTable?[shadowTableIndex + 1] {
+				   let bottomRow = outline?.shadowTable?[shadowTableIndex + 1],
+				   bottomRow.rows.isEmpty {
 					let attrString = NSMutableAttributedString(attributedString: topic.cleansedAttributedText)
 					attrString.append(bottomRow.topic ?? NSAttributedString())
 
@@ -3996,7 +3997,10 @@ private extension EditorViewController {
 	}
 
 	func joinRow(_ bottomRow: Row, topic: NSAttributedString) {
-		guard let undoManager,
+		// Outline.joinRows won't join a row that has children, so check before the
+		// command registers an undo step for a join that never happens.
+		guard bottomRow.rows.isEmpty,
+			  let undoManager,
 			  let outline,
 			  let rowShadowTableIndex = bottomRow.shadowTableIndex,
 			  rowShadowTableIndex > 0,
