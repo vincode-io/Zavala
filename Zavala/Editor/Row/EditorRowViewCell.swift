@@ -20,7 +20,7 @@ protocol EditorRowViewCellDelegate: AnyObject {
 	func editorRowMoveCursorTo(rowID: String)
 	func editorRowMoveCursorUp(rowID: String)
 	func editorRowMoveCursorDown(rowID: String)
-	func editorRowMoveRowLeft(rowID: String)
+	func editorRowMoveRowLeft(rowID: String, rowStrings: RowStrings)
 	func editorRowMoveRowRight(rowID: String)
 	func editorRowTextChanged(rowID: String, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange)
 	func editorRowDeleteRow(rowID: String, rowStrings: RowStrings)
@@ -28,7 +28,7 @@ protocol EditorRowViewCellDelegate: AnyObject {
 	func editorRowCreateRow(afterRowID: String, rowStrings: RowStrings?)
 	func editorRowSplitRow(rowID: String, topic: NSAttributedString, cursorPosition: Int)
 	func editorRowJoinRowWithPreviousSibling(rowID: String, attrText: NSAttributedString)
-	func editorRowShouldMoveLeftOnReturn(rowID: String) -> Bool
+	func editorRowShouldMoveLeftOnReturn(rowID: String, topic: NSAttributedString?) -> Bool
 	func editorRowDeleteRowNote(rowID: String)
 	func editorRowEditLink(_ link: String?, text: String?, range: NSRange)
 	func editorRowZoomImage(_ image: UIImage, rect: CGRect)

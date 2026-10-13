@@ -1324,9 +1324,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		requestCloudKitUpdate(for: id)
 	}
 	
-	public func shouldMoveLeftOnReturn(row: Row) -> Bool {
-		guard row.topic == nil else { return false }
-		
+	/// Determines if pressing Return in the row should outdent it rather than create a new row.
+	/// - Parameters:
+	///   - row: The row the Return was pressed in.
+	///   - topic: The row's current topic. The editor may not have saved its text to the row yet,
+	///     so it passes what is currently in the text view. An emptied topic is treated the same as `nil`.
+	public func shouldMoveLeftOnReturn(row: Row, topic: NSAttributedString?) -> Bool {
+		guard topic?.length ?? 0 == 0 else { return false }
+
 		guard row.parent is Row else { return false }
 		
 		if row.parent?.rows.last == row {

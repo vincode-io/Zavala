@@ -19,7 +19,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func scrollEditorToVisible(_: EditorRowTopicTextView, rect: CGRect)
 	func moveCursorUp(_: EditorRowTopicTextView, rowID: String)
 	func moveCursorDown(_: EditorRowTopicTextView, rowID: String)
-	func moveRowLeft(_: EditorRowTopicTextView, rowID: String)
+	func moveRowLeft(_: EditorRowTopicTextView, rowID: String, rowStrings: RowStrings)
 	func moveRowRight(_: EditorRowTopicTextView, rowID: String)
 	func textChanged(_: EditorRowTopicTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRow(_: EditorRowTopicTextView, rowID: String, rowStrings: RowStrings)
@@ -27,7 +27,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func createRow(_: EditorRowTopicTextView, afterRowID: String, rowStrings: RowStrings)
 	func splitRow(_: EditorRowTopicTextView, rowID: String, topic: NSAttributedString, cursorPosition: Int)
 	func joinRowWithPreviousSibling(_: EditorRowTopicTextView, rowID: String, attrText: NSAttributedString)
-	func shouldMoveLeftOnReturn(_: EditorRowTopicTextView, rowID: String) -> Bool
+	func shouldMoveLeftOnReturn(_: EditorRowTopicTextView, rowID: String, topic: NSAttributedString?) -> Bool
 	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange)
 	func zoomImage(_: EditorRowTopicTextView, _ image: UIImage, rect: CGRect)
 }
@@ -309,8 +309,9 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 			return false
 		case "\n":
 			if cursorIsAtBeginning {
-				if editorDelegate?.shouldMoveLeftOnReturn(self, rowID: rowID) ?? false {
-					editorDelegate?.moveRowLeft(self, rowID: rowID)
+				if editorDelegate?.shouldMoveLeftOnReturn(self, rowID: rowID, topic: cleansedAttributedText) ?? false {
+					isTextChanged = false
+					editorDelegate?.moveRowLeft(self, rowID: rowID, rowStrings: rowStrings)
 				} else {
 					isTextChanged = false
 					editorDelegate?.createRow(self, beforeRowID: rowID, rowStrings: rowStrings, moveCursor: false)

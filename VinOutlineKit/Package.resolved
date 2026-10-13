@@ -1,15 +1,6 @@
 {
-  "originHash" : "30a3fb16966cfe4f8073ce145a0aee270dd73fb6262b621637eaece37cc68660",
+  "originHash" : "1e949d6a8c8646ad217ab389dcbd908586fbd850e7afd2186b8e4ab5d876de76",
   "pins" : [
-    {
-      "identity" : "markdownattributedstring",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vincode-io/MarkdownAttributedString.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "2b284b2fb6ac3d58c5e9d58763d7517dbd84ee2b"
-      }
-    },
     {
       "identity" : "semaphore",
       "kind" : "remoteSourceControl",
@@ -56,12 +47,30 @@
       }
     },
     {
+      "identity" : "swiftyjscore",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vincode-io/SwiftyJSCore.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "eb3c79f11a48f8a1b4428eedae236dfc2b35fc0b"
+      }
+    },
+    {
       "identity" : "vincloudkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vincode-io/VinCloudKit.git",
       "state" : {
         "branch" : "main",
         "revision" : "bffa73124f31e49e7f6ca167cf3ef9b8e9dd149e"
+      }
+    },
+    {
+      "identity" : "vinreadability",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vincode-io/VinReadability.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7ad11d9909f0b98c9253146ce83ce829a233d162"
       }
     },
     {

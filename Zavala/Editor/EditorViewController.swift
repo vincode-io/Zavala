@@ -2126,9 +2126,9 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		toggleDisclosure(row: row, applyToAll: applyToAll)
 	}
 	
-	func editorRowMoveRowLeft(rowID: String) {
+	func editorRowMoveRowLeft(rowID: String, rowStrings: RowStrings) {
 		guard let row = outline?.findRow(id: rowID) else { return }
-		moveRowsLeft([row])
+		moveRowsLeft([row], rowStrings: rowStrings)
 	}
 
 	func editorRowMoveRowRight(rowID: String) {
@@ -2182,9 +2182,9 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		joinRow(row, topic: topic)
 	}
 
-	func editorRowShouldMoveLeftOnReturn(rowID: String) -> Bool {
+	func editorRowShouldMoveLeftOnReturn(rowID: String, topic: NSAttributedString?) -> Bool {
 		guard let row = outline?.findRow(id: rowID) else { return false }
-		return outline?.shouldMoveLeftOnReturn(row: row) ?? false
+		return outline?.shouldMoveLeftOnReturn(row: row, topic: topic) ?? false
 	}
 
 	func editorRowDeleteRowNote(rowID: String) {

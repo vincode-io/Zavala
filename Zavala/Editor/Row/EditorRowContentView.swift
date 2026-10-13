@@ -206,8 +206,8 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowMoveCursorDown(rowID: rowID)
 	}
 
-	func moveRowLeft(_: EditorRowTopicTextView, rowID: String) {
-		appliedConfiguration?.delegate?.editorRowMoveRowLeft(rowID: rowID)
+	func moveRowLeft(_: EditorRowTopicTextView, rowID: String, rowStrings: RowStrings) {
+		appliedConfiguration?.delegate?.editorRowMoveRowLeft(rowID: rowID, rowStrings: rowStrings)
 	}
 
 	func moveRowRight(_: EditorRowTopicTextView, rowID: String) {
@@ -246,8 +246,8 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowJoinRowWithPreviousSibling(rowID: rowID, attrText: attrText)
 	}
 	
-	func shouldMoveLeftOnReturn(_: EditorRowTopicTextView, rowID: String) -> Bool {
-		return appliedConfiguration?.delegate?.editorRowShouldMoveLeftOnReturn(rowID: rowID) ?? false
+	func shouldMoveLeftOnReturn(_: EditorRowTopicTextView, rowID: String, topic: NSAttributedString?) -> Bool {
+		return appliedConfiguration?.delegate?.editorRowShouldMoveLeftOnReturn(rowID: rowID, topic: topic) ?? false
 	}
 
 	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange) {
