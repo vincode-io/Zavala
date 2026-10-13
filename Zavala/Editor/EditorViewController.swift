@@ -3718,7 +3718,12 @@ private extension EditorViewController {
 
 	func collapseAll(containers: [RowContainer]) {
 		guard let undoManager, let outline else { return }
-		
+
+		var currentRow: Row? = nil
+		if let rowID = currentRowTextView?.rowID {
+			currentRow = outline.findRow(id: rowID)
+		}
+
 		let command = CollapseAllCommand(actionName: .collapseAllControlLabel,
 										 undoManager: undoManager,
 										 delegate: self,
@@ -3726,6 +3731,19 @@ private extension EditorViewController {
 										 containers: containers)
 
 		command.execute()
+
+		// If the cursor row got hidden, move the cursor to the end of its nearest visible ancestor
+		guard let cursorRow = currentRow, cursorRow.shadowTableIndex == nil else { return }
+
+		var ancestor = cursorRow.parent as? Row
+		while let row = ancestor, row.shadowTableIndex == nil {
+			ancestor = row.parent as? Row
+		}
+
+		if let newCursorIndex = ancestor?.shadowTableIndex,
+		   let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
+			rowCell.moveToTopicEnd()
+		}
 	}
 
 	func textChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
