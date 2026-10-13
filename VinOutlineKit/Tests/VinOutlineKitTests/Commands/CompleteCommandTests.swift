@@ -35,5 +35,33 @@ final class CompleteCommandTests: VOKTestCase {
 		#expect(outline.rows.first!.topic!.string == "Test 1 - Changed")
 	}
 
+	@Test func undoLeavesAlreadyCompletedRowsComplete() async throws {
+		let accountManager = buildAccountManager()
+		let undoManager = UndoManager()
+
+		let outline = try await loadOutline(accountManager: accountManager)
+		let alpha = outline.rows[0]
+		let bravo = outline.rows[1]
+		bravo.isComplete = true
+
+		let command = CompleteCommand(actionName: "Complete", undoManager: undoManager, delegate: self, outline: outline, rows: [alpha, bravo], rowStrings: nil)
+		command.execute()
+
+		#expect(alpha.isComplete == true)
+		#expect(bravo.isComplete == true)
+
+		undoManager.undo()
+
+		#expect(alpha.isComplete == false)
+		#expect(bravo.isComplete == true)
+
+		undoManager.redo()
+
+		#expect(alpha.isComplete == true)
+		#expect(bravo.isComplete == true)
+
+		deleteAccountManager(accountManager)
+	}
+
 }
 

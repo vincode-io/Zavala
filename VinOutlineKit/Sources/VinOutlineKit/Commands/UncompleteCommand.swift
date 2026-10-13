@@ -10,13 +10,17 @@ import Foundation
 public final class UncompleteCommand: OutlineCommand {
 	
 	var rows: [Row]
-	
+
+	// Only the rows that were complete, so that undo doesn't complete rows that started out incomplete
+	var changedRows: [Row]
+
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings?
 
 	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.rows = rows
-		
+		self.changedRows = rows.filter { $0.isComplete ?? false }
+
 		if rows.count == 1, let row = rows.first {
 			self.oldRowStrings = row.rowStrings
 			self.newRowStrings = rowStrings
@@ -30,7 +34,7 @@ public final class UncompleteCommand: OutlineCommand {
 	}
 	
 	public override func undo() {
-		outline.complete(rows: rows, rowStrings: oldRowStrings)
+		outline.complete(rows: changedRows, rowStrings: oldRowStrings)
 	}
 	
 }
