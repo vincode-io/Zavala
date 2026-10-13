@@ -11,27 +11,12 @@ public final class DeleteRowCommand: OutlineCommand {
 	var rows: [Row]
 	var currentRow: Row?
 	var rowStrings: RowStrings?
-	var afterRows = [Row: Row]()
+	var locations = [(row: Row, parent: RowContainer, index: Int)]()
 	var isInOutlineMode: Bool
-	
+
 	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], currentRow: Row?, rowStrings: RowStrings?, isInOutlineMode: Bool) {
-		self.rows = rows
-
-		var allRows = Set<Row>()
-		
-		func deleteVisitor(_ visited: Row) {
-			allRows.insert(visited)
-			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
-		}
-		rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
-		
-		self.rows = Array(allRows)
-
-		for row in allRows {
-			if let rowShadowTableIndex = row.shadowTableIndex, rowShadowTableIndex > 0, let afterRow = outline.shadowTable?[rowShadowTableIndex - 1] {
-				afterRows[row] = afterRow.ancestorSibling(row)
-			}
-		}
+		self.locations = outline.rowLocations(for: rows)
+		self.rows = locations.map { $0.row }
 
 		self.currentRow = currentRow
 		self.rowStrings = rowStrings
@@ -45,9 +30,7 @@ public final class DeleteRowCommand: OutlineCommand {
 	}
 	
 	public override func undo() {
-		for row in rows.sortedByDisplayOrder() {
-			outline.createRows([row], afterRow: afterRows[row])
-		}
+		outline.restoreRows(locations)
 	}
 	
 }

@@ -1995,6 +1995,68 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outlineElementsDidChange(changes)
 	}
 
+	/// The given rows plus all of their descendants, each with its parent and child index, in outline order.
+	///
+	/// This walks the tree rather than the shadow table so that rows hidden under a collapsed
+	/// parent are included too. Pass the result to `restoreRows(_:)` to undo a delete.
+	func rowLocations(for rows: [Row]) -> [(row: Row, parent: RowContainer, index: Int)] {
+		let selectedRowIDs = Set(rows.map { $0.id })
+		var locations = [(row: Row, parent: RowContainer, index: Int)]()
+
+		func visitor(_ visited: Row, isIncluded: Bool) {
+			let isIncluded = isIncluded || selectedRowIDs.contains(visited.id)
+			if isIncluded, let parent = visited.parent, let index = parent.firstIndexOfRow(visited) {
+				locations.append((row: visited, parent: parent, index: index))
+			}
+			visited.rows.forEach { visitor($0, isIncluded: isIncluded) }
+		}
+		self.rows.forEach { visitor($0, isIncluded: false) }
+
+		return locations
+	}
+
+	/// Puts previously deleted rows back at the parent and child index each one had in the tree.
+	///
+	/// The locations must be in outline order (parents before their children, earlier siblings before
+	/// later ones) so that each recorded index is valid at the time its row is inserted. Unlike
+	/// `createRows(_:afterRow:)` this doesn't depend on the shadow table, so it also restores rows that
+	/// were hidden under a collapsed parent.
+	func restoreRows(_ locations: [(row: Row, parent: RowContainer, index: Int)]) {
+		collapseAllInOutlineUnavailableNeedsUpdate = true
+
+		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
+
+		let rows = locations.map { $0.row }
+		resetPreviouslyUsed(rows: rows)
+
+		var parentRows = [Row]()
+
+		for location in locations {
+			location.parent.insertRow(location.row, at: min(location.index, location.parent.rows.count))
+			if let parentRow = location.parent as? Row {
+				parentRows.append(parentRow)
+			}
+		}
+
+		for parentRow in parentRows {
+			autoCompleteUncomplete(row: parentRow)
+		}
+
+		createLinkRelationships(for: rows)
+		replaceLinkTitlesIfPossible(rows: rows)
+		outlineContentDidChange()
+
+		guard isBeingViewed else { return }
+
+		var changes = rebuildShadowTable()
+		let reloads = parentRows.compactMap { $0.shadowTableIndex }
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads)))
+		outlineElementsDidChange(changes)
+	}
+
 	public func createRowsInsideAtStart(_ rows: [Row], afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) {
 		beginCloudKitBatchRequest()
 		defer {
