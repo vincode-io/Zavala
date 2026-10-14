@@ -1625,21 +1625,25 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func moveCurrentRowsLeft(_ sender: Any?) {
 		guard let rows = currentRows else { return }
+		currentRowTextView?.saveTextAsSeparateUndoStep()
 		moveRowsLeft(rows, rowStrings: currentRowStrings)
 	}
 	
 	@objc func moveCurrentRowsRight(_ sender: Any?) {
 		guard let rows = currentRows else { return }
+		currentRowTextView?.saveTextAsSeparateUndoStep()
 		moveRowsRight(rows, rowStrings: currentRowStrings)
 	}
 	
 	@objc func moveCurrentRowsUp(_ sender: Any?) {
 		guard let rows = currentRows else { return }
+		currentRowTextView?.saveTextAsSeparateUndoStep()
 		moveRowsUp(rows, rowStrings: currentRowStrings)
 	}
 	
 	@objc func moveCurrentRowsDown(_ sender: Any?) {
 		guard let rows = currentRows else { return }
+		currentRowTextView?.saveTextAsSeparateUndoStep()
 		moveRowsDown(rows, rowStrings: currentRowStrings)
 	}
 

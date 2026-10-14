@@ -152,6 +152,16 @@ final class EditorHarness {
 		(outline.shadowTable ?? []).map { $0.topic?.string ?? "" }
 	}
 
+	/// The topic text each row's cell actually displays, in order. Compare with `visibleTitles` to catch a cell
+	/// that wasn't updated after the outline changed.
+	var displayedTopics: [String] {
+		let section = Outline.Section.rows.rawValue
+		return (0..<(outline.shadowTable?.count ?? 0)).map { index in
+			let cell = editor.collectionView.cellForItem(at: IndexPath(row: index, section: section)) as? EditorRowViewCell
+			return cell?.topicTextView?.text ?? ""
+		}
+	}
+
 	/// Whether a row's note text is shown under its topic.
 	func isNoteShown(for title: String, sourceLocation: SourceLocation = #_sourceLocation) throws -> Bool {
 		let row = try outline.row(titled: title, sourceLocation: sourceLocation)

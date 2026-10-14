@@ -74,6 +74,11 @@ class EditorRowContentView: UIView, UIContentView {
 
 	private var barViews = [UIView]()
 	private var appliedConfiguration: EditorRowContentConfiguration?
+
+	/// Saving typed text doesn't reconfigure the cell, so the applied configuration still holds the text from
+	/// before the edit. Until a new configuration is applied, one equal to that stale text (e.g. from Undo
+	/// reverting the typing) must still be applied, or the text views keep showing the edit.
+	private var appliedConfigurationIsStale = false
 	
 	init(configuration: EditorRowContentConfiguration) {
 		super.init(frame: .zero)
@@ -131,10 +136,11 @@ class EditorRowContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorRowContentConfiguration) {
-		guard appliedConfiguration != configuration else { return }
+		guard appliedConfigurationIsStale || appliedConfiguration != configuration else { return }
 		
 		defer {
 			appliedConfiguration = configuration
+			appliedConfigurationIsStale = false
 		}
 		
 		if topicTextView.isFirstResponder {
@@ -223,6 +229,7 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 	}
 
 	func textChanged(_: EditorRowTopicTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
+		appliedConfigurationIsStale = true
 		appliedConfiguration?.delegate?.editorRowTextChanged(rowID: rowID, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
@@ -291,6 +298,7 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 	}
 	
 	func textChanged(_: EditorRowNoteTextView, rowID: String, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
+		appliedConfigurationIsStale = true
 		appliedConfiguration?.delegate?.editorRowTextChanged(rowID: rowID, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	

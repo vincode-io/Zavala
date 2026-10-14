@@ -151,6 +151,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 
 	@objc func createRow(_ sender: Any) {
 		guard let rowID else { return }
+		saveTextAsSeparateUndoStep()
 		editorDelegate?.createRow(self, afterRowID: rowID, rowStrings: rowStrings)
 	}
 	
@@ -170,6 +171,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 	
 	@objc func insertRow(_ sender: Any) {
 		guard let rowID else { return }
+		saveTextAsSeparateUndoStep()
 		isTextChanged = false
 		editorDelegate?.createRow(self, beforeRowID: rowID, rowStrings: rowStrings, moveCursor: true)
 	}
@@ -177,6 +179,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 	@objc func split(_ sender: Any) {
 		guard let rowID else { return }
 		
+		saveTextAsSeparateUndoStep()
 		isTextChanged = false
 
 		if cursorPosition == 0 {
@@ -305,9 +308,11 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 		
 		switch text {
 		case "\t":
+			saveTextAsSeparateUndoStep()
 			editorDelegate?.moveRowRight(self, rowID: rowID)
 			return false
 		case "\n":
+			saveTextAsSeparateUndoStep()
 			if cursorIsAtBeginning {
 				if editorDelegate?.shouldMoveLeftOnReturn(self, rowID: rowID, topic: cleansedAttributedText) ?? false {
 					isTextChanged = false

@@ -407,6 +407,25 @@ class EditorRowTextView: UITextView, EditorTextInput {
         isTextChanged = false
 	}
 
+	/// Saves any pending typing as its own undo step before a structural edit (Return, Tab, …) made in the
+	/// same key event. UIKit groups undo by event, so without closing the group here, the typing and the
+	/// structural edit would be undone together.
+	func saveTextAsSeparateUndoStep() {
+		guard isTextChanged, markedTextRange == nil else { return }
+		saveText()
+
+		// The text view's own undo stack still holds UIKit's typing step for the text just saved, and Undo
+		// tries that stack first. Clear it so Undo reverts the editor's steps in order instead of reverting
+		// the typing in place before the structural edit.
+		if let textViewUndoManager = super.undoManager, textViewUndoManager !== editorUndoManager {
+			textViewUndoManager.removeAllActions()
+		}
+
+		guard let editorUndoManager, editorUndoManager.groupingLevel > 0 else { return }
+		editorUndoManager.endUndoGrouping()
+		editorUndoManager.beginUndoGrouping()
+	}
+
     func textWasChanged() {
         fatalError("textChanged has not been implemented")
     }
