@@ -20,7 +20,8 @@ public final class DuplicateRowCommand: OutlineCommand {
 	
 	public override func perform() {
 		if let newRows {
-			outline.createRows(newRows, afterRow: rows.sortedByDisplayOrder().first)
+			// Anchor the copies the same way duplicateRows does, after the last selected row.
+			outline.createRows(newRows, afterRow: rows.sortedWithDecendentsFiltered().sortedByDisplayOrder().last)
 		} else {
 			newRows = outline.duplicateRows(rows)
 		}

@@ -19,4 +19,35 @@ final class DuplicateRowCommandTests: VOKTestCase {
         #expect(outline.rows.count == originalCount + 1)
         deleteAccountManager(accountManager)
     }
+
+	@Test("Redoing a duplicate of multiple rows puts the copies after the last selected row")
+	func duplicateMultipleRowsAndRedo() async throws {
+		let before = """
+			- A
+			- B
+			  > b note
+			  - B1
+			- [x] C
+			- D
+			"""
+		let (outline, accountManager) = try await makeOutline(before)
+		defer { deleteAccountManager(accountManager) }
+
+		let rows = [try outline.row(titled: "B"), try outline.row(titled: "C")]
+		let command = DuplicateRowCommand(actionName: "DuplicateRow", undoManager: undoManager, delegate: self, outline: outline, rows: rows)
+		command.execute()
+
+		expectEdit(outline, before: before, after: """
+			- A
+			- B
+			  > b note
+			  - B1
+			- [x] C
+			- B
+			  > b note
+			  - B1
+			- [x] C
+			- D
+			""")
+	}
 }
