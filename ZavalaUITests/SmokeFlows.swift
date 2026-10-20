@@ -166,9 +166,7 @@ struct SmokeFlows {
 		#expect(smoke.screenOutline == "- Alpha\n- Bravo!\n- Charlie")
 
 		smoke.key("z", .command)
-		withKnownIssue("ZB-012 The typing before Return is never undone; this Undo reverts the typing before it instead") {
-			#expect(smoke.screenOutline == "- Alpha\n- Bravo\n- Charlie")
-		}
+		#expect(smoke.screenOutline == "- Alpha\n- Bravo\n- Charlie")
 	}
 
 	@Test("ED-252 ED-010 After typing in a row and pressing Tab, Cmd-Z undoes the indent only; the next Cmd-Z undoes the typing")
@@ -184,9 +182,7 @@ struct SmokeFlows {
 		#expect(smoke.screenOutline == "- Alpha\n  - Bravo!\n- Charlie")
 
 		smoke.key("z", .command)
-		withKnownIssue("ZB-012 One Undo reverts both the indent and the typing before it") {
-			#expect(smoke.screenOutline == "- Alpha\n- Bravo!\n- Charlie")
-		}
+		#expect(smoke.screenOutline == "- Alpha\n- Bravo!\n- Charlie")
 	}
 
 	@Test("ED-251 Shift-Cmd-Z redoes undone edits in order")
