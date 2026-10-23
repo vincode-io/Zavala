@@ -17,13 +17,22 @@ class SettingsFontConfigViewController: UITableViewController {
 	var field: OutlineFontField?
 	var config: OutlineFontConfig?
 	
+	/// The iPad popover's translucent background in Dark Mode is too light for the accent color to be readable,
+	/// so brighten it in that case.
+	var controlColor: UIColor {
+		if UIDevice.current.userInterfaceIdiom == .pad && traitCollection.userInterfaceStyle == .dark {
+			return .brightenedAccentColor
+		}
+		return .accentColor
+	}
+
 	var fontButtonTitle: NSAttributedString {
 		let imageAttachment = NSTextAttachment()
-		imageAttachment.image = .popupChevrons.tinted(color: .accentColor)
-		
+		imageAttachment.image = .popupChevrons.tinted(color: controlColor)
+
 		let title = NSMutableAttributedString(string: "\(config?.name ?? "") ")
 		title.append(NSAttributedString(attachment: imageAttachment))
-		title.addAttribute(.foregroundColor, value: UIColor.accentColor, range: NSRange(location: 0, length: title.length))
+		title.addAttribute(.foregroundColor, value: controlColor, range: NSRange(location: 0, length: title.length))
 		return title
 	}
 	
@@ -80,7 +89,6 @@ class SettingsFontConfigViewController: UITableViewController {
 		}
 		
 		navigationItem.title = field.displayName
-		fontButton.setAttributedTitle(fontButtonTitle, for: .normal)
 		fontValueStepper.value = Double(config.size)
 		var colorMenuItems = [UIAction]()
 		
@@ -97,8 +105,13 @@ class SettingsFontConfigViewController: UITableViewController {
 		}
 		
 		fontColorPopupButton.menu = UIMenu(children: colorMenuItems)
-		fontColorPopupButton.tintColor = .accentColor
-		
+		fontColorPopupButton.tintColor = controlColor
+
+		updateControlColors()
+		registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, _) in
+			self.updateControlColors()
+		}
+
 		updateUI()
     }
 
@@ -169,6 +182,11 @@ extension SettingsFontConfigViewController: UIFontPickerViewControllerDelegate {
 // MARK: Helpers
 
 private extension SettingsFontConfigViewController {
+
+	func updateControlColors() {
+		fontButton.setAttributedTitle(fontButtonTitle, for: .normal)
+		fontValueStepper.tintColor = controlColor
+	}
 
 	func updateUI() {
 		guard let config, let font = UIFont(name: config.name, size: CGFloat(config.size)) else { return }
