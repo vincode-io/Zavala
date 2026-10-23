@@ -31,11 +31,14 @@ class EditorTagInputPill: UIView {
 	let button: EditorTagPaddedButton
 	var buttonWidthConstraint: NSLayoutConstraint?
 	var buttonIsShowing = false
-	
-	var cornerRadius: CGFloat {
-		return (textField.intrinsicContentSize.height + 8) / 2
+	var heightConstraint: NSLayoutConstraint?
+
+	/// Matches the height of `EditorTagPaddedButton` with its default insets, so the input pill and the
+	/// tag pills line up. The text field's intrinsic height runs taller than a label's, so we can't size from it.
+	var pillHeight: CGFloat {
+		return EditorTagPaddedButton.defaultHeight(for: OutlineFontCache.shared.tagFont)
 	}
-	
+
 	override init(frame: CGRect) {
 		border = UIView()
 		textField = EditorTagInputTextField()
@@ -60,16 +63,18 @@ class EditorTagInputPill: UIView {
 		buttonWidthConstraint = button.widthAnchor.constraint(equalToConstant: layoutMargins.right)
 		textFieldTrailingConstraint = textField.trailingAnchor.constraint(equalTo: button.leadingAnchor)
 		
+		heightConstraint = heightAnchor.constraint(equalToConstant: pillHeight)
+
 		let textFieldMaxWidth = UIFontMetrics(forTextStyle: .body).scaledValue(for: 200)
-		
+
 		NSLayoutConstraint.activate([
 			border.topAnchor.constraint(equalTo: topAnchor),
 			border.leadingAnchor.constraint(equalTo: leadingAnchor),
 			border.bottomAnchor.constraint(equalTo: bottomAnchor),
 			border.trailingAnchor.constraint(equalTo: trailingAnchor),
-			textField.topAnchor.constraint(equalTo: border.topAnchor, constant: 2),
+			heightConstraint!,
+			textField.centerYAnchor.constraint(equalTo: border.centerYAnchor),
 			textField.leadingAnchor.constraint(equalTo: border.layoutMarginsGuide.leadingAnchor),
-			textField.bottomAnchor.constraint(equalTo: border.bottomAnchor, constant: -2),
 			textField.widthAnchor.constraint(lessThanOrEqualToConstant: textFieldMaxWidth),
 			button.topAnchor.constraint(equalTo: topAnchor),
 			button.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -78,19 +83,23 @@ class EditorTagInputPill: UIView {
 			textFieldTrailingConstraint!,
 		])
 		
-		let cornerRadius = cornerRadius
-		
 		clipsToBounds = true
-		layer.cornerRadius = cornerRadius
-		
+
 		border.translatesAutoresizingMaskIntoConstraints = false
 		border.layer.borderWidth = 1
 		border.layer.borderColor = UIColor.tertiarySystemBackground.cgColor
-		border.layer.cornerRadius = cornerRadius
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		// Derive the radius from the laid out height, matching EditorTagContentView's tag button.
+		let cornerRadius = bounds.height / 2
+		layer.cornerRadius = cornerRadius
+		border.layer.cornerRadius = cornerRadius
 	}
 
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -104,9 +113,8 @@ class EditorTagInputPill: UIView {
 	func updateAppearance() {
 		textField.font = OutlineFontCache.shared.tagFont
 		textField.textColor = OutlineFontCache.shared.tagColor
-		let cornerRadius = cornerRadius
-		layer.cornerRadius = cornerRadius
-		border.layer.cornerRadius = cornerRadius
+		heightConstraint?.constant = pillHeight
+		setNeedsLayout()
 		button.titleLabel?.font = UIFont.systemFont(ofSize: OutlineFontCache.shared.tagFont.pointSize)
 		button.invalidateIntrinsicContentSize()
 	}

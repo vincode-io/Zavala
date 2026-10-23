@@ -12,7 +12,17 @@ import UIKit
 /// the self-sizing tag cell can measure its intrinsic content size correctly.
 class EditorTagPaddedButton: UIButton {
 
-	var titleInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8) {
+	static let defaultTitleInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
+
+	/// The height of a tag button using `font` and the default insets, measured the same way as `intrinsicContentSize`.
+	static func defaultHeight(for font: UIFont) -> CGFloat {
+		let sizingLabel = UILabel()
+		sizingLabel.font = font
+		sizingLabel.text = " "
+		return sizingLabel.intrinsicContentSize.height + defaultTitleInsets.top + defaultTitleInsets.bottom
+	}
+
+	var titleInsets = EditorTagPaddedButton.defaultTitleInsets {
 		didSet {
 			invalidateIntrinsicContentSize()
 		}
